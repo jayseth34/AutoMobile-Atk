@@ -1,0 +1,121 @@
+.form-row {
+    display: flex;
+    padding: 10px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+  }
+  
+.form-group {
+    margin-bottom: 1rem;
+    display: flex; /* Ensures items inside form-group are flex items */
+  }
+  
+.form-group.double {
+    margin-bottom: 0;
+  }
+  
+.form-group.double input {
+    margin-right: 1rem;
+  }
+
+form {
+    margin-left: 19%;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+  border-right:1px solid #bbb;
+}
+
+li:last-child {
+  border-right: none;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #04AA6D;
+}
+
+.addressForm {
+  padding: 20px;
+  margin-left: 0%;
+}
+.addressFields{
+  width: 100%; /* Full width */
+  padding: 12px; /* Some padding */ 
+  border: 1px solid #ccc; /* Gray border */
+  border-radius: 4px; /* Rounded borders */
+  box-sizing: border-box; /* Make sure that padding and width stays in place */
+  margin-top: 6px; /* Add a top margin */
+  margin-bottom: 16px; /* Bottom margin */
+  resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+}
+
+.gstForm {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  margin-left: 0%;
+  padding: 10px;
+}
+
+.gstFields {
+  margin: 10px;
+  width: 30%;
+  padding: 12px; /* Some padding */ 
+  border: 1px solid #ccc; /* Gray border */
+  border-radius: 4px; /* Rounded borders */
+  box-sizing: border-box; /* Make sure that padding and width stays in place */
+  margin-top: 6px; /* Add a top margin */
+  margin-bottom: 16px; /* Bottom margin */
+}
+
+#gstType {
+  margin-right: 10%;
+}
+
+.openingbalanceForm {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  margin-left: 0%;
+  padding: 10px;
+}
+
+.openingbalanceFields {
+  margin: 10px;
+  width: 30%;
+  padding: 12px; /* Some padding */ 
+  border: 1px solid #ccc; /* Gray border */
+  border-radius: 4px; /* Rounded borders */
+  box-sizing: border-box; /* Make sure that padding and width stays in place */
+  margin-top: 6px; /* Add a top margin */
+  margin-bottom: 16px; /* Bottom margin */
+}
+
+input[type=submit] {
+  background-color: #04AA6D;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px;
+}

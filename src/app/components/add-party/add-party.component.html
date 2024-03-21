@@ -1,0 +1,75 @@
+<!-- app.component.html -->
+<app-sidebar></app-sidebar>
+
+<form>
+    <!-- First row with two input columns -->
+    <div class="form-row">
+      <div class="form-group double">
+        <label for="partyName">Party Name:</label>
+        <input type="text" id="partyName" name="partyName" required>
+      </div>
+      <div class="form-group double">
+        <label for="phoneNo">Phone No.:</label>
+        <input type="text" id="phoneNo" name="phoneNo" required>
+      </div>
+    </div>
+  
+    <ul>
+      <li><a [class.active]="selectedTab === 'address'" (click)="selectTab('address')">Address</a></li>
+      <li><a [class.active]="selectedTab === 'gst'" (click)="selectTab('gst')">GST</a></li>
+      <li><a [class.active]="selectedTab === 'openingbalance'" (click)="selectTab('openingbalance')">Opening Balance</a></li>
+    </ul>
+
+    <div id="address" *ngIf="selectedTab === 'address'">
+    <form class="addressForm">
+      <label for="billingAddress">Billing Address</label>
+      <textarea class="addressFields" name="billingAddress" id="billingAddress" cols="20" rows="5" placeholder="Enter Billing Address"></textarea>
+
+      <label for="emailId">Email ID</label>
+      <input class="addressFields" type="text" id="emailId" name="emailId" placeholder="Enter Email">
+    </form>
+    </div>
+    
+    <div id="gst" *ngIf="selectedTab === 'gst'">
+      <form class="gstForm">
+      <label for="gstType">GST Type</label>
+      <select class="gstFields" id="gstType" name="gstType">
+        <option value="gstType1">gstType1</option>
+        <option value="gstType2">gstType2</option>
+        <option value="gstType3">gstType3</option>
+      </select>
+
+      <label for="state">State</label>
+      <select class="gstFields" id="state" name="state">
+        <option value="state1">state1</option>
+        <option value="state2">state2</option>
+        <option value="state3">state3</option>
+      </select>
+
+      </form>
+    </div>
+    
+    <div id="openingbalance" *ngIf="selectedTab === 'openingbalance'">
+      <form class="openingbalanceForm">
+        <label for="openingbalanceAmt">Opening Balance</label>
+        <input class="openingbalanceFields" type="text" id="openingbalanceFields" name="openingbalanceAmt" placeholder="Enter Opening Balance">
+
+        <label for="asofdate">As of date</label>
+        <input class="openingbalanceFields" type="date" id="openingbalanceFields" name="asofdate">
+
+        <br>
+        <label>
+          <input type="radio" name="openingbalance" value="pay"> To Pay
+        </label>
+
+        <label>
+          <input type="radio" name="openingbalance" value="recieve"> To Recieve
+        </label>
+
+      </form>
+    </div>
+  
+    <input type="submit" value="SAVE & NEW">
+    <input type="submit" value="SAVE">
+
+</form>
