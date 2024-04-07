@@ -5,6 +5,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { BusinessInformationComponent } from './components/business-information/business-information.component';
 import { AddPartyComponent } from './components/add-party/add-party.component';
 import { AddItemComponent } from './components/add-item/add-item.component';
+import { DetailsComponent } from './components/details/details.component';
 
 const routes: Routes = [
   {path:'', component:LoginComponent},
@@ -13,6 +14,14 @@ const routes: Routes = [
   {path:'businessinfo', component:BusinessInformationComponent},
   {path:'addparty', component:AddPartyComponent},
   {path:'additem', component:AddItemComponent},
+  {path: 'sale', pathMatch: 'full', redirectTo: '/sale/sale-invoice'},
+  {path: 'sale/sale-invoice', component: DetailsComponent},
+  {path: 'purchase', pathMatch: 'full', redirectTo: '/purchase/puchase-bills'},
+  {path: 'purchase/puchase-bills', component: DetailsComponent},
+  // {path: 'sale', pathMatch: 'full', children: [
+  //   {path: '', redirectTo: 'sale-invoice', pathMatch: 'full'},
+  //   {path: 'sale-invoice', component: DetailsComponent},
+  // ]},
 ];
 
 @NgModule({

@@ -10,6 +10,8 @@ import { AddPartyComponent } from './components/add-party/add-party.component';
 import { AddItemComponent } from './components/add-item/add-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
+import { DetailsComponent } from './components/details/details.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,13 +20,15 @@ import { MatDialogModule } from '@angular/material/dialog';
     SidebarComponent,
     BusinessInformationComponent,
     AddPartyComponent,
-    AddItemComponent
+    AddItemComponent,
+    DetailsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatDialogModule
+    MatDialogModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,18 @@
+.select-container > select {
+  font-size: 1.3rem;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid grey;
+  height: 40px;
+  padding: 2px;
+}
+
+.select-container > select:focus {
+  border: none;
+  border-bottom: 2px solid grey;
+}
+
+.select-container > select > option {
+  font-size: 1.1rem;
+  font-weight: 300;
+}
