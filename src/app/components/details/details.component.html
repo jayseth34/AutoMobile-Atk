@@ -32,7 +32,7 @@
   </section>
 
   <!-- Filters -->
-  <section class="m-3 bg-body-secondary">
+  <section class="m-2 bg-body-secondary">
     <form [formGroup]="filterForm">
       <div class="row p-2 mt-1 mb-2">
         <div class="select-container col-3">
@@ -55,12 +55,16 @@
               aria-label="start-date"
               class="form-control"
               formControlName="startDate"
+              id="startDate"
+              (change)="filterData($event)"
             />
             <input
               type="date"
               aria-label="end-date"
               class="form-control"
+              id="endDate"
               formControlName="endDate"
+              (change)="filterData($event)"
             />
           </div>
         </div>
@@ -88,5 +92,99 @@
         </ul>
       </div>
     </form>
+  </section>
+
+  <!-- Table Contents -->
+  <section class="m-2 bg-body-secondary">
+    <h3 class="ms-3 pt-2">Transactions</h3>
+    <table mat-table [dataSource]="saleData">
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="invoiceNo">
+        <th mat-header-cell *matHeaderCellDef>Invoice No</th>
+        <td mat-cell *matCellDef="let element">{{ element.invoiceNo }}</td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="partyName">
+        <th mat-header-cell *matHeaderCellDef>Party Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.partyName }}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="transactionType">
+        <th mat-header-cell *matHeaderCellDef>Transaction Type</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.transactionType }}
+        </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="paymentType">
+        <th mat-header-cell *matHeaderCellDef>Payment Type</th>
+        <td mat-cell *matCellDef="let element">{{ element.paymentType }}</td>
+      </ng-container>
+
+      <!-- Amount Column -->
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef>Amount</th>
+        <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+      </ng-container>
+
+      <!-- Balance Column -->
+      <ng-container matColumnDef="balance">
+        <th mat-header-cell *matHeaderCellDef>Balance</th>
+        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+      </ng-container>
+
+      <!-- Icons Column -->
+      <ng-container matColumnDef="icons">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon class="ms-2" (click)="handlePrintClick(element.invoiceNo)"
+            >print</mat-icon
+          >
+          <mat-icon class="ms-2" (click)="handleShareClick(element.invoiceNo)"
+            >share</mat-icon
+          >
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="option">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <div class="dropdown ms-auto">
+            <i
+              class="fas fa-ellipsis-vertical"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            ></i>
+            <ul class="dropdown-menu">
+              <li>
+                <span class="dropdown-item">
+                  <i class="fas fa-pen mx-2"></i> Update
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item">
+                  <i class="fas fa-trash mx-2"></i> Delete
+                </span>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
   </section>
 </div>

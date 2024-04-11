@@ -10,8 +10,11 @@ import { AddPartyComponent } from './components/add-party/add-party.component';
 import { AddItemComponent } from './components/add-item/add-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
-import { DetailsComponent } from './components/details/details.component';
+import { MatTableModule } from '@angular/material/table' ;
+import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
+
+import { DetailsComponent } from './components/details/details.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatDialogModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTableModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
