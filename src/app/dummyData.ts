@@ -25,5 +25,23 @@ export let saleData = [
         "paymentType": "Cash",
         "amount": 12600,
         "balance": 7600
-    }
+    },
+    {
+        "date": "04/02/2024",
+        "invoiceNo": 5,
+        "partyName": "Jay",
+        "transactionType": "Purchase",
+        "paymentType": "Cash",
+        "amount": 12600,
+        "balance": 7600
+    },
+    {
+        "date": "03/02/2024",
+        "invoiceNo": 6,
+        "partyName": "Jay",
+        "transactionType": "Purchase",
+        "paymentType": "Cash",
+        "amount": 12600,
+        "balance": 7600
+    },
 ]
