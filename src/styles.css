@@ -1,7 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
-
+@import 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css';
+/* 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .app-sidebar {
+    width: 250px;
+    background-color: #333;
+  }
+  
+  .main-content {
+    flex: 10;
+    padding: 20px;
+    margin-left: 10%;
+  }

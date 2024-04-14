@@ -6,6 +6,8 @@ import { BusinessInformationComponent } from './components/business-information/
 import { AddPartyComponent } from './components/add-party/add-party.component';
 import { AddItemComponent } from './components/add-item/add-item.component';
 import { DetailsComponent } from './components/details/details.component';
+import { PartyHomepageComponent } from './components/party-homepage/party-homepage.component';
+import { ItemHomepageComponent } from './components/item-homepage/item-homepage.component';
 
 const routes: Routes = [
   {path:'', component:LoginComponent},
@@ -22,6 +24,8 @@ const routes: Routes = [
   //   {path: '', redirectTo: 'sale-invoice', pathMatch: 'full'},
   //   {path: 'sale-invoice', component: DetailsComponent},
   // ]},
+  {path:'party-homepage', component:PartyHomepageComponent},
+  {path:'item-homepage', component:ItemHomepageComponent},
 ];
 
 @NgModule({

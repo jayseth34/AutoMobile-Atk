@@ -14,13 +14,11 @@ export class SidebarComponent {
   openDialog(): void {
     const dialogRef = this.dialog.open(AddPartyComponent, {
       width: '1000px',
-      maxHeight: '1000px' // adjust width as per your requirement
-      // Other configuration options as needed
+      maxHeight: '1000px' 
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      // You can perform actions here after dialog close if needed
     });
   }
 

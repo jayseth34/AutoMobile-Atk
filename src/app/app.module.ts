@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,9 +15,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table' ;
 import { MatIconModule } from '@angular/material/icon';
-import { ReactiveFormsModule } from '@angular/forms';
-
 import { DetailsComponent } from './components/details/details.component';
+import { PartyHomepageComponent } from './components/party-homepage/party-homepage.component';
+import { ItemHomepageComponent } from './components/item-homepage/item-homepage.component';
+import { SelectUnitComponent } from './components/select-unit/select-unit.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,10 @@ import { DetailsComponent } from './components/details/details.component';
     BusinessInformationComponent,
     AddPartyComponent,
     AddItemComponent,
-    DetailsComponent
+    DetailsComponent,
+    PartyHomepageComponent,
+    ItemHomepageComponent,
+    SelectUnitComponent
   ],
   imports: [
     BrowserModule,
@@ -34,6 +41,8 @@ import { DetailsComponent } from './components/details/details.component';
     ReactiveFormsModule,
     MatTableModule,
     MatIconModule,
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

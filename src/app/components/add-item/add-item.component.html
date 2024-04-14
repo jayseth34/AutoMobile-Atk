@@ -1,2 +1,292 @@
-<app-sidebar></app-sidebar>
-<p style="margin-left: 20%;">add-item works!</p>
+<form class="main">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="mr-auto">Add Item</h1>
+        <!-- <div class="form-check form-switch" style="margin-right: 5%;">
+            <div class="form-check-label" style="margin-right: 5px;">Product</div>
+            <input class="form-check-input mx-2" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <div class="form-check-label" style="margin-left: 5px;">Service</div>
+        </div> -->
+    </div>
+
+    <div style="border-bottom: 1px solid gray; margin-bottom: 10px;"></div>
+    
+    <!-- item details -->
+    <div class="item-details">
+        <!-- FIRST ROW -->
+        <div class="form-row three-columns">
+            <!-- First Column -->
+            <div class="col">
+            <div class="form-floating">
+                <input type="text" class="form-control item-name" placeholder="Item Name*" id="itemName" name="itemName" formControlName="itemName" required>
+                <label for="itemName">Item Name*</label>
+            </div>
+            </div>
+        
+            <!-- Second Column -->
+            <div class="col">
+            <div class="form-floating">
+                <input type="text" class="form-control item-hsn" placeholder="Item HSN" id="item-hsn" name="item-hsn" formControlName="item_hsn" required>
+                <label for="item-hsn">Item HSN</label>
+            </div>
+            </div>
+
+            <!-- Third Column -->
+            <div class="col select-unit-btn">
+            <div class="form-floating d-flex justify-content-center align-items-center">
+                <input type="button" style="margin-right:50%; margin-top: 5%;" class="btn btn-secondary" name="selectunit" id="selectunit" value="SELECT UNIT" (click)="openSelectUnitModal()">
+            </div>
+            </div>
+        </div>
+
+        <!-- when clicked on select unit this will open -->
+        <!-- <div *ngIf="showSelectUnitModal()" class="modal-popup">
+            <div class="modal" tabindex="-1" role="dialog" [class.show]="showSelectUnit">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Modal Title</h5>
+                      <button type="button" class="close" (click)="showSelectUnitModal()">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p>This is your modal content.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" (click)="showSelectUnitModal()">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div> -->
+        
+        
+        <!-- Second Row -->
+        <div class="row second-row">
+            <!-- Category Dropdown Column -->
+            <div class="col">
+                <div class="dropdown form-floating">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Category
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="categoryDropdown">
+                        <!-- Category Checkbox Fields -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox1">
+                            <label class="form-check-label" for="checkbox1">
+                                Category 1
+                            </label>
+                        </div>
+                        <!-- Add Category Field -->
+                        <div class="dropdown-divider"></div>
+                        <input type="text" class="form-control" placeholder="Add Category">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Item Code Input Field Column -->
+            <div class="col">
+                <div class="form-floating">
+                    <input type="text" class="form-control item-code" placeholder="Item Code" id="item-code" name="item-code" formControlName="item_code" required>
+                    <label for="item-code">Item Code</label>
+                </div>
+            </div>
+            <!-- <div class="col">
+                <div class="input-group form-floating">
+                    <input type="text" class="form-control item-code" placeholder="Item Code" id="item-code" name="item-code" formControlName="item_code" required>
+                    <label for="item-code">Item Code</label>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button">Assign Code</button>
+                    </div>
+                </div>
+            </div> -->
+            
+            <!-- Add Item Image Column -->
+            <!-- <div class="col">
+                <label for="itemImage" style="color: blue;">Add Item Image</label>
+                <input type="file" id="itemImage" class="form-control-file">
+            </div> -->
+            <div class="col select-unit-btn">
+                <div class="form-floating d-flex justify-content-center align-items-center">
+                    <input type="button" style="margin-right:50%; margin-top: 5%;" class="btn btn-secondary" name="assign-code" id="assign-code" value="ASSIGN CODE">
+                </div>
+            </div>
+        </div>
+           
+    </div>
+
+    <!-- two tabs -->
+    <ul class="nav nav-tabs tabs">
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="selectedTab === 'pricing'" (click)="selectTab('pricing')">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="selectedTab === 'stock'" (click)="selectTab('stock')">Stock</a>
+        </li>
+    </ul>
+
+    <!-- TAB1: Pricing -->
+    <div class="pricing" *ngIf="selectedTab === 'pricing'">
+        <div class="sale-price">
+            <h2>Sale Price</h2>
+        </div>
+        <!-- row1: sale price -->
+        <div class="container">
+            <div class="row">
+              <div class="col p-0 h-300">
+                    <div class="form-floating">
+                        <input type="text" class="form-control sale-price-input" placeholder="Sale Price" id="sale-price" name="sale-price" formControlName="sale_price" required>
+                        <label for="sale-price">Sale Price</label>
+                    </div>
+              </div>
+              <div class="col-auto p-0">
+                <select class="form-select">
+                  <option selected>Without Tax</option>
+                  <option>With Tax</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row" style="margin-left: 5%;">
+                <div class="col p-0">
+                    <div class="form-floating">
+                        <input type="text" class="form-control disc-sale-price" placeholder="Disc. on Sale Price" id="disc-sale-price" name="disc-sale-price" formControlName="disc_sale_price" required>
+                        <label for="sale-price">Discount on Sale Price</label>
+                    </div>
+                </div>
+                <div class="col-auto p-0">
+                  <select class="form-select">
+                    <option selected>Percentage</option>
+                    <option>With Tax</option>
+                  </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- row2: Wholesale Price -->
+        <div>
+            <a style="text-decoration:none ;" type="button" (click)="toggleWholesalePrice()" class="wholesaletitle">
+                <h2 *ngIf="isWholesalePriceEnabled" class="add-wholesale">+  Add Wholesale Price</h2>
+                <h2 *ngIf="!isWholesalePriceEnabled" class="remove-wholesale">Wholesale Price <a style="text-decoration: none; color: grey;"> (- Remove)</a></h2>
+            </a>            
+        </div>
+        <div *ngIf="!isWholesalePriceEnabled">
+            <div class="container mb-2">
+                <div class="row" style="margin-bottom: 5%;">
+                  <div class="col p-0">
+                        <div class="form-floating">
+                            <input type="text" class="form-control wholesale-price" placeholder="Wholesale Price" id="wholesale-price" name="eholesale-price" formControlName="wholesale_price" required>
+                            <label for="wholesale-price">Wholesale Price</label>
+                        </div>
+                  </div>
+                  <div class="col-auto p-0">
+                    <select class="form-select">
+                      <option selected>Without Tax</option>
+                      <option>With Tax</option>
+                    </select>
+                  </div>
+                </div>
+    
+                <div class="row" style="margin-left: 5%;">
+                    <div class="form-floating">
+                        <input type="text" class="form-control min-wholesale-qty" placeholder="Minimum Wholesale Quantity" id="min-wholesale-qty" name="min-wholesale-qty" formControlName="min_wholesale_qty" required>
+                        <label for="wholesale-price">Minimum Wholesale Quantity</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- row3:Purchase Price -->
+        <div class="container">
+            <div class="row">
+                <h2 style="padding-left: 0%;">Purchase Price</h2>
+              <div class="col p-0">
+                    <div class="form-floating">
+                        <input type="text" class="form-control sale-price-input" placeholder="Sale Price" id="sale-price" name="sale-price" formControlName="sale_price" required>
+                        <label for="sale-price">Sale Price</label>
+                    </div>
+              </div>
+              <div class="col-auto p-0">
+                <select class="form-select">
+                  <option selected>Without Tax</option>
+                  <option>With Tax</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row" style="margin-left: 5%;">
+                <h2 class="text-end">Taxes</h2>
+                <div class="col p-0">
+                    <select class="form-select">
+                        <option selected disabled>None</option>
+                        <option>IGST@0%</option>
+                        <option>GST@0%</option>
+                        <option>IGST@0.25%</option>
+                        <option>GST@0.25%</option>
+                        <option>IGST@3%</option>
+                        <option>GST@3%</option>
+                        <option>IGST@5%</option>
+                        <option>GST@5%</option>
+                        <option>IGST@12%</option>
+                        <option>GST@12%</option>
+                        <option>IGST@18%</option>
+                        <option>GST@18%</option>
+                        <option>IGST@28%</option>
+                        <option>GST@28%</option>
+                        <option>Exempt</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB2: STOCK -->
+    <div class="stock" *ngIf="selectedTab === 'stock'">
+        <div class="form-row three-columns">
+            <div class="col">
+                <div class="form-floating">
+                    <input type="text" class="form-control openingquantity" placeholder="Opening Quantity" id="openingquantity" name="openingquantity" formControlName="openingquantity" required>
+                    <label for="openingquantity">Opening Quantity</label>
+                </div>
+            </div>
+        
+            <div class="col">
+                <div class="form-floating">
+                    <input type="text" class="form-control at-price" placeholder="At Price" id="atprice" name="atprice" formControlName="atprice" required>
+                    <label for="atprice">At Price</label>
+                </div>
+            </div>
+        
+            <div class="col">
+                <div class="form-floating">
+                    <input type="date" class="form-control asofdate" placeholder="As Of Date" id="asofdate" name="asofdate" formControlName="asofdate" required>
+                    <label for="asofdate">As of Date</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row two-columns">
+            <div class="col">
+                <div class="form-floating">
+                    <input type="text" class="form-control minstock" placeholder="Min Stock to Maintain" id="minstock" name="minstock" formControlName="minstock" required>
+                    <label for="minstock">Min Stock to Maintain</label>
+                </div>
+            </div>
+        
+            <div class="col">
+                <div class="form-floating">
+                    <input type="text" class="form-control location" placeholder="Location" id="location" name="location" formControlName="location" required>
+                    <label for="location">Location</label>
+                </div>
+            </div>
+        
+            <div class="col"></div> <!-- Empty column -->
+        </div>
+    </div>
+
+
+    <div class="position-fixed bottom-0 submit-btns">
+        <input type="submit" style="margin-right: 20px;" class="btn btn-warning add_party_btn" value="SAVE & NEW">
+        <input type="submit" class="btn btn-warning add_party_btn" value="SAVE">
+    </div>
+</form>

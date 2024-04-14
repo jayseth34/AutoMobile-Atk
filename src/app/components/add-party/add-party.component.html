@@ -1,61 +1,195 @@
-<!-- app.component.html -->
-<app-sidebar></app-sidebar>
-
-<form>
-    <!-- First row with two input columns -->
-    <div class="form-row">
-      <div class="form-group double">
-        <label for="partyName">Party Name:</label>
-        <input type="text" id="partyName" name="partyName" required>
+<form [formGroup]="addPartyForm">
+  
+  <!-- First row with three input columns -->
+      <!-- Party Name Field --> 
+    <div class="form-row three-columns">
+      <div class="form-floating">
+        <input type="text" class="form-control party-name" placeholder="Party Name*" id="partyName" name="partyName" formControlName="partyNameControl" [(ngModel)]="addPartyData.partyName" required>
+        <label for="partyName">Party Name*</label>
       </div>
-      <div class="form-group double">
-        <label for="phoneNo">Phone No.:</label>
-        <input type="text" id="phoneNo" name="phoneNo" required>
+
+      <!-- GSTIN Field -->
+      <div class="form-floating">
+        <input type="text" class="form-control gst-in" placeholder="GSTIN" id="floatingPassword" name="gstin" formControlName="gstControl" [(ngModel)]="addPartyData.gst" required>
+        <label for="floatingPassword">GSTIN</label>
+      </div>
+      
+      <!-- Phone no. Field -->
+      <div class="form-floating">
+        <input type="text" class="form-control phone-num" placeholder="Phone Number" id="phoneNo" name="phoneNo" formControlName="phoneNumberControl" [(ngModel)]="addPartyData.phoneNumber" required>
+        <label for="phoneNo">Phone Number</label>
+      </div>
+    </div>
+
+    <div class="form-row party-group">
+      <div class="form-floating">
+        <input type="text" class="form-control party-group" placeholder="Party Group*" id="partyGroup" name="partyGroup" formControlName="partyGroupControl" [(ngModel)]="addPartyData.partyGroup" required>
+        <label for="partyGroup">Party Group</label>
       </div>
     </div>
   
-    <ul>
-      <li><a [class.active]="selectedTab === 'address'" (click)="selectTab('address')">Address</a></li>
-      <li><a [class.active]="selectedTab === 'gst'" (click)="selectTab('gst')">GST</a></li>
-      <li><a [class.active]="selectedTab === 'openingbalance'" (click)="selectTab('openingbalance')">Opening Balance</a></li>
+    <!-- three tabs -->
+    <ul class="nav nav-tabs tabs">
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="selectedTab === 'gstAndAddress'" (click)="selectTab('gstAndAddress')">GST & Address</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="selectedTab === 'creditAndBalance'" (click)="selectTab('creditAndBalance')">Credit & Balance</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="selectedTab === 'additionalFields'" (click)="selectTab('additionalFields')">Additional Fields</a>
+      </li>
     </ul>
-
-    <div id="address" *ngIf="selectedTab === 'address'">
-    <form class="addressForm">
-      <label for="billingAddress">Billing Address</label>
-      <textarea class="addressFields" name="billingAddress" id="billingAddress" cols="20" rows="5" placeholder="Enter Billing Address"></textarea>
-
-      <label for="emailId">Email ID</label>
-      <input class="addressFields" type="text" id="emailId" name="emailId" placeholder="Enter Email">
-    </form>
-    </div>
     
-    <div id="gst" *ngIf="selectedTab === 'gst'">
-      <form class="gstForm">
-      <label for="gstType">GST Type</label>
-      <select class="gstFields" id="gstType" name="gstType">
-        <option value="gstType1">gstType1</option>
-        <option value="gstType2">gstType2</option>
-        <option value="gstType3">gstType3</option>
-      </select>
-
-      <label for="state">State</label>
-      <select class="gstFields" id="state" name="state">
-        <option value="state1">state1</option>
-        <option value="state2">state2</option>
-        <option value="state3">state3</option>
-      </select>
-
-      </form>
-    </div>
+    <!-- TAB1: GST -->
+    <div class="gstAndAddressForm" id="gstAndAddress" *ngIf="selectedTab === 'gstAndAddress'">
+      <div class="row">
+        <!-- First Column -->
+        <div class="col-md-4">
+          <div class="form-floating">
+            <select class="form-select gstFields" id="gstType" name="gstType" formControlName="gstTypeControl" [(ngModel)]="addPartyData.gstType">
+              <option value=""></option>
+              <option value="Unregistered/Consumer">Unregistered/Consumer</option>
+              <option value="Registered Business - Regular">Registered Business - Regular</option>
+              <option value="Registered Business - Composition">Registered Business - Composition</option>
+            </select>
+            <label for="gstType">GST Type</label>
+          </div>
+          
+          <div class="form-floating">
+            <select class="form-select gstFields" id="state" name="state" formControlName="_stateControl" [(ngModel)]="addPartyData._state">
+              <option value=""></option>
+              <option value="state1">state1</option>
+              <option value="state2">state2</option>
+              <option value="state3">state3</option>
+            </select>
+            <label for="state">State</label>
+          </div>
     
-    <div id="openingbalance" *ngIf="selectedTab === 'openingbalance'">
+          <div class="form-floating">
+            <input type="text" class="form-control gstFields" id="emailId" name="emailId" placeholder="Enter Email" formControlName="emailIdControl" [(ngModel)]="addPartyData.emailId">
+            <label for="emailId">Email ID</label>
+          </div>
+        </div>     
+    
+        <!-- Second Column -->
+        <div class="col-md-4">
+          <div class="form-floating">
+            <textarea class="form-control gstFields" id="billingAddress" name="billingAddress" rows="5" placeholder="Enter Billing Address" formControlName="billingAddressControl" [(ngModel)]="addPartyData.billingAddress" style="height: 200px;"></textarea>
+            <label for="billingAddress">Billing Address</label>
+            <a type="button" (click)="toggleShippingAddress()">
+              {{ isShippingAddressEnabled ? '- Disable Shipping Address' : '+ Enable Shipping Address' }}
+            </a>
+          </div>
+        </div>
+    
+        <!-- Third Column -->
+        <div class="col-md-4">
+          <div id="shippingAddressContainer" *ngIf="isShippingAddressEnabled">
+          <div class="form-floating">
+            <textarea class="form-control gstFields" id="shippingAddress" name="shippingAddress" rows="5" placeholder="Enter Shipping Address" formControlName="shippingAddressControl" [(ngModel)]="addPartyData.shippingAddress" style="height: 200px;"></textarea>
+            <label for="shippingAddress">Shipping Address</label>
+          </div>   
+          <div class="text-end">
+          <button class="btn btn-secondary add-btn">Add</button>
+          </div>
+        </div>
+        </div>
+      </div>   
+    </div>
+
+    <!-- TAB 2: BALANCE -->
+    <div class="creditAndBalanceForm row" id="creditAndBalance" *ngIf="selectedTab === 'creditAndBalance'">
+      <div class="col-md-6">
+        <div class="form-floating">
+          <input class="form-control creditAndBalanceFields" type="text" id="openingbalanceAmt" name="openingbalanceAmt" placeholder="Enter Opening Balance" formControlName="openingBalanceControl" [(ngModel)]="addPartyData.openingBalance" (input)="isPayRecieve(addPartyData.openingBalance)">
+          <label for="openingbalanceAmt">Opening Balance</label>
+        </div>
+        <div *ngIf="isOpeningBalance">
+          <label class="pay-recieve">
+            <input type="radio" name="openingbalance" value="pay" formControlName="toPayorReceiveControl"> To Pay
+          </label>
+
+          <label>
+            <input type="radio" name="openingbalance" value="recieve" formControlName="toPayorReceiveControl"> To Recieve
+          </label>
+        </div>
+ 
+
+        <!-- improvement required -->
+        <div class="form-check form-switch">
+          <input class="form-check-input" style="height: 25px; width:45px;" type="checkbox" role="switch" id="flexSwitchCheckDefault" (change)="updateLabel($event)">
+          <label class="form-check-label" style="margin-left: 5%; margin-top: 2%;" for="flexSwitchCheckDefault">{{ labelText }}</label>
+        </div>
+        
+        <div [class.hidden]="!isCustomLimit">
+          <div class="form-floating mt-3">
+            <input type="text" class="form-control" [(ngModel)]="customLimit" name="customLimit" placeholder="Enter Custom Limit" formControlName="creditLimitControl" [(ngModel)]="addPartyData.creditLimit">
+            <label for="customLimit">Credit Limit</label>
+          </div>
+        </div>
+        
+        <!-- -------------------- -->
+
+      </div>
+      <div class="col-md-6">
+        <div class="form-floating">
+          <input class="form-control creditAndBalanceFields" type="date" id="asofdate" name="asofdate" formControlName="asOfDateControl" [(ngModel)]="addPartyData.asOfDate">
+          <label for="asofdate">As of date</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: ADDTIONAL FIELDS -->
+    <div *ngIf="selectedTab === 'additionalFields'">
+      <div class="row  col-md-6">
+        <div class="form-floating mt-3">
+          <input type="text" class="form-control" name="additionalField1" placeholder="Additional Field 1" formControlName="additionalField1Control" [(ngModel)]="addPartyData.additionalFieldName1">
+          <label for="additionalField1">Additional Field 1</label>
+        </div>
+        
+        <div class="form-floating mt-3">
+          <input type="text" class="form-control" name="additionalField2" placeholder="Additional Field 2" formControlName="additionalField2Control" [(ngModel)]="addPartyData.additionalFieldName2">
+          <label for="additionalField2">Additional Field 2</label>
+        </div>
+        
+        <div class="form-floating mt-3">
+          <input type="text" class="form-control" name="additionalField3" placeholder="Additional Field 3" formControlName="additionalField3Control" [(ngModel)]="addPartyData.additionalFieldName3">
+          <label for="additionalField3">Additional Field 3</label>
+        </div>
+        
+        <div class="form-floating mt-3">
+          <input type="text" class="form-control" name="additionalField4" placeholder="Additional Field 4" formControlName="additionalField4Control" [(ngModel)]="addPartyData.additionalFieldName4">
+          <label for="additionalField4">Additional Field 4</label>
+        </div>
+        
+      </div>
+    </div>
+     
+  <div class="fixed-buttons d-flex justify-content-end position-fixed bottom-0 p-3 submit-btns">
+    <input type="submit" style="margin-right: 20px;" class="btn btn-warning add_party_btn" value="SAVE & NEW" (click)="submit()">
+    <input type="submit" class="btn btn-warning add_party_btn" value="SAVE" (click)="submit()">
+  </div>
+</form>
+
+
+    <!-- <div id="openingbalance" *ngIf="selectedTab === 'openingbalance'">
       <form class="openingbalanceForm">
         <label for="openingbalanceAmt">Opening Balance</label>
         <input class="openingbalanceFields" type="text" id="openingbalanceFields" name="openingbalanceAmt" placeholder="Enter Opening Balance">
 
         <label for="asofdate">As of date</label>
         <input class="openingbalanceFields" type="date" id="openingbalanceFields" name="asofdate">
+
+        <div>
+          <label>
+            <input type="checkbox"> Show Text Field
+          </label>
+        </div>
+        
+        <div *ngIf="isTextFieldVisible">
+          <input type="text" placeholder="Enter text">
+        </div>
 
         <br>
         <label>
@@ -65,11 +199,6 @@
         <label>
           <input type="radio" name="openingbalance" value="recieve"> To Recieve
         </label>
-
+ 
       </form>
-    </div>
-  
-    <input type="submit" value="SAVE & NEW">
-    <input type="submit" value="SAVE">
-
-</form>
+    </div> -->
