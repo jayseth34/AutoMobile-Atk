@@ -1,0 +1,17 @@
+.main {
+    padding: 5%;
+}
+
+.conversion-rate {
+    margin-left: 0%; 
+    margin-top: 5%; 
+    font-weight: bold;
+}
+
+.conversion-rate-line {
+    text-align: center;
+}
+
+.save-btn {
+    text-align: center;
+}

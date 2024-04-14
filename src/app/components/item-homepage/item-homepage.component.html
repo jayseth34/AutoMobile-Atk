@@ -1,0 +1,83 @@
+<div class="grid-container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="btn btn-primary d-inline-flex align-items-center bulk-edit-btn">
+            <img src="https://static-00.iconduck.com/assets.00/bulk-edit-icon-2048x2048-97d4a9fo.png" alt="Button Image" class="mr-2 bulk-icon">
+            <div class="bulk-text">
+                <h4 class="text-left" style="margin-bottom: 0%;">Bulk Items Update</h4>
+                <h6 class="text-left" style="margin-bottom: 0%;">Update/ Edit multiple items at a time.</h6>
+            </div>
+        </div>        
+
+        <div class="row">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Search here..">
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-warning add_item_btn" (click)="openAddItemModal()">+ ADD ITEM</button>
+            </div>
+        </div>
+
+        <table class="table table-bordered item_list">
+            <thead>
+              <tr>
+                <th>ITEM</th>
+                <th>QUANTITY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Loop to generate rows -->
+              <tr *ngFor="let row of rows">
+                <td>{{ row.column1 }}</td>
+                <td>{{ row.column2 }}</td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+
+    <!-- TOP CONTENT -->
+    <div class="top-content">
+        <h3>ITEM NAME</h3>
+        <div class="top-content-row">
+            <div class="sale-price">SALE PRICE: &#8377; 60.00 (exel)</div>
+            <div class="purchase-price">PURCHASE PRICE: &#8377; 45.00 (exel)</div>
+        </div>
+        <div class="top-content-row">
+            <div class="sale-price">STOCK QUANTITY: 2</div>
+            <div class="purchase-price">STOCK VALUE: &#8377; 32.00</div>
+        </div>
+    </div>
+
+    <!-- BOTTOM CONTENT -->
+    <div class="bottom-content">
+        <h2>TRANSACTIONS</h2>
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>TYPE</th>
+                <th>INVOICE/REF</th>
+                <th>NAME</th>
+                <th>DATE</th>
+                <th>QUANTITY</th>
+                <th>PRICE/UNIT</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Loop to generate rows -->
+              <tr *ngFor="let row of rows">
+                <td>{{ row.column1 }}</td>
+                <td>{{ row.column2 }}</td>
+                <td>{{ row.column3 }}</td>
+                <td>{{ row.column4 }}</td>
+                <td>{{ row.column5 }}</td>
+                <td>{{ row.column6 }}</td>
+                <td>{{ row.column7 }}</td>
+              </tr>
+            </tbody>
+          </table>
+          
+    </div>
+
+</div>

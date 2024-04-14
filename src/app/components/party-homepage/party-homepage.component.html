@@ -1,0 +1,72 @@
+<div class="grid-container">
+
+  
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="row">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Search here..">
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-warning add_party_btn" (click)="openAddPartyModal()">+ ADD PARTY</button>
+            </div>
+        </div>
+
+        <table class="table table-hover party_list">
+            <thead class="thead-dark">
+              <tr>
+                <th class="table-column">PARTY</th>
+                <th class="table-column">AMOUNT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Loop to generate rows -->
+              <tr *ngFor="let row of rows">
+                <td class="table-row">{{ row.column1 }}</td>
+                <td class="table-row">{{ row.column2 }}</td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+
+    <!-- TOP CONTENT -->
+    <div class="top-content">
+        <h3>PARTY NAME</h3>
+        <div class="top-content-row">
+            <div class="phone">PHONE: 123-456-7890</div>
+            <div class="address">ADDRESS: 123 Main St, City</div>
+        </div>
+        <div class="top-content-row">
+            <div class="phone">EMAIL: qwerty@test.com</div>
+            <div class="address">GSTIN: </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM CONTENT -->
+    <div class="bottom-content">
+        <h2>TRANSACTIONS</h2>
+        <table class="table table-hover transaction-list">
+            <thead class="thead-dark">
+              <tr>
+                <th class="table-column">TYPE</th>
+                <th class="table-column">NUMBER</th>
+                <th class="table-column">DATE</th>
+                <th class="table-column">TOTAL</th>
+                <th class="table-column">BALANCE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Loop to generate rows -->
+              <tr *ngFor="let row of rows" >
+                <td class="table-row">{{ row.column1 }}</td>
+                <td class="table-row">{{ row.column2 }}</td>
+                <td class="table-row">{{ row.column3 }}</td>
+                <td class="table-row">{{ row.column4 }}</td>
+                <td class="table-row">{{ row.column5 }}</td>
+              </tr>
+            </tbody>
+          </table>
+          
+    </div>
+
+</div>
