@@ -1,4 +1,9 @@
-.header{
-    background:lightgray;
-    padding: 2px;
+.header {
+  padding: 2px;
+}
+
+.root-container {
+  padding: 0;
+  margin: 0;
+  max-width: 100vw;
 }

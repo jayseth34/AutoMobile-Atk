@@ -13,12 +13,13 @@ import { AddPartyComponent } from './components/add-party/add-party.component';
 import { AddItemComponent } from './components/add-item/add-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatTableModule } from '@angular/material/table' ;
+import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { DetailsComponent } from './components/details/details.component';
 import { PartyHomepageComponent } from './components/party-homepage/party-homepage.component';
 import { ItemHomepageComponent } from './components/item-homepage/item-homepage.component';
 import { SelectUnitComponent } from './components/select-unit/select-unit.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { SelectUnitComponent } from './components/select-unit/select-unit.compon
     MatTableModule,
     MatIconModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSidenavModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
