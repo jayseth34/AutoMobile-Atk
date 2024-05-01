@@ -1,28 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ɵɵi18nApply } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 
 import { TransactionTypeEnum, TimeFilterEnum } from 'src/app/models';
-import { ApiService } from 'src/app/api.service';
+import { ApiService } from 'src/app/services/api.service';
+import { Transaction } from 'src/app/models';
 
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.css']
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent implements OnInit, AfterViewInit {
+  // TransactionType = TransactionTypeEnum // just gets the datatype
   filters = ["All Purchase Invoice", "Current Month", "Last Month", "Current Quarter", "Current Year", "Custom"];
   transactionType: TransactionTypeEnum = TransactionTypeEnum.Sale;
-  paidVal: Number = 0;
-  unpaidVal: Number = 0;
-  totalVal: Number = 0;
+  transactionTypeString: string;
+  paidVal: number = 0;
+  unpaidVal: number = 0;
+  totalVal: number = 0;
   fullData: any = [];
-  filteredData: any = [];
+  transactonData: MatTableDataSource<Transaction>;
+  phonenumber: number;
 
   // For Mat Table
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   // dataSource = ELEMENT_DATA;
-  displayedColumns: string[] = ['date', 'invoiceNo', 'partyName', 'transactionType', 'paymentType', 'amount', 'balance', 'icons', 'option'];
+  displayedColumns: string[] = ['invoicedate', 'invoicenumber', 'customername', 'typeofpay', 'paymenttype', 'total', 'balance', 'icons', 'option'];
 
   // Form Groups
   filterForm = new FormGroup({
@@ -32,20 +38,35 @@ export class DetailsComponent implements OnInit {
   });
 
   constructor(private route: Router, private api: ApiService) {
+    this.transactonData = new MatTableDataSource();
+  }
 
+  @ViewChild(MatSort) sort: MatSort;
+
+  ngAfterViewInit() {
+    this.transactonData.sort = this.sort;
   }
 
   ngOnInit(): void {
-    // console.log(this.route.url);
-    this.transactionType = this.route.url.split('/')[1] == 'sale' ? 0 : 1;
+    // Remove this!
+    localStorage.setItem("phonenumber", "9920279905");
+    this.transactionType = this.route.url.split('/')[1] == 'Sale' ? 0 : 1;
+    this.transactionTypeString = TransactionTypeEnum[this.transactionType];
+    this.phonenumber = parseInt(localStorage.getItem("phonenumber") as string);
 
     // API Call to get data
-    const body = {
-      "key": "value"
-    }
-    this.api.callBackend("/something", JSON.stringify(body), "POST").then(res => {
-      this.fullData = res;
-      this.handleRangeChange();
+    this.api.getTypeOfTransactions(this.transactionTypeString, this.phonenumber).subscribe((res) => {
+      if (res.status === "SUCCESS") {
+        // Setting the inv count
+        let curInvCount = res?.invoicenumbercount;
+        localStorage.setItem("curInvCount", curInvCount);
+
+        if (res.typeofpaytransactionlist != null) {
+          this.fullData = res.typeofpaytransactionlist;
+          console.log(this.fullData);
+          this.handleRangeChange();
+        }
+      }
     });
   }
 
@@ -114,14 +135,34 @@ export class DetailsComponent implements OnInit {
     let end = new Date(endTimestamp);
 
     // Api Call if required
-    console.log(this.fullData);
-    this.filteredData = this.fullData.filter((item: any) => {
-      let itemTimestamp = Date.parse(item.date);
-      let itemDate = new Date(itemTimestamp);
-      return (itemDate >= start && itemDate <= end && item.transactionType == TransactionTypeEnum[this.transactionType]);
+    this.transactonData.data = this.fullData.filter((item: any) => {
+      let itemDate = new Date(item.invoicedate);
+      this.updatePayment(item.paymentstatus, item.balance, item.total)
+      return (itemDate >= start && itemDate <= end && item.typeofpay == TransactionTypeEnum[this.transactionType].toUpperCase());
     });
+    console.log(this.transactonData);
+  }
 
-    // console.log(filteredData);
+  applyFilter(ev: Event) {
+    const filterVal = (ev.target as HTMLInputElement).value;
+    this.transactonData.filter = filterVal.trim().toLowerCase();;
+  }
+
+  updatePayment(payStatus: string, payBal: number, payTotal: number): void {
+    this.totalVal += payTotal;
+    if (payStatus === "UNPAID") {
+      this.unpaidVal += payBal;
+    } else if (payStatus === "PARTIAL") {
+      this.unpaidVal += payBal;
+      this.paidVal += (payTotal - payBal);
+    } else {
+      this.paidVal += payTotal;
+    }
+  }
+
+  tableSort(data: any, sortHeaderId: string): string | number {
+    console.log(data, sortHeaderId);
+    return sortHeaderId;
   }
 
 }

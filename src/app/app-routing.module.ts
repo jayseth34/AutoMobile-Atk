@@ -8,24 +8,29 @@ import { AddItemComponent } from './components/add-item/add-item.component';
 import { DetailsComponent } from './components/details/details.component';
 import { PartyHomepageComponent } from './components/party-homepage/party-homepage.component';
 import { ItemHomepageComponent } from './components/item-homepage/item-homepage.component';
+import { EditDetailComponent } from './components/edit-detail/edit-detail.component';
 
 const routes: Routes = [
-  {path:'', component:LoginComponent},
-  {path:'login', component:LoginComponent},
-  {path:'sidebar', component:SidebarComponent},
-  {path:'businessinfo', component:BusinessInformationComponent},
-  {path:'addparty', component:AddPartyComponent},
-  {path:'additem', component:AddItemComponent},
-  {path: 'sale', pathMatch: 'full', redirectTo: '/sale/sale-invoice'},
-  {path: 'sale/sale-invoice', component: DetailsComponent},
-  {path: 'purchase', pathMatch: 'full', redirectTo: '/purchase/puchase-bills'},
-  {path: 'purchase/puchase-bills', component: DetailsComponent},
+  { path: '', component: LoginComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'sidebar', component: SidebarComponent },
+  { path: 'businessinfo', component: BusinessInformationComponent },
+  { path: 'addparty', component: AddPartyComponent },
+  { path: 'additem', component: AddItemComponent },
+  { path: 'Sale', pathMatch: 'full', redirectTo: '/Sale/sale-invoice' },
+  { path: 'Sale/sale-invoice', component: DetailsComponent },
+  { path: 'Sale/edit/:invoiceNo', component: EditDetailComponent },
+  { path: 'Sale/add', component: EditDetailComponent },
+
+  { path: 'Purchase', pathMatch: 'full', redirectTo: '/Purchase/puchase-bills' },
+  { path: 'Purchase/puchase-bills', component: DetailsComponent },
+  { path: 'Purchase/edit/:invoiceNo', component: EditDetailComponent },
   // {path: 'sale', pathMatch: 'full', children: [
   //   {path: '', redirectTo: 'sale-invoice', pathMatch: 'full'},
   //   {path: 'sale-invoice', component: DetailsComponent},
   // ]},
-  {path:'party-homepage', component:PartyHomepageComponent},
-  {path:'item-homepage', component:ItemHomepageComponent},
+  { path: 'party-homepage', component: PartyHomepageComponent },
+  { path: 'item-homepage', component: ItemHomepageComponent },
 ];
 
 @NgModule({
