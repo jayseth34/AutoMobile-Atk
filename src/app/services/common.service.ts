@@ -37,14 +37,14 @@ export class CommonService {
     headers = headers.append("Authorization", "Bearer" + this.authToken.token);
     headers = headers.append("Content-Type", "application/json");
     return this.http
-    .post("http://localhost:4200/" + endPoint, body, {headers: headers })
+    .post("https://localhost:7002/" + endPoint, body, {headers: headers })
     .pipe(catchError(this.errorHandler));
   }
 
   get(endPoint: any): Observable<any> {
     this.UpdateHttpRequest();
     return this.http
-      .get("URL" + endPoint, this.httpOptions)
+      .get("http://localhost:4200/" + endPoint, this.httpOptions)
       .pipe(catchError(this.errorHandler));
   }
 }

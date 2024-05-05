@@ -1,11 +1,31 @@
-<div class="grid-container">
+<div style="margin-left: 20%;">
+  <ul class="nav nav-tabs navbar-light bg-light row tabMain" role="tablist">
+    <li class="nav-item tabSubMain col-sm-6 d-flex justify-content-center align-items-center">
+      <a class="nav-link tabTitle" style="margin-left: 40%; border: none;" [class.active]="selectedTab === 'party'"  id="tab1-tab" data-toggle="tab"  role="tab" aria-controls="tab1" (click)="selectTab('party')">PARTY</a>
+    </li>
+    <li class="nav-item tabSubMain col-sm-6 d-flex justify-content-center align-items-center">
+      <a class="nav-link tabTitle" [class.active]="selectedTab === 'group'" id="tab2-tab" data-toggle="tab"  role="tab" aria-controls="tab2" (click)="selectTab('group')">GROUP</a>
+    </li>
+  </ul>  
+  <!-- <button [class.active]="selectedTab === 'party'" style="width: 50%;">PARTY</button> -->
+  <!-- <button [class.active]="selectedTab === 'group'" style="width: 50%;">GROUP</button> -->
+  <!-- <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="selectedTab === 'party'">Party</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="selectedTab === 'group'">Group</a>
+    </li>
+  </ul> -->
+</div>
 
-  
+<ng-container *ngIf="selectedTab === 'party'">
+<div class="grid-container">
     <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="row">
             <div class="col">
-              <input type="text" class="form-control" placeholder="Search here..">
+              <input type="text" [(ngModel)]="searchParty" class="form-control" placeholder="Search here..">
             </div>
             <div class="col-auto">
               <button class="btn btn-warning add_party_btn" (click)="openAddPartyModal()">+ ADD PARTY</button>
@@ -21,9 +41,9 @@
             </thead>
             <tbody>
               <!-- Loop to generate rows -->
-              <tr *ngFor="let row of rows">
-                <td class="table-row">{{ row.column1 }}</td>
-                <td class="table-row">{{ row.column2 }}</td>
+              <tr *ngFor="let value of values" (click)="GetPartyDetailsData('9876543456',value)">
+                <td class="table-row">{{ value }}</td>
+                <td class="table-row">{{ value }}</td>
               </tr>
             </tbody>
           </table>
@@ -37,7 +57,7 @@
             <div class="address">ADDRESS: 123 Main St, City</div>
         </div>
         <div class="top-content-row">
-            <div class="phone">EMAIL: qwerty@test.com</div>
+            <div class="phone">EMAIL: qwerty.ttest.com</div>
             <div class="address">GSTIN: </div>
         </div>
     </div>
@@ -70,3 +90,66 @@
     </div>
 
 </div>
+</ng-container>
+
+<ng-container *ngIf="selectedTab === 'group'">
+<div class="grid-container">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="row">
+            <div class="col">
+              <input type="text" [(ngModel)]="searchParty" class="form-control" placeholder="Search here..">
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-warning add_party_btn" (click)="openAddPartyGroupModal()">+ ADD PARTY GROUP</button>
+            </div>
+        </div>
+
+        <table class="table table-hover party_list">
+            <thead class="thead-dark">
+              <tr>
+                <th class="table-column">GROUP</th>
+                <th class="table-column">PARTY</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Loop to generate rows -->
+              <tr *ngFor="let value of values" (click)="GetPartyByGroupData(9594645455,value)">
+                <td class="table-row">{{ value }}</td>
+                <td class="table-row">{{ value }}</td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+
+    <!-- TOP CONTENT -->
+    <div class="top-content">
+        <h3>GROUP NAME</h3>
+        <div class="top-content-row">
+            <div class="phone">Parties (no.ofparties) <span>(totalofParties)</span> </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM CONTENT -->
+    <div class="bottom-content">
+        <h2>PARTIES</h2>
+        <table class="table table-hover transaction-list">
+            <thead class="thead-dark">
+              <tr>
+                <th class="table-column">PARTY</th>
+                <th class="table-column">AMOUNT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Loop to generate rows -->
+              <tr *ngFor="let row of rows" >
+                <td class="table-row">{{ row.column1 }}</td>
+                <td class="table-row">{{ row.column2 }}</td>
+              </tr>
+            </tbody>
+          </table>
+          
+    </div>
+
+</div>
+</ng-container>

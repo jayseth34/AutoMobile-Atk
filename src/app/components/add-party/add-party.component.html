@@ -4,27 +4,43 @@
       <!-- Party Name Field --> 
     <div class="form-row three-columns">
       <div class="form-floating">
-        <input type="text" class="form-control party-name" placeholder="Party Name*" id="partyName" name="partyName" formControlName="partyNameControl" [(ngModel)]="addPartyData.partyName" required>
+        <input type="text" class="form-control party-name" placeholder="Party Name*" id="partyName" name="partyName" formControlName="partyNameControl" [(ngModel)]="partyName"
+        [class.is-invalid]="partyNameControl?.errors?.['required'] && (partyNameControl?.touched || ifFormSubmitted)">
         <label for="partyName">Party Name*</label>
+        <!-- <div>
+          <div *ngIf="addPartyForm.get('partyNameControl')?.errors?.['required']">This is required field.</div>
+        </div> -->
       </div>
+
+      <!-- <div *ngIf="partyNameControl?.errors?.['required'] && (partyNameControl?.dirty || partyNameControl?.touched)">
+        Party Name cannot be blank
+      </div> -->
 
       <!-- GSTIN Field -->
       <div class="form-floating">
-        <input type="text" class="form-control gst-in" placeholder="GSTIN" id="floatingPassword" name="gstin" formControlName="gstControl" [(ngModel)]="addPartyData.gst" required>
+        <input type="text" class="form-control gst-in" placeholder="GSTIN" id="floatingPassword" name="gstin" formControlName="gstControl" [(ngModel)]="gst">
         <label for="floatingPassword">GSTIN</label>
       </div>
       
       <!-- Phone no. Field -->
       <div class="form-floating">
-        <input type="text" class="form-control phone-num" placeholder="Phone Number" id="phoneNo" name="phoneNo" formControlName="phoneNumberControl" [(ngModel)]="addPartyData.phoneNumber" required>
+        <input type="text" class="form-control phone-num" placeholder="Phone Number" id="phoneNo" name="phoneNo" formControlName="phoneNumberControl" [(ngModel)]="phoneNumber"
+        [class.is-invalid]="phoneNumberControl?.errors">
         <label for="phoneNo">Phone Number</label>
+        <div>
+          <div *ngIf="addPartyForm.get('phoneNumberControl')?.errors?.['pattern']" style="color: red;">Please enter a valid number.</div>
+        </div>
       </div>
     </div>
 
     <div class="form-row party-group">
       <div class="form-floating">
-        <input type="text" class="form-control party-group" placeholder="Party Group*" id="partyGroup" name="partyGroup" formControlName="partyGroupControl" [(ngModel)]="addPartyData.partyGroup" required>
-        <label for="partyGroup">Party Group</label>
+        <input type="text" class="form-control party-group-input" placeholder="Party Group*" id="partyGroup" name="partyGroup" formControlName="partyGroupControl" [(ngModel)]="partyGroup" 
+        [class.is-invalid]="partyGroupControl?.errors?.['required'] && (partyGroupControl?.touched || ifFormSubmitted)">
+        <label for="partyGroup">Party Group*</label>
+        <!-- <div>
+          <div *ngIf="addPartyForm.get('partyGroupControl')?.errors?.['required']">This is required field.</div>
+        </div> -->
       </div>
     </div>
   
@@ -47,7 +63,7 @@
         <!-- First Column -->
         <div class="col-md-4">
           <div class="form-floating">
-            <select class="form-select gstFields" id="gstType" name="gstType" formControlName="gstTypeControl" [(ngModel)]="addPartyData.gstType">
+            <select class="form-select gstFields" id="gstType" name="gstType" formControlName="gstTypeControl" [(ngModel)]="gstType">
               <option value=""></option>
               <option value="Unregistered/Consumer">Unregistered/Consumer</option>
               <option value="Registered Business - Regular">Registered Business - Regular</option>
@@ -56,18 +72,20 @@
             <label for="gstType">GST Type</label>
           </div>
           
+          
           <div class="form-floating">
-            <select class="form-select gstFields" id="state" name="state" formControlName="_stateControl" [(ngModel)]="addPartyData._state">
-              <option value=""></option>
-              <option value="state1">state1</option>
-              <option value="state2">state2</option>
-              <option value="state3">state3</option>
+            <select class="form-select gstFields" id="state" name="state" formControlName="_stateControl" [(ngModel)]="_state">
+              <option value="" disabled selected class="dropdown-item"></option>
+              <option value="state1" class="dropdown-item">state1</option>
+              <option value="state2" class="dropdown-item">state2</option>
+              <option value="state3" class="dropdown-item">state3</option>
             </select>
             <label for="state">State</label>
           </div>
     
           <div class="form-floating">
-            <input type="text" class="form-control gstFields" id="emailId" name="emailId" placeholder="Enter Email" formControlName="emailIdControl" [(ngModel)]="addPartyData.emailId">
+            <input type="text" class="form-control gstFields" id="emailId" name="emailId" placeholder="Enter Email" formControlName="emailIdControl" [(ngModel)]="emailId"
+            [class.is-invalid]="emailIdControl?.errors">
             <label for="emailId">Email ID</label>
           </div>
         </div>     
@@ -75,7 +93,7 @@
         <!-- Second Column -->
         <div class="col-md-4">
           <div class="form-floating">
-            <textarea class="form-control gstFields" id="billingAddress" name="billingAddress" rows="5" placeholder="Enter Billing Address" formControlName="billingAddressControl" [(ngModel)]="addPartyData.billingAddress" style="height: 200px;"></textarea>
+            <textarea class="form-control gstFields" id="billingAddress" name="billingAddress" rows="5" placeholder="Enter Billing Address" formControlName="billingAddressControl" [(ngModel)]="billingAddress" style="height: 200px;"></textarea>
             <label for="billingAddress">Billing Address</label>
             <a type="button" (click)="toggleShippingAddress()">
               {{ isShippingAddressEnabled ? '- Disable Shipping Address' : '+ Enable Shipping Address' }}
@@ -87,7 +105,7 @@
         <div class="col-md-4">
           <div id="shippingAddressContainer" *ngIf="isShippingAddressEnabled">
           <div class="form-floating">
-            <textarea class="form-control gstFields" id="shippingAddress" name="shippingAddress" rows="5" placeholder="Enter Shipping Address" formControlName="shippingAddressControl" [(ngModel)]="addPartyData.shippingAddress" style="height: 200px;"></textarea>
+            <textarea class="form-control gstFields" id="shippingAddress" name="shippingAddress" rows="5" placeholder="Enter Shipping Address" formControlName="shippingAddressControl" [(ngModel)]="shippingAddress" style="height: 200px;"></textarea>
             <label for="shippingAddress">Shipping Address</label>
           </div>   
           <div class="text-end">
@@ -102,30 +120,36 @@
     <div class="creditAndBalanceForm row" id="creditAndBalance" *ngIf="selectedTab === 'creditAndBalance'">
       <div class="col-md-6">
         <div class="form-floating">
-          <input class="form-control creditAndBalanceFields" type="text" id="openingbalanceAmt" name="openingbalanceAmt" placeholder="Enter Opening Balance" formControlName="openingBalanceControl" [(ngModel)]="addPartyData.openingBalance" (input)="isPayRecieve(addPartyData.openingBalance)">
+          <input class="form-control creditAndBalanceFields" type="text" id="openingbalanceAmt" name="openingbalanceAmt" placeholder="Enter Opening Balance" formControlName="openingBalanceControl" [(ngModel)]="openingBalance">
           <label for="openingbalanceAmt">Opening Balance</label>
         </div>
-        <div *ngIf="isOpeningBalance">
+        <div>
+          <div *ngIf="addPartyForm.get('openingBalanceControl')?.errors?.['pattern']" style="color: red;">Please enter valid opening balance.</div>
+        </div>
+        <div *ngIf="openingBalance != null">
           <label class="pay-recieve">
-            <input type="radio" name="openingbalance" value="pay" formControlName="toPayorReceiveControl"> To Pay
+            <input type="radio" name="toPayorReceiveControl" value="pay" formControlName="toPayorReceiveControl" [(ngModel)]="toPayOrReceive" (change)="updateValue($event)"> To Pay
           </label>
 
           <label>
-            <input type="radio" name="openingbalance" value="recieve" formControlName="toPayorReceiveControl"> To Recieve
+            <input type="radio" name="toPayorReceiveControl" value="receive" formControlName="toPayorReceiveControl" [(ngModel)]="toPayOrReceive" (change)="updateValue($event)"> To Recieve
           </label>
         </div>
  
 
         <!-- improvement required -->
         <div class="form-check form-switch">
-          <input class="form-check-input" style="height: 25px; width:45px;" type="checkbox" role="switch" id="flexSwitchCheckDefault" (change)="updateLabel($event)">
-          <label class="form-check-label" style="margin-left: 5%; margin-top: 2%;" for="flexSwitchCheckDefault">{{ labelText }}</label>
+          <input class="form-check-input" style="height: 25px; width:45px;" type="checkbox" role="switch" id="customNoLimit" (change)="updateLabel($event)">
+          <label class="form-check-label" style="margin-left: 5%; margin-top: 2%;" for="customNoLimit">{{ labelText }}</label>
         </div>
         
         <div [class.hidden]="!isCustomLimit">
           <div class="form-floating mt-3">
-            <input type="text" class="form-control" [(ngModel)]="customLimit" name="customLimit" placeholder="Enter Custom Limit" formControlName="creditLimitControl" [(ngModel)]="addPartyData.creditLimit">
+            <input type="text" class="form-control" [(ngModel)]="customLimit" name="customLimit" placeholder="Enter Custom Limit" formControlName="creditLimitControl" [(ngModel)]="creditLimit">
             <label for="customLimit">Credit Limit</label>
+          </div>
+          <div>
+            <div *ngIf="addPartyForm.get('creditLimitControl')?.errors?.['pattern']" style="color: red;">Please enter valid credit limit.</div>
           </div>
         </div>
         
@@ -134,35 +158,105 @@
       </div>
       <div class="col-md-6">
         <div class="form-floating">
-          <input class="form-control creditAndBalanceFields" type="date" id="asofdate" name="asofdate" formControlName="asOfDateControl" [(ngModel)]="addPartyData.asOfDate">
+          <input class="form-control creditAndBalanceFields" type="date" id="asofdate" name="asofdate" formControlName="asOfDateControl" [(ngModel)]="asOfDate">
           <label for="asofdate">As of date</label>
         </div>
       </div>
     </div>
 
     <!-- TAB 3: ADDTIONAL FIELDS -->
-    <div *ngIf="selectedTab === 'additionalFields'">
-      <div class="row  col-md-6">
-        <div class="form-floating mt-3">
-          <input type="text" class="form-control" name="additionalField1" placeholder="Additional Field 1" formControlName="additionalField1Control" [(ngModel)]="addPartyData.additionalFieldName1">
-          <label for="additionalField1">Additional Field 1</label>
+    <div id="addtionalFields" *ngIf="selectedTab === 'additionalFields'">
+      <div class="row  col-md-12">
+        <div class="row addtional-fields">
+          <div class="col-md-1">
+            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField1Checked" name="additionalField1Checked" [(ngModel)]="additionalField1Checked" (change)="toggleAdditionalField($event, 'additionalField1')">
+          </div>
+          <div class="col-md-5">
+            <div class="form-floating">
+              <input type="text" class="form-control" name="additionalField1" placeholder="Additional Field 1" formControlName="additionalFieldName1Control" [(ngModel)]="additionalFieldName1"
+              [class.is-invalid]="additionalFieldName1Control?.errors?.['required'] && ifFormSubmitted">
+
+              <label for="additionalField1">Additional Field 1</label>
+            </div>
+          </div>
+          <div class="col-md-5" *ngIf="isAdditionalField1Checked">
+            <div class="form-floating">
+              <input type="text" class="form-control" name="additionalField1Value" placeholder="Additional Field 1 Value" formControlName="additionalField1ValueControl" [(ngModel)]="additionalField1Value"
+              [class.is-invalid]="additionalField1ValueControl?.errors?.['required'] && (additionalField1ValueControl?.touched || ifFormSubmitted)">
+              <label for="additionalField1Value">Enter value for additionalFieldName1</label>
+            </div>
+          </div>
+          <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField1Checked">
+            <input class="form-check-input" style="height: 15px; width:25px;" type="checkbox" role="switch" id="flexSwitchCheckDefault1" formControlName="additionalField1Checked">            <label class="form-check-label" for="flexSwitchCheckDefault1">Show in Print</label>
+          </div>
         </div>
-        
-        <div class="form-floating mt-3">
-          <input type="text" class="form-control" name="additionalField2" placeholder="Additional Field 2" formControlName="additionalField2Control" [(ngModel)]="addPartyData.additionalFieldName2">
-          <label for="additionalField2">Additional Field 2</label>
+
+        <div class="row addtional-fields">
+          <div class="col-md-1">
+            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField2Checked" name="additionalField2Checked" [(ngModel)]="additionalField2Checked" (change)="toggleAdditionalField($event, 'additionalField2')">
+          </div>
+          <div class="col-md-5">
+            <div class="form-floating">
+              <input type="text" class="form-control" name="additionalField2" placeholder="Additional Field 2" formControlName="additionalField2Control" [(ngModel)]="additionalFieldName2">
+              <label for="additionalField2">Additional Field 2</label>
+            </div>
+          </div>
+          <div class="col-md-5"  *ngIf="isAdditionalField2Checked">
+            <div class="form-floating">
+              <input type="text" class="form-control" name="additionalField2Value" placeholder="Additional Field 2 Value" formControlName="additionalField2ValueControl" [(ngModel)]="additionalField2Value">
+              <label for="additionalField2Value">Enter value for additionalFieldName2</label>
+            </div>
+          </div>
+          <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField2Checked">
+            <input class="form-check-input" style="height: 15px; width:25px;" type="checkbox" role="switch" id="flexSwitchCheckDefault2" formControlName="additionalField2Checked" (change)="showInPrint($event)">
+            <label class="form-check-label" for="flexSwitchCheckDefault2">Show in Print</label>
+          </div>
         </div>
-        
-        <div class="form-floating mt-3">
-          <input type="text" class="form-control" name="additionalField3" placeholder="Additional Field 3" formControlName="additionalField3Control" [(ngModel)]="addPartyData.additionalFieldName3">
-          <label for="additionalField3">Additional Field 3</label>
+
+        <div class="row addtional-fields">
+          <div class="col-md-1">
+            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField3Checked" name="additionalField3Checked" [(ngModel)]="additionalField3Checked" (change)="toggleAdditionalField($event, 'additionalField3')">
+          </div>
+          <div class="col-md-5">
+            <div class="form-floating">
+              <input type="text" class="form-control" name="additionalField3" placeholder="Additional Field 3" formControlName="additionalField3Control" [(ngModel)]="additionalFieldName3">
+              <label for="additionalField3">Additional Field 3</label>
+            </div>
+          </div>
+          <div class="col-md-5" *ngIf="isAdditionalField3Checked">
+            <div class="form-floating">
+              <input type="text" class="form-control" name="additionalField3Value" placeholder="Additional Field 3 Value" formControlName="additionalField3ValueControl" [(ngModel)]="additionalField3Value">
+              <label for="additionalField3Value">Enter value for additionalFieldName3</label>
+            </div>
+          </div>
+          <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField3Checked">
+            <input class="form-check-input" style="height: 15px; width:25px;" type="checkbox" role="switch" id="flexSwitchCheckDefault3" formControlName="additionalField3Checked" (change)="showInPrint($event)">
+            <label class="form-check-label" for="flexSwitchCheckDefault3">Show in Print</label>
+          </div>
         </div>
-        
-        <div class="form-floating mt-3">
-          <input type="text" class="form-control" name="additionalField4" placeholder="Additional Field 4" formControlName="additionalField4Control" [(ngModel)]="addPartyData.additionalFieldName4">
-          <label for="additionalField4">Additional Field 4</label>
+
+        <div class="row addtional-fields">
+          <div class="col-md-1">
+            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField4Checked" name="additionalField4Checked" [(ngModel)]="additionalField4Checked" (change)="toggleAdditionalField($event, 'additionalField4')">
+          </div>
+          <div class="col-md-5">
+            <div class="form-floating">
+              <input type="text" class="form-control" name="additionalField4" placeholder="Additional Field 4" formControlName="additionalField4Control" [(ngModel)]="additionalFieldName4">
+              <label for="additionalField4">Additional Field 4</label>
+            </div>
+          </div>
+          <div class="col-md-5"  *ngIf="isAdditionalField4Checked">
+            <div class="form-floating">
+              <input type="text" class="form-control" name="additionalField4Value" placeholder="Additional Field 4 Value" formControlName="additionalField4ValueControl" [(ngModel)]="additionalField4Value">
+              <label for="additionalField4Value">Enter value for additionalFieldName4</label>
+            </div>
+          </div>
+          <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField4Checked">
+            <input class="form-check-input" style="height: 15px; width:25px;" type="checkbox" role="switch" id="flexSwitchCheckDefault4" formControlName="additionalField4Checked" (change)="showInPrint($event)">
+            <label class="form-check-label" for="flexSwitchCheckDefault4">Show in Print</label>
+          </div>
         </div>
-        
+      
       </div>
     </div>
      

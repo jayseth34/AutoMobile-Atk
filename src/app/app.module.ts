@@ -20,6 +20,9 @@ import { PartyHomepageComponent } from './components/party-homepage/party-homepa
 import { ItemHomepageComponent } from './components/item-homepage/item-homepage.component';
 import { SelectUnitComponent } from './components/select-unit/select-unit.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { AddPartyGroupComponent } from './components/add-party-group/add-party-group.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +35,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     DetailsComponent,
     PartyHomepageComponent,
     ItemHomepageComponent,
-    SelectUnitComponent
+    SelectUnitComponent,
+    AddPartyGroupComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +49,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     FormsModule,
     HttpClientModule,
     MatSidenavModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

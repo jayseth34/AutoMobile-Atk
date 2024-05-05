@@ -8,6 +8,7 @@ import { AddItemComponent } from './components/add-item/add-item.component';
 import { DetailsComponent } from './components/details/details.component';
 import { PartyHomepageComponent } from './components/party-homepage/party-homepage.component';
 import { ItemHomepageComponent } from './components/item-homepage/item-homepage.component';
+import { AddPartyGroupComponent } from './components/add-party-group/add-party-group.component';
 
 const routes: Routes = [
   {path:'', component:LoginComponent},
@@ -16,6 +17,7 @@ const routes: Routes = [
   {path:'businessinfo', component:BusinessInformationComponent},
   {path:'addparty', component:AddPartyComponent},
   {path:'additem', component:AddItemComponent},
+  {path:'addPartyGroup', component:AddPartyGroupComponent},
   {path: 'sale', pathMatch: 'full', redirectTo: '/sale/sale-invoice'},
   {path: 'sale/sale-invoice', component: DetailsComponent},
   {path: 'purchase', pathMatch: 'full', redirectTo: '/purchase/puchase-bills'},
