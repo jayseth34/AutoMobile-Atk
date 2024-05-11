@@ -10,8 +10,8 @@ export class CommonService {
   httpOptions = {
     headers: new HttpHeaders({
       "Content-Type": "application/json; charset=utf-8",
-      authorization: "",
-      "cache-control": "no-cache",
+      // authorization: "",
+      // "cache-control": "no-cache",
     }),
   };
   constructor(public http: HttpClient) { }
@@ -21,20 +21,20 @@ export class CommonService {
   }
 
   UpdateHttpRequest() {
-    this.authToken = JSON.parse(localStorage.getItem("AuthToken") || '{}');
+    // this.authToken = JSON.parse(localStorage.getItem("AuthToken") || '{}');
     this.httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json; charset=utf-8",
-        authorization: "Bearer " + this.authToken.token,
-        "cache-control": "no-cache",
+        // authorization: "Bearer " + this.authToken.token,
+        // "cache-control": "no-cache",
       }),
     };
   }
 
   Post(endPoint: any, body: any): Observable<any> {
-    this.authToken = JSON.parse(localStorage.getItem("AuthToken") || '{}');
+    // this.authToken = JSON.parse(localStorage.getItem("AuthToken") || '{}');
     let headers = new HttpHeaders();
-    headers = headers.append("Authorization", "Bearer" + this.authToken.token);
+    // headers = headers.append("Authorization", "Bearer" + this.authToken.token);
     headers = headers.append("Content-Type", "application/json");
     return this.http
     .post("https://localhost:7002/" + endPoint, body, {headers: headers })
@@ -44,7 +44,7 @@ export class CommonService {
   get(endPoint: any): Observable<any> {
     this.UpdateHttpRequest();
     return this.http
-      .get("http://localhost:4200/" + endPoint, this.httpOptions)
+      .get("https://localhost:7002/" + endPoint, this.httpOptions)
       .pipe(catchError(this.errorHandler));
   }
 }

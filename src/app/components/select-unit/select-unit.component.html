@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm">
         <label for="base-unit">BASE UNIT</label>
-        <select class="form-select" [(ngModel)]="selectedOption1" name="base-unit">
+        <select class="form-select" [(ngModel)]="selectedOption1" (ngModelChange)="unitConversion()" name="base-unit">
           <option value="null" disabled>None</option>
           <option *ngFor="let option of options1" [ngValue]="option.value">
             {{ option.label }}

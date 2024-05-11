@@ -15,10 +15,13 @@ import { ApiService } from 'src/app/services/api.service';
 
 export class PartyHomepageComponent {
   searchParty: string = '';
+  searchGroup: string = '';
   selectedTab: string = 'party'; // Initially select the 'address' tab
   partyName: any = '';
+  amount: any = '';
   groupname: any = '';
   registeredMobileNumber: any = '';
+  // searchTerm: string = '';
 
   // filteredParties = [];
   filteredValues: string[];
@@ -67,8 +70,9 @@ openAddPartyGroupModal() {
 }
 
 GetPartyDetailsData(registeredMobileNumber:any, partyName: any) {
+  debugger;
   console.log("onclick: ", partyName)
-  this.partyName = partyName;
+  // this.partyName = partyName;
   this.api.getPartyDetails(registeredMobileNumber,partyName).pipe(takeUntil(this.destroy$)).subscribe({
     next:(res) => {
       console.log("GETPARTYLIST API: ",res);
@@ -103,5 +107,13 @@ GetPartyByGroupData(registeredMobileNumber:any, groupname: any) {
     }
   })
 }
+
+// filteredData: { column1: string, column2: string }[] = [];
+
+// onSearch() {
+//   this.filteredData = this.rows.filter(item =>
+//     item.column1.toLowerCase().includes(this.searchTerm.toLowerCase())
+//   );
+// }
 
 }

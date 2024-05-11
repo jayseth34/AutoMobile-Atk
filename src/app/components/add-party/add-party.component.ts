@@ -32,7 +32,7 @@ export class AddPartyComponent {
   shippingAddress: any = '';
   openingBalance: any = '';
   toPayOrReceive: any = '';
-  asOfDate: any = moment().format('DD-MM-YYYY');
+  asOfDate: any ;
   creditLimit: any = '';
   //For additional column names
   additionalFieldName1:any = '';
@@ -57,12 +57,17 @@ export class AddPartyComponent {
   isAdditionalField3Checked: boolean = false;
   isAdditionalField4Checked: boolean = false;
   ifFormSubmitted: boolean = false;
-
+  //to show in print
+  showAdditionalField1: boolean = false;
+  showAdditionalField2: boolean = false;
+  showAdditionalField3: boolean = false;
+  showAdditionalField4: boolean = false;
   addPartyForm: UntypedFormGroup;
 
   constructor(private api: ApiService, public dataService: DataService) {}
 
   ngOnInit(): void {
+    this.asOfDate = moment().format('YYYY-MM-DD'); // Set the default date
     // const today = moment().format('DD-MM-YYYY');
     // this.showPrint = 'Dont show in print';
 
@@ -125,8 +130,33 @@ export class AddPartyComponent {
     this.isCustomLimit = event.target.checked; 
   }
 
-  showInPrint(event: any) {
-    this.showPrint = event.target.checked ? 'Show in Print' : 'Dont show in print';
+  showInPrint(event: any, field: string) {
+    // this.showPrint = event.target.checked ? 'Show in Print' : 'Dont show in print';
+    const checked = event.target.checked;
+    switch(field){
+      case 'additionalField1Checked':
+        this.showAdditionalField1 = checked;
+        console.log('show1:', this.showAdditionalField1)
+        break;
+
+      case 'additionalField2Checked':
+        this.showAdditionalField2 = checked;
+        console.log('show2:', this.showAdditionalField2)
+        break;
+
+      case 'additionalField3Checked':
+        this.showAdditionalField3 = checked;
+        console.log('show3:', this.showAdditionalField3)
+        break;
+
+      case 'additionalField4Checked':
+        this.showAdditionalField4 = checked;
+        console.log('show4:', this.showAdditionalField4)
+        break;
+
+      default:
+        break;
+    }
   }
 
   // toggleCreditLimit() {
@@ -257,11 +287,11 @@ export class AddPartyComponent {
     console.log(this.isOpeningBalance)
     // debugger;
     // const controlValue = this.addPartyForm.get('toPayOrReceiveControl')?.value ?? '';
-    if (this.toPayOrReceive === 'pay') {
+    if (this.toPayOrReceive === 'PAY') {
       this.typeOfPay = "PAYABLE OPENING BALANCE";
       this.openingBalance = -this.openingBalance;
       console.log('To pay is selected: ', this.openingBalance);
-    } else if (this.toPayOrReceive === 'receive') {
+    } else if (this.toPayOrReceive === 'RECEIVE') {
       this.typeOfPay = "RECEIVABLE OPENING BALANCE";
       console.log('To receive is selected');
     }
@@ -294,20 +324,22 @@ export class AddPartyComponent {
   // }
   toggleAdditionalField(event: any, field: string) {
     const isChecked = event.target.checked;
-    debugger;
+  
     switch (field) {
       case 'additionalField1':
         this.isAdditionalField1Checked = isChecked;
-          if (this.isAdditionalField1Checked) {
-            this.addPartyForm.get('additionalFieldName1Control')?.setValidators([Validators.required]);
-            this.addPartyForm.get('additionalField1ValueControl')?.setValidators([Validators.required]);
-          } else {
-            this.addPartyForm.get('additionalFieldName1Control')?.clearValidators();
-            this.addPartyForm.get('additionalField1ValueControl')?.clearValidators();
-          }
-          // Update the validation status
-          this.addPartyForm.get('additionalFieldName1Control')?.updateValueAndValidity();
-          this.addPartyForm.get('additionalField1ValueControl')?.updateValueAndValidity();
+        if (this.isAdditionalField1Checked) {
+          this.addPartyForm.get('additionalFieldName1Control')?.setValidators([Validators.required]);
+          this.addPartyForm.get('additionalField1ValueControl')?.setValidators([Validators.required]);
+        } else {
+          this.addPartyForm.get('additionalFieldName1Control')?.clearValidators();
+          this.addPartyForm.get('additionalFieldName1Control')?.setValue('');
+          this.addPartyForm.get('additionalField1ValueControl')?.clearValidators();
+          this.addPartyForm.get('additionalField1ValueControl')?.setValue('');
+        }
+        // Update the validation status
+        this.addPartyForm.get('additionalFieldName1Control')?.updateValueAndValidity();
+        this.addPartyForm.get('additionalField1ValueControl')?.updateValueAndValidity();
         break;
       case 'additionalField2':
         this.isAdditionalField2Checked = isChecked;
@@ -316,7 +348,9 @@ export class AddPartyComponent {
           this.addPartyForm.get('additionalField2ValueControl')?.setValidators([Validators.required]);
         } else {
           this.addPartyForm.get('additionalFieldName2Control')?.clearValidators();
+          this.addPartyForm.get('additionalFieldName2Control')?.setValue('');
           this.addPartyForm.get('additionalField2ValueControl')?.clearValidators();
+          this.addPartyForm.get('additionalField2ValueControl')?.setValue('');
         }
         // Update the validation status
         this.addPartyForm.get('additionalFieldName2Control')?.updateValueAndValidity();
@@ -329,7 +363,9 @@ export class AddPartyComponent {
           this.addPartyForm.get('additionalField3ValueControl')?.setValidators([Validators.required]);
         } else {
           this.addPartyForm.get('additionalFieldName3Control')?.clearValidators();
+          this.addPartyForm.get('additionalFieldName3Control')?.setValue('');
           this.addPartyForm.get('additionalField3ValueControl')?.clearValidators();
+          this.addPartyForm.get('additionalField3ValueControl')?.setValue('');
         }
         // Update the validation status
         this.addPartyForm.get('additionalFieldName3Control')?.updateValueAndValidity();
@@ -342,7 +378,9 @@ export class AddPartyComponent {
           this.addPartyForm.get('additionalField4ValueControl')?.setValidators([Validators.required]);
         } else {
           this.addPartyForm.get('additionalFieldName4Control')?.clearValidators();
+          this.addPartyForm.get('additionalFieldName4Control')?.setValue('');
           this.addPartyForm.get('additionalField4ValueControl')?.clearValidators();
+          this.addPartyForm.get('additionalField4ValueControl')?.setValue('');
         }
         // Update the validation status
         this.addPartyForm.get('additionalFieldName4Control')?.updateValueAndValidity();
@@ -352,6 +390,7 @@ export class AddPartyComponent {
         break;
     }
   }
+  
 
   updateValue(ev: any) {
     this.toPayOrReceive = ev.target.value;

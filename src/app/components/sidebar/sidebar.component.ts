@@ -27,10 +27,11 @@ export class SidebarComponent {
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   getPartyListData(registeredMobileNumber: any) {
+    debugger
     this.api.getPartyList(registeredMobileNumber).pipe(takeUntil(this.destroy$)).subscribe({
       next:(res) => {
         console.log("GETPARTYLIST API: ",res);
-        if(res.message == "Success" && res.status == 1) {
+        if(res.status == "SUCCESS") {
           console.log("successs")
         }
         else {
