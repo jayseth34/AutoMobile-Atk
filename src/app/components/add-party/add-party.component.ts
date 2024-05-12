@@ -19,31 +19,33 @@ export class AddPartyComponent {
   isShippingAddressEnabled: boolean = true;
   isCustomLimit: boolean = false;
   customLimit: any; 
-  partyBalance: any = '';
-  registeredMobileNumber: any = '';
+  partyBalance: any = 0;
+  registeredPhoneNumber: any = '';
   partyName: any = '';
   gst: any = '';
-  phoneNumber: any = '';
+  phoneNumber: any = 0;
   partyGroup: any = '';
   gstType: any = '';
   _state: any = '';
   emailId: any = '';
   billingAddress: any = '';
   shippingAddress: any = '';
-  openingBalance: any = '';
+  openingBalance: any = 0;
   toPayOrReceive: any = '';
   asOfDate: any ;
-  creditLimit: any = '';
+  creditLimit: any = 0;
+  isPartyUpdate: boolean = true;
+  oldPartyName: any = '';
   //For additional column names
   additionalFieldName1:any = '';
   additionalFieldName2: any = '';
   additionalFieldName3: any = '';
   additionalFieldName4: any = '';  
   //For additional column's vale
-  additionalField1Value:any = '';
-  additionalField2Value: any = '';
-  additionalField3Value: any = '';
-  additionalField4Value: any = '';  
+  additionalFieldName1Value:any = '';
+  additionalFieldName2Value: any = '';
+  additionalFieldName3Value: any = '';
+  additionalFieldName4Value: any;  
   typeOfPay: any = '';
   labelText: string = 'No Limit';
   showPrint: string= 'Dont show in print';
@@ -67,7 +69,8 @@ export class AddPartyComponent {
   constructor(private api: ApiService, public dataService: DataService) {}
 
   ngOnInit(): void {
-    this.asOfDate = moment().format('YYYY-MM-DD'); // Set the default date
+    this.asOfDate = moment().format('YYYY-MM-DD'); 
+    this.additionalFieldName4Value =  moment().format('YYYY-MM-DD'); // Set the default date
     // const today = moment().format('DD-MM-YYYY');
     // this.showPrint = 'Dont show in print';
 
@@ -220,7 +223,7 @@ export class AddPartyComponent {
       console.log("after return");
       let body = {
         partyBalance: this.partyBalance,
-        registeredMobileNumber: this.registeredMobileNumber,
+        registeredPhoneNumber: 9920279905,
         partyName: this.partyName,
         gst: this.gst,
         phoneNumber: this.phoneNumber,
@@ -229,7 +232,7 @@ export class AddPartyComponent {
         _state: this._state,
         emailId: this.emailId,
         billingAddress: this.billingAddress,
-        shipppingAddress: this.shippingAddress,
+        shippingAddress: this.shippingAddress,
         openingBalance: this.openingBalance,
         toPayOrReceive: this.toPayOrReceive,
         asOfDate:this.asOfDate,
@@ -238,11 +241,13 @@ export class AddPartyComponent {
         additionalFieldName2: this.additionalFieldName2,
         additionalFieldName3: this.additionalFieldName3,
         additionalFieldName4: this.additionalFieldName4,
-        additionalField1Value: this.additionalField1Value,
-        additionalField2Value: this.additionalField2Value,
-        additionalField3Value: this.additionalField3Value,
-        additionalField4Value: this.additionalField4Value,
-        typeOfPay: this.typeOfPay
+        additionalFieldName1Value: this.additionalFieldName1Value,
+        additionalFieldName2Value: this.additionalFieldName2Value,
+        additionalFieldName3Value: this.additionalFieldName3Value,
+        additionalFieldName4Value: this.additionalFieldName4Value,
+        typeOfPay: this.typeOfPay,
+        oldPartyName: this.partyName,
+        isPartyUpdate: this.isPartyUpdate
       }
       // this.dataService.partyName = this.addPartyData.partyName;
       debugger;
@@ -258,30 +263,6 @@ export class AddPartyComponent {
     });
   }
 
-  AddGroupData(body: any): Promise<void> {
-    debugger
-    console.log("BEFore return");
-    return new Promise((resolve) => {
-      console.log("after return");
-      let body = {
-        registeredMobileNumber: this.registeredMobileNumber,
-        partyGroup: this.partyGroup,
-        newgroupname: this.partyGroup
-      }
-      // this.dataService.partyName = this.addPartyData.partyName;
-      debugger;
-      this.api.AddPartyDetails(JSON.stringify(body)).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        if (res == "Success") {
-          console.log("Success")
-        }
-        else{
-          console.log("Failed")
-        }
-        resolve();
-      });
-    });
-  }
-  
   checkTypeOfPay() {
     // Use optional chaining to safely access the control, and provide a default value ('') if it's null
     console.log(this.isOpeningBalance)
@@ -429,10 +410,10 @@ export class AddPartyComponent {
   get additionalFieldName2Control() { return this.addPartyForm.get('additionalFieldName2Control')}
   get additionalFieldName3Control() { return this.addPartyForm.get('additionalFieldName3Control')}
   get additionalFieldName4Control() { return this.addPartyForm.get('additionalFieldName4Control')}
-  get additionalField1ValueControl() { return this.addPartyForm.get('additionalField1ValueControl')}
-  get additionalField2ValueControl() { return this.addPartyForm.get('additionalField2ValueControl')}
-  get additionalField3ValueControl() { return this.addPartyForm.get('additionalField3ValueControl')}
-  get additionalField4ValueControl() { return this.addPartyForm.get('additionalField4ValueControl')}
+  get additionalFieldName1ValueControl() { return this.addPartyForm.get('additionalFieldName1ValueControl')}
+  get additionalFieldName2ValueControl() { return this.addPartyForm.get('additionalFieldName2ValueControl')}
+  get additionalFieldName3ValueControl() { return this.addPartyForm.get('additionalFieldName3ValueControl')}
+  get additionalFieldName4ValueControl() { return this.addPartyForm.get('additionalFieldName4ValueControl')}
   get additionalField1CheckedControl() { return this.addPartyForm.get('additionalField1CheckedControl')}
   get additionalField2CheckedControl() { return this.addPartyForm.get('additionalField2CheckedControl')}
   get additionalField3CheckedControl() { return this.addPartyForm.get('additionalField3CheckedControl')}

@@ -131,11 +131,11 @@
         </div>
         <div *ngIf="openingBalance != null">
           <label class="pay-recieve">
-            <input type="radio" name="toPayorReceiveControl" value="pay" formControlName="toPayorReceiveControl" [(ngModel)]="toPayOrReceive" (change)="updateValue($event)"> To Pay
+            <input type="radio" name="toPayorReceiveControl" value="PAY" formControlName="toPayorReceiveControl" [(ngModel)]="toPayOrReceive" (change)="updateValue($event)"> To Pay
           </label>
 
           <label>
-            <input type="radio" name="toPayorReceiveControl" value="receive" formControlName="toPayorReceiveControl" [(ngModel)]="toPayOrReceive" (change)="updateValue($event)"> To Recieve
+            <input type="radio" name="toPayorReceiveControl" value="RECEIVE" formControlName="toPayorReceiveControl" [(ngModel)]="toPayOrReceive" (change)="updateValue($event)"> To Recieve
           </label>
         </div>
  
@@ -184,10 +184,10 @@
           </div>
           <div class="col-md-5" *ngIf="isAdditionalField1Checked">
             <div class="form-floating">
-              <input type="text" class="form-control" name="additionalField1Value" placeholder="Additional Field 1 Value" formControlName="additionalField1ValueControl" [(ngModel)]="additionalField1Value"
-              [class.is-invalid]="additionalField1ValueControl?.errors?.['required'] && (additionalField1ValueControl?.touched || ifFormSubmitted)"
+              <input type="text" class="form-control" name="additionalFieldName1Value" placeholder="Additional Field 1 Value" formControlName="additionalFieldName1ValueControl" [(ngModel)]="additionalFieldName1Value"
+              [class.is-invalid]="additionalFieldName1ValueControl?.errors?.['required'] && (additionalFieldName1ValueControl?.touched || ifFormSubmitted)"
               oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalField1Value">Enter value for additionalFieldName1</label>
+              <label for="additionalFieldName1Value">Enter value for additionalFieldName1</label>
             </div>
           </div>
           <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField1Checked">
@@ -209,10 +209,10 @@
           </div>
           <div class="col-md-5"  *ngIf="isAdditionalField2Checked">
             <div class="form-floating">
-              <input type="text" class="form-control" name="additionalField2Value" placeholder="Additional Field 2 Value" formControlName="additionalField2ValueControl" 
-              [(ngModel)]="additionalField2Value" [class.is-invalid]="additionalField2ValueControl?.errors?.['required'] && (additionalField2ValueControl?.touched || ifFormSubmitted)"
+              <input type="text" class="form-control" name="additionalFieldName2Value" placeholder="Additional Field 2 Value" formControlName="additionalFieldName2ValueControl" 
+              [(ngModel)]="additionalFieldName2Value" [class.is-invalid]="additionalFieldName2ValueControl?.errors?.['required'] && (additionalFieldName2ValueControl?.touched || ifFormSubmitted)"
               oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalField2Value">Enter value for additionalFieldName2</label>
+              <label for="additionalFieldName2Value">Enter value for additionalFieldName2</label>
             </div>
           </div>
           <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField2Checked">
@@ -232,13 +232,13 @@
               [class.is-invalid]="additionalFieldName3Control?.errors?.['required'] && ifFormSubmitted" [(ngModel)]="additionalFieldName3" oninput="this.value = this.value.toUpperCase()">
               <label for="additionalField3">Additional Field 3</label>
             </div>
-          </div>
+          </div>Name
           <div class="col-md-5" *ngIf="isAdditionalField3Checked">
             <div class="form-floating">
-              <input type="text" class="form-control" name="additionalField3Value" placeholder="Additional Field 3 Value" formControlName="additionalField3ValueControl" 
-              [(ngModel)]="additionalField3Value" [class.is-invalid]="additionalField3ValueControl?.errors?.['required'] && (additionalField3ValueControl?.touched || ifFormSubmitted)" 
+              <input type="text" class="form-control" name="additionalFieldName3Value" placeholder="Additional Field 3 Value" formControlName="additionalFieldName3ValueControl" 
+              [(ngModel)]="additionalFieldName3Value" [class.is-invalid]="additionalFieldName3ValueControl?.errors?.['required'] && (additionalFieldName3ValueControl?.touched || ifFormSubmitted)" 
               oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalField3Value">Enter value for additionalFieldName3</label>
+              <label for="additionalFieldName3Value">Enter value for additionalFieldName3</label>
             </div>
           </div>
           <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField3Checked">
@@ -260,10 +260,10 @@
           </div>
           <div class="col-md-5"  *ngIf="isAdditionalField4Checked">
             <div class="form-floating">
-              <input type="text" class="form-control" name="additionalField4Value" placeholder="Additional Field 4 Value" formControlName="additionalField4ValueControl" 
-              [(ngModel)]="additionalField4Value" [class.is-invalid]="additionalField4ValueControl?.errors?.['required'] && (additionalField4ValueControl?.touched || ifFormSubmitted)" 
+              <input type="date" class="form-control" name="additionalFieldName4Value" placeholder="Additional Field 4 Value" formControlName="additionalFieldName4ValueControl" 
+              [(ngModel)]="additionalFieldName4Value" [class.is-invalid]="additionalFieldName4ValueControl?.errors?.['required'] && (additionalFieldName4ValueControl?.touched || ifFormSubmitted)" 
               oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalField4Value">Enter value for additionalFieldName4</label>
+              <label for="additionalFieldName4Value">Enter value for additionalFieldName4</label>
             </div>
           </div>
           <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField4Checked">

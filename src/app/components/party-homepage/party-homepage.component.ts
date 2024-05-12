@@ -75,8 +75,23 @@ GetPartyDetailsData(registeredMobileNumber:any, partyName: any) {
   // this.partyName = partyName;
   this.api.getPartyDetails(registeredMobileNumber,partyName).pipe(takeUntil(this.destroy$)).subscribe({
     next:(res) => {
-      console.log("GETPARTYLIST API: ",res);
-      if(res.message == "Success" && res.status == 1) {
+      console.log("GETPARTDETAILS API: ",res);
+      if(res.status == "SUCCESS") {
+        this.dataService.partyListResponse = res;
+        this.api.getPartyTransactions(registeredMobileNumber,partyName).pipe(takeUntil(this.destroy$)).subscribe({
+          next:(response) => {
+            if(res.status == "SUCCESS"){
+              this.dataService.transactionDetailsResponse =  response.partyTransactionsList
+              console.log("TRANSACTION SUCCESS")
+            }
+            else{
+              console.log("TRANSACTION FAILED")
+            }
+          },
+          error:() => {
+            console.log("TRANSACTION ERROR")
+          },
+        })
         console.log("successs")
       }
       else {
@@ -95,7 +110,8 @@ GetPartyByGroupData(registeredMobileNumber:any, groupname: any) {
   this.api.GetPartyByGroup(registeredMobileNumber,groupname).pipe(takeUntil(this.destroy$)).subscribe({
     next:(res) => {
       console.log("GETPARTYGROUPLIST API: ",res);
-      if(res.message == "Success" && res.status == 1) {
+      if(res) {
+        this.dataService.partyByGroupResponse = res.getPartyList
         console.log("successs")
       }
       else {

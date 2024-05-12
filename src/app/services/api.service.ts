@@ -9,6 +9,8 @@ export class ApiService {
 
   constructor(private http: HttpClient, private cs: CommonService) { }
 
+  // PARTY TAB
+
   AddPartyDetails(body: any){
     return this.cs.Post("api/Login/SaveOrUpdateParty",body);
   }
@@ -21,9 +23,28 @@ export class ApiService {
   }
 
   //https://localhost:7002/api/Login/GetPartyDetails?registeredphonenumber=9594645455&partyname=SHREYA- WORKING
-  getPartyDetails(registeredphonenumber: any, partyname: any){      //mini sidebar
+  getPartyDetails(registeredphonenumber: number, partyname: any){      //mini sidebar
     return this.cs.get(
       "api/Login/GetPartyDetails?registeredphonenumber=" + registeredphonenumber + "&partyname=" + partyname
+    );
+  }
+
+  //WORKING
+  getPartyTransactions(registeredphonenumber: number,partyname: any){
+    return this.cs.get(
+      "api/Sale/GetPartyTransactions?registeredphonenumber=" + registeredphonenumber+ "&customername=" + partyname
+    );    
+  }
+
+  // GROUP TAB
+
+  AddGroupDetails(body: any){
+    return this.cs.Post("api/Login/AddUpdatePartyGroup",body);
+  }
+
+  GetPartyGroup(registeredPhoneNumber: any){       
+    return this.cs.get(
+      "api/Login/GetPartyGroup?registeredPhoneNumber=" + registeredPhoneNumber
     );
   }
 

@@ -41,9 +41,9 @@
             </thead>
             <tbody>
               <!-- Loop to generate rows -->
-              <tr *ngFor="let value of values" (click)="GetPartyDetailsData('9876543456',value)">
-                <td class="table-row">{{ partyName }}</td>
-                <td class="table-row">{{ amount }}</td>
+              <tr *ngFor="let partydetail of dataService.partyList" (click)="GetPartyDetailsData('9920279905',partydetail.partyname)">
+                <td class="table-row">{{ partydetail.partyname }}</td>
+                <td class="table-row">{{ partydetail.partybalance }}</td>
               </tr>
             </tbody>
           </table>
@@ -51,14 +51,14 @@
 
     <!-- TOP CONTENT -->
     <div class="top-content">
-        <h3>PARTY NAME</h3>
+        <h3>PARTY NAME{{this.dataService.partyListResponse.partyList[0].partyname}}</h3>
         <div class="top-content-row">
-            <div class="phone">PHONE: 123-456-7890</div>
-            <div class="address">ADDRESS: 123 Main St, City</div>
+            <div class="phone">PHONE: {{this.dataService.partyListResponse.partyList[0].phonenumber}}</div>
+            <div class="address">ADDRESS: {{this.dataService.partyListResponse.partyList[0].billingaddress}}</div>
         </div>
         <div class="top-content-row">
-            <div class="phone">EMAIL: qwerty.ttest.com</div>
-            <div class="address">GSTIN: </div>
+            <div class="phone">EMAIL: {{this.dataService.partyListResponse.partyList[0].emailid}}</div>
+            <div class="address">GSTIN: {{this.dataService.partyListResponse.partyList[0].gst}}</div>
         </div>
     </div>
 
@@ -77,12 +77,12 @@
             </thead>
             <tbody>
               <!-- Loop to generate rows -->
-              <tr *ngFor="let row of rows" >
-                <td class="table-row">{{ row.column1 }}</td>
-                <td class="table-row">{{ row.column2 }}</td>
-                <td class="table-row">{{ row.column3 }}</td>
-                <td class="table-row">{{ row.column4 }}</td>
-                <td class="table-row">{{ row.column5 }}</td>
+              <tr *ngFor="let transaction of this.dataService.transactionDetailsResponse" >
+                <td class="table-row">{{ transaction.typeofpay }}</td>
+                <td class="table-row">{{ transaction.invoicenumber }}</td>
+                <td class="table-row">{{ transaction.invoicedate }}</td>
+                <td class="table-row">{{ transaction.total }}</td>
+                <td class="table-row">{{ transaction.balance }}</td>
               </tr>
             </tbody>
           </table>
@@ -114,9 +114,11 @@
             </thead>
             <tbody>
               <!-- Loop to generate rows -->
-              <tr *ngFor="let value of values" (click)="GetPartyByGroupData(9594645455,value)">
-                <td class="table-row">{{ value }}</td>
-                <td class="table-row">{{ value }}</td>
+              <tr *ngFor="let party of dataService.partyGroupListResponse" 
+              (click)="GetPartyByGroupData(9920279905, party.partygroup)" 
+              (dblclick)="openAddPartyGroupModal()">                
+                <td class="table-row">{{ party.partygroup }}</td>
+                <td class="table-row">{{ party.partygroupcount }}</td>
               </tr>
             </tbody>
           </table>
@@ -142,9 +144,9 @@
             </thead>
             <tbody>
               <!-- Loop to generate rows -->
-              <tr *ngFor="let row of rows" >
-                <td class="table-row">{{ row.column1 }}</td>
-                <td class="table-row">{{ row.column2 }}</td>
+              <tr *ngFor="let party of this.dataService.partyByGroupResponse" >
+                <td class="table-row">{{ party.partyname }}</td>
+                <td class="table-row">{{ party.partybalance }}</td>
               </tr>
             </tbody>
           </table>

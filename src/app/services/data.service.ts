@@ -25,6 +25,23 @@ export class DataService {
     additionalFieldName3: "",
     additionalFieldName4: ""
   }
+
+  partyList: { 
+    partyname: string, 
+    partybalance: number }[] = [];
+
+  partyListResponse: any;
+
+  transactionDetailsResponse: any;
+
+  partyGroupListResponse: any;
+
+  partyByGroupResponse: any;
+
+  // totalNoOfParties: any;
+
+  // totalAmountOfParties: any;
+
   constructor() { }
 
 
