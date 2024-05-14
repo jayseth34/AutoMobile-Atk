@@ -27,9 +27,8 @@ import { DetailsComponent } from './components/details/details.component';
 import { PartyHomepageComponent } from './components/party-homepage/party-homepage.component';
 import { ItemHomepageComponent } from './components/item-homepage/item-homepage.component';
 import { SelectUnitComponent } from './components/select-unit/select-unit.component';
-
 import { EditDetailComponent } from './components/edit-detail/edit-detail.component';
-import { AddDetailComponent } from './components/add-detail/add-detail.component';
+import { AddPartyGroupComponent } from './components/add-party-group/add-party-group.component';
 
 @NgModule({
   declarations: [
@@ -43,8 +42,8 @@ import { AddDetailComponent } from './components/add-detail/add-detail.component
     PartyHomepageComponent,
     ItemHomepageComponent,
     SelectUnitComponent,
+    AddPartyGroupComponent,
     EditDetailComponent,
-    AddDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +56,7 @@ import { AddDetailComponent } from './components/add-detail/add-detail.component
     FormsModule,
     HttpClientModule,
     MatSidenavModule,
+    MatFormFieldModule,
     MatButtonModule,
     MatMenuModule,
     MatFormFieldModule,

@@ -9,6 +9,7 @@ import { DetailsComponent } from './components/details/details.component';
 import { PartyHomepageComponent } from './components/party-homepage/party-homepage.component';
 import { ItemHomepageComponent } from './components/item-homepage/item-homepage.component';
 import { EditDetailComponent } from './components/edit-detail/edit-detail.component';
+import { AddPartyGroupComponent } from './components/add-party-group/add-party-group.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -17,14 +18,11 @@ const routes: Routes = [
   { path: 'businessinfo', component: BusinessInformationComponent },
   { path: 'addparty', component: AddPartyComponent },
   { path: 'additem', component: AddItemComponent },
-  { path: 'Sale', pathMatch: 'full', redirectTo: '/Sale/sale-invoice' },
-  { path: 'Sale/sale-invoice', component: DetailsComponent },
-  { path: 'Sale/edit/:invoiceNo', component: EditDetailComponent },
-  { path: 'Sale/add', component: EditDetailComponent },
-
-  { path: 'Purchase', pathMatch: 'full', redirectTo: '/Purchase/puchase-bills' },
-  { path: 'Purchase/puchase-bills', component: DetailsComponent },
-  { path: 'Purchase/edit/:invoiceNo', component: EditDetailComponent },
+  { path: 'addPartyGroup', component: AddPartyGroupComponent },
+  { path: 'sale', pathMatch: 'full', redirectTo: '/sale/sale-invoice' },
+  { path: 'sale/sale-invoice', component: DetailsComponent },
+  { path: 'purchase', pathMatch: 'full', redirectTo: '/purchase/puchase-bills' },
+  { path: 'purchase/puchase-bills', component: DetailsComponent },
   // {path: 'sale', pathMatch: 'full', children: [
   //   {path: '', redirectTo: 'sale-invoice', pathMatch: 'full'},
   //   {path: 'sale-invoice', component: DetailsComponent},

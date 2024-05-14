@@ -14,7 +14,16 @@ form {
   margin-bottom: 1%;
 }
 
-.party-group {
+.party-name, .phone-num{
+  /* padding: 2%; */
+  width: 210px;
+}
+
+.party-group-input{
+  width: 210px;
+}
+ 
+.party-group{
   padding: 2%;
   width: 210px;
 }
@@ -22,10 +31,12 @@ form {
   /* tabs */
 li a {
   color: black;
+  font-size: 15px;
 }
 
-.active {
-  text-decoration: underline;
+.nav-link.active {
+  color: rgb(28, 28, 152);
+  font-weight: 550;
 }
 
   /* GST TAB */
@@ -157,3 +168,30 @@ li a:hover:not(.active) {
   cursor: pointer;
   margin: 10px;
 } */
+
+
+/* Dropdown select options */
+.dropdown-options {
+  padding: 5%;
+}
+
+/* Additional fields */
+.addtional-fields {
+  margin: 3%;
+}
+
+.additionalFieldcheckBox {
+  margin-top: 30%;
+  margin-left: 15%;
+  height: 20px;
+  width: 20px;
+}
+
+.addFieldToggle {
+  margin: 1%;
+  margin-left: 10%;
+}
+
+.invalid-input{
+  border: 2px solid red;
+}
