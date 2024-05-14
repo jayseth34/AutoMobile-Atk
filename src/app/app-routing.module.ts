@@ -19,10 +19,14 @@ const routes: Routes = [
   { path: 'addparty', component: AddPartyComponent },
   { path: 'additem', component: AddItemComponent },
   { path: 'addPartyGroup', component: AddPartyGroupComponent },
-  { path: 'sale', pathMatch: 'full', redirectTo: '/sale/sale-invoice' },
-  { path: 'sale/sale-invoice', component: DetailsComponent },
-  { path: 'purchase', pathMatch: 'full', redirectTo: '/purchase/puchase-bills' },
-  { path: 'purchase/puchase-bills', component: DetailsComponent },
+  { path: 'Sale', pathMatch: 'full', redirectTo: '/Sale/sale-invoice' },
+  { path: 'Sale/sale-invoice', component: DetailsComponent },
+  { path: ':type/edit/:invoiceNo', component: EditDetailComponent },
+  { path: ':type/add', component: EditDetailComponent },
+
+  { path: 'Purchase', pathMatch: 'full', redirectTo: '/Purchase/puchase-bills' },
+  { path: 'Purchase/puchase-bills', component: DetailsComponent },
+  // { path: 'Purchase/edit/:invoiceNo', component: EditDetailComponent },
   // {path: 'sale', pathMatch: 'full', children: [
   //   {path: '', redirectTo: 'sale-invoice', pathMatch: 'full'},
   //   {path: 'sale-invoice', component: DetailsComponent},

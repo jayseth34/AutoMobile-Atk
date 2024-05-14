@@ -59,13 +59,13 @@ export class DetailsComponent implements OnInit, AfterViewInit {
       if (res.status === "SUCCESS") {
         // Setting the inv count
         let curInvCount = res?.invoicenumbercount;
-        localStorage.setItem("curInvCount", curInvCount);
+        localStorage.setItem("curInvCount", JSON.stringify(curInvCount));
 
-        if (res.typeofpaytransactionlist != null) {
-          this.fullData = res.typeofpaytransactionlist;
-          console.log(this.fullData);
-          this.handleRangeChange();
-        }
+        // if (res.typeofpaytransactionlist != null) {
+        //   this.fullData = res.typeofpaytransactionlist;
+        //   // console.log(this.fullData);
+        //   this.handleRangeChange();
+        // }
       }
     });
   }
@@ -85,7 +85,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     } else if (filterVal == TimeFilterEnum.CurYear) {
       start = new Date(curDate.getFullYear(), 0, 1);
       end = new Date(curDate.getFullYear() + 1, 0, 0);
-      console.log(start);
+      // console.log(start);
 
     } else if (filterVal == TimeFilterEnum.All) {
       start = ''
@@ -117,16 +117,16 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   handlePrintClick(invNo: number) {
-    console.log(invNo);
+    // console.log(invNo);
   }
 
   handleShareClick(invNo: number) {
-    console.log(invNo);
+    // console.log(invNo);
   }
 
   filterData(ev?: any) {
     if (ev) {
-      console.log(ev.target.id);
+      // console.log(ev.target.id);
     }
 
     let startTimestamp = Date.parse(this.filterForm.get('startDate')?.value as string);
@@ -140,7 +140,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
       this.updatePayment(item.paymentstatus, item.balance, item.total)
       return (itemDate >= start && itemDate <= end && item.typeofpay == TransactionTypeEnum[this.transactionType].toUpperCase());
     });
-    console.log(this.transactonData);
+    // console.log(this.transactonData);
   }
 
   applyFilter(ev: Event) {
@@ -161,7 +161,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   tableSort(data: any, sortHeaderId: string): string | number {
-    console.log(data, sortHeaderId);
+    // console.log(data, sortHeaderId);
     return sortHeaderId;
   }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonService } from './common.service';
+import { GetPartyTransactionDetailsRq, ItemListRs, Party, PartyListRs, TransactionDetails } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -43,12 +44,37 @@ export class ApiService {
   }
 
   getTypeOfTransactions(transactionType: string, phonenumber: number) {
+    let requestParams = new HttpParams();
     let req = {
       "registeredphonenumber": phonenumber,
       "typeofpay": transactionType.toUpperCase()
     }
-    let body = JSON.stringify(req);
-    return this.cs.Post("Sale/GetTypeOfPayTransactions", body);
+    requestParams.appendAll(req);
+    return this.cs.typeGet<TransactionDetails>("Sale/GetTypeOfPayTransactions");
+  }
+
+  getPartyListTyped(phonenumber: number) {
+    let params = new HttpParams();
+    params.append("registeredphonenumber", phonenumber)
+    let endpoint = 'Login/GetPartyList';
+    return this.cs.typeGet<PartyListRs>(endpoint, params);
+  }
+
+  getItemList(phonenumber: number) {
+    let endpoint = `Item/GetItemList?registeredphonenumber=${phonenumber}`;
+    return this.cs.typeGet<ItemListRs>(endpoint);
+  }
+
+  getTransactionDetails(phNo: number, invNo: number, type: string, isSaleConvert: boolean, isSaleOrder: boolean) {
+    const body: GetPartyTransactionDetailsRq = {
+      "registeredphonenumber": phNo,
+      "invoicenumber": invNo,
+      "typeofpay": type.toUpperCase(),
+      "issaleconvert": isSaleConvert,
+      "issaleorderconvert": isSaleOrder
+    };
+    const endPoint = "Sale/GetPartyItemTransactionDetails";
+    return this.cs.PostType<TransactionDetails, GetPartyTransactionDetailsRq>(endPoint, body);
   }
 
   GetPartyGroup(registeredPhoneNumber: any) {

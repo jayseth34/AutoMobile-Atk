@@ -14,3 +14,88 @@ export interface Transaction {
     balance: number
     paymentstatus: string
 }
+
+export interface Customer {
+    id: number,
+    name: string
+    phonenumber: number
+    balance: number
+    billingaddress: string
+}
+
+export interface TransactionItem {
+    id: number,
+    item: string,
+    quantity: number,
+    unit: string,
+    price: number,
+    discountPercent: number,
+    discountAmount: number,
+    taxPercent: number,
+    taxAmount: number,
+    totalAmount: number
+}
+
+export interface Party {
+    partyname: string,
+    partybalance: number,
+    phonenumber: number,
+    billingaddress: string,
+    shipppingaddress: string,
+    creditlimit: number
+}
+
+export interface TransactionDetails {
+    typeofpay: string
+    invoicedate: string
+    stateofsupply: string
+    paymenttype: string
+    total: number
+    received: number
+    balance: number
+    customername: string
+    phonenumber: number
+    billingaddress: string
+    shippingaddress: string
+    status: string
+    invoicenumbercount: number
+    itemdetailslist: ItemDetail[]
+}
+
+export interface ItemDetail {
+    item: string
+    qty: number
+    unit: string
+    priceperunit: number
+}
+
+export interface Item {
+    itemname: string,
+    remainingquantity: number,
+    saleprice: number,
+    purchaseprice: number,
+    wholesaleprice: number,
+    minimumwholesalequantity: number,
+    discountonsaleprice: number,
+    percentageoramounttype: any,
+    baseunit: string,
+}
+
+
+// ---------------- Request - Response Models ------------------
+
+export interface PartyListRs {
+    getPartyList: Party[],
+}
+
+export interface GetPartyTransactionDetailsRq {
+    registeredphonenumber: number
+    invoicenumber: number
+    typeofpay: string
+    issaleconvert: boolean
+    issaleorderconvert: boolean
+}
+
+export interface ItemListRs {
+    getItemList: Item[]
+}

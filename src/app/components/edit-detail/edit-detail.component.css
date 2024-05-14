@@ -1,0 +1,113 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.mat-mdc-form-field.col-5 .mat-mdc-text-field-wrapper.mdc-text-field {
+  background-color: white;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 90px;
+}
+
+.hover-display {
+  display: none;
+}
+
+/* Mat Table styling */
+table.mat-mdc-table {
+  border-collapse: separate;
+  border-spacing: 1px;
+  background-color: rgba(var(--bs-secondary-bg-rgb), var(--bs-bg-opacity));
+  /* background-color: rgba(var(--bs-secondary-bg-rgb), var(--bs-bg-opacity)); */
+}
+
+table.mat-mdc-table > thead.rowgroup {
+  margin-bottom: 2px;
+}
+
+table.mat-mdc-table td.mat-mdc-cell .container-fluid {
+  padding: 0 3px;
+}
+
+table.mat-mdc-table td.mat-mdc-cell input.form-control.table-input,
+table.mat-mdc-table td.mat-mdc-cell select.form-select.table-input {
+  border: none;
+}
+
+table.mat-mdc-table td.mat-mdc-cell select.form-select.table-input {
+  cursor: pointer;
+}
+
+table.mat-mdc-table td.mat-mdc-cell input.form-control.table-input:disabled,
+table.mat-mdc-table td.mat-mdc-cell select.form-select.table-input:disabled {
+  background-color: transparent;
+  cursor: default;
+}
+
+th.mat-mdc-header-cell,
+td.mat-mdc-cell,
+td.mat-mdc-footer-cell {
+  text-align: center;
+  /* padding: 0 5px; */
+  /* background-color: white; */
+  background-color: white;
+  /* border: 1px solid black; */
+  padding: 0 !important;
+}
+
+td.mat-mdc-footer-cell {
+  text-align: end;
+}
+
+td.mat-mdc-cell.mat-column-quantity,
+td.mat-mdc-cell.mat-column-id {
+  width: 50px;
+}
+
+tr.mat-mdc-row:hover .hover-display {
+  display: inline-block;
+}
+
+tr.mat-mdc-row:hover .hover-none {
+  display: none;
+}
+
+td.mat-mdc-cell.mat-column-unit {
+  width: 80px;
+}
+
+td.mat-mdc-cell.mat-column-discountAmount,
+td.mat-mdc-cell.mat-column-taxAmount,
+td.mat-mdc-cell.mat-column-totalAmount,
+td.mat-mdc-cell.mat-column-price {
+  width: 125px;
+}
+
+td.mat-mdc-cell.mat-column-discountPercent,
+td.mat-mdc-cell.mat-column-taxPercent {
+  width: 75px;
+}
+
+td.mat-mdc-cell .input-group .input-group-text,
+td.mat-mdc-cell .input-group input,
+td.mat-mdc-cell select.form-select {
+  padding: 5px 7px !important;
+}
+
+/* table,
+th.mat-header-cell,
+td.mat-cell {
+  border: 1px solid black;
+  border-collapse: collapse;
+} */

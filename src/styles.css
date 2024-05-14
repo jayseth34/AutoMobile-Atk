@@ -28,3 +28,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
   padding: 20px;
   margin-left: 10%;
 }
+
+::ng-deep .mat-datepicker-content .mat-calendar {
+  zoom: 0.85;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  background-color: white;
+  border-radius: 5px;
+}

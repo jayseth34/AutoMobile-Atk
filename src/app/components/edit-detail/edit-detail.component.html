@@ -1,3 +1,447 @@
-<section class="header">
-  <h2>{{ TransactionType[transactionType] }}</h2>
+<section class="bg-body-secondary">
+  <div class="container-fluid pt-2 pb-2">
+    <div class="row align-content-center">
+      <div class="example-button-container" (click)="goToSaleInvoice()">
+        <button mat-mini-fab aria-label="Back to sale invoice">
+          <mat-icon>arrow_back_ios_new</mat-icon>
+        </button>
+      </div>
+      <div class="col-2 align-self-center">
+        <h1 class="m-0">{{ transactionType }}</h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-body-secondary basic-details pt-2 mt-2">
+  <div class="container-fluid">
+    <div class="row justify-content-between">
+      <!-- Party Details -->
+      <div class="container-fluid col-8 ms-2 me-2">
+        <form [formGroup]="modifyDetail" class="row">
+          <!-- Party Name -->
+          <mat-form-field class="col-4">
+            <mat-label>Party Name</mat-label>
+            <input
+              type="text"
+              placeholder="Enter Name"
+              aria-label="Number"
+              matInput
+              formControlName="partyName"
+              [matAutocomplete]="auto"
+              (click)="handleCustomerInputClick()"
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              (optionSelected)="handleChange($event)"
+            >
+              <mat-option
+                *ngFor="let party of partyList"
+                [value]="party.partyname"
+                >{{ party.partyname }}</mat-option
+              >
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <!-- Phone Number -->
+          <mat-form-field class="col-3">
+            <mat-label>Phone Number</mat-label>
+            <input
+              matInput
+              placeholder="Phone Number"
+              formControlName="phoneNumber"
+            />
+          </mat-form-field>
+
+          <!-- Credit Limit -->
+          <mat-form-field class="col-3">
+            <mat-label>Credit Limit</mat-label>
+            <input
+              matInput
+              placeholder="Credit Limit"
+              formControlName="creditLimit"
+            />
+          </mat-form-field>
+
+          <!-- Balance -->
+          <mat-form-field class="col-2">
+            <mat-label>Balance</mat-label>
+            <input
+              matInput
+              placeholder="Balance"
+              formControlName="partybalance"
+            />
+          </mat-form-field>
+
+          <!-- Billing Address -->
+          <mat-form-field class="col-5">
+            <mat-label>Billing Address</mat-label>
+            <textarea
+              matInput
+              placeholder="Billing Address"
+              formControlName="billingAddress"
+            >
+            </textarea>
+          </mat-form-field>
+
+          <!-- Shipping Address -->
+          <mat-form-field class="col-5">
+            <mat-label>Shipping Address</mat-label>
+            <textarea
+              matInput
+              placeholder="Shipping Address"
+              formControlName="shippingAddress"
+            >
+            </textarea>
+          </mat-form-field>
+        </form>
+      </div>
+
+      <!-- Invoice Details -->
+      <div class="container-fluid col-3 ms-2 me-2">
+        <form [formGroup]="modifyDetail" class="row">
+          <mat-form-field class="col-4">
+            <mat-label>Inv. No</mat-label>
+            <input
+              type="number"
+              matInput
+              formControlName="invNumber"
+              [disabled]="true"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-7">
+            <mat-label>Inv. Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="invoiceDate"
+            />
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col-11">
+            <mat-label>State</mat-label>
+            <input
+              type="text"
+              aria-label="Number"
+              matInput
+              formControlName="state"
+              [matAutocomplete]="state"
+              (click)="handleStateInputClick()"
+            />
+            <mat-autocomplete #state="matAutocomplete">
+              <mat-option *ngFor="let state of stateList" [value]="state">
+                {{ state }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mt-2 bg-body-secondary p-2">
+  <form [formGroup]="itemDataForm">
+    <table
+      mat-table
+      matSort
+      [dataSource]="newTransactionData"
+      formArrayName="items"
+    >
+      <!-- First Header Columns -->
+      <!-- Id column -->
+      <ng-container matColumnDef="Id">
+        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">#</th>
+        <td mat-footer-cell *matFooterCellDef>
+          <button
+            mat-icon-button
+            color="accent"
+            aria-label="Add Row"
+            (click)="handleAddRowClick()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Item Header -->
+      <ng-container matColumnDef="Item">
+        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ITEM</th>
+        <td mat-footer-cell *matFooterCellDef>
+          <span class="me-3 ms-1">TOTAL</span>
+        </td>
+      </ng-container>
+
+      <!-- Quantity Column -->
+      <ng-container matColumnDef="Quantity">
+        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">QTY</th>
+        <td mat-footer-cell *matFooterCellDef>
+          <span class="ms-1 me-2"> {{ totalQuantity }} </span>
+        </td>
+      </ng-container>
+
+      <!-- Unit Column -->
+      <ng-container matColumnDef="Unit">
+        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">UNIT</th>
+        <td mat-footer-cell *matFooterCellDef>-</td>
+      </ng-container>
+
+      <!-- Price Per unit Column -->
+      <ng-container matColumnDef="Price/unit">
+        <th mat-header-cell *matHeaderCellDef>Price/Unit</th>
+        <td mat-footer-cell *matFooterCellDef>-</td>
+      </ng-container>
+
+      <!-- Discount Column -->
+      <ng-container matColumnDef="Discount">
+        <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">DICOUNT</th>
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="2">
+          <span class="ms-1 me-2"> {{ totalDiscount }} </span>
+        </td>
+      </ng-container>
+
+      <!-- TAX Column -->
+      <ng-container matColumnDef="Tax">
+        <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">TAX</th>
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="2">
+          <span class="ms-1 me-2"> {{ totalTax }} </span>
+        </td>
+      </ng-container>
+
+      <!-- Final Amount Column -->
+      <ng-container matColumnDef="Amount">
+        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">AMOUNT</th>
+        <td mat-footer-cell *matFooterCellDef>
+          <span class="ms-1 me-2"> {{ totalAmount }} </span>
+        </td>
+      </ng-container>
+
+      <!-- Second Header Columns -->
+      <!-- Id Column display none -->
+      <ng-container matColumnDef="id">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          [ngStyle]="{ display: 'none' }"
+        >
+          #
+        </th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <span class="hover-none">
+            {{ i + 1 }}
+          </span>
+          <div class="hover-display">
+            <button
+              mat-icon-button
+              color="warn"
+              aria-label="Delete Row"
+              (click)="handleDeleteRowClick(i)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Item Column display none -->
+      <ng-container matColumnDef="item">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          [ngStyle]="{ display: 'none' }"
+        >
+          Item
+        </th>
+        <td mat-cell *matCellDef="let element" [formGroup]="element">
+          <div class="container-fluid">
+            <select
+              class="form-select table-input"
+              (click)="getItems()"
+              formControlName="item"
+              [compareWith]="compareItems"
+              (change)="handleItemChangeRow(element)"
+            >
+              <option value="" *ngIf="!element.controls['item'].value">
+                Select Value
+              </option>
+              <option
+                *ngIf="element.controls['item'].value"
+                [value]="element.controls['item'].value"
+              >
+                {{ element.controls["item"].value }}
+              </option>
+              <option
+                *ngFor="let item of items"
+                value="{{ item.itemname }}"
+                [selected]="item.itemname === element.controls['item'].value"
+              >
+                {{ item.itemname }}
+              </option>
+            </select>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Quantity Column display none -->
+      <ng-container matColumnDef="quantity">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          [ngStyle]="{ display: 'none' }"
+        >
+          Quantity
+        </th>
+        <td mat-cell *matCellDef="let element" [formGroup]="element">
+          <div class="container-fluid">
+            <input
+              type="number"
+              class="form-control table-input"
+              formControlName="qty"
+            />
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Unit Column display none -->
+      <ng-container matColumnDef="unit">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          [ngStyle]="{ display: 'none' }"
+        >
+          Unit
+        </th>
+        <td mat-cell *matCellDef="let element" [formGroup]="element">
+          <div class="container-fluid">
+            <select class="form-select table-input" formControlName="unit">
+              <option *ngFor="let unit of UNITS" [value]="unit">
+                {{ unit }}
+              </option>
+            </select>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Price/Unit without tax column -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Without Tax</th>
+        <td mat-cell *matCellDef="let element" [formGroup]="element">
+          <div class="container-fluid">
+            <input
+              type="number"
+              class="form-control table-input"
+              formControlName="price"
+            />
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Discount - Percentage Column -->
+      <ng-container matColumnDef="discountPercent">
+        <th mat-header-cell *matHeaderCellDef>%</th>
+        <td mat-cell *matCellDef="let element" [formGroup]="element">
+          <div class="container-fluid">
+            <input
+              type="number"
+              min="0"
+              max="100"
+              class="form-control table-input"
+              formControlName="discountPercent"
+            />
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Discount - Amount Column -->
+      <ng-container matColumnDef="discountAmount">
+        <th mat-header-cell *matHeaderCellDef>Amount</th>
+        <td mat-cell *matCellDef="let element" [formGroup]="element">
+          <div class="container-fluid">
+            <input
+              type="number"
+              class="form-control table-input"
+              formControlName="discountAmount"
+            />
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Tax - Percentage Column -->
+      <ng-container matColumnDef="taxPercent">
+        <th mat-header-cell *matHeaderCellDef>%</th>
+        <td mat-cell *matCellDef="let element" [formGroup]="element">
+          <div class="container-fluid">
+            <input
+              type="number"
+              min="0"
+              max="100"
+              class="form-control table-input"
+              formControlName="discountPercent"
+            />
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Tax - Amount Column -->
+      <ng-container matColumnDef="taxAmount">
+        <th mat-header-cell *matHeaderCellDef>Amount</th>
+        <td mat-cell *matCellDef="let element" [formGroup]="element">
+          <div class="container-fluid">
+            <input
+              type="number"
+              class="form-control table-input"
+              formControlName="taxAmount"
+            />
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Final Amount display none Column -->
+      <ng-container matColumnDef="totalAmount">
+        <th
+          mat-header-cell
+          mat-sort-header
+          *matHeaderCellDef
+          [ngStyle]="{ display: 'none' }"
+        >
+          Amount
+        </th>
+        <td mat-cell *matCellDef="let element" [formGroup]="element">
+          <div class="container-fluid">
+            <input
+              type="number"
+              class="form-control table-input"
+              formControlName="totalAmount"
+            />
+          </div>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <!-- Defining the header row -->
+      <tr mat-header-row *matHeaderRowDef="newTransactionDataHeaders"></tr>
+      <tr mat-header-row *matHeaderRowDef="newTransactionDataColumns"></tr>
+
+      <!-- Defining the data row -->
+      <tr mat-row *matRowDef="let row; columns: newTransactionDataColumns"></tr>
+
+      <!-- Defining the footer row -->
+      <tr mat-footer-row *matFooterRowDef="newTransactionDataHeaders"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <!-- <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">
+          No data matching the filter "{{ tableFilterInp.value }}"
+        </td>
+      </tr> -->
+    </table>
+  </form>
 </section>
