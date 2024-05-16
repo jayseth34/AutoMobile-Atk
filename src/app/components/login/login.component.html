@@ -1,18 +1,34 @@
 <div class="login-container">
-    <form class="login-form">
-      <h2>LOGIN</h2>
-      <div class="form-group">
-        <input type="text" id="mobileno" name="mobileno" placeholder="Enter Mobile no.">
-      </div>
+  <form class="login-form" [formGroup]="loginForm">
+    <h2>LOGIN</h2>
+    <div class="form-group">
+      <input
+        type="text"
+        id="mobileno"
+        name="mobileno"
+        placeholder="Enter Mobile no."
+        formControlName="phonenumber"
+      />
+    </div>
 
-      <input type="submit" value="GET OTP">
-      <!-- <h4 class="resendOtp">Resend OTP</h4> -->
+    <input type="submit" value="GET OTP" />
+    <!-- <h4 class="resendOtp">Resend OTP</h4> -->
 
-      <div class="form-group">
-        <input type="text" id="otp" name="otp" placeholder="Enter OTP">
-      </div>
+    <div class="form-group">
+      <input type="text" id="otp" name="otp" placeholder="Enter OTP" />
+    </div>
 
-      <input type="submit" routerLink="/businessinfo" value="SUBMIT">
+    <div class="form-group">
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Enter password"
+        formControlName="password"
+      />
+    </div>
 
-    </form>
-  </div>
+    <input type="submit" (click)="handleLoginFormSubmit()" value="SUBMIT" />
+    <!-- <input type="submit" routerLink="/businessinfo" value="SUBMIT" /> -->
+  </form>
+</div>

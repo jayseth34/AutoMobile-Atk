@@ -81,8 +81,32 @@ export interface Item {
     baseunit: string,
 }
 
+export interface Typeofpaytransaction {
+    invoicenumber: number
+    invoicedate: string
+    customername: string
+    typeofpay: string
+    paymenttype: string
+    total: number
+    balance: number
+    paymentstatus: string
+}
+
 
 // ---------------- Request - Response Models ------------------
+
+export interface LoginReponse {
+    status: string
+    statusMessage: string
+    accessToken: string
+    expiryDate: string
+}
+
+export interface LoginRequest {
+    phonenumber: number
+    password: string
+}
+
 
 export interface PartyListRs {
     getPartyList: Party[],
@@ -99,3 +123,10 @@ export interface GetPartyTransactionDetailsRq {
 export interface ItemListRs {
     getItemList: Item[]
 }
+
+export interface GetTypeOfPayTransactionsRq {
+    status: string
+    invoicenumbercount: number
+    typeofpaytransactionlist: Typeofpaytransaction[]
+}
+

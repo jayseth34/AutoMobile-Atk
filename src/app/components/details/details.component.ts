@@ -61,11 +61,11 @@ export class DetailsComponent implements OnInit, AfterViewInit {
         let curInvCount = res?.invoicenumbercount;
         localStorage.setItem("curInvCount", JSON.stringify(curInvCount));
 
-        // if (res.typeofpaytransactionlist != null) {
-        //   this.fullData = res.typeofpaytransactionlist;
-        //   // console.log(this.fullData);
-        //   this.handleRangeChange();
-        // }
+        if (res.typeofpaytransactionlist != null) {
+          this.fullData = res.typeofpaytransactionlist;
+          // console.log(this.fullData);
+          this.handleRangeChange();
+        }
       }
     });
   }

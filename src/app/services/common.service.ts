@@ -23,11 +23,11 @@ export class CommonService {
   }
 
   UpdateHttpRequest() {
-    // this.authToken = JSON.parse(localStorage.getItem("AuthToken") || '{}');
+    this.authToken = JSON.parse(localStorage.getItem("AuthToken") || '{}');
     this.httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json; charset=utf-8",
-        // authorization: "Bearer " + this.authToken.token,
+        authorization: "Bearer " + this.authToken.token,
         // "cache-control": "no-cache",
       }),
     };

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonService } from './common.service';
-import { GetPartyTransactionDetailsRq, ItemListRs, Party, PartyListRs, TransactionDetails } from '../models';
+import { GetPartyTransactionDetailsRq, GetTypeOfPayTransactionsRq, ItemListRs, LoginReponse, LoginRequest, Party, PartyListRs, TransactionDetails } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,10 @@ import { GetPartyTransactionDetailsRq, ItemListRs, Party, PartyListRs, Transacti
 export class ApiService {
 
   constructor(private http: HttpClient, private cs: CommonService) { }
+
+  AuthenticateUser(body: LoginRequest) {
+    return this.cs.PostType<LoginReponse, any>("Login/AuthenticateUser", body)
+  }
 
   // PARTY TAB
 
@@ -49,8 +53,9 @@ export class ApiService {
       "registeredphonenumber": phonenumber,
       "typeofpay": transactionType.toUpperCase()
     }
-    requestParams.appendAll(req);
-    return this.cs.typeGet<TransactionDetails>("Sale/GetTypeOfPayTransactions");
+    requestParams = requestParams.appendAll(req);
+    console.log(requestParams.toString());
+    return this.cs.typeGet<GetTypeOfPayTransactionsRq>("Sale/GetTypeOfPayTransactions", requestParams);
   }
 
   getPartyListTyped(phonenumber: number) {
