@@ -79,6 +79,8 @@ export interface Item {
     discountonsaleprice: number,
     percentageoramounttype: any,
     baseunit: string,
+
+    [index: string]: string | number;
 }
 
 export interface Typeofpaytransaction {

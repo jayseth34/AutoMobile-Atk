@@ -55,7 +55,6 @@ export class CommonService {
     this.UpdateHttpRequest();
     if (requestParams) {
       newHttpOptions = { ...this.httpOptions, params: requestParams }
-      console.log(newHttpOptions)
     }
     return this.http
       .get<T>(this.baseURL + endPoint, requestParams ? newHttpOptions : this.httpOptions)
@@ -65,7 +64,7 @@ export class CommonService {
   PostType<T, P>(endPoint: string, body: P): Observable<T> {
     this.authToken = JSON.parse(localStorage.getItem("AuthToken") || '{}');
     let headers = new HttpHeaders();
-    headers = headers.append("Authorization", "Bearer" + this.authToken.token);
+    headers = headers.append("Authorization", "Bearer " + this.authToken.token);
     headers = headers.append("Content-Type", "application/json");
     return this.http
       .post<T>(this.baseURL + endPoint, body, { headers: headers })

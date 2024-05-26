@@ -20,7 +20,10 @@
       <div class="container-fluid col-8 ms-2 me-2">
         <form [formGroup]="modifyDetail" class="row">
           <!-- Party Name -->
-          <mat-form-field class="col-4">
+          <mat-form-field
+            class="col-4 mat-small mb-1"
+            subscriptSizing="dynamic"
+          >
             <mat-label>Party Name</mat-label>
             <input
               type="text"
@@ -44,7 +47,7 @@
           </mat-form-field>
 
           <!-- Phone Number -->
-          <mat-form-field class="col-3">
+          <mat-form-field class="col-3 mb-1" subscriptSizing="dynamic">
             <mat-label>Phone Number</mat-label>
             <input
               matInput
@@ -54,7 +57,7 @@
           </mat-form-field>
 
           <!-- Credit Limit -->
-          <mat-form-field class="col-3">
+          <mat-form-field class="col-3 mb-1" subscriptSizing="dynamic">
             <mat-label>Credit Limit</mat-label>
             <input
               matInput
@@ -64,7 +67,7 @@
           </mat-form-field>
 
           <!-- Balance -->
-          <mat-form-field class="col-2">
+          <mat-form-field class="col-2 mb-1" subscriptSizing="dynamic">
             <mat-label>Balance</mat-label>
             <input
               matInput
@@ -74,7 +77,7 @@
           </mat-form-field>
 
           <!-- Billing Address -->
-          <mat-form-field class="col-5">
+          <mat-form-field class="col-5 mb-1" subscriptSizing="dynamic">
             <mat-label>Billing Address</mat-label>
             <textarea
               matInput
@@ -85,7 +88,7 @@
           </mat-form-field>
 
           <!-- Shipping Address -->
-          <mat-form-field class="col-5">
+          <mat-form-field class="col-5 mb-1" subscriptSizing="dynamic">
             <mat-label>Shipping Address</mat-label>
             <textarea
               matInput
@@ -100,7 +103,8 @@
       <!-- Invoice Details -->
       <div class="container-fluid col-3 ms-2 me-2">
         <form [formGroup]="modifyDetail" class="row">
-          <mat-form-field class="col-4">
+          <!-- Invoice Number -->
+          <mat-form-field class="col-4 mb-1" subscriptSizing="dynamic">
             <mat-label>Inv. No</mat-label>
             <input
               type="number"
@@ -109,7 +113,9 @@
               [disabled]="true"
             />
           </mat-form-field>
-          <mat-form-field class="col-7">
+
+          <!-- Invoice Date -->
+          <mat-form-field class="col-7 mb-1" subscriptSizing="dynamic">
             <mat-label>Inv. Date</mat-label>
             <input
               matInput
@@ -122,6 +128,8 @@
             ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
+
+          <!-- Invoice State -->
           <mat-form-field class="col-11">
             <mat-label>State</mat-label>
             <input
@@ -145,7 +153,7 @@
 </section>
 
 <section class="mt-2 bg-body-secondary p-2">
-  <form [formGroup]="itemDataForm">
+  <form [formGroup]="itemDataForm" disabled>
     <table
       mat-table
       matSort
@@ -240,7 +248,7 @@
               mat-icon-button
               color="warn"
               aria-label="Delete Row"
-              (click)="handleDeleteRowClick(i)"
+              (click)="handleDeleteRowClick(i, element)"
             >
               <mat-icon>delete</mat-icon>
             </button>
@@ -259,13 +267,12 @@
           Item
         </th>
         <td mat-cell *matCellDef="let element" [formGroup]="element">
-          <div class="container-fluid">
+          <!-- <div class="container-fluid">
             <select
               class="form-select table-input"
               (click)="getItems()"
               formControlName="item"
               [compareWith]="compareItems"
-              (change)="handleItemChangeRow(element)"
             >
               <option value="" *ngIf="!element.controls['item'].value">
                 Select Value
@@ -284,7 +291,47 @@
                 {{ item.itemname }}
               </option>
             </select>
-          </div>
+          </div> -->
+          <!-- <mat-form-field
+            class="w-100"
+            appearance="outline"
+            subscriptSizing="dynamic"
+            formControlName="item"
+          >
+            <input
+              type="text"
+              matInput
+              formControlName="item"
+              (click)="getItems()"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete
+              #itemAuto="matAutocomplete"
+              [displayWith]="getItemName"
+            >
+              <mat-option *ngFor="let item of items" [value]="item.itemname">
+                {{ item.itemname }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field> -->
+          <mat-form-field
+            class="w-100"
+            subscriptSizing="dynamic"
+            appearance="outline"
+            (click)="getItems()"
+          >
+            <input
+              type="text"
+              matInput
+              formControlName="item"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let item of items" [value]="item.itemname">
+                {{ item.itemname }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
         </td>
       </ng-container>
 
@@ -384,7 +431,7 @@
               min="0"
               max="100"
               class="form-control table-input"
-              formControlName="discountPercent"
+              formControlName="taxPercent"
             />
           </div>
         </td>
@@ -444,4 +491,10 @@
       </tr> -->
     </table>
   </form>
+</section>
+
+<section class="mt-2 bg-body-secondary p-2">
+  <button mat-raised-button color="accent" (click)="submitDetails()">
+    Submit
+  </button>
 </section>

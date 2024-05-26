@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AbstractType, Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
@@ -7,7 +7,7 @@ import { STATE_LIST } from 'src/app/dummyData';
 import { Party } from 'src/app/models';
 import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from 'src/app/services/api.service';
-import { distinctUntilChanged, pairwise, startWith } from 'rxjs';
+import { Observable, distinctUntilChanged, map, of, pairwise, startWith } from 'rxjs';
 
 
 @Component({
@@ -48,10 +48,20 @@ export class EditDetailComponent implements OnInit {
     "Kg"
   ]
 
+  public get itemDetailValue(): FormArray {
+    return (this.itemDataForm.get("items") as FormArray);
+  }
+
+
+  getItemName(item: Item): string {
+    return item.itemname
+  }
+
+
   constructor(private router: Router, private route: ActivatedRoute, private api: ApiService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.registeredPhoneNumber = parseInt(localStorage.getItem("phonenumber") ?? "");
+    this.registeredPhoneNumber = parseInt(JSON.parse(localStorage.getItem("phonenumber") ?? ""));
     this.currentInvNo = parseInt(localStorage.getItem("curInvCount") ?? "");
     this.modifyDetail = new FormGroup({
       partyName: new FormControl(),
@@ -76,7 +86,6 @@ export class EditDetailComponent implements OnInit {
         this.transactionType = params.get("type") as string;
         if (this.transactionType == "Sale") {
           this.modifyDetail.get("phoneNumber")?.disable();
-          this.modifyDetail.get("billingAddress")?.disable();
           this.modifyDetail.get("state")?.disable();
         }
       }
@@ -112,10 +121,6 @@ export class EditDetailComponent implements OnInit {
     });
   }
 
-  public get itemDetailValue(): FormArray {
-    return (this.itemDataForm.get("items") as FormArray);
-  }
-
   updateTransactionData() {
     this.newTransactionData.data = this.itemDetailValue.controls;
   }
@@ -134,7 +139,7 @@ export class EditDetailComponent implements OnInit {
       // "id": new FormControl(data?.id ?? 0),
       "item": new FormControl(data?.item ?? ""),
       "qty": new FormControl(data?.qty ?? 0),
-      "unit": new FormControl({ value: data?.unit ?? this.UNITS[0], disabled: true }),
+      "unit": new FormControl({ value: data?.unit ? data?.unit : "None", disabled: true }),
       "price": new FormControl({ value: data?.priceperunit ?? 0.0, disabled: true }),
       "discountPercent": new FormControl(0.0),
       "discountAmount": new FormControl(0.0),
@@ -150,7 +155,121 @@ export class EditDetailComponent implements OnInit {
     // using distinctUntilChanged because the function get called two times
     // Error can be two subscriptions but I don't know ??
     element.get("item")?.valueChanges.pipe(distinctUntilChanged(), startWith(data?.item ?? ""), pairwise()).subscribe(([prev, next]: [any, any]) => this.handleItemChange(prev, next, element));
+    const valueChanges$ = element.valueChanges.pipe(map((item: any) => this.getChangesNew(element)));
+    valueChanges$.subscribe((changeObj: any) => {
+      console.log("Changed", changeObj);
+      Object.keys(changeObj).forEach((key: string) => {
+        const pricePerUnit = element.get("price")?.value as number;
+        const discountPer = element.get("discountPercent")?.value as number;
+        const discountAmt = element.get("discountAmount")?.value as number;
+        const taxPer = element.get("taxPercent")?.value as number;
+        const itemQty = element.get("qty")?.value as number;
+        const taxAmt = element.get("taxAmount")?.value as number;
+        switch (key) {
+          case "qty":
+            const iscountAmtQty = ((discountPer * pricePerUnit) / 100) * changeObj[key]
+            const newTaxAmtQty = ((taxPer * pricePerUnit) / 100) * changeObj[key];
+            element.patchValue({
+              "discountAmount": iscountAmtQty,
+              "taxAmount": newTaxAmtQty,
+              "totalAmount": (pricePerUnit * changeObj[key]) - discountAmt + taxAmt
+            }, { emitEvent: false });
+            break;
+
+          case "discountAmount":
+            const newPricePerUnitDisc = changeObj[key] / itemQty;
+            element.patchValue({
+              "discountPercent": (newPricePerUnitDisc / pricePerUnit) * 100,
+              "totalAmount": (pricePerUnit * itemQty) - changeObj[key] + taxAmt
+            }, { emitEvent: false });
+            break;
+
+          case "discountPercent":
+            const newDiscountAmt = (changeObj[key] / 100) * itemQty * pricePerUnit;
+            element.patchValue({
+              "discountAmount": newDiscountAmt,
+              "totalAmount": (pricePerUnit * itemQty) - newDiscountAmt + taxAmt
+            }, { emitEvent: false });
+            break;
+
+          case "taxAmount":
+            const newPricePerUnitTax = changeObj[key] / itemQty;
+            element.patchValue({
+              "taxPercent": (newPricePerUnitTax / pricePerUnit) * 100,
+              "totalAmount": (pricePerUnit * itemQty) + changeObj[key] - discountAmt
+            }, { emitEvent: false });
+            break;
+
+          case "taxPercent":
+            const newTaxAmt = (changeObj[key] / 100) * itemQty * pricePerUnit;
+            element.patchValue({
+              "taxAmount": newTaxAmt,
+              "totalAmount": (pricePerUnit * itemQty) - discountAmt + newTaxAmt
+            }, { emitEvent: false });
+            break;
+        }
+        this.calcTotalVal();
+      });
+    });
+
     return element;
+  }
+
+  calcTotalVal() {
+    let tempTotalValObj = {
+      "qty": 0,
+      "disc": 0,
+      "tax": 0,
+      "amt": 0
+    };
+    tempTotalValObj = this.itemDetailValue.controls.reduce((total: any, currVal: any) => {
+      total["qty"] += currVal.get("qty").value;
+      total["disc"] += currVal.get("discountAmount").value;
+      total["tax"] += currVal.get("taxAmount").value;
+      total["amt"] += currVal.get("totalAmount").value;
+      return total;
+    }, tempTotalValObj);
+    this.totalAmount = tempTotalValObj.amt;
+    this.totalDiscount = tempTotalValObj.disc;
+    this.totalQuantity = tempTotalValObj.qty;
+    this.totalTax = tempTotalValObj.tax;
+  }
+
+  getChanges(item1: Item, item2: Item): [string, any][] {
+    console.log(item1, item2);
+    let diff$: [string, string | number][];
+
+    if (item1 == null && item2 != null)
+      diff$ = Object.entries(item2);
+    else if (item1 != null && item2 == null)
+      diff$ = Object.entries(item1);
+    else if (item1 != null && item2 != null) {
+      const result = Object.entries(item1).reduce((acc, [key, value]) => {
+        if (item2[key] != value) {
+          const updatedAcc = { ...acc, [key]: { "prev": item1[key], "next": item2[key] } };
+          return updatedAcc;
+        } else {
+          return acc;
+        }
+      }, {});
+      diff$ = Object.entries(result);
+    }
+    else {
+      diff$ = [];
+    }
+    return diff$;
+  }
+
+  getChangesNew(item1: FormGroup) {
+    const constObj = Object.entries((item1 as FormGroup).controls);
+    const changeObj = constObj.reduce((acc: any, currVal: any) => {
+      if (currVal[1].dirty) {
+        return { ...acc, [currVal[0]]: currVal[1].value };
+      }
+      return acc;
+    }, {});
+    item1.markAsPristine();
+    return changeObj
   }
 
   addNewFormRow(row: FormGroup) {
@@ -158,9 +277,9 @@ export class EditDetailComponent implements OnInit {
     control.push(row);
   }
 
-  handleDeleteRowClick(ind: number) {
-    console.log(`Deleting: ${ind}`);
+  handleDeleteRowClick(ind: number, element: FormControl) {
     this.itemDetailValue.removeAt(ind);
+    this.handleItemChangeRow(element);
     this.updateTransactionData();
   }
 
@@ -227,7 +346,6 @@ export class EditDetailComponent implements OnInit {
     // Removing the next(new) value from the items array
     const ind = this.items.findIndex((item: Item) => item.itemname === next)
     const newItem: Item = this.items[ind];
-    console.log("New Item Base unit: ", newItem.baseunit);
     this.items.splice(ind, 1);
 
     // Adding the previous (old) item to the items list
@@ -236,19 +354,7 @@ export class EditDetailComponent implements OnInit {
     if (prevItem)
       this.items.push(prevItem);
 
-    // if()
-    // Updating the row containing the new element
-    element.patchValue({
-      "qty": 1,
-      "item": next,
-      "unit": newItem.baseunit ?? "None",
-      "price": newItem.saleprice ?? 0,
-      "discountPercent": 0.0,
-      "discountAmount": 0.0,
-      "taxPercent": 0.0,
-      "taxAmount": 0.0,
-      "totalAmount": 0.0,
-    });
+    this.handleItemChangeRow(element, newItem);
   }
 
   compareItems(item1: Item, item2: Item) {
@@ -256,7 +362,41 @@ export class EditDetailComponent implements OnInit {
     return item1.itemname === item2.itemname;
   }
 
-  handleItemChangeRow(formControl: any) {
+  handleItemChangeRow(element: any, item?: Item) {
+    // Calculating the required amt
+    // Deleting the previous value
+    this.totalAmount -= element.get("totalAmount").value;
+    this.totalDiscount -= element.get("discountAmount").value;
+    this.totalQuantity -= element.get("qty").value;
 
+    // TODO: Tax calculation required.
+
+    // Updating the row containing the new element
+    if (item) {
+      // If item is present, then perform calc.
+      const itemTotalAmt = (item?.saleprice ?? 0) - (item?.discountonsaleprice ?? 0);
+      const discountPercent = ((item?.discountonsaleprice ?? 0) / (item?.saleprice ?? 0)) * 100;
+
+      this.totalAmount += itemTotalAmt;
+      this.totalDiscount += item.discountonsaleprice;
+      this.totalQuantity += 1;
+      element.patchValue({
+        "qty": 1,
+        "item": item.itemname,
+        "unit": item.baseunit ?? "None",
+        "price": item.saleprice ?? 0,
+        "discountPercent": discountPercent,
+        "discountAmount": item.discountonsaleprice,
+        "taxPercent": 0.0,
+        "taxAmount": 0.0,
+        "totalAmount": itemTotalAmt
+      }, { emitEvent: false });
+    }
   }
+
+  submitDetails() {
+    console.log(this.modifyDetail.getRawValue());
+    console.log(this.itemDataForm.getRawValue());
+  }
+
 }

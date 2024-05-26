@@ -23,7 +23,7 @@ export class ApiService {
   //https://localhost:7002/api/Login/GetPartyList?registeredphonenumber=9920279905 - WORKING
   getPartyList(registeredphonenumber: number) {       //sidebar
     return this.cs.get(
-      "api/Login/GetPartyList?registeredphonenumber=" + registeredphonenumber
+      "Login/GetPartyList?registeredphonenumber=" + registeredphonenumber
     );
   }
 
@@ -54,7 +54,6 @@ export class ApiService {
       "typeofpay": transactionType.toUpperCase()
     }
     requestParams = requestParams.appendAll(req);
-    console.log(requestParams.toString());
     return this.cs.typeGet<GetTypeOfPayTransactionsRq>("Sale/GetTypeOfPayTransactions", requestParams);
   }
 
