@@ -1,21 +1,33 @@
+<div>
+  <ul class="nav nav-tabs navbar-light bg-light row tabMain" role="tablist">
+    <li class="nav-item tabSubMain col-sm-6 d-flex justify-content-center align-items-center">
+      <a class="nav-link tabTitle" [class.active]="dataService.itemHomePageSelectedTab === 'product'"  id="tab1-tab" data-toggle="tab"  role="tab" aria-controls="tab1" (click)="selectTab('product')">PRODUCT</a>
+    </li>
+    <li class="nav-item tabSubMain col-sm-6 d-flex justify-content-center align-items-center">
+      <a class="nav-link tabTitle" [class.active]="dataService.itemHomePageSelectedTab === 'category'" id="tab2-tab" data-toggle="tab"  role="tab" aria-controls="tab2" (click)="selectTab('category')">CATEGORY</a>
+    </li>
+  </ul>  
+</div>
+
+<ng-container *ngIf="dataService.itemHomePageSelectedTab === 'product'">
 <div class="grid-container">
 
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <div class="btn btn-primary d-inline-flex align-items-center bulk-edit-btn">
+        <!-- <div class="btn btn-primary d-inline-flex align-items-center bulk-edit-btn">
             <img src="https://static-00.iconduck.com/assets.00/bulk-edit-icon-2048x2048-97d4a9fo.png" alt="Button Image" class="mr-2 bulk-icon">
             <div class="bulk-text">
                 <h4 class="text-left" style="margin-bottom: 0%;">Bulk Items Update</h4>
                 <h6 class="text-left" style="margin-bottom: 0%;">Update/ Edit multiple items at a time.</h6>
             </div>
-        </div>        
+        </div>         -->
 
         <div class="row">
             <div class="col">
               <input type="text" class="form-control" placeholder="Search here..">
             </div>
             <div class="col-auto">
-              <button class="btn btn-warning add_item_btn" (click)="openAddItemModal()">+ ADD ITEM</button>
+              <button class="btn btn-warning add_item_btn" (click)="openAddItemModal('','')">+ ADD ITEM</button>
             </div>
         </div>
 
@@ -28,9 +40,9 @@
             </thead>
             <tbody>
               <!-- Loop to generate rows -->
-              <tr *ngFor="let row of rows">
-                <td>{{ row.column1 }}</td>
-                <td>{{ row.column2 }}</td>
+              <tr *ngFor="let item of this.dataService.itemListResponse" (click)="productHandleClick($event, 9920279905,item.itemname)">
+                <td>{{ item.itemname }}</td>
+                <td>{{ item.remainingquantity }}</td>
               </tr>
             </tbody>
           </table>
@@ -40,12 +52,12 @@
     <div class="top-content">
         <h3>ITEM NAME</h3>
         <div class="top-content-row">
-            <div class="sale-price">SALE PRICE: &#8377; 60.00 (exel)</div>
-            <div class="purchase-price">PURCHASE PRICE: &#8377; 45.00 (exel)</div>
+            <div class="sale-price">SALE PRICE:  &#8377;{{this.dataService.getItemDetailsData[0].saleprice}} (exel)</div>
+            <div class="purchase-price">PURCHASE PRICE:  &#8377;{{this.dataService.getItemDetailsData[0].purchaseprice}} (exel)</div>
         </div>
         <div class="top-content-row">
-            <div class="sale-price">STOCK QUANTITY: 2</div>
-            <div class="purchase-price">STOCK VALUE: &#8377; 32.00</div>
+            <div class="sale-price">STOCK QUANTITY: {{this.dataService.getItemDetailsData[0].minimumwholesalequantity}}</div>
+            <div class="purchase-price">STOCK VALUE: &#8377;{{this.dataService.getItemDetailsData[0].minimumstocktomaintain}}</div>
         </div>
     </div>
 
@@ -66,14 +78,14 @@
             </thead>
             <tbody>
               <!-- Loop to generate rows -->
-              <tr *ngFor="let row of rows">
-                <td>{{ row.column1 }}</td>
-                <td>{{ row.column2 }}</td>
-                <td>{{ row.column3 }}</td>
-                <td>{{ row.column4 }}</td>
-                <td>{{ row.column5 }}</td>
-                <td>{{ row.column6 }}</td>
-                <td>{{ row.column7 }}</td>
+              <tr *ngFor="let transaction of this.dataService.GetItemTransactionsResponse">
+                <td>{{ transaction.typeofpay }}</td>
+                <td>{{ transaction.invoicenumber }}</td>
+                <td>{{ transaction.partyname }}</td>
+                <td>{{ transaction.invoicedate }}</td>
+                <td>{{ transaction.qty }}</td>
+                <td>{{ transaction.priceperunit }}</td>
+                <td>{{ transaction.paymentstatus }}</td>
               </tr>
             </tbody>
           </table>
@@ -81,3 +93,77 @@
     </div>
 
 </div>
+</ng-container>
+
+<ng-container *ngIf="dataService.itemHomePageSelectedTab === 'category'">
+  <div class="grid-container">
+  
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+          <!-- <div class="btn btn-primary d-inline-flex align-items-center bulk-edit-btn">
+              <img src="https://static-00.iconduck.com/assets.00/bulk-edit-icon-2048x2048-97d4a9fo.png" alt="Button Image" class="mr-2 bulk-icon">
+              <div class="bulk-text">
+                  <h4 class="text-left" style="margin-bottom: 0%;">Bulk Items Update</h4>
+                  <h6 class="text-left" style="margin-bottom: 0%;">Update/ Edit multiple items at a time.</h6>
+              </div>
+          </div>         -->
+  
+          <div class="row">
+              <div class="col">
+                <input type="text" class="form-control" placeholder="Search here..">
+              </div>
+              <div class="col-auto">
+                <button class="btn btn-warning add_item_btn" (click)="openAddItemCategoryModal()">+ ADD CATEGORY</button>
+              </div>
+          </div>
+  
+          <table class="table table-bordered item_list">
+              <thead>
+                <tr>
+                  <th>CATEGORY</th>
+                  <th>ITEM</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Loop to generate rows -->
+                <tr *ngFor="let category of this.dataService.categoryListResponse" (click)="categoryHandleClick($event,'9920279905',category.category)">
+                  <td>{{ category.category }}</td>
+                  <td>{{ category.categorycount }}</td>
+                </tr>
+              </tbody>
+            </table>
+      </div>
+  
+      <!-- TOP CONTENT -->
+      <div class="top-content">
+          <h3>CATEGORY NAME</h3>
+          <div class="top-content-row">
+              <div class="sale-price">ITEM COUNT(2)</div>
+          </div>
+      </div>
+  
+      <!-- BOTTOM CONTENT -->
+      <div class="bottom-content">
+          <h2>ITEMS</h2>
+          <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>NAME</th>
+                  <th>QUANTITY</th>
+                  <th>STOCK VALUE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Loop to generate rows -->
+                <tr *ngFor="let category of this.dataService.GetItemByCategoryResponse">
+                  <td>{{ category.itemname }}</td>
+                  <td>{{ category.minimumwholesalequantity }}</td>
+                  <td>{{ category.wholesaleprice }}</td>
+                </tr>
+              </tbody>
+            </table>
+            
+      </div>
+  
+  </div>
+  </ng-container>

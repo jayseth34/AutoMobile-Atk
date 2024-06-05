@@ -2,7 +2,7 @@
     <h2>Add Party Group</h2>
     <div class="form-group">
       <label for="partyGroupName">ENTER PARTY GROUP NAME</label>
-      <input type="text" class="form-control" id="partyGroupName" formControlName="partyGroupNameControl" [(ngModel)]="partyGroupName"
+      <input type="text" class="form-control" id="partyGroupName" formControlName="partyGroupNameControl" [(ngModel)]="partyGroupName" (input)="onInputChange($event)"
       oninput="this.value = this.value.toUpperCase()" [class.is-invalid]="partyGroupNameControl?.errors?.['required'] && partyGroupNameControl?.touched">
     </div>
 

@@ -98,4 +98,46 @@ export class ApiService {
   // AddPartyDetails(body: any){
   //   return this.http.post("http://localhost:4200/party-homepage",body);
   // }
+
+
+  ///////////////////////// ITEMSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+
+  AddItemDetails(body: any){
+    return this.cs.Post("api/Item/SaveOrUpdateItem",body);
+  }
+
+  GetItemList(registeredPhoneNumber: any) {
+    return this.cs.get(
+      "api/Item/GetItemList?registeredPhoneNumber=" + registeredPhoneNumber
+    );
+  }
+
+  GetItemDetails(registeredPhoneNumber: any, itemname: any) {
+    return this.cs.get(
+      "api/Item/GetItemDetails?registeredPhoneNumber=" + registeredPhoneNumber + "&itemname=" + itemname
+    );
+  }
+
+  GetItemTransactions(registeredPhoneNumber: any, itemname: any) {
+    return this.cs.get(
+      "api/Sale/GetItemTransactions?registeredPhoneNumber=" + registeredPhoneNumber + "&itemname=" + itemname
+    );
+  }
+
+  GetCategory(registeredPhoneNumber: any) {
+    return this.cs.get(
+      "api/Item/GetCategory?registeredPhoneNumber=" + registeredPhoneNumber
+    );
+  }
+
+  GetItemByCategory(registeredPhoneNumber: any, category: any) {
+    return this.cs.get(
+      "api/Item/GetItemByCategory?registeredPhoneNumber=" + registeredPhoneNumber + "&category=" + category
+    );
+  }
+
+  AddUpdateCategory(body: any){
+    return this.cs.Post("api/Item/AddUpdateCategory",body);
+  }
+
 }

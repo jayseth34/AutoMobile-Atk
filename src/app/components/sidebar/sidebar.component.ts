@@ -4,6 +4,7 @@ import { AddPartyComponent } from '../add-party/add-party.component';
 import { ApiService } from 'src/app/services/api.service';
 import { takeUntil, Subject } from 'rxjs';
 import { DataService } from 'src/app/services/data.service';
+import { BusinessInformationComponent } from '../business-information/business-information.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -30,7 +31,8 @@ export class SidebarComponent {
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   getPartyListData(registeredMobileNumber: any) {
-    debugger
+    // debugger
+    this.dataService.partyHomePageSelectedTab = 'party';
     this.api.getPartyList(registeredMobileNumber).pipe(takeUntil(this.destroy$)).subscribe({
       next:(res) => {
         console.log("GETPARTYLIST API: ",res);
@@ -67,6 +69,51 @@ export class SidebarComponent {
       },
       error:() => {
         console.log("PARTY GROUP ERROR")
+      }
+    })
+  }
+
+  openBusinessInfoModal() {
+    const dialogRef = this.dialog.open(BusinessInformationComponent, {
+      width: '50%',
+      height: '70%', 
+    });
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
+
+  getItemListData(registeredMobileNumber: any) {
+    // debugger
+    this.dataService.itemHomePageSelectedTab = 'product';
+    this.api.GetItemList(registeredMobileNumber).pipe(takeUntil(this.destroy$)).subscribe({
+      next:(res) => {
+        console.log("GETITEMLIST API: ",res);
+        if(res) {
+          this.dataService.itemListResponse = res.getItemList
+          console.log("ITEMMM: ", this.dataService.itemListResponse[1].saleprice)
+          console.log("GETITEMLIST successs")
+        }
+        else {
+          console.log("GETITEMLIST failed")
+        }
+      },
+      error:() => {
+        console.log("GETITEMLIST errorrrr")
+      }
+    })
+    this.api.GetCategory(registeredMobileNumber).pipe(takeUntil(this.destroy$)).subscribe({
+      next:(response) => {
+        if(response.status == "SUCCESS") {
+          this.dataService.categoryListResponse = response.getCateogoryList
+          console.log("CATEGORRYYY: ", this.dataService.categoryListResponse[1].category)
+          console.log("GET CATEGORY SUCCESS", response)
+        }
+        else{
+          console.log("CATEGORY FAILED")
+        }
+      },
+      error:() => {
+        console.log("CATEGORY ERROR")
       }
     })
   }

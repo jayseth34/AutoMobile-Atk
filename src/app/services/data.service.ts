@@ -19,18 +19,23 @@ export class DataService {
     openingBalance: "",
     toPayOrReceive: "",
     asOfDate: "",
+    customLimit: "",
     creditLimit: "",
     additionalFieldName1:"",
     additionalFieldName2: "",
     additionalFieldName3: "",
-    additionalFieldName4: ""
+    additionalFieldName4: "",
+    additionalFieldName1Value: "",
+    additionalFieldName2Value: "",
+    additionalFieldName3Value: "",
+    additionalFieldName4Value: "",
   }
 
   partyList: { 
     partyname: string, 
     partybalance: number }[] = [];
 
-  partyListResponse: any;
+  partyDetailsResponse: any;
 
   transactionDetailsResponse: any;
 
@@ -38,6 +43,28 @@ export class DataService {
 
   partyByGroupResponse: any;
 
+  itemListResponse: any;
+
+  categoryListResponse: any;
+
+  getItemDetailsData: any;
+
+  getItemByCategoryData: any;
+
+  GetItemTransactionsResponse: any;
+
+  GetItemByCategoryResponse: any;
+
+  partyHomePageSelectedTab: any ='party';
+
+  itemHomePageSelectedTab: any ='item';
+
+  isPartyUpdate:boolean = false;
+  isGroupUpdate:boolean = false;
+  isItemUpdate:boolean = false;
+  oldPartyName:any;
+  oldPartyGroupName: any;
+  oldItemName:any;
   // totalNoOfParties: any;
 
   // totalAmountOfParties: any;

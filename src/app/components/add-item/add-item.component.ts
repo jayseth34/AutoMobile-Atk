@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { FormControl, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { SelectUnitComponent } from '../select-unit/select-unit.component';
+import { DataService } from 'src/app/services/data.service';
+import { Subject, takeUntil } from 'rxjs';
+import { ApiService } from 'src/app/services/api.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-item',
@@ -17,24 +21,31 @@ export class AddItemComponent {
   itemHsn: any = '';
   itemCode: any = '';
   salePrice: any = '';
-  saleWithOrWithoutTax: any = '';
+  saleWithOrWithoutTax: any = 'Without Tax';
   discountOnSalePrice: any = '';
-  percentageOrAmount: any = '';
+  percentageOrAmount: any = 'Percentage';
   wholeSalePrice: any = '';
-  wholeSaleWithOrWithoutTax: any = '';
+  wholeSaleWithOrWithoutTax: any = 'Without Tax';
   minimumWholeSaleQuantity: any = '';
   purchasePrice: any = '';
-  purchaseWithOrWithoutTax: any = '';
-  taxRate: any = '';
+  purchaseWithOrWithoutTax: any = 'Without Tax';
+  taxRate: any = 'None';
   openingQuantity: any = '';
   atPrice: any = '';
   asOfDate: any = '';
   minimumStockToMaintain: any = '';
   _location: any = '';
+  //------------
+  typeOfPay: any ='';
+  remainigQuantity: any ='';
+
+  isSaveAndNew: boolean = false;
 
   addItemForm: UntypedFormGroup;
 
-  constructor(private dialog: MatDialog) {}
+  @Input() itemDetails: any;
+
+  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, private api: ApiService) {}
 
   ngOnInit() {
 
@@ -59,8 +70,38 @@ export class AddItemComponent {
       _locationControl: new UntypedFormControl('',),
     })
 
-    this.selectTab('pricing')
-    console.log("working")
+    if(this.data.status='SUCCESS'){
+      this.populateForm(this.data.itemDetails) 
+    }
+  }
+
+  populateForm(itemDetails: any) {
+    if (itemDetails) {
+      this.itemName = this.data.itemName
+      // this.typeOfPay= itemDetails.gst
+      this.itemHsn= itemDetails.itemhsn
+      // this.baseUnit= itemDetails.partygroup
+      // this.secondaryunit= itemDetails.gsttype
+      // this.conversionrates= itemDetails._state
+      // this.category= itemDetails.emailid
+      this.itemCode= itemDetails.itemcode
+      this.salePrice= itemDetails.saleprice
+      this.saleWithOrWithoutTax= itemDetails.salewithorwithouttax
+      this.discountOnSalePrice= itemDetails.discountonsaleprice
+      this.wholeSalePrice= itemDetails.wholesaleprice
+      this.wholeSaleWithOrWithoutTax= itemDetails.wholesalewithorwithouttax
+      this.minimumWholeSaleQuantity= itemDetails.minimumwholesalequantity
+      this.purchasePrice= itemDetails.purchaseprice
+      this.purchaseWithOrWithoutTax= itemDetails.purchasewithorwithouttax
+      this.taxRate= itemDetails.taxrate
+      this.openingQuantity= itemDetails.openingquantity
+      this.remainigQuantity= itemDetails.openingquantity
+      this.atPrice= itemDetails.atprice
+      this.asOfDate= itemDetails.asofdate
+      this.minimumStockToMaintain= itemDetails.minimumstocktomaintain
+      this._location= itemDetails._location
+      this.percentageOrAmount= itemDetails.percentageoramounttype
+  }
   }
 
   selectTab(tab: string) {
@@ -72,12 +113,12 @@ export class AddItemComponent {
   // }
 
   toggleWholesalePrice() {
-    debugger;
+    // debugger;
     this.isWholesalePriceEnabled = !this.isWholesalePriceEnabled;
   }
 
   openSelectUnitModal() {
-    debugger;
+    // debugger;
     const dialogRef = this.dialog.open(SelectUnitComponent, {
       width: '40%',
       // height: '35%', 
@@ -91,10 +132,70 @@ export class AddItemComponent {
     });
   }
 
-  submit(){
-    console.log('ADD ITEM FORM: ', this.addItemForm.value)
-    console.log('ADD ITEM FORM: ', this.itemName)
+  submit(isSaveAndNew: boolean) {
+    // debugger;
+    if(this.addItemForm.valid) {
 
+    this.AddItemData(this.addItemForm.value);
+    if(isSaveAndNew){
+      this.addItemForm.reset();
+    }
+  } else {
+      Swal.fire({
+        title: 'Validation Error!',
+        text: 'One or more validation error has occured. Please fill all the required fields.',
+        confirmButtonText: 'OK',
+      })
+  }
+  }
+
+  destroy$: Subject<boolean> = new Subject<boolean>();
+
+  AddItemData(body: any): Promise<void> {
+    // debugger
+    console.log("BEFore return");
+    return new Promise((resolve) => {
+      console.log("after return");
+      let body = {
+        typeOfPay: this.typeOfPay,
+        registeredPhoneNumber: 9920279905,
+        itemName: this.itemName,
+        itemHsn: this.itemHsn,
+        // baseUnit: , 
+        // secondaryUnit:,
+        // conversionRates: ,
+        // category: ,
+        itemCode: this.itemCode,
+        salePrice: this.salePrice,
+        saleWithOrWithoutTax: this.saleWithOrWithoutTax,
+        discountOnSalePrice: this.discountOnSalePrice,
+        percentageOrAmountType: this.percentageOrAmount,
+        wholeSalePrice: this.wholeSalePrice,
+        wholeSaleWithOrWithoutTax: this.wholeSaleWithOrWithoutTax,
+        minimumWholeSaleQuantity: this.minimumWholeSaleQuantity,
+        purchasePrice: this.purchasePrice,
+        purchaseWithOrWithoutTax:this.purchaseWithOrWithoutTax,
+        taxRate: this.taxRate,
+        openingQuantity: this.openingQuantity,
+        // remainingQunatity: this.remainingQunatity,
+        atPrice: this.atPrice,
+        asOfDate: this.asOfDate,
+        minimumStockToMaintain: this.minimumStockToMaintain,
+        _location: this._location,
+      }
+      // if(this.dataService.isItemUpdate){
+      //   body.oldPartyName = this.dataService.oldPartyName
+      // }
+      this.api.AddItemDetails(JSON.stringify(body)).pipe(takeUntil(this.destroy$)).subscribe(res => {
+        if (res == "Success") {
+          console.log("Success")
+        }
+        else{
+          console.log("Failed")
+        }
+        resolve();
+      });
+    });
   }
 
   get itemNameControl() { return this.addItemForm.get('itemNameControl')}
