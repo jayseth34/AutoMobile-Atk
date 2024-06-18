@@ -17,34 +17,34 @@ export class ApiService {
   // PARTY TAB
 
   AddPartyDetails(body: any) {
-    return this.cs.Post("api/Login/SaveOrUpdateParty", body);
+    return this.cs.Post("Login/SaveOrUpdateParty", body);
   }
 
   //https://localhost:7002/api/Login/GetPartyList?registeredphonenumber=9920279905 - WORKING
   getPartyList(registeredphonenumber: number) {       //sidebar
     return this.cs.get(
-      "api/Login/GetPartyList?registeredphonenumber=" + registeredphonenumber
+      "Login/GetPartyList?registeredphonenumber=" + registeredphonenumber
     );
   }
 
   //https://localhost:7002/api/Login/GetPartyDetails?registeredphonenumber=9594645455&partyname=SHREYA- WORKING
   getPartyDetails(registeredphonenumber: number, partyname: any) {      //mini sidebar
     return this.cs.get(
-      "api/Login/GetPartyDetails?registeredphonenumber=" + registeredphonenumber + "&partyname=" + partyname
+      "Login/GetPartyDetails?registeredphonenumber=" + registeredphonenumber + "&partyname=" + partyname
     );
   }
 
   //WORKING
   getPartyTransactions(registeredphonenumber: number, partyname: any) {
     return this.cs.get(
-      "api/Sale/GetPartyTransactions?registeredphonenumber=" + registeredphonenumber + "&customername=" + partyname
+      "Sale/GetPartyTransactions?registeredphonenumber=" + registeredphonenumber + "&customername=" + partyname
     );
   }
 
   // GROUP TAB
 
   AddGroupDetails(body: any) {
-    return this.cs.Post("api/Login/AddUpdatePartyGroup", body);
+    return this.cs.Post("Login/AddUpdatePartyGroup", body);
   }
 
   getTypeOfTransactions(transactionType: string, phonenumber: number) {
@@ -84,14 +84,14 @@ export class ApiService {
 
   GetPartyGroup(registeredPhoneNumber: any) {
     return this.cs.get(
-      "api/Login/GetPartyGroup?registeredPhoneNumber=" + registeredPhoneNumber
+      "Login/GetPartyGroup?registeredPhoneNumber=" + registeredPhoneNumber
     );
   }
 
   //https://localhost:7002/api/Login/GetPartyByGroup?registeredPhoneNumber=9594645455&groupname=SK - WORKING
   GetPartyByGroup(registeredPhoneNumber: any, groupname: any) {
     return this.cs.get(
-      "api/Login/GetPartyByGroup?registeredPhoneNumber=" + registeredPhoneNumber + "&groupname=" + groupname
+      "Login/GetPartyByGroup?registeredPhoneNumber=" + registeredPhoneNumber + "&groupname=" + groupname
     );
   }
 
@@ -103,41 +103,41 @@ export class ApiService {
   ///////////////////////// ITEMSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 
   AddItemDetails(body: any){
-    return this.cs.Post("api/Item/SaveOrUpdateItem",body);
+    return this.cs.Post("Item/SaveOrUpdateItem",body);
   }
 
   GetItemList(registeredPhoneNumber: any) {
     return this.cs.get(
-      "api/Item/GetItemList?registeredPhoneNumber=" + registeredPhoneNumber
+      "Item/GetItemList?registeredPhoneNumber=" + registeredPhoneNumber
     );
   }
 
   GetItemDetails(registeredPhoneNumber: any, itemname: any) {
     return this.cs.get(
-      "api/Item/GetItemDetails?registeredPhoneNumber=" + registeredPhoneNumber + "&itemname=" + itemname
+      "Item/GetItemDetails?registeredPhoneNumber=" + registeredPhoneNumber + "&itemname=" + itemname
     );
   }
 
   GetItemTransactions(registeredPhoneNumber: any, itemname: any) {
     return this.cs.get(
-      "api/Sale/GetItemTransactions?registeredPhoneNumber=" + registeredPhoneNumber + "&itemname=" + itemname
+      "Sale/GetItemTransactions?registeredPhoneNumber=" + registeredPhoneNumber + "&itemname=" + itemname
     );
   }
 
   GetCategory(registeredPhoneNumber: any) {
     return this.cs.get(
-      "api/Item/GetCategory?registeredPhoneNumber=" + registeredPhoneNumber
+      "Item/GetCategory?registeredPhoneNumber=" + registeredPhoneNumber
     );
   }
 
   GetItemByCategory(registeredPhoneNumber: any, category: any) {
     return this.cs.get(
-      "api/Item/GetItemByCategory?registeredPhoneNumber=" + registeredPhoneNumber + "&category=" + category
+      "Item/GetItemByCategory?registeredPhoneNumber=" + registeredPhoneNumber + "&category=" + category
     );
   }
 
   AddUpdateCategory(body: any){
-    return this.cs.Post("api/Item/AddUpdateCategory",body);
+    return this.cs.Post("Item/AddUpdateCategory",body);
   }
 
 }
