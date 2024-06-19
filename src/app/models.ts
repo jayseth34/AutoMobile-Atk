@@ -67,6 +67,12 @@ export interface ItemDetail {
     qty: number
     unit: string
     priceperunit: number
+    transactionid: number
+    taxrate: string
+    taxrateamount: number
+    discountpercent: number
+    discountamount: number
+    remainingquantity: number
 }
 
 export interface Item {
@@ -79,6 +85,8 @@ export interface Item {
     discountonsaleprice: number,
     percentageoramounttype: any,
     baseunit: string,
+
+    [index: string]: string | number;
 }
 
 export interface Typeofpaytransaction {
@@ -130,3 +138,39 @@ export interface GetTypeOfPayTransactionsRq {
     typeofpaytransactionlist: Typeofpaytransaction[]
 }
 
+export interface SaveUpdateTransactionRq {
+    typeofpay: string
+    invoicenumber: number
+    invoicedate: string
+    stateofsupply: any
+    paymenttype: any
+    total: number
+    received: number
+    balance: number
+    customername: any
+    phonenumber: number
+    registeredphonenumber: number
+    topayparty: number
+    toreceivefromparty: number
+    partybalance: number
+    billingaddress: any
+    shippingaddress: any
+    paymentstatus: any
+    isconvert: boolean
+    isupdate: boolean
+    itemdetailslist: Itemdetailslist[]
+}
+
+interface Itemdetailslist {
+    item: any
+    qty: number
+    unit: any
+    priceperunit: number
+    remainingquantity: number
+    queryoperationtype: any
+    taxrate: any
+    taxrateamount: number
+    transactionid: number
+    discountpercent: number
+    discountamount: number
+}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonService } from './common.service';
-import { GetPartyTransactionDetailsRq, GetTypeOfPayTransactionsRq, ItemListRs, LoginReponse, LoginRequest, Party, PartyListRs, TransactionDetails } from '../models';
+import { GetPartyTransactionDetailsRq, GetTypeOfPayTransactionsRq, ItemListRs, LoginReponse, LoginRequest, Party, PartyListRs, SaveUpdateTransactionRq, TransactionDetails } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +54,6 @@ export class ApiService {
       "typeofpay": transactionType.toUpperCase()
     }
     requestParams = requestParams.appendAll(req);
-    console.log(requestParams.toString());
     return this.cs.typeGet<GetTypeOfPayTransactionsRq>("Sale/GetTypeOfPayTransactions", requestParams);
   }
 
@@ -102,8 +101,8 @@ export class ApiService {
 
   ///////////////////////// ITEMSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 
-  AddItemDetails(body: any){
-    return this.cs.Post("Item/SaveOrUpdateItem",body);
+  AddItemDetails(body: any) {
+    return this.cs.Post("Item/SaveOrUpdateItem", body);
   }
 
   GetItemList(registeredPhoneNumber: any) {
@@ -136,8 +135,13 @@ export class ApiService {
     );
   }
 
-  AddUpdateCategory(body: any){
-    return this.cs.Post("Item/AddUpdateCategory",body);
+  AddUpdateCategory(body: any) {
+    return this.cs.Post("Item/AddUpdateCategory", body);
   }
 
+
+  // Update Sale Details
+  PostUpdateSaleDetails(req: SaveUpdateTransactionRq) {
+    return this.cs.PostType<string, SaveUpdateTransactionRq>("Sale/UpdateSale", req);
+  }
 }

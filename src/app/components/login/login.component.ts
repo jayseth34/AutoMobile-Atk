@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   constructor(private api: ApiService, private router: Router) { };
 
   ngOnInit(): void {
+    localStorage.clear();
     this.loginForm = new FormGroup({
       "phonenumber": new FormControl(""),
       "password": new FormControl(""),
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit {
             "token": res.accessToken,
             "expiryDate": res.expiryDate
           }
+          localStorage.setItem("phonenumber", JSON.stringify(formValue.phonenumber));
           localStorage.setItem("AuthToken", JSON.stringify(AuthToken));
           this.router.navigateByUrl("/businessinfo");
         }

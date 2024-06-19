@@ -24,12 +24,25 @@ input[type="number"] {
   display: none;
 }
 
+.mat-mdc-form-field-infix {
+}
+
+.w-100 .mdc-text-field--outlined {
+  --mdc-outlined-text-field-outline-width: 0px;
+}
+
 /* Mat Table styling */
 table.mat-mdc-table {
   border-collapse: separate;
   border-spacing: 1px;
   background-color: rgba(var(--bs-secondary-bg-rgb), var(--bs-bg-opacity));
   /* background-color: rgba(var(--bs-secondary-bg-rgb), var(--bs-bg-opacity)); */
+}
+
+.mat-mdc-header-row,
+.mat-mdc-footer-row,
+.mat-mdc-row {
+  height: 42px;
 }
 
 table.mat-mdc-table > thead.rowgroup {
