@@ -26,7 +26,6 @@ export class SelectUnitComponent {
   constructor() { }
 
   unitConversion(){
-    debugger;
     if (this.selectedOption1 && this.selectedOption2){
       this.showConversion = true;
     } else {

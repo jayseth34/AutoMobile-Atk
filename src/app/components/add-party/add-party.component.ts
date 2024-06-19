@@ -114,13 +114,11 @@ export class AddPartyComponent implements OnInit {
     });
     
     if(this.data.status='SUCCESS'){
-      debugger;
       this.populateForm(this.data.partyDetails) 
     }
   }
   
   populateForm(partyDetails: any) {
-    debugger
     if (partyDetails) {
         this.partyName = this.data.partyName
         this.gst= partyDetails.gst

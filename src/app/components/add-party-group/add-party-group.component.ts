@@ -32,7 +32,6 @@ export class AddPartyGroupComponent {
     });
 
     if(this.data!=null){
-      debugger
       console.log("HEYY: ",this.data)
       this.populateForm(this.data.groupDetails) 
     }
@@ -40,7 +39,6 @@ export class AddPartyGroupComponent {
   }
 
   populateForm(fetchedPartyGroupName: any){
-    debugger;
     if(fetchedPartyGroupName){
       this.partyGroupName = fetchedPartyGroupName;
     }
@@ -75,7 +73,6 @@ export class AddPartyGroupComponent {
       // this.dataService.partyName = this.addPartyData.partyName;
       // debugger;
       this.api.AddGroupDetails(JSON.stringify(body)).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        debugger;
         if (res == "Success") {
           console.log("Success group", res)
           this.partyGroupName = this.newPartyGroupName
@@ -89,7 +86,6 @@ export class AddPartyGroupComponent {
   }
 
   refreshPage() {
-    debugger;
     window.location.reload();
   }
 

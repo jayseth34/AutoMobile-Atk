@@ -10,6 +10,7 @@ import { PartyHomepageComponent } from './components/party-homepage/party-homepa
 import { ItemHomepageComponent } from './components/item-homepage/item-homepage.component';
 import { EditDetailComponent } from './components/edit-detail/edit-detail.component';
 import { AddPartyGroupComponent } from './components/add-party-group/add-party-group.component';
+import { PaymentInoutComponent } from './components/payment-inout/payment-inout.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -33,6 +34,7 @@ const routes: Routes = [
   // ]},
   { path: 'party-homepage', component: PartyHomepageComponent },
   { path: 'item-homepage', component: ItemHomepageComponent },
+  { path: 'inout', component: PaymentInoutComponent },
 ];
 
 @NgModule({

@@ -80,7 +80,6 @@ selectTab(tab: string) {
 }
 
 openAddPartyModal(registeredMobileNumber: any, partyName: any) {
-  debugger;
   if (partyName !== '' && registeredMobileNumber !== '') {
     this.api.getPartyDetails(registeredMobileNumber, partyName).subscribe({
       next: (res) => {
@@ -116,7 +115,6 @@ openAddPartyGroupModal(registeredMobileNumber: any, groupname: any) {
       next: (res) => {
         // if (res.status === "SUCCESS") {
           if (res!=null) {
-          debugger;
           this.dataService.isGroupUpdate = true;
           this.dataService.oldPartyGroupName = groupname
           const dialogRef = this.dialog.open(AddPartyGroupComponent, {

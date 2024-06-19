@@ -198,7 +198,7 @@ export class EditDetailComponent implements OnInit {
             }, { emitEvent: false });
             break;
 
-          case "discountAmount":
+          case "discountamount":
             const newPricePerUnitDisc = changeObj[key] / itemQty;
             element.patchValue({
               "discountpercent": (newPricePerUnitDisc / pricePerUnit) * 100,
@@ -206,7 +206,7 @@ export class EditDetailComponent implements OnInit {
             }, { emitEvent: false });
             break;
 
-          case "discountPercent":
+          case "discountpercent":
             const newDiscountAmt = (changeObj[key] / 100) * itemQty * pricePerUnit;
             element.patchValue({
               "discountamount": newDiscountAmt,
@@ -214,7 +214,7 @@ export class EditDetailComponent implements OnInit {
             }, { emitEvent: false });
             break;
 
-          case "taxAmount":
+          case "taxrateamount":
             const newPricePerUnitTax = changeObj[key] / itemQty;
             element.patchValue({
               "taxrate": (newPricePerUnitTax / pricePerUnit) * 100,
@@ -222,7 +222,7 @@ export class EditDetailComponent implements OnInit {
             }, { emitEvent: false });
             break;
 
-          case "taxPercent":
+          case "taxrate":
             const newTaxAmt = (changeObj[key] / 100) * itemQty * pricePerUnit;
             element.patchValue({
               "taxrateamount": newTaxAmt,
