@@ -30,7 +30,7 @@
               placeholder="Enter Name"
               aria-label="Number"
               matInput
-              formControlName="partyName"
+              formControlName="customername"
               [matAutocomplete]="auto"
               (click)="handleCustomerInputClick()"
             />
@@ -52,7 +52,7 @@
             <input
               matInput
               placeholder="Phone Number"
-              formControlName="phoneNumber"
+              formControlName="phonenumber"
             />
           </mat-form-field>
 
@@ -82,7 +82,7 @@
             <textarea
               matInput
               placeholder="Billing Address"
-              formControlName="billingAddress"
+              formControlName="billingaddress"
             >
             </textarea>
           </mat-form-field>
@@ -93,7 +93,7 @@
             <textarea
               matInput
               placeholder="Shipping Address"
-              formControlName="shippingAddress"
+              formControlName="shippingaddress"
             >
             </textarea>
           </mat-form-field>
@@ -109,7 +109,7 @@
             <input
               type="number"
               matInput
-              formControlName="invNumber"
+              formControlName="invoicenumber"
               [disabled]="true"
             />
           </mat-form-field>
@@ -120,7 +120,7 @@
             <input
               matInput
               [matDatepicker]="picker"
-              formControlName="invoiceDate"
+              formControlName="invoicedate"
             />
             <mat-datepicker-toggle
               matIconSuffix
@@ -136,7 +136,7 @@
               type="text"
               aria-label="Number"
               matInput
-              formControlName="state"
+              formControlName="stateofsupply"
               [matAutocomplete]="state"
               (click)="handleStateInputClick()"
             />
@@ -153,12 +153,12 @@
 </section>
 
 <section class="mt-2 bg-body-secondary p-2">
-  <form [formGroup]="itemDataForm" disabled>
+  <form [formGroup]="modifyDetail" disabled>
     <table
       mat-table
       matSort
       [dataSource]="newTransactionData"
-      formArrayName="items"
+      formArrayName="itemdetailslist"
     >
       <!-- First Header Columns -->
       <!-- Id column -->
@@ -241,7 +241,7 @@
         </th>
         <td mat-cell *matCellDef="let element; let i = index">
           <span class="hover-none">
-            {{ i + 1 }}
+            {{ getTransactionId(i) }}
           </span>
           <div class="hover-display">
             <button
@@ -267,53 +267,6 @@
           Item
         </th>
         <td mat-cell *matCellDef="let element" [formGroup]="element">
-          <!-- <div class="container-fluid">
-            <select
-              class="form-select table-input"
-              (click)="getItems()"
-              formControlName="item"
-              [compareWith]="compareItems"
-            >
-              <option value="" *ngIf="!element.controls['item'].value">
-                Select Value
-              </option>
-              <option
-                *ngIf="element.controls['item'].value"
-                [value]="element.controls['item'].value"
-              >
-                {{ element.controls["item"].value }}
-              </option>
-              <option
-                *ngFor="let item of items"
-                value="{{ item.itemname }}"
-                [selected]="item.itemname === element.controls['item'].value"
-              >
-                {{ item.itemname }}
-              </option>
-            </select>
-          </div> -->
-          <!-- <mat-form-field
-            class="w-100"
-            appearance="outline"
-            subscriptSizing="dynamic"
-            formControlName="item"
-          >
-            <input
-              type="text"
-              matInput
-              formControlName="item"
-              (click)="getItems()"
-              [matAutocomplete]="auto"
-            />
-            <mat-autocomplete
-              #itemAuto="matAutocomplete"
-              [displayWith]="getItemName"
-            >
-              <mat-option *ngFor="let item of items" [value]="item.itemname">
-                {{ item.itemname }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field> -->
           <mat-form-field
             class="w-100"
             subscriptSizing="dynamic"
@@ -385,7 +338,7 @@
             <input
               type="number"
               class="form-control table-input"
-              formControlName="price"
+              formControlName="priceperunit"
             />
           </div>
         </td>
@@ -401,7 +354,7 @@
               min="0"
               max="100"
               class="form-control table-input"
-              formControlName="discountPercent"
+              formControlName="discountpercent"
             />
           </div>
         </td>
@@ -415,7 +368,7 @@
             <input
               type="number"
               class="form-control table-input"
-              formControlName="discountAmount"
+              formControlName="discountamount"
             />
           </div>
         </td>
@@ -431,7 +384,7 @@
               min="0"
               max="100"
               class="form-control table-input"
-              formControlName="taxPercent"
+              formControlName="taxrate"
             />
           </div>
         </td>
@@ -445,7 +398,7 @@
             <input
               type="number"
               class="form-control table-input"
-              formControlName="taxAmount"
+              formControlName="taxrateamount"
             />
           </div>
         </td>
@@ -493,8 +446,39 @@
   </form>
 </section>
 
-<section class="mt-2 bg-body-secondary p-2">
-  <button mat-raised-button color="accent" (click)="submitDetails()">
-    Submit
-  </button>
+<section class="mt-2 bg-body-secondary p-2 container-fluid">
+  <form class="row" [formGroup]="modifyDetail">
+    <div class="col-2">
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        formControlName="paymenttype"
+      >
+        <option value="CASH">CASH</option>
+        <option value="CREDIT">
+          CREDIT
+          <!-- <option value="3">Three</option> -->
+        </option>
+      </select>
+    </div>
+    <div class="col-6">
+      <span> Custom </span>
+      <mat-slide-toggle formControlName="fullpayment"> Full </mat-slide-toggle>
+      <div class="d-inline-block ms-3">
+        <input
+          type="number"
+          class="form-control"
+          placeholder="customPayment"
+          aria-label="customPayment"
+          aria-describedby="customPayment"
+          formControlName="received"
+        />
+      </div>
+    </div>
+    <div class="col-3">
+      <button mat-raised-button color="accent" (click)="submitDetails()">
+        Submit
+      </button>
+    </div>
+  </form>
 </section>

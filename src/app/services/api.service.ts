@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonService } from './common.service';
-import { GetPartyTransactionDetailsRq, GetTypeOfPayTransactionsRq, ItemListRs, LoginReponse, LoginRequest, Party, PartyListRs, TransactionDetails } from '../models';
+import { GetPartyTransactionDetailsRq, GetTypeOfPayTransactionsRq, ItemListRs, LoginReponse, LoginRequest, Party, PartyListRs, SaveUpdateTransactionRq, TransactionDetails } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -97,4 +97,9 @@ export class ApiService {
   // AddPartyDetails(body: any){
   //   return this.http.post("http://localhost:4200/party-homepage",body);
   // }
+
+  // Update Sale Details
+  PostUpdateSaleDetails(req: SaveUpdateTransactionRq) {
+    return this.cs.PostType<string, SaveUpdateTransactionRq>("Sale/UpdateSale", req);
+  }
 }
