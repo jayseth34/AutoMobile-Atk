@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="payment-in-container">
+    <form [formGroup]="paymentInForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="party">Party *</label>
+          <select id="party" formControlName="party" class="form-control">
+            <option value="">Select Party</option>
+            <option value="Ravi Dixit">Ravi Dixit</option>
+            <!-- Add more options as needed -->
+          </select>
+          <small class="form-text text-muted">BAL: 59413</small>
+
+          <label for="paymentType">Payment Type</label>
+          <select id="paymentType" formControlName="paymentType" class="form-control">
+            <option value="">Select Payment Type</option>
+            <option value="Cash">Cash</option>
+            <!-- Add more options as needed -->
+          </select>
+
+          <label for="description">Description</label>
+          <textarea id="description" formControlName="description" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="receiptNo">Receipt No</label>
+          <input id="receiptNo" type="text" formControlName="receiptNo" class="form-control" />
+
+          <label for="date">Date</label>
+          <input id="date" type="date" formControlName="date" class="form-control" />
+
+          <div class="received-container">
+            <label for="received">Received</label>
+            <input id="received" type="text" formControlName="received" class="form-control" />
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-container">
+        <button type="button" class="btn btn-success">Link Payment</button>
+      </div>
+
+      <div class="right-btn-container">
+        <button type="button" class="btn btn-light">Share</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

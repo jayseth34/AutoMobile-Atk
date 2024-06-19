@@ -1,0 +1,92 @@
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.payment-in-container {
+  width: 80%;
+  height: 60%;
+  max-width: 1500px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group.col-md-6 {
+  flex: 0 0 48%;
+  max-width: 48%;
+}
+
+.form-group.col-md-12 {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.form-control {
+  width: 100%;
+}
+
+.inline-form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.inline-form-group label {
+  margin-right: 10px;
+  width: auto;
+  min-width: 100px;
+}
+
+.inline-form-group .form-control {
+  flex: 1;
+  max-width: 200px;
+}
+
+.btn {
+  margin-right: 10px;
+}
+
+.btn-container {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.right-btn-container {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.received-container {
+  position: absolute;
+  bottom: 0px;
+  right: 20px;
+  width: 48%;
+}
+
+.form-text {
+  display: block;
+  margin-top: 5px;
+}
