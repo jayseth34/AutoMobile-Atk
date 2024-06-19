@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./business-information.component.css']
 })
 export class BusinessInformationComponent {
+  showBusinessDetails: boolean = false;
+
+  constructor(){ }
+
+  toggleBusinessDetails() {
+    this.showBusinessDetails = !this.showBusinessDetails;
+  }
 
 }

@@ -1,5 +1,5 @@
-<app-sidebar></app-sidebar>
-<div class="container">
+<!-- <app-sidebar></app-sidebar> -->
+<!-- <div class="container">
     <form >
   
       <label for="businessName">Business Name</label>
@@ -44,4 +44,115 @@
       <input type="submit" value="SAVE">
   
     </form>
+  </div> -->
+
+<form>
+  <h2>EDIT FIRM</h2>
+<div class="row">
+  <div class="col-md-6">
+    <h1 class="addLogo" style="text-align: center;">ADD LOGO</h1>
+    <!-- <label class="addLogo" for="itemImage" style="text-align: center;">ADD LOGO</label>
+    <input type="file" id="itemImage" class="form-control-file"> -->
   </div>
+  <div class="col-md-6">
+
+    <div class="form-floating fields">
+      <input type="text" class="form-control business-name" placeholder="Business Name" id="businessName" name="businessName" formControlName="businessNameControl" 
+      oninput="this.value = this.value.toUpperCase()">
+      <label for="businessName">Business Name</label>
+    </div>
+
+    <div class="form-floating fields">
+      <input type="text" class="form-control gst-in" placeholder="GSTIN" id="gstin" name="gstin" formControlName="gstinControl" 
+      oninput="this.value = this.value.toUpperCase()">
+      <label for="gstin">GSTIN</label>
+    </div>
+
+    <div class="form-floating fields">
+      <input type="text" class="form-control phoneNumber" placeholder="Phone Number" id="phoneNumber" name="phoneNumber" formControlName="phoneNumberControl" 
+      oninput="this.value = this.value.toUpperCase()">
+      <label for="phoneNumber">Phone Number</label>
+    </div>
+
+    <div class="form-floating fields">
+      <input type="text" class="form-control email-id" placeholder="Email Id" id="emailId" name="emailId" formControlName="emailIdControl">
+      <label for="emailId">Email ID</label>
+    </div>
+
+  </div>
+</div>
+
+<!-- <div style="display: flex; justify-content: space-between;"> -->
+    <h2 (click)="toggleBusinessDetails()">{{ showBusinessDetails ? '- Less Information' : '+ More Information' }}</h2>
+<!-- </div> -->
+
+<div class="businessDets" *ngIf="showBusinessDetails">
+<h3 class="business-details">Business Details</h3>
+
+
+<div class="row">
+
+  <div class="col-md-6">
+    <div class="form-floating">
+      <textarea class="form-control businessAddress" id="businessAddress" name="businessAddress" rows="5" placeholder="Business Address" formControlName="businessAddressControl" 
+       style="height: 100px;" oninput="this.value = this.value.toUpperCase()"></textarea>
+      <label for="businessgAddress">Business Address</label>
+    </div>
+
+    <div class="form-floating fields">
+      <input type="text" class="form-control pincode" placeholder="Pincode" id="pincode" name="pincode" formControlName="pincodeControl" 
+      oninput="this.value = this.value.toUpperCase()">
+      <label for="pincode">Pincode</label>
+    </div>
+
+    <div class="form-floating">
+      <select class="form-select state" id="state" name="state" formControlName="_stateControl">
+        <!-- <option value="" disabled selected class="dropdown-item"></option> -->
+        <option value="state1" class="dropdown-item" selected disabled>None</option>
+        <option value="state1" class="dropdown-item">state1</option>
+        <option value="state2" class="dropdown-item">state2</option>
+        <option value="state3" class="dropdown-item">state3</option>
+      </select>
+      <label for="state">State</label>
+    </div>
+
+    <div class="form-floating">
+      <textarea class="form-control businessDesc" id="businessDesc" name="businessDesc" rows="5" placeholder="Business Desciption" formControlName="businessDescriptionControl" 
+       style="height: 100px;" oninput="this.value = this.value.toUpperCase()"></textarea>
+      <label for="businessDescription">Business Description</label>
+    </div>
+
+  </div>
+
+  <div class="col-md-6">
+
+    <div class="form-floating">
+      <select class="form-select businessType" id="businessType" name="businessType" formControlName="businessTypeControl">
+        <option value="None" selected>None</option>
+        <option value="Retail">Retail</option>
+        <option value="Wholesale">Wholesale</option>
+        <option value="Distributor">Distributor</option>
+        <option value="Service">Service</option>
+        <option value="Manufacturing">Manufacturing</option>
+        <option value="Others">Others</option>
+      </select>
+      <label for="businessType">Business Type</label>
+    </div>
+
+    <div class="form-floating fields">
+      <input type="text" class="form-control businessCategory" placeholder="Business Category" id="businessCategory" name="businessCategory" formControlName="businessCategoryControl" 
+      oninput="this.value = this.value.toUpperCase()">
+      <label for="businessCategory">Business Category</label>
+    </div>
+
+    <div class="col-md-6">
+      <p class="addSign" style="text-align: center;">Add Signature</p>
+    </div>
+
+  </div>
+</div>
+</div>
+<div class="text-md-end"> <!-- Use 'text-md-end' to align content to the right on medium and larger screens -->
+  <input type="submit" class="btn btn-warning save_btn" value="SAVE">
+</div>
+</form>

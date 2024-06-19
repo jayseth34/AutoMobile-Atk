@@ -33,6 +33,7 @@ import { ItemHomepageComponent } from './components/item-homepage/item-homepage.
 import { SelectUnitComponent } from './components/select-unit/select-unit.component';
 import { EditDetailComponent } from './components/edit-detail/edit-detail.component';
 import { AddPartyGroupComponent } from './components/add-party-group/add-party-group.component';
+import { AddItemCategoryComponent } from './components/add-item-category/add-item-category.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { AddPartyGroupComponent } from './components/add-party-group/add-party-g
     SelectUnitComponent,
     AddPartyGroupComponent,
     EditDetailComponent,
+    AddItemCategoryComponent
   ],
   imports: [
     BrowserModule,

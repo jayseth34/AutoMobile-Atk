@@ -1,11 +1,12 @@
 <div>
   <ul class="nav nav-tabs navbar-light bg-light row tabMain" role="tablist">
     <li class="nav-item tabSubMain col-sm-6 d-flex justify-content-center align-items-center">
-      <a class="nav-link tabTitle" [class.active]="selectedTab === 'party'"  id="tab1-tab" data-toggle="tab"  role="tab" aria-controls="tab1" (click)="selectTab('party')">PARTY</a>
+      <a class="nav-link tabTitle" [class.active]="dataService.partyHomePageSelectedTab === 'party'"  id="tab1-tab" data-toggle="tab"  role="tab" aria-controls="tab1" (click)="selectTab('party')">PARTY</a>
     </li>
     <li class="nav-item tabSubMain col-sm-6 d-flex justify-content-center align-items-center">
-      <a class="nav-link tabTitle" [class.active]="selectedTab === 'group'" id="tab2-tab" data-toggle="tab"  role="tab" aria-controls="tab2" (click)="selectTab('group')">GROUP</a>
+      <a class="nav-link tabTitle" [class.active]="dataService.partyHomePageSelectedTab === 'group'" id="tab2-tab" data-toggle="tab"  role="tab" aria-controls="tab2" (click)="selectTab('group')">GROUP</a>
     </li>
+    
   </ul>  
   <!-- <button [class.active]="selectedTab === 'party'" style="width: 50%;">PARTY</button> -->
   <!-- <button [class.active]="selectedTab === 'group'" style="width: 50%;">GROUP</button> -->
@@ -19,7 +20,8 @@
   </ul> -->
 </div>
 
-<ng-container *ngIf="selectedTab === 'party'">
+
+<ng-container *ngIf="dataService.partyHomePageSelectedTab === 'party'">
 <div class="grid-container">
     <!-- SIDEBAR -->
     <div class="sidebar">
@@ -28,7 +30,7 @@
               <input type="text" [(ngModel)]="searchParty" class="form-control" placeholder="Search here..">
             </div>
             <div class="col-auto">
-              <button class="btn btn-warning add_party_btn" (click)="openAddPartyModal()">+ ADD PARTY</button>
+              <button class="btn btn-warning add_party_btn" (click)="openAddPartyModal('','')">+ ADD PARTY</button>
             </div>
         </div>
 
@@ -41,7 +43,8 @@
             </thead>
             <tbody>
               <!-- Loop to generate rows -->
-              <tr *ngFor="let partydetail of dataService.partyList" (click)="GetPartyDetailsData('9920279905',partydetail.partyname)">
+              <!-- <tr *ngFor="let partydetail of dataService.partyList" (click)="singleClick($event,'9920279905',partydetail.partyname)" (dblclick)="doubleClick($event)"> -->
+              <tr *ngFor="let partydetail of dataService.partyList" (click)="partyHandleClick($event,'9920279905',partydetail.partyname)">
                 <td class="table-row">{{ partydetail.partyname }}</td>
                 <td class="table-row">{{ partydetail.partybalance }}</td>
               </tr>
@@ -51,14 +54,14 @@
 
     <!-- TOP CONTENT -->
     <div class="top-content">
-        <h3>PARTY NAME{{this.dataService.partyListResponse.partyList[0].partyname}}</h3>
+        <h3>PARTY NAME{{this.dataService.partyDetailsResponse.partyList[0].partyname}}</h3>
         <div class="top-content-row">
-            <div class="phone">PHONE: {{this.dataService.partyListResponse.partyList[0].phonenumber}}</div>
-            <div class="address">ADDRESS: {{this.dataService.partyListResponse.partyList[0].billingaddress}}</div>
+            <div class="phone">PHONE: {{this.dataService.partyDetailsResponse.partyList[0].phonenumber}}</div>
+            <div class="address">ADDRESS: {{this.dataService.partyDetailsResponse.partyList[0].billingaddress}}</div>
         </div>
         <div class="top-content-row">
-            <div class="phone">EMAIL: {{this.dataService.partyListResponse.partyList[0].emailid}}</div>
-            <div class="address">GSTIN: {{this.dataService.partyListResponse.partyList[0].gst}}</div>
+            <div class="phone">EMAIL: {{this.dataService.partyDetailsResponse.partyList[0].emailid}}</div>
+            <div class="address">GSTIN: {{this.dataService.partyDetailsResponse.partyList[0].gst}}</div>
         </div>
     </div>
 
@@ -73,6 +76,7 @@
                 <th class="table-column">DATE</th>
                 <th class="table-column">TOTAL</th>
                 <th class="table-column">BALANCE</th>
+                <th class="table-column">STATUS</th>
               </tr>
             </thead>
             <tbody>
@@ -83,6 +87,7 @@
                 <td class="table-row">{{ transaction.invoicedate }}</td>
                 <td class="table-row">{{ transaction.total }}</td>
                 <td class="table-row">{{ transaction.balance }}</td>
+                <td class="table-row">{{ transaction.paymentstatus }}</td>
               </tr>
             </tbody>
           </table>
@@ -92,7 +97,7 @@
 </div>
 </ng-container>
 
-<ng-container *ngIf="selectedTab === 'group'">
+<ng-container *ngIf="dataService.partyHomePageSelectedTab === 'group'">
 <div class="grid-container">
     <!-- SIDEBAR -->
     <div class="sidebar">
@@ -101,7 +106,7 @@
               <input type="text" [(ngModel)]="searchGroup" class="form-control" placeholder="Search here..">
             </div>
             <div class="col-auto">
-              <button class="btn btn-warning add_party_btn" (click)="openAddPartyGroupModal()">+ ADD PARTY GROUP</button>
+              <button class="btn btn-warning add_party_btn" (click)="openAddPartyGroupModal('','')">+ ADD PARTY GROUP</button>
             </div>
         </div>
 
@@ -114,9 +119,7 @@
             </thead>
             <tbody>
               <!-- Loop to generate rows -->
-              <tr *ngFor="let party of dataService.partyGroupListResponse" 
-              (click)="GetPartyByGroupData(9920279905, party.partygroup)" 
-              (dblclick)="openAddPartyGroupModal()">                
+              <tr *ngFor="let party of dataService.partyGroupListResponse" (click)="groupHandleClick($event,9920279905, party.partygroup)">                
                 <td class="table-row">{{ party.partygroup }}</td>
                 <td class="table-row">{{ party.partygroupcount }}</td>
               </tr>

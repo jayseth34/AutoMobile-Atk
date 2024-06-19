@@ -11,7 +11,7 @@
         />
         <a href="#">Home</a>
       </li>
-      <li class="tabs" routerLink="/businessinfo">
+      <li class="tabs" (click)="openBusinessInfoModal()">
         <img
           src="https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png"
           alt="Home Icon"
@@ -32,12 +32,8 @@
         <a>Parties</a>
         <!-- <a (click)="openDialog()" >Parties</a> -->
       </li>
-      <li class="tabs" routerLink="/item-homepage">
-        <img
-          src="https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png"
-          alt="Home Icon"
-          class="icon"
-        />
+      <li class="tabs" routerLink="/item-homepage" (click)="getItemListData(9920279905)">
+        <img src="https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png" alt="Home Icon" class="icon">
         <a>Items</a>
       </li>
       <li class="tabs" routerLink="/Sale">

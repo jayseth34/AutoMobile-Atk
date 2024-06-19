@@ -1,8 +1,9 @@
 .grid-container {
     display: grid;
-    grid-template-columns: 32% 82%; /* Sidebar takes 20%, content takes 80% */
-    grid-template-rows: auto; /* Adjust based on content */
-    height: 100%;
+    grid-template-columns: 30% 70%; /* Sidebar takes 20%, content takes 80% */
+    /* grid-template-rows: auto; Adjust based on content */
+    height: 94%;
+    margin: 0%;
   }
 
 /****** SIDEBAR CONTENT ******/
@@ -63,3 +64,10 @@
     padding: 10px;
     overflow-y: auto; /* This makes the bottom content scrollable vertically */
   }
+
+
+/* TAB */
+.tabMain {
+  /* margin-left: 20%; */
+  text-align: center;
+}

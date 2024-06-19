@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, SimpleChanges } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, AbstractControl, Validators, FormsModule } from '@angular/forms';
 import { takeUntil, Subject } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
 import * as moment from 'moment';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 
 import Swal from 'sweetalert2';
 
@@ -13,7 +15,8 @@ import Swal from 'sweetalert2';
   templateUrl: './add-party.component.html',
   styleUrls: ['./add-party.component.css']
 })
-export class AddPartyComponent {
+
+export class AddPartyComponent implements OnInit {
   selectedTab: string = 'gstAndAddress'; // Initially select the 'address' tab
   isOpeningBalance: boolean = false;
   isShippingAddressEnabled: boolean = true;
@@ -34,7 +37,7 @@ export class AddPartyComponent {
   toPayOrReceive: any = '';
   asOfDate: any ;
   creditLimit: any = 0;
-  isPartyUpdate: boolean = true;
+  // isPartyUpdate: boolean = true;
   oldPartyName: any = '';
   //For additional column names
   additionalFieldName1:any = '';
@@ -66,15 +69,22 @@ export class AddPartyComponent {
   showAdditionalField4: boolean = false;
   addPartyForm: UntypedFormGroup;
 
-  constructor(private api: ApiService, public dataService: DataService) {}
+  isSaveAndNew: boolean = false;
+
+  
+  @Input() partyDetails: any;
+
+  constructor(private api: ApiService, public dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any) {
+    // this.partyDetails = data.partyDetails; // Access the injected data
+  }
 
   ngOnInit(): void {
-    this.asOfDate = moment().format('YYYY-MM-DD'); 
-    this.additionalFieldName4Value =  moment().format('YYYY-MM-DD'); // Set the default date
+    this.asOfDate = moment().format('YYYY-MM-DDTHH:mm:ss');
+    this.additionalFieldName4Value = moment().format('YYYY-MM-DDTHH:mm:ss');
     // const today = moment().format('DD-MM-YYYY');
     // this.showPrint = 'Dont show in print';
 
-    debugger;
+    // debugger;
     this.addPartyForm = new UntypedFormGroup({
       partyNameControl: new UntypedFormControl('', [Validators.required]),
       gstControl: new UntypedFormControl('',),
@@ -102,8 +112,41 @@ export class AddPartyComponent {
       additionalField3CheckedControl: new UntypedFormControl('',),
       additionalField4CheckedControl: new UntypedFormControl('',),
     });
+    
+    if(this.data.status='SUCCESS'){
+      debugger;
+      this.populateForm(this.data.partyDetails) 
+    }
   }
-
+  
+  populateForm(partyDetails: any) {
+    debugger
+    if (partyDetails) {
+        this.partyName = this.data.partyName
+        this.gst= partyDetails.gst
+        this.phoneNumber= partyDetails.phonenumber
+        this.partyGroup= partyDetails.partygroup
+        this.gstType= partyDetails.gsttype
+        this._state= partyDetails._state
+        this.emailId= partyDetails.emailid
+        this.billingAddress= partyDetails.billingaddress
+        this.shippingAddress= partyDetails.shippingaddress
+        this.openingBalance= partyDetails.openingbalance
+        this.asOfDate= partyDetails.asofdate
+        this.creditLimit= partyDetails.creditlimit
+        this.additionalFieldName1= partyDetails.additionalfieldname1
+        this.additionalFieldName2= partyDetails.additionalfieldname2
+        this.additionalFieldName3= partyDetails.additionalfieldname3
+        this.additionalFieldName4= partyDetails.additionalfieldname4
+        this.additionalFieldName1Value= partyDetails.additionalfieldname1value
+        this.additionalFieldName2Value= partyDetails.additionalfieldname2value
+        this.additionalFieldName3Value= partyDetails.additionalfieldname3value
+        this.additionalFieldName4Value= partyDetails.additionalfieldname4value
+        this.toPayOrReceive= partyDetails.topayorreceive
+        this.partyBalance= partyDetails.partybalance
+    }
+  }
+    
   selectTab(tab: string) {
     this.selectedTab = tab;
   }
@@ -128,7 +171,7 @@ export class AddPartyComponent {
 
   /////////// improvement required
   updateLabel(event: any) {
-    debugger;
+    // debugger;
     this.labelText = event.target.checked ? 'Custom limit' : 'No limit';
     this.isCustomLimit = event.target.checked; 
   }
@@ -176,8 +219,8 @@ export class AddPartyComponent {
   //   console.log(obj);
   // }
 
-  submit() {
-    debugger;
+  submit(isSaveAndNew: boolean) {
+    // debugger;
     this.ifFormSubmitted = true;
     if(this.addPartyForm.valid) {
     if(this.openingBalance!=null) {
@@ -197,6 +240,9 @@ export class AddPartyComponent {
     // });
     // this.checkTypeOfPay()
     this.AddPartyData(this.addPartyForm.value);
+    if(isSaveAndNew){
+      this.addPartyForm.reset();
+    }
   } else {
       Swal.fire({
         title: 'Validation Error!',
@@ -206,6 +252,7 @@ export class AddPartyComponent {
   }
   }
 
+  
   // isPayRecieve(ev:any) { //not req : used only for displaying two bullets
   //   if(ev.length == 0){
   //     this.isOpeningBalance = false
@@ -217,7 +264,7 @@ export class AddPartyComponent {
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   AddPartyData(body: any): Promise<void> {
-    debugger
+    // debugger
     console.log("BEFore return");
     return new Promise((resolve) => {
       console.log("after return");
@@ -247,10 +294,11 @@ export class AddPartyComponent {
         additionalFieldName4Value: this.additionalFieldName4Value,
         typeOfPay: this.typeOfPay,
         oldPartyName: this.partyName,
-        isPartyUpdate: this.isPartyUpdate
+        isPartyUpdate: this.dataService.isPartyUpdate
       }
-      // this.dataService.partyName = this.addPartyData.partyName;
-      debugger;
+      if(this.dataService.isPartyUpdate){
+        body.oldPartyName = this.dataService.oldPartyName
+      }
       this.api.AddPartyDetails(JSON.stringify(body)).pipe(takeUntil(this.destroy$)).subscribe(res => {
         if (res == "Success") {
           console.log("Success")

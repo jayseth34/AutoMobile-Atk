@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
@@ -12,24 +13,49 @@ import { DataService } from 'src/app/services/data.service';
 export class AddPartyGroupComponent {
   registeredMobileNumber: any;
   partyGroupName: any = '';
+  oldPartyGroupName: any;
+  newPartyGroupName: any;
 
   addPartyGroup: UntypedFormGroup;
 
-  isSave: boolean = false;
+  isPartyGroupSave: boolean = false;
   partyGroup: any = '';
 
-  constructor(private api: ApiService, private dataService: DataService) { }
+  @Input() groupDetails: any;
+
+
+  constructor(private api: ApiService, private dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
     this.addPartyGroup = new UntypedFormGroup({
       partyGroupNameControl: new UntypedFormControl('', [Validators.required]),
     });
+
+    if(this.data!=null){
+      debugger
+      console.log("HEYY: ",this.data)
+      this.populateForm(this.data.groupDetails) 
+    }
+    this.oldPartyGroupName = this.partyGroupName;
+  }
+
+  populateForm(fetchedPartyGroupName: any){
+    debugger;
+    if(fetchedPartyGroupName){
+      this.partyGroupName = fetchedPartyGroupName;
+    }
+  }
+
+  onInputChange(event: any) {
+    // Update newgroupname with the new value
+    this.newPartyGroupName = event.target.value;
+    console.log("OLD: ",this.oldPartyGroupName,"NEW: ",this.newPartyGroupName)
   }
 
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   AddGroupData(body: any): Promise<void> {
-    debugger
+    // debugger
     console.log("BEFore return");
     return new Promise((resolve) => {
       console.log("after return");
@@ -38,19 +64,21 @@ export class AddPartyGroupComponent {
         oldgroupname: this.partyGroupName,
         newgroupname: this.partyGroupName
       }
-      if (this.isSave){
-        body.oldgroupname = this.partyGroupName,
-        body.newgroupname = this.partyGroupName
+      if (this.isPartyGroupSave){
+        body.oldgroupname = this.oldPartyGroupName,
+        body.newgroupname = this.newPartyGroupName
       }
       else{
-        body.newgroupname = this.partyGroupName,
-        body.oldgroupname = this.dataService.partyGroupListResponse.partygroup
+        body.newgroupname = this.oldPartyGroupName,
+        body.oldgroupname = this.oldPartyGroupName
       }
       // this.dataService.partyName = this.addPartyData.partyName;
-      debugger;
+      // debugger;
       this.api.AddGroupDetails(JSON.stringify(body)).pipe(takeUntil(this.destroy$)).subscribe(res => {
+        debugger;
         if (res == "Success") {
           console.log("Success group", res)
+          this.partyGroupName = this.newPartyGroupName
         }
         else{
           console.log("Failed")
@@ -60,14 +88,20 @@ export class AddPartyGroupComponent {
     });
   }
 
+  refreshPage() {
+    debugger;
+    window.location.reload();
+  }
+
   submit() {
     // debugger;
     if(this.addPartyGroup.valid) {
-      this.isSave = true
+      this.isPartyGroupSave = true
       this.AddGroupData(this.addPartyGroup.value);
+      this.refreshPage();
     } 
     else{
-      this.isSave = false
+      this.isPartyGroupSave = false
     }
   }
   
