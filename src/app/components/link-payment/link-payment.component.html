@@ -1,0 +1,55 @@
+<!-- app.component.html -->
+<div class="popup-container">
+    <div class="header">
+        <h2>Link Payment to Txns</h2>
+        <button class="close-button">&times;</button>
+    </div>
+    <div class="input-row">
+        <div class="input-group">
+            <label for="party">Party</label>
+            <input type="text" id="party" value="JAY" readonly>
+        </div>
+        <div class="input-group">
+            <label for="received">Received</label>
+            <input type="text" id="received" [value]="received" readonly>
+        </div>
+    </div>
+    <div class="filters">
+        <select>
+            <option>All transactions</option>
+            <!-- Other options here -->
+        </select>
+        <input type="text" placeholder="Search">
+    </div>
+    <div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Disable</th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Ref/Inv No.</th>
+                <th>Total</th>
+                <th>Balance</th>
+                <th>Linked Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let transaction of transactions">
+                <td><input type="checkbox" [(ngModel)]="transaction.disabled" (change)="updateLinkedAmount(transaction)"></td>
+                <td>{{ transaction.date }}</td>
+                <td>{{ transaction.type }}</td>
+                <td>{{ transaction.refNo }}</td>
+                <td>{{ transaction.total }}</td>
+                <td>{{ transaction.balance }}</td>
+                <td><input type="text" [value]="transaction.linkedAmount" [disabled]="transaction.disabled"></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <div class="footer">
+        <p>Total Unused: {{ totalUnused }}</p>
+        <button class="reset-button" (click)="reset()">RESET</button>
+        <button class="done-button">DONE</button>
+    </div>
+</div>
