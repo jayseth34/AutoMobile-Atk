@@ -70,7 +70,6 @@ export class EditDetailComponent implements OnInit {
       billingaddress: new FormControl(""),
       shippingaddress: new FormControl(""),
       invoicedate: new FormControl({ value: new Date(), disabled: true }),
-      creditLimit: new FormControl(),
       stateofsupply: new FormControl({ value: "Maharashtra", disabled: true }),
       partybalance: new FormControl(0),
       invoicenumber: new FormControl({ value: this.currentInvNo, disabled: true }),
@@ -84,7 +83,6 @@ export class EditDetailComponent implements OnInit {
     this.modifyDetail.get("fullpayment")?.valueChanges.subscribe((val: any) => this.updatePayAmount(val));
 
     this.modifyDetail.get("partybalance")?.disable();
-    this.modifyDetail.get("creditLimit")?.disable();
 
     this.route.paramMap.subscribe((params: ParamMap) => {
       if (params.has("type")) {
@@ -349,7 +347,6 @@ export class EditDetailComponent implements OnInit {
         phonenumber: this.selectedParty.phonenumber,
         billingaddress: this.selectedParty.billingaddress,
         shippingaddress: this.selectedParty.shipppingaddress,
-        creditLimit: this.selectedParty.creditlimit,
         partybalance: this.selectedParty.partybalance,
       });
     }
