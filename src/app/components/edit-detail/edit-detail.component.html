@@ -44,10 +44,15 @@
                 >{{ party.partyname }}</mat-option
               >
             </mat-autocomplete>
+            <mat-hint>
+              <span [ngStyle]="{ color: balanceColor }">
+                Balance: {{ partyBalance }}
+              </span>
+            </mat-hint>
           </mat-form-field>
 
           <!-- Phone Number -->
-          <mat-form-field class="col-3 mb-1" subscriptSizing="dynamic">
+          <mat-form-field class="col-4 mb-1">
             <mat-label>Phone Number</mat-label>
             <input
               matInput
@@ -56,28 +61,16 @@
             />
           </mat-form-field>
 
-          <!-- Credit Limit -->
-          <mat-form-field class="col-3 mb-1" subscriptSizing="dynamic">
-            <mat-label>Credit Limit</mat-label>
-            <input
-              matInput
-              placeholder="Credit Limit"
-              formControlName="creditLimit"
-            />
-          </mat-form-field>
-
-          <!-- Balance -->
-          <mat-form-field class="col-2 mb-1" subscriptSizing="dynamic">
-            <mat-label>Balance</mat-label>
-            <input
-              matInput
-              placeholder="Balance"
-              formControlName="partybalance"
-            />
-          </mat-form-field>
+          <!-- Address Same -->
+          <mat-checkbox
+            [checked]="shippingAddressSame"
+            (change)="updateShippingAddress()"
+          >
+            Billing Address same as shipping address
+          </mat-checkbox>
 
           <!-- Billing Address -->
-          <mat-form-field class="col-5 mb-1" subscriptSizing="dynamic">
+          <mat-form-field class="col-5 mb-1">
             <mat-label>Billing Address</mat-label>
             <textarea
               matInput
@@ -88,7 +81,7 @@
           </mat-form-field>
 
           <!-- Shipping Address -->
-          <mat-form-field class="col-5 mb-1" subscriptSizing="dynamic">
+          <mat-form-field class="col-5 mb-1">
             <mat-label>Shipping Address</mat-label>
             <textarea
               matInput
@@ -241,7 +234,7 @@
         </th>
         <td mat-cell *matCellDef="let element; let i = index">
           <span class="hover-none">
-            {{ getTransactionId(i) }}
+            {{ i + 1 }}
           </span>
           <div class="hover-display">
             <button

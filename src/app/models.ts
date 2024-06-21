@@ -38,11 +38,12 @@ export interface TransactionItem {
 
 export interface Party {
     partyname: string,
-    partybalance: number,
     phonenumber: number,
     billingaddress: string,
     shipppingaddress: string,
-    creditlimit: number
+    creditlimit: number,
+    topayparty: number,
+    toreceivefromparty: number,
 }
 
 export interface TransactionDetails {
