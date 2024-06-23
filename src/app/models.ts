@@ -107,12 +107,15 @@ export interface LinkedTransaction {
     invoicenumber: number;
     total: number;
     balance: number;
+    topayparty: number; // Assuming this is the field from party table
+    toreceivefromparty: number;
     linkedAmount: number;
     disabled: boolean;
-    originalLinkedAmount: number; // Track the original linked amount
-    originalBalance: number; // Track the original balance
+    originalLinkedAmount: number;
+    originalBalance: number;
     unused: number;
     registeredphonenumber: number;
+    customername:string;
 }
 
 

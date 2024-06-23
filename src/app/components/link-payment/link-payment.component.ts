@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { LinkedTransaction } from 'src/app/models';
+import { DataService } from 'src/app/services/data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-link-payment',
@@ -9,14 +11,18 @@ import { LinkedTransaction } from 'src/app/models';
 })
 export class LinkPaymentComponent {
   transactions: LinkedTransaction[] = [];
-  received: number = 10; // Example initial value
-  totalUnused: number = 10; // Initially totalUnused is the same as received
+  received: number; // Example initial value
+  totalUnused: number; // Initially totalUnused is the same as received
   unused: number;
+  typeofpay:any;
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private dataService : DataService, private router : Router) {}
 
   ngOnInit() {
     this.loadTransactions(9920279905, 'JAY');
+    this.received = this.dataService.received;
+    this.totalUnused = this.received;
+    this.typeofpay = this.dataService.typeofpay;
   }
 
   loadTransactions(registeredPhoneNumber: number, customerName: string) {
@@ -28,12 +34,15 @@ export class LinkPaymentComponent {
           invoicenumber: item.invoicenumber,
           total: item.total,
           balance: item.balance,
+          topayparty: this.dataService.topayparty,
+          toreceivefromparty: this.dataService.toreceivefromparty,
           linkedAmount: item.linkedamount,
           disabled: false,
           originalLinkedAmount: item.linkedamount,
           originalBalance: item.balance,
           unused: item.linkedamount,
-          registeredphonenumber: 9920279905
+          registeredphonenumber: 9920279905,
+          customername: item.customername
         }));
         this.updateTotalUnused();
       } else {
@@ -44,22 +53,15 @@ export class LinkPaymentComponent {
 
   updateLinkedAmount(transaction: LinkedTransaction) {
   if (transaction.disabled) {
-    // Calculate the maximum amount that can be linked
     const maxLinkedAmount = Math.min(this.totalUnused, transaction.balance);
-
-    // Update linkedAmount and balance
     transaction.linkedAmount += maxLinkedAmount;
     transaction.balance -= maxLinkedAmount;
     transaction.unused = maxLinkedAmount;
 
-    // Update totalUnused after linking
     this.updateTotalUnused();
   } else {
-    // Restore original values from API
     transaction.balance = transaction.originalBalance;
     transaction.linkedAmount = transaction.originalLinkedAmount;
-
-    // Reset totalUnused to received
     this.totalUnused = this.received;
   }
 }
@@ -86,6 +88,15 @@ updateTotalUnused() {
       .filter(transaction => transaction.linkedAmount !== transaction.originalLinkedAmount || transaction.balance !== transaction.originalBalance);
 
     if (updatedTransactions.length > 0) {
+      updatedTransactions.forEach(transaction => {
+        if (this.typeofpay === 'PAYMENT IN') {
+          transaction.toreceivefromparty -= this.received;
+        } else if (this.typeofpay === 'PAYMENT OUT') {
+          transaction.topayparty -= this.received;
+        }
+      });
+    }
+    if (updatedTransactions.length > 0) {
       this.api.updateTransactions(updatedTransactions).subscribe(response => {
         if (response.status === 'SUCCESS') {
           console.log('Transactions updated successfully');
@@ -96,5 +107,6 @@ updateTotalUnused() {
     } else {
       console.log('No changes to save');
     }
+    this.router.navigate(['inout']);
   }
 }

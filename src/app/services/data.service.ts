@@ -65,6 +65,10 @@ export class DataService {
   oldPartyName:any;
   oldPartyGroupName: any;
   oldItemName:any;
+  received: number;
+  topayparty: number;
+  toreceivefromparty:number;
+  typeofpay:any;
   // totalNoOfParties: any;
 
   // totalAmountOfParties: any;
