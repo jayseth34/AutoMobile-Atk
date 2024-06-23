@@ -37,9 +37,9 @@
         <tbody>
             <tr *ngFor="let transaction of transactions">
                 <td><input type="checkbox" [(ngModel)]="transaction.disabled" (change)="updateLinkedAmount(transaction)"></td>
-                <td>{{ transaction.date }}</td>
-                <td>{{ transaction.type }}</td>
-                <td>{{ transaction.refNo }}</td>
+                <td>{{ transaction.invoicedate }}</td>
+                <td>{{ transaction.typeofpay }}</td>
+                <td>{{ transaction.invoicenumber }}</td>
                 <td>{{ transaction.total }}</td>
                 <td>{{ transaction.balance }}</td>
                 <td><input type="text" [value]="transaction.linkedAmount" [disabled]="transaction.disabled"></td>
@@ -50,6 +50,6 @@
     <div class="footer">
         <p>Total Unused: {{ totalUnused }}</p>
         <button class="reset-button" (click)="reset()">RESET</button>
-        <button class="done-button">DONE</button>
+        <button class="done-button" (click)="saveChanges()">DONE</button>
     </div>
 </div>

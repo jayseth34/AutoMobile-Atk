@@ -34,9 +34,9 @@ export class CommonService {
   }
 
   Post(endPoint: any, body: any): Observable<any> {
-    // this.authToken = JSON.parse(localStorage.getItem("AuthToken") || '{}');
+    this.authToken = JSON.parse(localStorage.getItem("AuthToken") || '{}');
     let headers = new HttpHeaders();
-    // headers = headers.append("Authorization", "Bearer" + this.authToken.token);
+    headers = headers.append("Authorization", "Bearer " + this.authToken.token);
     headers = headers.append("Content-Type", "application/json");
     return this.http
       .post(this.baseURL + endPoint, body, { headers: headers })

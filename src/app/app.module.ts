@@ -36,6 +36,7 @@ import { EditDetailComponent } from './components/edit-detail/edit-detail.compon
 import { AddPartyGroupComponent } from './components/add-party-group/add-party-group.component';
 import { AddItemCategoryComponent } from './components/add-item-category/add-item-category.component';
 import { PaymentInoutComponent } from './components/payment-inout/payment-inout.component';
+import { LinkPaymentComponent } from './components/link-payment/link-payment.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { PaymentInoutComponent } from './components/payment-inout/payment-inout.
     AddPartyGroupComponent,
     EditDetailComponent,
     AddItemCategoryComponent,
-    PaymentInoutComponent
+    PaymentInoutComponent,
+    LinkPaymentComponent
   ],
   imports: [
     BrowserModule,

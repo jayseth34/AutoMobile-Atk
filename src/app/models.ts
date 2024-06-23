@@ -101,6 +101,20 @@ export interface Typeofpaytransaction {
     paymentstatus: string
 }
 
+export interface LinkedTransaction {
+    invoicedate: string;
+    typeofpay: string;
+    invoicenumber: number;
+    total: number;
+    balance: number;
+    linkedAmount: number;
+    disabled: boolean;
+    originalLinkedAmount: number; // Track the original linked amount
+    originalBalance: number; // Track the original balance
+    unused: number;
+    registeredphonenumber: number;
+}
+
 
 // ---------------- Request - Response Models ------------------
 

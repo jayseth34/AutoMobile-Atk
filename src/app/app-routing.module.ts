@@ -11,6 +11,7 @@ import { ItemHomepageComponent } from './components/item-homepage/item-homepage.
 import { EditDetailComponent } from './components/edit-detail/edit-detail.component';
 import { AddPartyGroupComponent } from './components/add-party-group/add-party-group.component';
 import { PaymentInoutComponent } from './components/payment-inout/payment-inout.component';
+import { LinkPaymentComponent } from './components/link-payment/link-payment.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -35,6 +36,8 @@ const routes: Routes = [
   { path: 'party-homepage', component: PartyHomepageComponent },
   { path: 'item-homepage', component: ItemHomepageComponent },
   { path: 'inout', component: PaymentInoutComponent },
+  { path: 'linked', component: LinkPaymentComponent },
+
 ];
 
 @NgModule({
