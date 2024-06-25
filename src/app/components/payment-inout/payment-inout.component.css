@@ -90,3 +90,11 @@ body, html {
   display: block;
   margin-top: 5px;
 }
+
+.negative-balance {
+  color: red;
+}
+
+.positive-balance {
+  color: green;
+}

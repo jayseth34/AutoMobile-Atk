@@ -38,6 +38,7 @@ import { AddItemCategoryComponent } from './components/add-item-category/add-ite
 import { PaymentInoutComponent } from './components/payment-inout/payment-inout.component';
 import { AutoCompleteComponent } from './components/auto-complete/auto-complete.component';
 import { ClickOutsideDirective } from './click-outside.directive';
+import { LinkPaymentComponent } from './components/link-payment/link-payment.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { ClickOutsideDirective } from './click-outside.directive';
     AddItemCategoryComponent,
     PaymentInoutComponent,
     AutoCompleteComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    LinkPaymentComponent
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonService } from './common.service';
-import { GetPartyTransactionDetailsRq, GetTypeOfPayTransactionsRq, ItemListRs, LoginReponse, LoginRequest, Party, PartyListRs, SaveUpdateTransactionRq, TransactionDetails } from '../models';
+import { GetPartyTransactionDetailsRq, GetTypeOfPayTransactionsRq, ItemListRs, LinkedTransaction, LoginReponse, LoginRequest, Party, PartyListRs, SaveUpdateTransactionRq, TransactionDetails } from '../models';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -147,4 +148,15 @@ export class ApiService {
     else
       return this.cs.PostType<string, SaveUpdateTransactionRq>("Sale/AddSale", req);
   }
+
+  getTransactions(registeredPhoneNumber: number, customerName: string): Observable<any> {
+    return this.cs.get(
+      "Sale/GetLinkedPaymentTransaction?registeredPhoneNumber=" + registeredPhoneNumber + "&customername=" + customerName
+    );
+  }
+
+  updateTransactions(transactions: LinkedTransaction[]): Observable<any> {
+    return this.cs.Post("Sale/UpdateLinkedPaymentTransaction", transactions)
+  }
+
 }

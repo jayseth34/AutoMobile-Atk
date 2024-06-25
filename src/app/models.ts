@@ -109,6 +109,23 @@ export interface Typeofpaytransaction {
     paymentstatus: string
 }
 
+export interface LinkedTransaction {
+    invoicedate: string;
+    typeofpay: string;
+    invoicenumber: number;
+    total: number;
+    balance: number;
+    topayparty: number; // Assuming this is the field from party table
+    toreceivefromparty: number;
+    linkedAmount: number;
+    disabled: boolean;
+    originalLinkedAmount: number;
+    originalBalance: number;
+    unused: number;
+    registeredphonenumber: number;
+    customername:string;
+}
+
 
 // ---------------- Request - Response Models ------------------
 

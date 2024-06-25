@@ -4,12 +4,18 @@
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="party">Party *</label>
-          <select id="party" formControlName="party" class="form-control">
+          <select id="party" formControlName="party" class="form-control" (change)="onPartyChange($event)">
             <option value="">Select Party</option>
-            <option value="Ravi Dixit">Ravi Dixit</option>
-            <!-- Add more options as needed -->
+            <option *ngFor="let party of partyList" [ngValue]="party.partyname">
+              {{ party.partyname }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="balance">{{ calculateBalance(party) }}</span>
+            </option>
           </select>
-          <small class="form-text text-muted">BAL: 59413</small>
+          <small class="form-text text-muted">BAL: <b><span [ngClass]="{'negative-balance': balance < 0, 'positive-balance': balance >= 0}">{{ balance }}</span></b></small>
 
           <label for="paymentType">Payment Type</label>
           <select id="paymentType" formControlName="paymentType" class="form-control">
@@ -31,13 +37,14 @@
 
           <div class="received-container">
             <label for="received">Received</label>
-            <input id="received" type="text" formControlName="received" class="form-control" />
+            <input id="received" type="text" formControlName="received" class="form-control"
+                   [(ngModel)]="receivedValue" (ngModelChange)="updateReceivedValue($event)" />
           </div>
         </div>
       </div>
 
       <div class="btn-container">
-        <button type="button" class="btn btn-success">Link Payment</button>
+        <button type="button" class="btn btn-success" (click)="linkPayment()">Link Payment</button>
       </div>
 
       <div class="right-btn-container">
