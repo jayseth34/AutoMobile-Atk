@@ -56,9 +56,9 @@ import { LinkPaymentComponent } from './components/link-payment/link-payment.com
     EditDetailComponent,
     AddItemCategoryComponent,
     PaymentInoutComponent,
+    LinkPaymentComponent,
     AutoCompleteComponent,
     ClickOutsideDirective,
-    LinkPaymentComponent
   ],
   imports: [
     BrowserModule,
