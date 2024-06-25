@@ -11,6 +11,7 @@ import { ItemHomepageComponent } from './components/item-homepage/item-homepage.
 import { EditDetailComponent } from './components/edit-detail/edit-detail.component';
 import { AddPartyGroupComponent } from './components/add-party-group/add-party-group.component';
 import { PaymentInoutComponent } from './components/payment-inout/payment-inout.component';
+import { AutoCompleteComponent } from './components/auto-complete/auto-complete.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },

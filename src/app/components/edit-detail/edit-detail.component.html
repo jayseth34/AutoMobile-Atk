@@ -20,76 +20,52 @@
       <div class="container-fluid col-8 ms-2 me-2">
         <form [formGroup]="modifyDetail" class="row">
           <!-- Party Name -->
-          <mat-form-field
-            class="col-4 mat-small mb-1"
-            subscriptSizing="dynamic"
-          >
-            <mat-label>Party Name</mat-label>
-            <input
-              type="text"
-              placeholder="Enter Name"
-              aria-label="Number"
-              matInput
-              formControlName="customername"
-              [matAutocomplete]="auto"
+          <div class="col-5 mb-1">
+            <app-auto-complete
+              [controlName]="'customername'"
+              [dataList]="autoCompletePartyData"
+              [placeholder]="'Party name'"
+              [handleChange]="handlePartyChange"
+              [columns]="columnInfoAutoComplete"
               (click)="handleCustomerInputClick()"
-            />
-            <mat-autocomplete
-              #auto="matAutocomplete"
-              (optionSelected)="handleChange($event)"
             >
-              <mat-option
-                *ngFor="let party of partyList"
-                [value]="party.partyname"
-                >{{ party.partyname }}</mat-option
-              >
-            </mat-autocomplete>
-            <mat-hint>
-              <span [ngStyle]="{ color: balanceColor }">
-                Balance: {{ partyBalance }}
-              </span>
-            </mat-hint>
-          </mat-form-field>
+            </app-auto-complete>
+            <span [ngStyle]="{ color: balanceColor }">
+              Balance: {{ partyBalance }}
+            </span>
+          </div>
 
           <!-- Phone Number -->
-          <mat-form-field class="col-4 mb-1">
-            <mat-label>Phone Number</mat-label>
+          <div class="col-5 mb-1">
             <input
-              matInput
+              id="phoneNumberInput"
               placeholder="Phone Number"
               formControlName="phonenumber"
+              class="form-control"
             />
-          </mat-form-field>
-
-          <!-- Address Same -->
-          <mat-checkbox
-            [checked]="shippingAddressSame"
-            (change)="updateShippingAddress()"
-          >
-            Billing Address same as shipping address
-          </mat-checkbox>
+          </div>
 
           <!-- Billing Address -->
-          <mat-form-field class="col-5 mb-1">
-            <mat-label>Billing Address</mat-label>
+          <div class="col-5 mb-1">
             <textarea
-              matInput
+              class="form-control"
+              id="billingAddress"
+              rows="2"
               placeholder="Billing Address"
               formControlName="billingaddress"
-            >
-            </textarea>
-          </mat-form-field>
+            ></textarea>
+          </div>
 
           <!-- Shipping Address -->
-          <mat-form-field class="col-5 mb-1">
-            <mat-label>Shipping Address</mat-label>
+          <div class="col-5 mb-1">
             <textarea
-              matInput
+              class="form-control"
+              id="shippingAddress"
+              rows="2"
               placeholder="Shipping Address"
               formControlName="shippingaddress"
-            >
-            </textarea>
-          </mat-form-field>
+            ></textarea>
+          </div>
         </form>
       </div>
 
@@ -97,48 +73,43 @@
       <div class="container-fluid col-3 ms-2 me-2">
         <form [formGroup]="modifyDetail" class="row">
           <!-- Invoice Number -->
-          <mat-form-field class="col-4 mb-1" subscriptSizing="dynamic">
-            <mat-label>Inv. No</mat-label>
+          <div class="col-11 input-group mb-1">
+            <span class="input-group-text transparent"> Invoice No. </span>
             <input
-              type="number"
-              matInput
+              id="invNumber"
+              name="invNumber"
+              placeholder="Inv No"
               formControlName="invoicenumber"
-              [disabled]="true"
+              class="form-control"
+              readonly
             />
-          </mat-form-field>
+          </div>
 
           <!-- Invoice Date -->
-          <mat-form-field class="col-7 mb-1" subscriptSizing="dynamic">
-            <mat-label>Inv. Date</mat-label>
+          <div class="col-11 input-group mb-1">
+            <span class="input-group-text transparent"> Invoice Date </span>
             <input
-              matInput
-              [matDatepicker]="picker"
+              id="invDate"
+              name="invDate"
+              placeholder="Inv Date"
               formControlName="invoicedate"
+              class="form-control"
+              readonly
             />
-            <mat-datepicker-toggle
-              matIconSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
+          </div>
 
-          <!-- Invoice State -->
-          <mat-form-field class="col-11">
-            <mat-label>State</mat-label>
-            <input
-              type="text"
-              aria-label="Number"
-              matInput
-              formControlName="stateofsupply"
-              [matAutocomplete]="state"
+          <!-- State Of Supply -->
+          <div class="col-11 mb-3">
+            <app-auto-complete
+              [controlName]="'stateofsupply'"
+              [dataList]="stateList"
+              [placeholder]="'State'"
+              [dataIsObject]="false"
+              [label]="'State'"
               (click)="handleStateInputClick()"
-            />
-            <mat-autocomplete #state="matAutocomplete">
-              <mat-option *ngFor="let state of stateList" [value]="state">
-                {{ state }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+            >
+            </app-auto-complete>
+          </div>
         </form>
       </div>
     </div>
@@ -260,24 +231,14 @@
           Item
         </th>
         <td mat-cell *matCellDef="let element" [formGroup]="element">
-          <mat-form-field
-            class="w-100"
-            subscriptSizing="dynamic"
-            appearance="outline"
+          <app-auto-complete
+            [controlName]="'item'"
+            [dataList]="autoCompleteItemData"
+            [dataIsObject]="true"
+            [columns]="itemColumnInfo"
+            [maxContentWidth]="true"
             (click)="getItems()"
-          >
-            <input
-              type="text"
-              matInput
-              formControlName="item"
-              [matAutocomplete]="auto"
-            />
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let item of items" [value]="item.itemname">
-                {{ item.itemname }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+          />
         </td>
       </ng-container>
 
@@ -437,37 +398,113 @@
       </tr> -->
     </table>
   </form>
+
+  <div class="container-fluid">
+    <form [formGroup]="modifyDetail" class="mt-4 row justify-content-between">
+      <div class="col-3">
+        <div class="form-floating">
+          <select
+            class="form-select"
+            id="paymentType"
+            aria-label="Payment Type Select"
+            formControlName="paymenttype"
+          >
+            <option value="CASH">CASH</option>
+            <option value="CREDIT">
+              CREDIT
+              <!-- <option value="3">Three</option> -->
+            </option>
+          </select>
+          <label for="floatingSelect">Payment Type</label>
+        </div>
+      </div>
+
+      <div class="col-5 row justify-content-end">
+        <!-- Round Off Checkbox -->
+        <div class="form-check col-3 mb-1">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            [value]="roundOff"
+            id="roundOff"
+            style="top: 23%"
+          />
+          <label
+            class="form-check-label"
+            for="roundOff"
+            style="position: absolute; top: 20%"
+          >
+            Round Off
+          </label>
+        </div>
+
+        <!-- Round off input -->
+        <div class="col-3 mb-1">
+          <input
+            id="roundOff"
+            name="roundOff"
+            placeholder="Roundoff Value"
+            class="form-control"
+          />
+        </div>
+
+        <!-- Total Amount -->
+        <div class="col-6 mb-1 d-flex">
+          <span class="input-group-text transparent w-50px"> Total </span>
+          <!-- <label for="total"> Total </label> -->
+          <input
+            id="total"
+            name="total"
+            placeholder="Total"
+            formControlName="total"
+            class="form-control"
+            readonly="true"
+          />
+        </div>
+        <!-- </div> -->
+
+        <!-- Full Paymnt Checkbox -->
+        <div class="form-check col-1 mb-1">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="fullPayment"
+            style="top: 23%"
+            (click)="updatePayAmount()"
+            [checked]="fullpayment"
+          />
+        </div>
+
+        <!-- Received Amount -->
+        <div class="col-6 d-flex mb-1">
+          <span class="input-group-text transparent w-50px"> Received </span>
+          <input
+            id="received"
+            name="received"
+            placeholder="received"
+            formControlName="received"
+            class="form-control"
+          />
+        </div>
+
+        <!-- Balance Amount -->
+        <div class="col-6 d-flex mb-1">
+          <span class="input-group-text transparent w-50px"> Balance </span>
+          <input
+            id="balance"
+            name="balance"
+            placeholder="balance"
+            formControlName="balance"
+            class="form-control"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
 </section>
 
 <section class="mt-2 bg-body-secondary p-2 container-fluid">
   <form class="row" [formGroup]="modifyDetail">
-    <div class="col-2">
-      <select
-        class="form-select"
-        aria-label="Default select example"
-        formControlName="paymenttype"
-      >
-        <option value="CASH">CASH</option>
-        <option value="CREDIT">
-          CREDIT
-          <!-- <option value="3">Three</option> -->
-        </option>
-      </select>
-    </div>
-    <div class="col-6">
-      <span> Custom </span>
-      <mat-slide-toggle formControlName="fullpayment"> Full </mat-slide-toggle>
-      <div class="d-inline-block ms-3">
-        <input
-          type="number"
-          class="form-control"
-          placeholder="customPayment"
-          aria-label="customPayment"
-          aria-describedby="customPayment"
-          formControlName="received"
-        />
-      </div>
-    </div>
     <div class="col-3">
       <button mat-raised-button color="accent" (click)="submitDetails()">
         Submit

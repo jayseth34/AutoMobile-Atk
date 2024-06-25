@@ -4,6 +4,14 @@ export enum TimeFilterEnum {
     All, CurMonth, LastMonth, CurQuarter, CurYear, Custom
 };
 
+export interface ColumnInfo {
+    columnName: string,
+    isColoured: boolean,
+    identifier: string,
+    positiveIcon?: string,
+    negativeIcon?: string,
+}
+
 export interface Transaction {
     invoicenumber: number
     invoicedate: string

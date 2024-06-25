@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { TransactionTypeEnum, TimeFilterEnum } from 'src/app/models';
 import { ApiService } from 'src/app/services/api.service';
 import { Transaction } from 'src/app/models';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-details',

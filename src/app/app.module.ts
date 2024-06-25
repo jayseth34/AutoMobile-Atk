@@ -36,6 +36,8 @@ import { EditDetailComponent } from './components/edit-detail/edit-detail.compon
 import { AddPartyGroupComponent } from './components/add-party-group/add-party-group.component';
 import { AddItemCategoryComponent } from './components/add-item-category/add-item-category.component';
 import { PaymentInoutComponent } from './components/payment-inout/payment-inout.component';
+import { AutoCompleteComponent } from './components/auto-complete/auto-complete.component';
+import { ClickOutsideDirective } from './click-outside.directive';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { PaymentInoutComponent } from './components/payment-inout/payment-inout.
     AddPartyGroupComponent,
     EditDetailComponent,
     AddItemCategoryComponent,
-    PaymentInoutComponent
+    PaymentInoutComponent,
+    AutoCompleteComponent,
+    ClickOutsideDirective
   ],
   imports: [
     BrowserModule,

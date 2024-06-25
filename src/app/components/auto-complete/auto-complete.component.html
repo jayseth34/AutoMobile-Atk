@@ -1,0 +1,67 @@
+<form
+  autocomplete="off"
+  class="autocomplete"
+  (clickOutside)="closeList()"
+  [formGroup]="form"
+>
+  <div class="autocomplete input-group">
+    <span for="inputElement" *ngIf="label" class="input-group-text transparent">
+      {{ label }}
+    </span>
+    <input
+      id="inputElement"
+      [placeholder]="placeholder"
+      [formControlName]="controlName"
+      (click)="handleInputCLick()"
+      (keydown)="handleKeyPress($event)"
+      class="form-control"
+    />
+  </div>
+  <div
+    class="autocomplete-items"
+    *ngIf="showList"
+    [ngClass]="maxContentWidth ? 'max-content-width' : ''"
+  >
+    <table class="table table-hover table-borderless" *ngIf="dataIsObject">
+      <thead>
+        <tr>
+          <th *ngFor="let column of columns" scope="col">
+            {{ column.columnName }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of itemList; let i = index"
+          [ngClass]="
+            currentFocus != null && i == currentFocus
+              ? 'autocomplete-active'
+              : ''
+          "
+          (click)="selectItem(item)"
+        >
+          <td
+            *ngFor="let column of columns"
+            [ngClass]="{
+              'text-success': column.isColoured && item[column.identifier] > 0,
+              'text-danger': column.isColoured && item[column.identifier] < 0
+            }"
+          >
+            {{ item[column.identifier] }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!dataIsObject">
+      <div
+        *ngFor="let item of itemList; index as i"
+        (click)="selectItem(item)"
+        [ngClass]="
+          currentFocus != null && i == currentFocus ? 'autocomplete-active' : ''
+        "
+      >
+        {{ item }}
+      </div>
+    </div>
+  </div>
+</form>

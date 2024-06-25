@@ -9,6 +9,14 @@ input::-webkit-inner-spin-button {
   background-color: white;
 }
 
+.w-50px {
+  width: 150px !important;
+}
+
+.transparent {
+  background-color: transparent;
+}
+
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
@@ -41,12 +49,17 @@ table.mat-mdc-table {
 
 .mat-mdc-header-row,
 .mat-mdc-footer-row,
-.mat-mdc-row {
-  height: 42px;
+.mat-mdc-row,
+.mat-mdc-row:hover {
+  height: 48px;
 }
 
 table.mat-mdc-table > thead.rowgroup {
   margin-bottom: 2px;
+}
+
+table.mat-mdc-table td.mat-mdc-cell {
+  overflow: visible;
 }
 
 table.mat-mdc-table td.mat-mdc-cell .container-fluid {
