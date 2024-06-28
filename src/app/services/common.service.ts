@@ -70,6 +70,14 @@ export class CommonService {
       .post<T>(this.baseURL + endPoint, body, { headers: headers })
       .pipe(catchError(this.errorHandler));
   }
+  
+  isUndefineOrNull(value:any){
+    if(value == null || value == '' || value == ""){
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   public formatDate(date: any): string {
     if (date == '') {

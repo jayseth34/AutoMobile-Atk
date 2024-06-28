@@ -3,6 +3,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { LinkedTransaction } from 'src/app/models';
 import { DataService } from 'src/app/services/data.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-link-payment',
@@ -11,15 +12,19 @@ import { Router } from '@angular/router';
 })
 export class LinkPaymentComponent {
   transactions: LinkedTransaction[] = [];
-  received: number; // Example initial value
-  totalUnused: number; // Initially totalUnused is the same as received
+  received: number;
+  totalUnused: number;
   unused: number;
   typeofpay:any;
+  registeredphonenumber:number;
+  customername:string;
 
   constructor(private api: ApiService, private dataService : DataService, private router : Router) {}
 
   ngOnInit() {
-    this.loadTransactions(9920279905, 'JAY');
+    this.registeredphonenumber = parseInt(JSON.parse(localStorage.getItem("phonenumber") as string));
+    this.customername = this.dataService.partyName;
+    this.loadTransactions(this.registeredphonenumber, this.customername);
     this.received = this.dataService.received;
     this.totalUnused = this.received;
     this.typeofpay = this.dataService.typeofpay;
@@ -86,7 +91,10 @@ updateTotalUnused() {
   saveChanges() {
     const updatedTransactions: LinkedTransaction[] = this.transactions
       .filter(transaction => transaction.linkedAmount !== transaction.originalLinkedAmount || transaction.balance !== transaction.originalBalance);
-
+    if(this.totalUnused != 0){
+      Swal.fire({ text : "Kindly Use entire Linked Amount To Save Changes"})
+      return;
+    }
     if (updatedTransactions.length > 0) {
       updatedTransactions.forEach(transaction => {
         if (this.typeofpay === 'PAYMENT IN') {
