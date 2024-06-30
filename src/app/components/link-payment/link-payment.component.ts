@@ -74,16 +74,25 @@ export class LinkPaymentComponent {
   }
 
   updateLinkedAmount(transaction: LinkedTransaction) {
-    if (transaction.disabled) {
-      const maxLinkedAmount = Math.min(this.totalUnused, transaction.balance);
-      transaction.linkedAmount += maxLinkedAmount;
-      transaction.balance -= maxLinkedAmount;
-      transaction.unused = maxLinkedAmount;
-      this.updateTotalUnused();
+    if (this.totalUnused != 0 && this.totalUnused > 0) {
+      if (transaction.disabled) {
+        const maxLinkedAmount = Math.min(this.totalUnused, transaction.balance);
+        transaction.linkedAmount += maxLinkedAmount;
+        transaction.balance -= maxLinkedAmount;
+        transaction.unused = maxLinkedAmount;
+        this.updateTotalUnused();
+      } else {
+        transaction.balance = transaction.originalBalance;
+        transaction.linkedAmount = transaction.originalLinkedAmount;
+        this.totalUnused = this.received;
+      }
     } else {
-      transaction.balance = transaction.originalBalance;
-      transaction.linkedAmount = transaction.originalLinkedAmount;
-      this.totalUnused = this.received;
+      Swal.fire({
+        text: 'You Have No Unused Amount Left',
+        allowOutsideClick: false,
+      }).then(() => {
+        transaction.disabled = false;
+      });
     }
   }
 
