@@ -68,7 +68,7 @@ export class DataService {
   topayparty: number;
   toreceivefromparty:number;
   typeofpay:any;
-  invoicenumber:any;
+  invoicenumber:number;
   paymentType: any;
   // totalNoOfParties: any;
 

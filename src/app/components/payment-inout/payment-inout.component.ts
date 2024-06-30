@@ -17,7 +17,7 @@ export class PaymentInoutComponent implements OnInit {
   balance: number = 0;
   typeofpay :any = 'PAYMENT IN';
   receivedValue: number | undefined; // Track received value separately
-  receiptno:any;
+  receiptno:number;
   registeredphonenumber: number;
   partyName:any;
   paymentType: any;
@@ -43,7 +43,11 @@ export class PaymentInoutComponent implements OnInit {
   getPartyList() {
     this.api.getPartyList(this.registeredphonenumber).subscribe(data => {
       if (data.status === 'SUCCESS') {
-        this.partyList = data.getPartyList;
+        if(this.typeofpay == "PAYMENT IN"){
+          this.partyList = data.getPartyList.filter((party:any) => party.toreceivefromparty > 0)
+        } else if (this.typeofpay == "PAYMENT OUT"){
+          this.partyList = data.getPartyList.filter((party:any) => party.topayparty > 0)
+        }
       } else {
         console.error('Failed to load party list:', data.status);
       }
@@ -107,7 +111,7 @@ export class PaymentInoutComponent implements OnInit {
       })
     }
   }
-  updateReceiptValue(value:any){
+  updateReceiptValue(value:number){
     this.receiptno = value;
     this.dataService.invoicenumber = this.receiptno;
     console.log(this.receiptno)
