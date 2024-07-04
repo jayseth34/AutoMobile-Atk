@@ -132,8 +132,10 @@ export class DetailsComponent implements OnInit, AfterViewInit {
 
     let startTimestamp = Date.parse(this.filterForm.get('startDate')?.value as string);
     let start = new Date(startTimestamp);
+    start.setHours(0, 0, 0, 0);
     let endTimestamp = Date.parse(this.filterForm.get('endDate')?.value as string);
     let end = new Date(endTimestamp);
+    end.setHours(0, 0, 0, 0);
 
     // Api Call if required
     this.transactonData.data = this.fullData.filter((item: any) => {

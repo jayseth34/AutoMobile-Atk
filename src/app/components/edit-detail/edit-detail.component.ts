@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
@@ -9,6 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from 'src/app/services/api.service';
 import { distinctUntilChanged, map, of, pairwise, startWith } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
+import { ReceivedValidator } from 'src/app/received-validator';
 
 type BalanceColors = "green" | "red" | "black";
 
@@ -20,7 +21,7 @@ type BalanceColors = "green" | "red" | "black";
 export class EditDetailComponent implements OnInit {
   // TransactionType = TransactionTypeEnum;
   transactionType: string;
-  items: Item[] = [];
+  items = signal<Item[]>([]);
   selectedParty?: Party;
   currentInvNo?: number;
   stateList: string[];
@@ -40,6 +41,7 @@ export class EditDetailComponent implements OnInit {
   balanceColor: BalanceColors;
   roundOff: boolean = true;
   fullpayment: boolean = false;
+  ogBalance: number = 0;
 
   // For AutoComplete
   autoCompletePartyData: any[] = [];
@@ -56,7 +58,17 @@ export class EditDetailComponent implements OnInit {
     }
   ];
 
-  autoCompleteItemData: any[] = [];
+  autoCompleteItemData = computed(() => {
+    return this.items().map((item) => {
+      return {
+        'itemName': item.itemname,
+        'salePrice': item.saleprice,
+        'purchasePrice': item.purchaseprice,
+        'stock': item.remainingquantity,
+        'location': ''
+      };
+    });
+  });;
   itemColumnInfo: ColumnInfo[] = [
     {
       columnName: "Item Name",
@@ -124,7 +136,7 @@ export class EditDetailComponent implements OnInit {
       customername: new FormControl("", [Validators.required, Validators.minLength(1)]),
       phonenumber: new FormControl("", [Validators.required, Validators.minLength(9), Validators.maxLength(10)]),
       billingaddress: new FormControl("", [Validators.required, Validators.minLength(1)]),
-      shippingaddress: new FormControl("", [Validators.required, Validators.minLength(1)]),
+      shippingaddress: new FormControl(""),
       invoicedate: new FormControl({ value: this.cs.formatDate(new Date()), disabled: false }),
       stateofsupply: new FormControl({ value: "Maharashtra", disabled: false }),
       partybalance: new FormControl(0),
@@ -134,8 +146,10 @@ export class EditDetailComponent implements OnInit {
       received: new FormControl<number>({ value: 0, disabled: false }),
       total: new FormControl<number>({ value: 0, disabled: false }),
       balance: new FormControl<number>({ value: 0, disabled: true }),
+      topayparty: new FormControl<number>(0),
+      toreceivefromparty: new FormControl<number>(0),
       itemdetailslist: new FormArray([]),
-    });
+    }, ReceivedValidator);
 
     this.modifyDetail.get("partybalance")?.disable();
 
@@ -184,9 +198,19 @@ export class EditDetailComponent implements OnInit {
               invoicedate: this.cs.formatDate(new Date(transaction.invoicedate)),
               state: transaction.stateofsupply,
               invoicenumber: this.invNo,
-              paymenttype: transaction.paymenttype
+              paymenttype: transaction.paymenttype,
+              total: transaction.total,
+              received: transaction.received,
+              balance: transaction.balance,
+              topayparty: transaction.topayparty,
+              toreceivefromparty: transaction.toreceivefromparty,
+              partybalance: transaction.toreceivefromparty - transaction.topayparty,
             });
 
+            this.ogBalance = transaction.balance ?? 0;
+
+            console.log(this.modifyDetail.get("toreceivefromparty")?.value);
+            this.updateBalanceColor(transaction.toreceivefromparty - transaction.topayparty);
             transaction.itemdetailslist.forEach(item => this.addNewFormRow(this.createNewFormRow(item)));
             // For the extra row
             this.addNewFormRow(this.createNewFormRow(null));
@@ -205,10 +229,12 @@ export class EditDetailComponent implements OnInit {
 
   createNewFormRow(data: ItemDetail | null): FormGroup {
     let finalAmount = 0
+    let totalElementControl = this.modifyDetail.get("total");
     if (data != null) {
       finalAmount = data?.priceperunit * data.qty + 0 - 0;
       this.totalAmount += finalAmount;
       this.totalQuantity += data.qty;
+      totalElementControl?.setValue(this.totalAmount, { emitevent: false });
     }
 
     if (this.transactionId == 0 && data != null)
@@ -229,7 +255,7 @@ export class EditDetailComponent implements OnInit {
       remainingquantity: new FormControl(data?.remainingquantity ?? 0)
     });
 
-    this.updatePayAmount();
+    // this.updatePayAmount();
 
     // Setting the substriber to get previous and next value
     // Using pairwise to club two changes together.
@@ -240,7 +266,6 @@ export class EditDetailComponent implements OnInit {
     element.get("item")?.valueChanges.pipe(distinctUntilChanged(), startWith(data?.item ?? ""), pairwise()).subscribe(([prev, next]: [any, any]) => this.handleItemChange(prev, next, element));
     const valueChanges$ = element.valueChanges.pipe(map((item: any) => this.getChangesNew(element)));
     valueChanges$.subscribe((changeObj: any) => {
-      console.log("Changed", changeObj);
       if (!element.value.queryoperationtype) {
         element.patchValue({
           queryoperationtype: "UPDATE"
@@ -335,11 +360,10 @@ export class EditDetailComponent implements OnInit {
     this.totalQuantity = tempTotalValObj.qty;
     this.totalTax = tempTotalValObj.tax;
 
-    this.modifyDetail.get("total")?.setValue(this.totalAmount);
+    this.modifyDetail.get("total")?.setValue(this.totalAmount, { emitevent: false });
   }
 
   updatePayAmount() {
-    console.log("pay Amoumt: " + this.fullpayment);
     this.fullpayment = !this.fullpayment;
     console.log("pay Amoumt: " + this.fullpayment);
     const control = this.modifyDetail.get("received");
@@ -385,13 +409,17 @@ export class EditDetailComponent implements OnInit {
 
   handleDeleteRowClick(ind: number, element: FormControl) {
     // if(element.g)
-    (this.modifyDetail.get("itemdetailslist") as FormArray).at(ind).disable();
+    let control = this.itemDetailValue?.at(ind);
+    if (control?.get("queryoperationtype")?.value == "INSERT")
+      (this.modifyDetail.get("itemdetailslist") as FormArray)?.removeAt(ind);
+    else {
+      element.patchValue({
+        queryoperationtype: "DELETE",
+      });
+      this.handleItemChangeRow(element);
+    }
     // this.itemDetailValue?.at(ind).disable()
     // this.itemDetailValue.removeAt(ind);
-    element.patchValue({
-      queryoperationtype: "DELETE",
-    });
-    this.handleItemChangeRow(element);
     this.updateTransactionData();
   }
 
@@ -428,36 +456,34 @@ export class EditDetailComponent implements OnInit {
       this.modifyDetail.patchValue({
         phonenumber: this.selectedParty.phonenumber,
         billingaddress: this.selectedParty.billingaddress,
-        shippingaddress: this.selectedParty.shipppingaddress,
+        shippingaddress: this.selectedParty.shipppingaddress ?? "",
         partybalance: balance,
+        topayparty: this.selectedParty.topayparty,
+        toreceivefromparty: this.selectedParty.toreceivefromparty
       });
-      if (balance < 0)
-        this.balanceColor = "red";
-      else if (balance > 0)
-        this.balanceColor = "green";
-      else
-        this.balanceColor = "black";
+      this.updateBalanceColor(balance);
     }
   }
 
+  updateBalanceColor(balance: number) {
+    if (balance < 0)
+      this.balanceColor = "red";
+    else if (balance > 0)
+      this.balanceColor = "green";
+    else
+      this.balanceColor = "black";
+  }
+
   getItems() {
-    if (this.items == undefined || this.items.length == 0) {
+    if (this.items() == undefined || this.items().length == 0) {
       const itemNameList = this.itemDetailValue.map(item => item.get("item")?.value);
       this.api.getItemList(this.registeredPhoneNumber).subscribe((res: ItemListRs) => {
         localStorage.setItem("itemList", JSON.stringify(res.getItemList));
-        this.autoCompleteItemData = res.getItemList.map((item) => {
+        res.getItemList.map((item) => {
           if (!itemNameList.includes(item.itemname)) {
-            this.items.push(item);
-            return {
-              'itemName': item.itemname,
-              'salePrice': item.saleprice,
-              'purchasePrice': item.purchaseprice,
-              'stock': item.remainingquantity,
-              'location': ''
-            };
-          } else return;
+            this.items.update((items) => [...items, item]);
+          }
         });
-        console.log('Parent: ', this.autoCompleteItemData);
       });
     }
   }
@@ -474,17 +500,19 @@ export class EditDetailComponent implements OnInit {
   }
 
   handleItemChange(prev: any, next: any, element: any) {
-    console.log(`Called with parameters: ${prev} and ${next}`);
+    // console.log(`Called with parameters: ${prev} and ${next}`);
     // Removing the next(new) value from the items array
-    const ind = this.items.findIndex((item: Item) => item.itemname === next)
-    const newItem: Item = this.items[ind];
-    this.items.splice(ind, 1);
+    const ind = this.items().findIndex((item: Item) => item.itemname === next)
+    if (ind < 0)
+      return;
+    const newItem: Item = this.items()[ind];
+    this.items.update(items => items.filter((item, index) => index != ind));
 
     // Adding the previous (old) item to the items list
     const arr: Item[] = JSON.parse(localStorage.getItem("itemList") ?? "")
     let prevItem = arr.find((item: Item) => item.itemname === prev);
     if (prevItem)
-      this.items.push(prevItem);
+      this.items.update(items => [...items, prevItem as Item]);
 
     this.handleItemChangeRow(element, newItem);
   }
@@ -508,13 +536,14 @@ export class EditDetailComponent implements OnInit {
       // If item is present, then perform calc.
       const itemTotalAmt = (item?.saleprice ?? 0) - (item?.discountonsaleprice ?? 0);
       let discountPercent = ((item?.discountonsaleprice ?? 0) / (item?.saleprice ?? 0)) * 100;
+      let receivedAmt = this.modifyDetail.get("received")?.value;
 
       if (Number.isNaN(discountPercent)) discountPercent = 0;
 
       this.totalAmount += itemTotalAmt;
       this.totalDiscount += item.discountonsaleprice;
       this.totalQuantity += 1;
-      this.modifyDetail.get("total")?.setValue(this.totalAmount, { emitEvent: false });
+      this.modifyDetail.get("total")?.setValue(this.totalAmount, { emitevent: false });
       element.patchValue({
         "qty": 1,
         "item": item.itemname,
@@ -524,34 +553,46 @@ export class EditDetailComponent implements OnInit {
         "discountamount": item.discountonsaleprice,
         "taxrate": 0.0,
         "taxrateamount": 0.0,
-        "totalAmount": itemTotalAmt
+        "totalAmount": itemTotalAmt,
       }, { emitEvent: false });
     }
   }
 
   submitDetails() {
-    // this.itemDetailValue.forEach((item) => {
-    //   let changed = item.get("remainingquantity")?.value - (item.get("qty")?.value - item.get("initialCount")?.value);
-    //   item.patchValue({
-    //     "remainingquantity": changed
-    //   }, { emitEvent: false });
-    // });
+    if (!this.modifyDetail.valid) {
+      console.log("Form not valid");
+      console.log(this.modifyDetail.errors);
+      return;
+    }
+
     let body: SaveUpdateTransactionRq = this.modifyDetail.getRawValue();
     if (body.received === this.totalAmount) {
       body.paymentstatus = "PAID";
     }
 
-    if (this.selectedParty == null)
-      return;
-    let diff = this.totalAmount - body.received;
+    console.log(body.toreceivefromparty);
+    // Updating Party Balance
+    if (this.transactionType == "Sale") {
+      body.toreceivefromparty += body.balance;
+      if (this.isEdit)
+        body.toreceivefromparty -= this.ogBalance;
+    } else {
+      body.topayparty += body.balance;
+      if (this.isEdit)
+        body.topayparty -= this.ogBalance;
+    }
+
+    // Updating the payment status
+    if (body.received == body.total)
+      body.paymentstatus = "PAID";
+
     body.isconvert = this.isSaleConvert;
     body.isupdate = this.isEdit;
-    body.registeredphonenumber = this.registeredPhoneNumber;
-    body.topayparty = this.selectedParty?.topayparty + (diff < 0 ? diff : 0);
-    body.toreceivefromparty = this.selectedParty.toreceivefromparty + (diff > 0 ? diff : 0);
+
     body.typeofpay = this.transactionType.toUpperCase();
     body.itemdetailslist = body.itemdetailslist.filter((val) => val.item.length > 0);
+    body.registeredphonenumber = this.registeredPhoneNumber;
     console.log(body);
-    // this.api.PostUpdateSaleDetails(body, this.isEdit).subscribe((res: string) => console.log(res));
+    this.api.PostUpdateSaleDetails(body, this.isEdit).subscribe((res: string) => console.log(res));
   }
 }

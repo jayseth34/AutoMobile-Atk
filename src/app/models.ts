@@ -68,6 +68,8 @@ export interface TransactionDetails {
     shippingaddress: string
     status: string
     invoicenumbercount: number
+    topayparty: number
+    toreceivefromparty: number
     itemdetailslist: ItemDetail[]
 }
 
@@ -123,7 +125,7 @@ export interface LinkedTransaction {
     originalBalance: number;
     unused: number;
     registeredphonenumber: number;
-    customername:string;
+    customername: string;
 }
 
 
@@ -179,8 +181,8 @@ export interface SaveUpdateTransactionRq {
     topayparty: number
     toreceivefromparty: number
     partybalance: number
-    billingaddress: any
-    shippingaddress: any
+    billingaddress: string
+    shippingaddress: string
     paymentstatus: any
     isconvert: boolean
     isupdate: boolean

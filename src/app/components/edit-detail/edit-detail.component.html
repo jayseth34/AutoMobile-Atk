@@ -31,7 +31,7 @@
             >
             </app-auto-complete>
             <span [ngStyle]="{ color: balanceColor }">
-              Balance: {{ partyBalance }}
+              <b> Balance: {{ partyBalance }} </b>
             </span>
           </div>
 
@@ -233,7 +233,7 @@
         <td mat-cell *matCellDef="let element" [formGroup]="element">
           <app-auto-complete
             [controlName]="'item'"
-            [dataList]="autoCompleteItemData"
+            [dataList]="autoCompleteItemData()"
             [dataIsObject]="true"
             [columns]="itemColumnInfo"
             [maxContentWidth]="true"
