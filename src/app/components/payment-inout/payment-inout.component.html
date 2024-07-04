@@ -4,7 +4,7 @@
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="party">Party *</label>
-          <select id="party" formControlName="party" class="form-control" (change)="onPartyChange($event)">
+          <select id="party" formControlName="party" class="form-control" [(ngModel)]="partyName" (change)="onPartyChange($event)">
             <option value="">Select Party</option>
             <option *ngFor="let party of partyList" [ngValue]="party.partyname">
               {{ party.partyname }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -18,9 +18,10 @@
           <small class="form-text text-muted">BAL: <b><span [ngClass]="{'negative-balance': balance < 0, 'positive-balance': balance >= 0}">{{ balance }}</span></b></small>
 
           <label for="paymentType">Payment Type</label>
-          <select id="paymentType" formControlName="paymentType" class="form-control">
-            <option value="">Select Payment Type</option>
+          <select id="paymentType" formControlName="paymentType" [(ngModel)]="paymentType" (ngModelChange)="updatepaymenttype($event)" class="form-control">
             <option value="Cash">Cash</option>
+            <option value="Cheque">Cheque</option>
+
             <!-- Add more options as needed -->
           </select>
 
@@ -30,7 +31,8 @@
 
         <div class="form-group col-md-6">
           <label for="receiptNo">Receipt No</label>
-          <input id="receiptNo" type="text" formControlName="receiptNo" class="form-control" />
+          <input id="receiptNo" type="text" formControlName="receiptNo" class="form-control" 
+          [(ngModel)]= "receiptno" (ngModelChange)="updateReceiptValue($event)"/>
 
           <label for="date">Date</label>
           <input id="date" type="date" formControlName="date" class="form-control" />

@@ -128,6 +128,14 @@ export interface LinkedTransaction {
     customername: string;
 }
 
+export interface PaymentInOut {
+    invoicenumber : any;
+    received: number;
+    paymenttype: string;
+    customername: string;
+    typeofpay: string;
+    registeredphonenumber: number;
+}
 
 // ---------------- Request - Response Models ------------------
 

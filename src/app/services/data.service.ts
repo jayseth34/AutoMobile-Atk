@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class DataService {
   partyName:any;
-
   addPartyData = {
     partyName: "",
     gst: "",
@@ -69,6 +68,8 @@ export class DataService {
   topayparty: number;
   toreceivefromparty:number;
   typeofpay:any;
+  invoicenumber:number;
+  paymentType: any;
   // totalNoOfParties: any;
 
   // totalAmountOfParties: any;
