@@ -129,7 +129,7 @@ export interface LinkedTransaction {
 }
 
 export interface PaymentInOut {
-    invoicenumber : any;
+    invoicenumber: any;
     received: number;
     paymenttype: string;
     customername: string;

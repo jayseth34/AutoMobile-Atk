@@ -33,7 +33,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
 
   // Form Groups
   filterForm = new FormGroup({
-    range: new FormControl<TimeFilterEnum>(TimeFilterEnum.CurMonth),
+    range: new FormControl<TimeFilterEnum>(TimeFilterEnum.CurYear),
     startDate: new FormControl(''),
     endDate: new FormControl(''),
   });
