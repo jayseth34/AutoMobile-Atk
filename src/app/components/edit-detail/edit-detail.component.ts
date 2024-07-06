@@ -10,6 +10,8 @@ import { ApiService } from 'src/app/services/api.service';
 import { distinctUntilChanged, map, of, pairwise, startWith } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
 import { ReceivedValidator } from 'src/app/received-validator';
+import { MatDialog } from '@angular/material/dialog';
+import Swal from 'sweetalert2';
 
 type BalanceColors = "green" | "red" | "black";
 
@@ -242,7 +244,7 @@ export class EditDetailComponent implements OnInit {
     let element = new FormGroup({
       transactionid: new FormControl(this.transactionId),
       item: new FormControl(data?.item ?? ""),
-      qty: new FormControl(data?.qty ?? 0),
+      qty: new FormControl(data?.qty ?? 0, Validators.min(0)),
       initialCount: new FormControl({ value: data?.qty ?? 0, disabled: true }),
       unit: new FormControl({ value: data?.unit ? data?.unit : "None", disabled: true }),
       priceperunit: new FormControl({ value: data?.priceperunit ?? 0.0, disabled: true }),
@@ -562,6 +564,7 @@ export class EditDetailComponent implements OnInit {
     if (!this.modifyDetail.valid) {
       console.log("Form not valid");
       console.log(this.modifyDetail.errors);
+      Swal.fire("Enter Valid Detials", "", "info")
       return;
     }
 
@@ -593,6 +596,25 @@ export class EditDetailComponent implements OnInit {
     body.itemdetailslist = body.itemdetailslist.filter((val) => val.item.length > 0);
     body.registeredphonenumber = this.registeredPhoneNumber;
     console.log(body);
-    this.api.PostUpdateSaleDetails(body, this.isEdit).subscribe((res: string) => console.log(res));
+
+    Swal.fire({
+      title: "Do you want to save the changes?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      denyButtonText: `Don't save`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.api.PostUpdateSaleDetails(body, this.isEdit).subscribe(
+          (res: any) => {
+            if (res.status == "SUCCESS") {
+              Swal.fire("Saved!", "", "success").then(_ => this.router.navigateByUrl("Sale/sale-invoice"));
+            }
+            else
+              Swal.fire("Changes are not saved", "", "error");
+          });
+      }
+    });
   }
 }

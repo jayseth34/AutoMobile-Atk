@@ -137,7 +137,7 @@ export interface TrnxInOut {
 }
 
 export interface PaymentInOut {
-    invoicenumber : any;
+    invoicenumber: any;
     received: number;
     paymenttype: string;
     customername: string;

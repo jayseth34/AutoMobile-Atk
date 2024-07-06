@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHandler, HttpHeaders, HttpParams } f
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { GetPartyTransactionDetailsRq } from '../models';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class CommonService {
   constructor(public http: HttpClient) { }
 
   errorHandler(error: HttpErrorResponse) {
-    return throwError(error);
+    Swal.fire(error.message, "", "error");
+    return throwError(() => error.error);
   }
 
   UpdateHttpRequest() {
@@ -70,9 +72,9 @@ export class CommonService {
       .post<T>(this.baseURL + endPoint, body, { headers: headers })
       .pipe(catchError(this.errorHandler));
   }
-  
-  isUndefineOrNull(value:any){
-    if(value == null || value == '' || value == ""){
+
+  isUndefineOrNull(value: any) {
+    if (value == null || value == '' || value == "") {
       return true;
     } else {
       return false;
