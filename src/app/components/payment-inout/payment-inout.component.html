@@ -52,6 +52,10 @@
       <div class="right-btn-container">
         <button type="button" class="btn btn-light">Share</button>
         <button type="submit" class="btn btn-primary">Save</button>
+        <!-- remove when edit is working for payment in out and adjust accordingly to logic-->
+        <button (click)="paymentHistory.openModal()">Open Payment History</button>
+        <app-payment-history #paymentHistory></app-payment-history>
+       <!-- end -->
       </div>
     </form>
   </div>

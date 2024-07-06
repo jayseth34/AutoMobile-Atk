@@ -126,6 +126,14 @@ export interface LinkedTransaction {
     unused: number;
     registeredphonenumber: number;
     customername: string;
+    paymentininvoicenumber: number;
+}
+
+export interface TrnxInOut {
+    invoicedate: string;
+    typeofpay: string;
+    invoicenumber: number;
+    linkedamount : number;
 }
 
 export interface PaymentInOut {

@@ -59,6 +59,7 @@ export class LinkPaymentComponent {
               unused: item.linkedamount,
               registeredphonenumber: this.registeredphonenumber,
               customername: item.customername,
+              paymentininvoicenumber: this.invoicenumber,
             })
           );
           this.updateTotalUnused();

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonService } from './common.service';
-import { GetPartyTransactionDetailsRq, GetTypeOfPayTransactionsRq, ItemListRs, LinkedTransaction, LoginReponse, LoginRequest, Party, PartyListRs, PaymentInOut, SaveUpdateTransactionRq, TransactionDetails } from '../models';
+import { GetPartyTransactionDetailsRq, GetTypeOfPayTransactionsRq, ItemListRs, LinkedTransaction, LoginReponse, LoginRequest, Party, PartyListRs, PaymentInOut, SaveUpdateTransactionRq, TransactionDetails, TrnxInOut } from '../models';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -161,6 +161,10 @@ export class ApiService {
 
   UpdatePaymentInOutTrnx(paymentInOut : PaymentInOut): Observable<any>{
     return this.cs.Post("Sale/UpdatePaymentInOutTrnx", paymentInOut)
+  }
+
+  getTrnxInOut(trnxInOut : any): Observable<any>{
+    return this.cs.Post("Sale/GetPaymentInOutTransactionDetails", trnxInOut)
   }
 
 }
