@@ -152,7 +152,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   updatePayment(payStatus: string, payBal: number, payTotal: number): void {
-    console.log(payStatus);
+    // console.log(payStatus);
     this.totalVal += payTotal;
     if (payStatus === "UNPAID") {
       this.unpaidVal += payBal;

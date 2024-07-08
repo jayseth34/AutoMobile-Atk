@@ -288,9 +288,9 @@ export class EditDetailComponent implements OnInit {
         switch (key) {
           case "qty":
 
-            console.log(discountPer, pricePerUnit);
+            // console.log(discountPer, pricePerUnit);
             const iscountAmtQty = ((discountPer * pricePerUnit) / 100) * changeObj[key]
-            console.log(iscountAmtQty);
+            // console.log(iscountAmtQty);
             const newTaxAmtQty = ((taxPer * pricePerUnit) / 100) * changeObj[key];
             element.patchValue({
               discountamount: iscountAmtQty,
@@ -574,13 +574,14 @@ export class EditDetailComponent implements OnInit {
       body.paymentstatus = "PAID";
     }
 
-    console.log(body.toreceivefromparty);
+    // console.log(body.toreceivefromparty);
     // Updating Party Balance
     if (this.transactionType == "Sale") {
       body.toreceivefromparty += body.balance;
       if (this.isEdit)
         body.toreceivefromparty -= this.ogBalance;
     } else {
+      body.itemdetailslist.forEach(item => item.qty = -item.qty);
       body.topayparty += body.balance;
       if (this.isEdit)
         body.topayparty -= this.ogBalance;
@@ -596,6 +597,8 @@ export class EditDetailComponent implements OnInit {
 
     body.isconvert = this.isSaleConvert;
     body.isupdate = this.isEdit;
+
+    // Updating the quantity
 
     body.typeofpay = this.transactionType.toUpperCase();
     body.itemdetailslist = body.itemdetailslist.filter((val) => val.item.length > 0);
