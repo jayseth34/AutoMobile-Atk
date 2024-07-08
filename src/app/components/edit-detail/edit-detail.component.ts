@@ -177,11 +177,13 @@ export class EditDetailComponent implements OnInit {
         this.transactionType = params.get("type") as string;
         if (this.transactionType == "Sale") {
           this.modifyDetail.get("state")?.disable();
+          this.modifyDetail.get("invoicenumber")?.disable();
+          this.modifyDetail.get("invoicedate")?.disable();
         }
       }
       else {
         // Route them back
-        this.router.navigateByUrl("Sale/sale-invoice");
+        this.router.navigateByUrl(`${this.transactionType}/sale-invoice`);
       }
 
       if (params.has("invoiceNo")) {
@@ -191,7 +193,7 @@ export class EditDetailComponent implements OnInit {
         this.modifyDetail.get("partyname")?.disable();
         this.invNo = parseInt(params.get("invoiceNo") ?? "");
         // Getting details from api and setting the values
-        this.api.getTransactionDetails(this.registeredPhoneNumber, this.invNo, "Sale", this.isSaleConvert, this.isSaleOrderConvert)
+        this.api.getTransactionDetails(this.registeredPhoneNumber, this.invNo, this.transactionType, this.isSaleConvert, this.isSaleOrderConvert)
           .subscribe((transaction: TransactionDetails) => {
             this.modifyDetail.patchValue({
               customername: transaction.customername,
@@ -211,7 +213,6 @@ export class EditDetailComponent implements OnInit {
 
             this.ogBalance = transaction.balance ?? 0;
 
-            console.log(this.modifyDetail.get("toreceivefromparty")?.value);
             this.updateBalanceColor(transaction.toreceivefromparty - transaction.topayparty);
             transaction.itemdetailslist.forEach(item => this.addNewFormRow(this.createNewFormRow(item)));
             // For the extra row
@@ -588,6 +589,10 @@ export class EditDetailComponent implements OnInit {
     // Updating the payment status
     if (body.received == body.total)
       body.paymentstatus = "PAID";
+    else if (body.received == 0)
+      body.paymentstatus = "UNPAID";
+    else
+      body.paymentstatus = "PARTIAL";
 
     body.isconvert = this.isSaleConvert;
     body.isupdate = this.isEdit;
@@ -609,7 +614,7 @@ export class EditDetailComponent implements OnInit {
         this.api.PostUpdateSaleDetails(body, this.isEdit).subscribe(
           (res: any) => {
             if (res.status == "SUCCESS") {
-              Swal.fire("Saved!", "", "success").then(_ => this.router.navigateByUrl("Sale/sale-invoice"));
+              Swal.fire("Saved!", "", "success").then(_ => this.router.navigateByUrl(`${this.transactionType}`));
             }
             else
               Swal.fire("Changes are not saved", "", "error");

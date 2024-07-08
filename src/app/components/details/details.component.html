@@ -119,9 +119,14 @@
         </mat-form-field>
 
         <!-- Add Sale Button -->
-        <button mat-fab extended class="col-2 me-3" routerLink="/Sale/add">
+        <button
+          mat-fab
+          extended
+          class="col-2 me-3"
+          routerLink="/{{ this.transactionTypeString }}/add"
+        >
           <mat-icon>add</mat-icon>
-          Add Sale
+          Add {{ this.transactionTypeString }}
         </button>
       </div>
     </div>

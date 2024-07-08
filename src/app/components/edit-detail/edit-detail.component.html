@@ -81,7 +81,6 @@
               placeholder="Inv No"
               formControlName="invoicenumber"
               class="form-control"
-              readonly
             />
           </div>
 
@@ -94,7 +93,6 @@
               placeholder="Inv Date"
               formControlName="invoicedate"
               class="form-control"
-              readonly
             />
           </div>
 
@@ -477,11 +475,26 @@
 
         <!-- Received Amount -->
         <div class="col-6 d-flex mb-1">
+          <!-- @if(transactionType == "Sale"){
           <span class="input-group-text transparent w-50px"> Received </span>
+          } @else {
+          <span class="input-group-text transparent w-50px"> Paid </span>
+          } -->
+          <span
+            class="input-group-text transparent w-50px"
+            *ngIf="transactionType == 'Sale'"
+          >
+            Received
+          </span>
+          <span
+            class="input-group-text transparent w-50px"
+            *ngIf="transactionType != 'Sale'"
+          >
+            Paid
+          </span>
           <input
             id="received"
             name="received"
-            placeholder="received"
             formControlName="received"
             class="form-control"
           />
