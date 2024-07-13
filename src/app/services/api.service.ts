@@ -167,4 +167,16 @@ export class ApiService {
     return this.cs.Post("Sale/GetPaymentInOutTransactionDetails", trnxInOut)
   }
 
+  createOrder(amount: number, currency: string, planType: string) {
+    return this.http.post("https://yourapiurl/api/payment/create-order", { amount, currency, planType });
+  }
+
+  GetOtp(phonenumber:string){
+    return this.cs.get("Login/send-otp?phoneNumber=" + phonenumber)
+  }
+  
+  VerifyOtp(body:any){
+    return this.cs.Post("Login/verify-otp", body)
+  }
+
 }

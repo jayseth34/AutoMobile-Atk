@@ -40,6 +40,7 @@ import { AutoCompleteComponent } from './components/auto-complete/auto-complete.
 import { ClickOutsideDirective } from './click-outside.directive';
 import { LinkPaymentComponent } from './components/link-payment/link-payment.component';
 import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
+import { PlansComponent } from './components/plans/plans.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { PaymentHistoryComponent } from './components/payment-history/payment-hi
     AutoCompleteComponent,
     ClickOutsideDirective,
     PaymentHistoryComponent,
+    PlansComponent,
   ],
   imports: [
     BrowserModule,

@@ -66,3 +66,12 @@
     margin: 10px;
     width: 94%;
   }
+
+  .show{
+    color: blue;
+    text-align: center;
+  }
+
+  .centerAlignment{
+    text-align: center;
+  }

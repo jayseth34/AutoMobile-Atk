@@ -1,0 +1,105 @@
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.plans-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 70px auto;
+}
+
+.plan {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 300px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s;
+  flex: 1;
+  margin: 10px;
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.plan:hover {
+  transform: scale(1.05);
+}
+
+.plan-header {
+  background-color: #4caf50;
+  color: white;
+  padding: 15px 0;
+  font-size: 24px;
+}
+
+.plan-price {
+  font-size: 36px;
+  margin: 20px 0;
+}
+
+.original-price {
+  font-size: 18px;
+  text-decoration: line-through;
+  color: #888;
+}
+
+.plan-features {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+  font-size: 18px;
+}
+
+.plan-features li {
+  margin: 10px 0;
+}
+
+button {
+  background-color: #000000;
+  color: white;
+  border: none;
+  padding: 15px 20px;
+  cursor: pointer;
+  border-radius: 0 0 10px 10px;
+  font-size: 18px;
+}
+
+button:hover {
+  background-color: #000000;
+}
+
+.most-popular {
+  background-color: #a2a6a8;
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 5px;
+}
+
+.plan.free .plan-header {
+  background-color: #7c8485;
+}
+
+.plan.silver .plan-header {
+  background-color: #7c8485;
+}
+
+.plan.gold .plan-header {
+  background-color: #7c8485;
+  /* color: #000; */
+}

@@ -1,5 +1,5 @@
 <div class="login-container">
-  <form class="login-form" [formGroup]="loginForm">
+  <form class="login-form centerAlignment" [formGroup]="loginForm">
     <h2>LOGIN</h2>
     <div class="form-group">
       <input
@@ -11,15 +11,15 @@
       />
     </div>
 
-    <input type="submit" value="GET OTP" />
+    <input class="centerAlignment" *ngIf="!showOtpInput" type="submit" value="GET OTP" (click)="GetOtp()"/>
     <!-- <h4 class="resendOtp">Resend OTP</h4> -->
 
-    <div class="form-group">
-      <input type="text" id="otp" name="otp" placeholder="Enter OTP" />
+    <div class="form-group centerAlignment">
+      <input *ngIf="!showOtpInput" type="text" id="otp" name="otp" placeholder="Enter OTP" formControlName="otp"/>
     </div>
 
-    <div class="form-group">
-      <input
+    <div class="form-group centerAlignment">
+      <input *ngIf="showOtpInput"
         type="password"
         id="password"
         name="password"
@@ -28,7 +28,15 @@
       />
     </div>
 
-    <input type="submit" (click)="handleLoginFormSubmit()" value="SUBMIT" />
+    <input
+    class="centerAlignment"
+      type="submit"
+      (click)="showOtpInput ?handleLoginFormSubmit() : handleOtpFormSubmit()"
+      [value]="showOtpInput ? 'SUBMIT' : 'VERIFY OTP'"
+    />
+
+    <p *ngIf="!showOtpInput" (click)="setflagvalue('password')" class="show"> Login using Password </p>
+    <p *ngIf="showOtpInput" (click)="setflagvalue('otp')" class="show"> Login using OTP </p>
     <!-- <input type="submit" routerLink="/businessinfo" value="SUBMIT" /> -->
   </form>
 </div>

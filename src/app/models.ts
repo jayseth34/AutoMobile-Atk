@@ -157,6 +157,7 @@ export interface LoginReponse {
 export interface LoginRequest {
     phonenumber: number
     password: string
+    otp: string
 }
 
 
