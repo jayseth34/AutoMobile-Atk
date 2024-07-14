@@ -103,3 +103,9 @@ button:hover {
   background-color: #7c8485;
   /* color: #000; */
 }
+
+.alignment{
+  text-align: center;
+  font-size: large;
+  box-shadow: #000000;
+}

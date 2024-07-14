@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
+import { CommonService } from 'src/app/services/common.service';
 declare var Razorpay: any;
 
 @Component({
@@ -7,45 +8,60 @@ declare var Razorpay: any;
   templateUrl: './plans.component.html',
   styleUrls: ['./plans.component.css']
 })
-export class PlansComponent {
-  constructor(private api: ApiService) {}
+export class PlansComponent implements OnInit {
+  registeredphonenumber:number;
+  hidesilverplan: boolean = true;
+  hidegoldplan: boolean = true;
+  hidefreeplan: boolean = true;
+  show:boolean = false;
+  planType: any;
+  constructor(private api: ApiService, public cs: CommonService) {}
+
+  ngOnInit(): void {
+    this.planType = JSON.parse(localStorage.getItem("planType") as string);
+  }
 
   buyPlan(plan: string) {
+    this.registeredphonenumber = parseInt(JSON.parse(localStorage.getItem("phonenumber") as string));
     let amount = 0;
-    let planType = plan;
+    this.planType = plan;
   
     if (plan === 'silver') {
       amount = 3399;
     } else if (plan === 'gold') {
       amount = 3999;
     } else if (plan === 'free') {
-      // No payment for free trial
-      this.api.createOrder(0, 'INR', planType).subscribe((response: any) => {
-        alert('Free trial activated');
-        // Handle free trial activation here
+      this.api.createOrder(0, 'INR', this.planType, this.registeredphonenumber).subscribe((response: any) => {
+        if(response.status == "SUCCESS"){
+          localStorage.setItem("planType", JSON.stringify(this.planType))
+          alert('Free trial activated');
+        }
       });
       return;
     }
-  
-    this.api.createOrder(amount, 'INR', planType).subscribe((response: any) => {
+    this.api.createOrder(amount, 'INR', this.planType,  this.registeredphonenumber).subscribe((response: any) => {
       const options = {
-        key: 'YOUR_KEY_ID', // Enter the Key ID generated from the Dashboard
+        key: 'rzp_test_c7nXNEo1IBbKnM', 
         amount: response.amount,
         currency: 'INR',
-        name: 'Your Company Name',
+        name: 'AUTOTEKK',
         description: 'Test Transaction',
         order_id: response.id,
         handler: (response:any) => {
-          alert(`Payment successful. Payment ID: ${response.razorpay_payment_id}`);
-          // Handle successful payment here
+          this.api.UpdateExpiryDate(this.planType, this.registeredphonenumber).subscribe((res:any) => {
+            if(res.status == "SUCCESS"){
+              localStorage.setItem("planType", JSON.stringify(this.planType))
+              alert(`Payment successful. Payment ID: ${response.razorpay_payment_id}`);
+            }
+          })
         },
-        prefill: {
+        prefills: {
           name: 'Customer Name',
           email: 'customer@example.com',
           contact: '9999999999'
         },
         theme: {
-          color: '#F37254'
+          color: '#000000',
         }
       };
   

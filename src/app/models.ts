@@ -152,6 +152,7 @@ export interface LoginReponse {
     statusMessage: string
     accessToken: string
     expiryDate: string
+    plantype: string
 }
 
 export interface LoginRequest {
