@@ -41,6 +41,7 @@ import { ClickOutsideDirective } from './click-outside.directive';
 import { LinkPaymentComponent } from './components/link-payment/link-payment.component';
 import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
 import { PlansComponent } from './components/plans/plans.component';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { PlansComponent } from './components/plans/plans.component';
     ClickOutsideDirective,
     PaymentHistoryComponent,
     PlansComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,

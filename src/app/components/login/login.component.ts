@@ -89,4 +89,10 @@ export class LoginComponent implements OnInit {
       this.showOtpInput = true
     }
   }
+
+  setregisterlogin(val:any){
+    if(val == "register"){
+      this.router.navigateByUrl("/register");
+    }
+  }
 }

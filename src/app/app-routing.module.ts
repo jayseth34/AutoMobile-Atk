@@ -14,6 +14,7 @@ import { PaymentInoutComponent } from './components/payment-inout/payment-inout.
 import { LinkPaymentComponent } from './components/link-payment/link-payment.component';
 import { AutoCompleteComponent } from './components/auto-complete/auto-complete.component';
 import { PlansComponent } from './components/plans/plans.component';
+import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -40,6 +41,8 @@ const routes: Routes = [
   { path: 'inout', component: PaymentInoutComponent },
   { path: 'linked', component: LinkPaymentComponent },
   { path: 'plans', component: PlansComponent },
+  { path: 'register', component: RegisterComponent },
+
 
 ];
 

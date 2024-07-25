@@ -183,4 +183,8 @@ export class ApiService {
     return this.cs.Post("Login/UpdateExpiryDate", { planType, registeredphonenumber })
   }
 
+  registerUser(body: any){
+    return this.cs.Post("Login/RegisterUser", body)
+  }
+
 }

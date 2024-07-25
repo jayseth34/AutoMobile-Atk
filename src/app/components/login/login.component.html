@@ -1,6 +1,7 @@
 <div class="login-container">
-  <form class="login-form centerAlignment" [formGroup]="loginForm">
+  <form class="login-form centerAlignment" [formGroup]="loginForm" (ngSubmit)="handleLoginFormSubmit()">
     <h2>LOGIN</h2>
+    
     <div class="form-group">
       <input
         type="text"
@@ -9,34 +10,61 @@
         placeholder="Enter Mobile no."
         formControlName="phonenumber"
       />
+      <div *ngIf="loginForm.get('phonenumber')?.invalid && loginForm.get('phonenumber')?.touched" class="error">
+        Please enter a valid mobile number.
+      </div>
     </div>
 
-    <input class="centerAlignment" *ngIf="!showOtpInput" type="submit" value="GET OTP" (click)="GetOtp()"/>
-    <!-- <h4 class="resendOtp">Resend OTP</h4> -->
+    <input 
+      class="centerAlignment"
+      *ngIf="!showOtpInput" 
+      type="submit" 
+      value="GET OTP" 
+      (click)="GetOtp()"
+      [disabled]="loginForm.get('phonenumber')?.invalid"
+    />
 
     <div class="form-group centerAlignment">
-      <input *ngIf="!showOtpInput" type="text" id="otp" name="otp" placeholder="Enter OTP" formControlName="otp"/>
+      <input 
+        *ngIf="!showOtpInput" 
+        type="text" 
+        id="otp" 
+        name="otp" 
+        placeholder="Enter OTP" 
+        formControlName="otp"
+      />
+      <div *ngIf="loginForm.get('otp')?.invalid && loginForm.get('otp')?.touched" class="error">
+        OTP is required.
+      </div>
     </div>
 
     <div class="form-group centerAlignment">
-      <input *ngIf="showOtpInput"
+      <input 
+        *ngIf="showOtpInput"
         type="password"
         id="password"
         name="password"
         placeholder="Enter password"
         formControlName="password"
       />
+      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
+        Password is required.
+      </div>
     </div>
 
-    <input
-    class="centerAlignment"
+    <input 
+      class="centerAlignment"
       type="submit"
-      (click)="showOtpInput ?handleLoginFormSubmit() : handleOtpFormSubmit()"
+      (click)="showOtpInput ? handleLoginFormSubmit() : handleOtpFormSubmit()"
       [value]="showOtpInput ? 'SUBMIT' : 'VERIFY OTP'"
+      [disabled]="showOtpInput ? loginForm.invalid : !loginForm.get('phonenumber')?.valid"
     />
 
     <p *ngIf="!showOtpInput" (click)="setflagvalue('password')" class="show"> Login using Password </p>
     <p *ngIf="showOtpInput" (click)="setflagvalue('otp')" class="show"> Login using OTP </p>
-    <!-- <input type="submit" routerLink="/businessinfo" value="SUBMIT" /> -->
+
+    <p class="centerAlignment"> Don't have an account?
+      <a routerLink="/register" class="register-link"> Register here</a>
+    </p>
   </form>
 </div>

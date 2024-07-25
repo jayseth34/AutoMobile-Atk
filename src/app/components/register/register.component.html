@@ -1,0 +1,85 @@
+<div class="register-container">
+    <form class="register-form centerAlignment" [formGroup]="registerForm" (ngSubmit)="handleRegisterFormSubmit()">
+      <h2>REGISTER</h2>
+  
+      <div class="form-group">
+        <input
+          type="text"
+          id="mobileno"
+          name="mobileno"
+          placeholder="Enter Mobile no."
+          formControlName="phonenumber"
+        />
+        <div *ngIf="registerForm.get('phonenumber')?.invalid && registerForm.get('phonenumber')?.touched" class="error">
+          Please enter a valid mobile number.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter Password"
+          formControlName="password"
+        />
+        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
+          Password must be at least 8 characters long.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          formControlName="confirmPassword"
+        />
+        <div *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched" class="error">
+          Password must be at least 8 characters long.
+        </div>
+        <div *ngIf="registerForm.errors?.['mismatch'] && registerForm.get('confirmPassword')?.touched" class="error">
+          Passwords do not match.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <input
+          type="text"
+          id="state"
+          name="state"
+          placeholder="Enter State"
+          formControlName="state"
+        />
+        <div *ngIf="registerForm.get('state')?.invalid && registerForm.get('state')?.touched" class="error">
+          State is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <input
+          type="text"
+          id="address"
+          name="address"
+          placeholder="Enter Address"
+          formControlName="address"
+        />
+        <div *ngIf="registerForm.get('address')?.invalid && registerForm.get('address')?.touched" class="error">
+          Address is required.
+        </div>
+      </div>
+  
+      <input
+        class="centerAlignment"
+        type="submit"
+        [value]="'REGISTER'"
+        [disabled]="registerForm.invalid"
+        [class.disabled]="registerForm.invalid"
+      />
+      <p class="centerAlignment">
+        Already have an account? 
+        <a routerLink="/login" class="login-link">Login here</a>
+    </form>
+  </div>
+  
