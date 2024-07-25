@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-party-group',
@@ -73,8 +74,11 @@ export class AddPartyGroupComponent {
       // this.dataService.partyName = this.addPartyData.partyName;
       // debugger;
       this.api.AddGroupDetails(JSON.stringify(body)).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        if (res == "Success") {
-          console.log("Success group", res)
+        if (res.status != null) {
+          Swal.fire({
+            text: res.status,
+            confirmButtonText: 'OK',
+          })
           this.partyGroupName = this.newPartyGroupName
         }
         else{

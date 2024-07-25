@@ -298,8 +298,11 @@ export class AddPartyComponent implements OnInit {
         body.oldPartyName = this.dataService.oldPartyName
       }
       this.api.AddPartyDetails(JSON.stringify(body)).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        if (res == "Success") {
-          console.log("Success")
+        if (res.status != null) {
+          Swal.fire({
+            text: res.status,
+            confirmButtonText: 'OK',
+          })
         }
         else{
           console.log("Failed")
