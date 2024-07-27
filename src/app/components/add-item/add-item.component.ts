@@ -22,20 +22,20 @@ export class AddItemComponent {
   itemHsn: any = '';
   itemCode: any = '';
   category: any = '';
-  salePrice: any = '';
+  salePrice: number;
   saleWithOrWithoutTax: any = 'Without Tax';
-  discountOnSalePrice: any = '';
+  discountOnSalePrice: number;
   percentageOrAmount: any = 'Percentage';
-  wholeSalePrice: any = '';
+  wholeSalePrice: number;
   wholeSaleWithOrWithoutTax: any = 'Without Tax';
-  minimumWholeSaleQuantity: any = '';
-  purchasePrice: any = '';
+  minimumWholeSaleQuantity: number;
+  purchasePrice: number;
   purchaseWithOrWithoutTax: any = 'Without Tax';
   taxRate: any = 'None';
-  openingQuantity: any = '';
-  atPrice: any = '';
+  openingQuantity: number;
+  atPrice: number;
   asOfDate: any = '';
-  minimumStockToMaintain: any = '';
+  minimumStockToMaintain: number;
   _location: any = '';
   //------------
   typeOfPay: any ='';
@@ -170,10 +170,10 @@ export class AddItemComponent {
         registeredPhoneNumber: 9920279905,
         itemName: this.itemName,
         itemHsn: this.itemHsn,
-        // baseUnit: , 
-        // secondaryUnit:,
-        // conversionRates: ,
-        // category: ,
+        baseunit: this.dataService.selectedOption1, 
+        secondaryunit: this.dataService.selectedOption2,
+        conversionrates: this.dataService.conversionRate,
+        category: this.category,
         itemCode: this.itemCode,
         salePrice: this.salePrice,
         saleWithOrWithoutTax: this.saleWithOrWithoutTax,
@@ -208,7 +208,6 @@ export class AddItemComponent {
   }
 
   openAddItemCategoryModal() {
-    debugger
     const dialogRef = this.dialog.open(AddItemCategoryComponent, {
       width: '40%',
       height: '35%', 

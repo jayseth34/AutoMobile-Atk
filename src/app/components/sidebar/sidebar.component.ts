@@ -40,7 +40,7 @@ export class SidebarComponent {
           console.log("partynames:",this.dataService.partyList)
           let amount: any;
           this.dataService.partyList = res.getPartyList.map((item: { partyname: any; toreceivefromparty: any; topayparty: any}) => {
-            amount = item.topayparty - item.toreceivefromparty
+            amount = item.toreceivefromparty - item.topayparty
             return {
               partyname: item.partyname,
               partybalance: amount

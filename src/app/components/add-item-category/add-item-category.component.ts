@@ -29,13 +29,11 @@ export class AddItemCategoryComponent {
     });
 
     if(this.data!=null){
-      debugger
       this.populateForm(this.data.categorynameDetails) 
     }
   }
 
   populateForm(fetchedCategoryName: any){
-    debugger
     if(fetchedCategoryName){
       this.itemCategoryName = fetchedCategoryName;
     }

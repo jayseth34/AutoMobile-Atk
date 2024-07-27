@@ -87,15 +87,11 @@ export class AddPartyGroupComponent {
     });
   }
 
-  refreshPage() {
-    window.location.reload();
-  }
 
   submit() {
     // debugger;
     if(this.addPartyGroup.valid) {
       this.AddGroupData(this.addPartyGroup.value);
-      this.refreshPage();
     } 
     else{
     }

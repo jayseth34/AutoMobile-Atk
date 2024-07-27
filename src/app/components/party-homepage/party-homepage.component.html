@@ -149,7 +149,7 @@
               <!-- Loop to generate rows -->
               <tr *ngFor="let party of this.dataService.partyByGroupResponse" >
                 <td class="table-row">{{ party.partyname }}</td>
-                <td class="table-row">{{ party.partybalance }}</td>
+                <td class="table-row">{{ party.toreceivefromparty - party.topayparty }}</td>
               </tr>
             </tbody>
           </table>

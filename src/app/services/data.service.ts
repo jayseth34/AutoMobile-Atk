@@ -76,6 +76,10 @@ export class DataService {
 
   // totalAmountOfParties: any;
 
+  selectedOption1: any;
+  selectedOption2: any;
+  conversionRate: any;
+
   constructor() { }
 
 

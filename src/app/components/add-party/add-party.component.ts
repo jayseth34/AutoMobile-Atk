@@ -37,6 +37,8 @@ export class AddPartyComponent implements OnInit {
   toPayOrReceive: any = '';
   asOfDate: any ;
   creditLimit: any = 0;
+  topayparty: any = 0;
+  toreceivefromparty: any = 0; 
   // isPartyUpdate: boolean = true;
   oldPartyName: any = '';
   //For additional column names
@@ -80,7 +82,7 @@ export class AddPartyComponent implements OnInit {
 
   ngOnInit(): void {
     this.asOfDate = moment().format('YYYY-MM-DDTHH:mm:ss');
-    this.additionalFieldName4Value = moment().format('YYYY-MM-DDTHH:mm:ss');
+    // this.additionalFieldName4Value = moment().format('YYYY-MM-DDTHH:mm:ss');
     // const today = moment().format('DD-MM-YYYY');
     // this.showPrint = 'Dont show in print';
     this.partyGroupList = this.dataService.partyGroupListResponse.map((group: { partygroup: any; }) => group.partygroup);
@@ -141,7 +143,7 @@ export class AddPartyComponent implements OnInit {
         this.additionalFieldName1Value= partyDetails.additionalfieldname1value
         this.additionalFieldName2Value= partyDetails.additionalfieldname2value
         this.additionalFieldName3Value= partyDetails.additionalfieldname3value
-        this.additionalFieldName4Value= partyDetails.additionalfieldname4value
+        this.additionalFieldName4Value= null
         this.toPayOrReceive= partyDetails.topayorreceive
         this.partyBalance= partyDetails.partybalance
     }
@@ -294,7 +296,9 @@ export class AddPartyComponent implements OnInit {
         additionalFieldName4Value: this.additionalFieldName4Value,
         typeOfPay: this.typeOfPay,
         oldPartyName: this.partyName,
-        isPartyUpdate: this.dataService.isPartyUpdate
+        isPartyUpdate: this.dataService.isPartyUpdate,
+        topayparty: this.topayparty,
+        toreceivefromparty: this.toreceivefromparty
       }
       if(this.dataService.isPartyUpdate){
         body.oldPartyName = this.dataService.oldPartyName
@@ -321,10 +325,12 @@ export class AddPartyComponent implements OnInit {
     // const controlValue = this.addPartyForm.get('toPayOrReceiveControl')?.value ?? '';
     if (this.toPayOrReceive === 'PAY') {
       this.typeOfPay = "PAYABLE OPENING BALANCE";
-      this.openingBalance = -this.openingBalance;
+      // this.openingBalance = -this.openingBalance;
+      this.topayparty = this.openingBalance
       console.log('To pay is selected: ', this.openingBalance);
     } else if (this.toPayOrReceive === 'RECEIVE') {
       this.typeOfPay = "RECEIVABLE OPENING BALANCE";
+      this.toreceivefromparty = this.openingBalance
       console.log('To receive is selected');
     }
   }
