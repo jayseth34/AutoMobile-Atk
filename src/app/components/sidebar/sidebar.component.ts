@@ -38,10 +38,12 @@ export class SidebarComponent {
         console.log("GETPARTYLIST API: ",res);
         if(res.status == "SUCCESS") {
           console.log("partynames:",this.dataService.partyList)
-          this.dataService.partyList = res.getPartyList.map((item: { partyname: any; partybalance: any; }) => {
+          let amount: any;
+          this.dataService.partyList = res.getPartyList.map((item: { partyname: any; toreceivefromparty: any; topayparty: any}) => {
+            amount = item.topayparty - item.toreceivefromparty
             return {
               partyname: item.partyname,
-              partybalance: item.partybalance
+              partybalance: amount
             }
           })
           console.log("successs")

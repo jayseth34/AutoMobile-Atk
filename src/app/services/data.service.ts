@@ -61,8 +61,10 @@ export class DataService {
   isPartyUpdate:boolean = false;
   isGroupUpdate:boolean = false;
   isItemUpdate:boolean = false;
+  isCategoryUpdate:boolean = false;
   oldPartyName:any;
   oldPartyGroupName: any;
+  oldCategoryName: any;
   oldItemName:any;
   received: number;
   topayparty: number;

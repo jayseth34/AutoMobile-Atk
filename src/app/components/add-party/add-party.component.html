@@ -36,12 +36,12 @@
 
     <div class="form-row party-group">
       <div class="form-floating">
-        <input type="text" class="form-control party-group-input" placeholder="Party Group*" id="partyGroup" name="partyGroup" formControlName="partyGroupControl" [(ngModel)]="partyGroup" 
-        [class.is-invalid]="partyGroupControl?.errors?.['required'] && (partyGroupControl?.touched || ifFormSubmitted)" oninput="this.value = this.value.toUpperCase()">
-        <label for="partyGroup">Party Group*</label>
-        <!-- <div>
-          <div *ngIf="addPartyForm.get('partyGroupControl')?.errors?.['required']">This is required field.</div>
-        </div> -->
+        <mat-form-field class="partyGroupDropDown">
+          <mat-label>Party Group</mat-label>
+          <mat-select formControlName="partyGroupControl" [(ngModel)]="partyGroup">
+            <mat-option *ngFor="let party of partyGroupList" [value]="party">{{ party }}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
   

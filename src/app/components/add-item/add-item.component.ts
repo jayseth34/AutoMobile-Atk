@@ -6,6 +6,7 @@ import { DataService } from 'src/app/services/data.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import Swal from 'sweetalert2';
+import { AddItemCategoryComponent } from '../add-item-category/add-item-category.component';
 
 @Component({
   selector: 'app-add-item',
@@ -20,6 +21,7 @@ export class AddItemComponent {
   itemName: any = '';
   itemHsn: any = '';
   itemCode: any = '';
+  category: any = '';
   salePrice: any = '';
   saleWithOrWithoutTax: any = 'Without Tax';
   discountOnSalePrice: any = '';
@@ -45,13 +47,20 @@ export class AddItemComponent {
 
   @Input() itemDetails: any;
 
+  categoryList: any;
+
   constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, private api: ApiService) {}
 
   ngOnInit() {
-
+    this.categoryList = this.dataService.categoryListResponse.map((getCateogoryList: { category: any; }) => getCateogoryList.category);
+    console.log("ITEM: ", this.categoryList)
+    // if (!this.dataService.isItemUpdate){
+    //   this.category = 'GENERAL'
+    // }
     this.addItemForm = new UntypedFormGroup({
       itemNameControl: new UntypedFormControl('',),
       itemHsnControl: new UntypedFormControl('',),
+      categoryControl: new UntypedFormControl('',),
       itemCodeControl: new UntypedFormControl('',),
       salePriceControl: new UntypedFormControl('',),
       saleWithOrWithoutTaxControl: new UntypedFormControl('',),
@@ -83,7 +92,7 @@ export class AddItemComponent {
       // this.baseUnit= itemDetails.partygroup
       // this.secondaryunit= itemDetails.gsttype
       // this.conversionrates= itemDetails._state
-      // this.category= itemDetails.emailid
+      this.category= itemDetails.category
       this.itemCode= itemDetails.itemcode
       this.salePrice= itemDetails.saleprice
       this.saleWithOrWithoutTax= itemDetails.salewithorwithouttax
@@ -198,8 +207,19 @@ export class AddItemComponent {
     });
   }
 
+  openAddItemCategoryModal() {
+    debugger
+    const dialogRef = this.dialog.open(AddItemCategoryComponent, {
+      width: '40%',
+      height: '35%', 
+    });
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
+
   get itemNameControl() { return this.addItemForm.get('itemNameControl')}
   get itemHsnControl() { return this.addItemForm.get('itemHsnControl')}
+  get categoryControl() { return this.addItemForm.get('categoryControl')}
   get itemCodeControl() { return this.addItemForm.get('itemCodeControl')}
   get salePriceControl() { return this.addItemForm.get('salePriceControl')}
   get saleWithOrWithoutTaxControl() { return this.addItemForm.get('saleWithOrWithoutTaxControl')}
@@ -216,6 +236,4 @@ export class AddItemComponent {
   get asOfDateControl() { return this.addItemForm.get('asOfDateControl')}
   get minimumStockToMaintainControl() { return this.addItemForm.get('minimumStockToMaintainControl')}
   get _locationControl() { return this.addItemForm.get('_locationControl')}
-
-
 }

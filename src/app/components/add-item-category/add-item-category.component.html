@@ -2,7 +2,7 @@
     <h2>Add Item Category</h2>
     <div class="form-group">
       <label for="itemCategoryName">ENTER ITEM CATEOGRY NAME</label>
-      <input type="text" class="form-control" id="itemCategoryName" formControlName="itemCategoryNameControl" [(ngModel)]="itemCategoryName"
+      <input type="text" class="form-control" id="itemCategoryName" formControlName="itemCategoryNameControl" [(ngModel)]="itemCategoryName" (input)="onInputChange($event)"
       oninput="this.value = this.value.toUpperCase()" [class.is-invalid]="itemCategoryNameControl?.errors?.['required'] && itemCategoryNameControl?.touched">
     </div>
 

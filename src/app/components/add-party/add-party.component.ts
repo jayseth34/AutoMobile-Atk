@@ -70,7 +70,7 @@ export class AddPartyComponent implements OnInit {
   addPartyForm: UntypedFormGroup;
 
   isSaveAndNew: boolean = false;
-
+  partyGroupList: any =[];
   
   @Input() partyDetails: any;
 
@@ -83,13 +83,13 @@ export class AddPartyComponent implements OnInit {
     this.additionalFieldName4Value = moment().format('YYYY-MM-DDTHH:mm:ss');
     // const today = moment().format('DD-MM-YYYY');
     // this.showPrint = 'Dont show in print';
-
+    this.partyGroupList = this.dataService.partyGroupListResponse.map((group: { partygroup: any; }) => group.partygroup);
     // debugger;
     this.addPartyForm = new UntypedFormGroup({
       partyNameControl: new UntypedFormControl('', [Validators.required]),
       gstControl: new UntypedFormControl('',),
       phoneNumberControl: new UntypedFormControl('',Validators.pattern("^[0-9]*$")),
-      partyGroupControl: new UntypedFormControl('', [Validators.required]),
+      partyGroupControl: new UntypedFormControl('GENERAL', [Validators.required]),
       gstTypeControl: new UntypedFormControl('',),
       _stateControl: new UntypedFormControl('',),
       emailIdControl: new UntypedFormControl('', [Validators.email]),
@@ -112,7 +112,9 @@ export class AddPartyComponent implements OnInit {
       additionalField3CheckedControl: new UntypedFormControl('',),
       additionalField4CheckedControl: new UntypedFormControl('',),
     });
-    
+    if (!this.dataService.isPartyUpdate){
+      this.partyGroup = 'GENERAL'
+    }
     if(this.data.status='SUCCESS'){
       this.populateForm(this.data.partyDetails) 
     }

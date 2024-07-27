@@ -17,7 +17,8 @@
             <!-- First Column -->
             <div class="col">
             <div class="form-floating">
-                <input type="text" class="form-control item-name" placeholder="Item Name*" id="itemName" name="itemName" formControlName="itemNameControl" [(ngModel)]="itemName" >
+                <input type="text" class="form-control item-name" placeholder="Item Name*" id="itemName" name="itemName" formControlName="itemNameControl" 
+                oninput="this.value = this.value.toUpperCase()" [(ngModel)]="itemName" >
                 <label for="itemName">Item Name*</label>
             </div>
             </div>
@@ -25,7 +26,8 @@
             <!-- Second Column -->
             <div class="col">
             <div class="form-floating">
-                <input type="text" class="form-control item-hsn" placeholder="Item HSN" id="item-hsn" name="item-hsn" formControlName="itemHsnControl" [(ngModel)]="itemHsn" >
+                <input type="text" class="form-control item-hsn" placeholder="Item HSN" id="item-hsn" name="item-hsn" formControlName="itemHsnControl" 
+                oninput="this.value = this.value.toUpperCase()" [(ngModel)]="itemHsn" >
                 <label for="item-hsn">Item HSN</label>
             </div>
             </div>
@@ -65,23 +67,17 @@
         <div class="row second-row">
             <!-- Category Dropdown Column -->
             <div class="col">
-                <div class="dropdown form-floating">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Category
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="categoryDropdown">
-                        <!-- Category Checkbox Fields -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="checkbox1">
-                            <label class="form-check-label" for="checkbox1">
-                                Category 1
-                            </label>
-                        </div>
-                        <!-- Add Category Field -->
-                        <div class="dropdown-divider"></div>
-                        <input type="text" class="form-control" placeholder="Add Category">
+                <div class="form-row party-group">
+                    <div class="form-floating">
+                      <mat-form-field class="partyGroupDropDown">
+                        <mat-label>Category</mat-label>
+                        <mat-select formControlName="categoryControl" [(ngModel)]="category">
+                          <mat-option value="+ add category" *ngIf="!dataService.isItemUpdate" (click)="openAddItemCategoryModal()">+ add category</mat-option>
+                          <mat-option *ngFor="let category of categoryList" [value]="category">{{ category }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </div>
-                </div>
+                  </div>
             </div>
             
             <!-- Item Code Input Field Column -->
@@ -275,7 +271,8 @@
         
             <div class="col">
                 <div class="form-floating">
-                    <input type="text" class="form-control location" placeholder="Location" id="location" name="location" formControlName="_locationControl" [(ngModel)]="_location">
+                    <input type="text" class="form-control location" placeholder="Location" id="location" name="location" formControlName="_locationControl" 
+                    oninput="this.value = this.value.toUpperCase()" [(ngModel)]="_location">
                     <label for="location">Location</label>
                 </div>
             </div>

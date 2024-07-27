@@ -87,13 +87,36 @@ export class ItemHomepageComponent {
     this.dataService.itemHomePageSelectedTab = tab;
   }
 
-  openAddItemCategoryModal() {
-    const dialogRef = this.dialog.open(AddItemCategoryComponent, {
-      width: '40%',
-      height: '35%', 
-    });
-    dialogRef.afterClosed().subscribe(result => {
-    });
+  openAddItemCategoryModal(registeredMobileNumber: any, categoryname: any) {
+    if (registeredMobileNumber!==''){
+      this.api.GetItemByCategory(registeredMobileNumber,categoryname).subscribe({
+        next: (res) => {
+          if (res.status === "SUCCESS") {
+            // if (res!=null) {
+            this.dataService.isCategoryUpdate = true;
+            this.dataService.oldCategoryName = categoryname
+            const dialogRef = this.dialog.open(AddItemCategoryComponent, {
+              width: '40%',
+              height: '35%', 
+              data: { categorynameDetails: categoryname } // Pass the data here
+            });
+          } else {
+            this.dataService.isCategoryUpdate = false;
+            console.log("Failed to retrieve party group details");
+          }
+        },
+        error: () => {
+          console.log("Error retrieving party group details");
+        }
+      });
+    } else {
+      const dialogRef = this.dialog.open(AddItemCategoryComponent, {
+        width: '40%',
+        height: '35%', 
+      });
+      dialogRef.afterClosed().subscribe(result => {
+      });
+    }
   }
 
   GetItemDetailsData(registeredMobileNumber: any, itemname: any){
@@ -132,6 +155,7 @@ export class ItemHomepageComponent {
       next:(res) => {
         console.log("GETITEMDETS API: ",res);
         if(res.status == "SUCCESS") {
+          this.dataService.isCategoryUpdate = true
           this.dataService.GetItemByCategoryResponse = res.getItemList;
           // this.api.GetItemByCategory(registeredMobileNumber,category).pipe(takeUntil(this.destroy$)).subscribe({
           //   next:(response) => {
@@ -149,6 +173,7 @@ export class ItemHomepageComponent {
           // })
         }
         else {
+          this.dataService.isCategoryUpdate = false
           console.log("GETITEMS API failed")
         }
       },
@@ -173,16 +198,16 @@ export class ItemHomepageComponent {
     }, 250);
   }
   
-  categoryHandleClick(event: MouseEvent,registeredMobileNumber:any, itemGroupName: any){
+  categoryHandleClick(event: MouseEvent,registeredMobileNumber:any, itemCategoryName: any){
     this.clicks.push(event);
   
     setTimeout(() => {
       if (this.clicks.length === 1) {
         // Single click detected
-        this.GetItemByCategoryData('9920279905',itemGroupName);
+        this.GetItemByCategoryData('9920279905',itemCategoryName);
       } else if (this.clicks.length === 2) {
         // Double click detected
-        this.openAddItemCategoryModal();
+        this.openAddItemCategoryModal('9920279905',itemCategoryName);
       }
       this.clicks = [];
     }, 250);

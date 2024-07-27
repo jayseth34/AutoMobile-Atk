@@ -19,7 +19,6 @@ export class AddPartyGroupComponent {
 
   addPartyGroup: UntypedFormGroup;
 
-  isPartyGroupSave: boolean = false;
   partyGroup: any = '';
 
   @Input() groupDetails: any;
@@ -33,10 +32,8 @@ export class AddPartyGroupComponent {
     });
 
     if(this.data!=null){
-      console.log("HEYY: ",this.data)
       this.populateForm(this.data.groupDetails) 
     }
-    this.oldPartyGroupName = this.partyGroupName;
   }
 
   populateForm(fetchedPartyGroupName: any){
@@ -57,19 +54,20 @@ export class AddPartyGroupComponent {
     // debugger
     console.log("BEFore return");
     return new Promise((resolve) => {
+      this.oldPartyGroupName = this.partyGroupName;
       console.log("after return");
       let body = {
         registeredPhoneNumber: 9920279905,
-        oldgroupname: this.partyGroupName,
+        oldgroupname:  this.oldPartyGroupName,
         newgroupname: this.partyGroupName
       }
-      if (this.isPartyGroupSave){
-        body.oldgroupname = this.oldPartyGroupName,
+      if (this.dataService.isGroupUpdate){
+        body.oldgroupname =  this.dataService.oldPartyGroupName,
         body.newgroupname = this.newPartyGroupName
       }
       else{
-        body.newgroupname = this.oldPartyGroupName,
-        body.oldgroupname = this.oldPartyGroupName
+        body.newgroupname =   this.newPartyGroupName,
+        body.oldgroupname =   this.newPartyGroupName
       }
       // this.dataService.partyName = this.addPartyData.partyName;
       // debugger;
@@ -96,12 +94,10 @@ export class AddPartyGroupComponent {
   submit() {
     // debugger;
     if(this.addPartyGroup.valid) {
-      this.isPartyGroupSave = true
       this.AddGroupData(this.addPartyGroup.value);
       this.refreshPage();
     } 
     else{
-      this.isPartyGroupSave = false
     }
   }
   
