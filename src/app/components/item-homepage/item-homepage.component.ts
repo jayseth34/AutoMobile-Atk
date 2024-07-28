@@ -16,6 +16,8 @@ export class ItemHomepageComponent {
   // selectedTab: string = 'product'; // Initially select the 'address' tab
   clickSubscription: Subscription;
   clicks: any[] = [];
+  itemName: any;
+  categoryName: any;
 
   @ViewChild('app-add-item') addItemModal: AddItemComponent;
 
@@ -185,7 +187,7 @@ export class ItemHomepageComponent {
 
   productHandleClick(event: MouseEvent,registeredMobileNumber:any, itemName: any) {
     this.clicks.push(event);
-  
+    this.itemName = itemName
     setTimeout(() => {
       if (this.clicks.length === 1) {
         // Single click detected
@@ -200,7 +202,7 @@ export class ItemHomepageComponent {
   
   categoryHandleClick(event: MouseEvent,registeredMobileNumber:any, itemCategoryName: any){
     this.clicks.push(event);
-  
+    this.categoryName = itemCategoryName
     setTimeout(() => {
       if (this.clicks.length === 1) {
         // Single click detected

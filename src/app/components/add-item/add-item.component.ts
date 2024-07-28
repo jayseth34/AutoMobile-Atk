@@ -60,7 +60,7 @@ export class AddItemComponent {
     this.addItemForm = new UntypedFormGroup({
       itemNameControl: new UntypedFormControl('',),
       itemHsnControl: new UntypedFormControl('',),
-      categoryControl: new UntypedFormControl('',),
+      categoryControl: new UntypedFormControl('GENERAL',),
       itemCodeControl: new UntypedFormControl('',),
       salePriceControl: new UntypedFormControl('',),
       saleWithOrWithoutTaxControl: new UntypedFormControl('',),
@@ -78,6 +78,9 @@ export class AddItemComponent {
       minimumStockToMaintainControl: new UntypedFormControl('',),
       _locationControl: new UntypedFormControl('',),
     })
+    if(!this.dataService.isItemUpdate){
+      this.category = 'GENERAL'
+    }
 
     if(this.data.status='SUCCESS'){
       this.populateForm(this.data.itemDetails) 

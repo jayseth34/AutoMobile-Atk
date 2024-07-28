@@ -15,6 +15,11 @@ export class ApiService {
     return this.cs.PostType<LoginReponse, any>("Login/AuthenticateUser", body)
   }
 
+  // BUSINESS INFO
+  addBusinessInfo(body: any){
+    return this.cs.Post("Login/AddBusinessInformation", body)
+  }
+
   // PARTY TAB
 
   AddPartyDetails(body: any) {

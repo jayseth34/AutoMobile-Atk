@@ -46,7 +46,7 @@
     </form>
   </div> -->
 
-<form>
+<form [formGroup]="businessInfoGroup">
   <h2>EDIT FIRM</h2>
 <div class="row">
   <div class="col-md-6">
@@ -69,14 +69,20 @@
     </div>
 
     <div class="form-floating fields">
-      <input type="text" class="form-control phoneNumber" placeholder="Phone Number" id="phoneNumber" name="phoneNumber" formControlName="phoneNumberControl" 
+      <input type="number" class="form-control phoneNumber" placeholder="Phone Number" id="phoneNumber" name="phoneNumber" formControlName="phoneNumberControl" 
       oninput="this.value = this.value.toUpperCase()">
       <label for="phoneNumber">Phone Number</label>
+      <div>
+        <div *ngIf="businessInfoGroup.get('phoneNumberControl')?.errors?.['pattern']" style="color: red;">Please enter a valid number.</div>
+      </div>
     </div>
 
     <div class="form-floating fields">
       <input type="text" class="form-control email-id" placeholder="Email Id" id="emailId" name="emailId" formControlName="emailIdControl">
       <label for="emailId">Email ID</label>
+      <div>
+        <div *ngIf="businessInfoGroup.get('emailIdControl')?.errors?.['pattern']" style="color: red;">Please enter a valid email.</div>
+      </div>
     </div>
 
   </div>
@@ -100,13 +106,16 @@
     </div>
 
     <div class="form-floating fields">
-      <input type="text" class="form-control pincode" placeholder="Pincode" id="pincode" name="pincode" formControlName="pincodeControl" 
-      oninput="this.value = this.value.toUpperCase()">
+      <input type="number" class="form-control pincode" placeholder="Pincode" id="pincode" name="pincode" formControlName="pincodeControl" 
+      oninput="this.value = this.value.toUpperCase()" >
       <label for="pincode">Pincode</label>
+      <div>
+        <div *ngIf="businessInfoGroup.get('pincodeControl')?.errors?.['pattern']" style="color: red;">Please enter a valid pincode.</div>
+      </div>
     </div>
 
     <div class="form-floating">
-      <select class="form-select state" id="state" name="state" formControlName="_stateControl">
+      <select class="form-select state" id="state" name="state" formControlName="stateControl">
         <!-- <option value="" disabled selected class="dropdown-item"></option> -->
         <option value="state1" class="dropdown-item" selected disabled>None</option>
         <option value="state1" class="dropdown-item">state1</option>
@@ -153,6 +162,6 @@
 </div>
 </div>
 <div class="text-md-end"> <!-- Use 'text-md-end' to align content to the right on medium and larger screens -->
-  <input type="submit" class="btn btn-warning save_btn" value="SAVE">
+  <input type="submit" class="btn btn-warning save_btn" value="SAVE" (click)="submit()">
 </div>
 </form>

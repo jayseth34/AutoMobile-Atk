@@ -68,17 +68,19 @@
             <!-- Category Dropdown Column -->
             <div class="col">
                 <div class="form-row party-group">
-                    <div class="form-floating">
-                      <mat-form-field class="partyGroupDropDown">
-                        <mat-label>Category</mat-label>
-                        <mat-select formControlName="categoryControl" [(ngModel)]="category">
-                          <mat-option value="+ add category" *ngIf="!dataService.isItemUpdate" (click)="openAddItemCategoryModal()">+ add category</mat-option>
-                          <mat-option *ngFor="let category of categoryList" [value]="category">{{ category }}</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
+                  <div class="form-floating">
+                    <mat-form-field class="partyGroupDropDown">
+                      <mat-label>Category</mat-label>
+                      <input type="text" matInput [matAutocomplete]="autoCategory" formControlName="categoryControl" oninput="this.value = this.value.toUpperCase()"
+                      [(ngModel)]="category">
+                      <mat-autocomplete #autoCategory="matAutocomplete">
+                        <mat-option (click)="openAddItemCategoryModal()">+ ADD CATEGORY</mat-option>
+                        <mat-option *ngFor="let category of categoryList" [value]="category">{{ category }}</mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field> 
                   </div>
-            </div>
+                </div>
+              </div>              
             
             <!-- Item Code Input Field Column -->
             <div class="col">

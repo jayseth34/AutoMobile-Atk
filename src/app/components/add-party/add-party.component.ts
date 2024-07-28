@@ -4,10 +4,11 @@ import { takeUntil, Subject } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
 import * as moment from 'moment';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 
 
 import Swal from 'sweetalert2';
+import { AddPartyGroupComponent } from '../add-party-group/add-party-group.component';
 
 
 @Component({
@@ -76,7 +77,7 @@ export class AddPartyComponent implements OnInit {
   
   @Input() partyDetails: any;
 
-  constructor(private api: ApiService, public dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(private dialog: MatDialog, private api: ApiService, public dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any) {
     // this.partyDetails = data.partyDetails; // Access the injected data
   }
 
@@ -245,6 +246,7 @@ export class AddPartyComponent implements OnInit {
     if(isSaveAndNew){
       this.addPartyForm.reset();
     }
+    // window.location.href = 'http://localhost:4200/party-homepage';
   } else {
       Swal.fire({
         title: 'Validation Error!',
@@ -449,6 +451,15 @@ export class AddPartyComponent implements OnInit {
   //         }
   //       });
   // }
+
+  openAddPartyGroupModal() {
+    const dialogRef = this.dialog.open(AddPartyGroupComponent, {
+      width: '40%',
+      height: '35%', 
+    });
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
 
   get partyNameControl() { return this.addPartyForm.get('partyNameControl')}
   get gstControl() { return this.addPartyForm.get('gstControl')}

@@ -72,7 +72,7 @@ export class AddPartyGroupComponent {
       // this.dataService.partyName = this.addPartyData.partyName;
       // debugger;
       this.api.AddGroupDetails(JSON.stringify(body)).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        if (res.status != null) {
+        if (res.status == 'SUCCESS') {
           Swal.fire({
             text: res.status,
             confirmButtonText: 'OK',
@@ -92,6 +92,7 @@ export class AddPartyGroupComponent {
     // debugger;
     if(this.addPartyGroup.valid) {
       this.AddGroupData(this.addPartyGroup.value);
+      // window.location.href = 'http://localhost:4200/party-homepage';
     } 
     else{
     }

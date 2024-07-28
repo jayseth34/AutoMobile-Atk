@@ -38,9 +38,12 @@
       <div class="form-floating">
         <mat-form-field class="partyGroupDropDown">
           <mat-label>Party Group</mat-label>
-          <mat-select formControlName="partyGroupControl" [(ngModel)]="partyGroup">
+          <input type="text" matInput [matAutocomplete]="auto" formControlName="partyGroupControl" oninput="this.value = this.value.toUpperCase()"
+          [(ngModel)]="partyGroup">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option (click)="openAddPartyGroupModal()">+ ADD PARTY</mat-option>
             <mat-option *ngFor="let party of partyGroupList" [value]="party">{{ party }}</mat-option>
-          </mat-select>
+          </mat-autocomplete>
         </mat-form-field>
       </div>
     </div>

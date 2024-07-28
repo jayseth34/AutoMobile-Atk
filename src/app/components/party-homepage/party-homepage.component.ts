@@ -199,7 +199,7 @@ GetPartyByGroupData(registeredMobileNumber:any, groupname: any) {
 
 partyHandleClick(event: MouseEvent,registeredMobileNumber:any, partyName: any) {
   this.clicks.push(event);
-
+  this.partyName = partyName
   setTimeout(() => {
     if (this.clicks.length === 1) {
       // Single click detected
