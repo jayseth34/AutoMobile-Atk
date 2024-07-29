@@ -27,7 +27,7 @@
               <input type="text" class="form-control" placeholder="Search here..">
             </div>
             <div class="col-auto">
-              <button class="btn btn-warning add_item_btn" (click)="openAddItemModal('','')">+ ADD ITEM</button>
+              <button class="btn btn-warning add_item_btn" (click)="openAddItemModal('')">+ ADD ITEM</button>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
             </thead>
             <tbody>
               <!-- Loop to generate rows -->
-              <tr *ngFor="let item of this.dataService.itemListResponse" (click)="productHandleClick($event, 9920279905,item.itemname)">
+              <tr *ngFor="let item of itemlist" (click)="productHandleClick($event,item.itemname)">
                 <td>{{ item.itemname }}</td>
                 <td>{{ item.remainingquantity }}</td>
               </tr>
@@ -50,14 +50,14 @@
 
     <!-- TOP CONTENT -->
     <div class="top-content">
-        <h2>{{itemName}}</h2>
+        <h3>ITEM NAME: {{ itemName }}</h3> 
         <div class="top-content-row">
-            <div class="sale-price">SALE PRICE:  &#8377;{{this.dataService.getItemDetailsData[0].saleprice}} (exel)</div>
-            <div class="purchase-price">PURCHASE PRICE:  &#8377;{{this.dataService.getItemDetailsData[0].purchaseprice}} (exel)</div>
+            <div class="sale-price">SALE PRICE:  &#8377;{{ saleprice}} (exel)</div>
+            <div class="purchase-price">PURCHASE PRICE:  &#8377;{{purchaseprice}} (exel)</div>
         </div>
         <div class="top-content-row">
-            <div class="sale-price">STOCK QUANTITY: {{this.dataService.getItemDetailsData[0].minimumwholesalequantity}}</div>
-            <div class="purchase-price">STOCK VALUE: &#8377;{{this.dataService.getItemDetailsData[0].minimumstocktomaintain}}</div>
+            <div class="sale-price">WHOLESALE PRICE: {{minimumwholesalequantity}}</div>
+            <div class="purchase-price">STOCK VALUE: &#8377;{{minimumstocktomaintain}}</div>
         </div>
     </div>
 
@@ -114,7 +114,7 @@
               </div>
               <div class="col-auto">
                 <!-- <button class="btn btn-warning add_item_btn">+ ADD CATEGORY</button> -->
-                <button class="btn btn-warning add_item_btn" (click)="openAddItemCategoryModal('','')">+ ADD CATEGORY</button>
+                <button class="btn btn-warning add_item_btn" (click)="openAddItemCategoryModal('')">+ ADD CATEGORY</button>
               </div>
           </div>
   
@@ -127,7 +127,7 @@
               </thead>
               <tbody>
                 <!-- Loop to generate rows -->
-                <tr *ngFor="let category of this.dataService.categoryListResponse" (click)="categoryHandleClick($event,'9920279905',category.category)">
+                <tr *ngFor="let category of this.dataService.categoryListResponse" (click)="categoryHandleClick($event,category.category)">
                   <td>{{ category.category }}</td>
                   <td>{{ category.categorycount }}</td>
                 </tr>

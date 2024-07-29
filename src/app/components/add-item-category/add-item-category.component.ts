@@ -24,6 +24,9 @@ export class AddItemCategoryComponent {
   constructor(private api: ApiService, @Inject(MAT_DIALOG_DATA) public data: any, private dataService: DataService) { }
 
   ngOnInit() {
+    this.registeredMobileNumber = parseInt(
+      JSON.parse(localStorage.getItem('phonenumber') as string)
+    );
     this.addItemCategory = new UntypedFormGroup({
       itemCategoryNameControl: new UntypedFormControl('', [Validators.required]),
     });
@@ -53,7 +56,7 @@ export class AddItemCategoryComponent {
     return new Promise((resolve) => {
       console.log("after return");
       let body = {
-        registeredPhoneNumber: 9920279905,
+        registeredPhoneNumber: this.registeredMobileNumber,
         newcategory: this.newcategory,
         oldcategory: this.oldcategory
       }
@@ -67,7 +70,7 @@ export class AddItemCategoryComponent {
       }
       // this.dataService.partyName = this.addPartyData.partyName;
       // debugger;
-      this.api.AddUpdateCategory(JSON.stringify(body)).pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.api.AddUpdateCategory(JSON.stringify(body)).subscribe(res => {
         if (res.status == "Success") {
           this.itemCategoryName = this.newcategory
           console.log("Success category", res)

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { Component, Inject, Input } from '@angular/core';
+import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class SelectUnitComponent {
   base_unit: any = 'QUINTAL (Qtl)';
   secondary_unit: any = 'PAIRS'
   showConversion: boolean = false;
-  selectUnitForm: UntypedFormGroup;
+  selectUnitForm: FormGroup;
+  @Input() selectunit: any;
   
   options1 = [
     { label: 'KG', value: 'KG' },
@@ -26,15 +28,18 @@ export class SelectUnitComponent {
     { label: 'G', value: 'G' }
   ];
 
-  constructor(public dataService: DataService) { }
+  constructor(public dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(){
-    this.selectUnitForm = new UntypedFormGroup({
-      selectedOption1: new UntypedFormControl('',),
-      selectedOption2: new UntypedFormControl('',),
-      conversionRate: new UntypedFormControl('',Validators.pattern("^[0-9]*$")),
+    this.selectUnitForm = new FormGroup({
+      selectedOption1: new FormControl('',),
+      selectedOption2: new FormControl('',),
+      conversionRate: new FormControl(0,Validators.pattern("^[0-9]*$")),
     });
     console.log("SELECT UNIT", this.selectUnitForm)
+    if(this.data.status='SUCCESS'){
+      this.populateForm(this.data.baseunit, this.data.secondaryunit,this.data.conversionrates) 
+    }
   }
 
   unitConversion(){
@@ -45,10 +50,18 @@ export class SelectUnitComponent {
     }
   }
 
-  save(){
-    this.dataService.selectedOption1 = this.selectUnitForm.get('selectedOption1')?.value
-    this.dataService.selectedOption2 = this.selectUnitForm.get('selectedOption2')?.value
-    this.dataService.conversionRate = this.selectUnitForm.get('conversionRate')?.value
+  save() {
+    this.dataService.setSelectedOption1(this.selectUnitForm.get('selectedOption1')?.value);
+    this.dataService.setSelectedOption2(this.selectUnitForm.get('selectedOption2')?.value);
+    this.dataService.setConversionRate(this.selectUnitForm.get('conversionRate')?.value);
+  }
+
+  populateForm(baseunit: any, secondaryunit: any, conversionrates: any){
+    this.selectUnitForm.patchValue({
+      selectedOption1: baseunit,
+      selectedOption2: secondaryunit,
+      conversionRate: conversionrates 
+    })
   }
 
 }

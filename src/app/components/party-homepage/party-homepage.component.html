@@ -30,7 +30,7 @@
               <input type="text" [(ngModel)]="searchParty" class="form-control" placeholder="Search here..">
             </div>
             <div class="col-auto">
-              <button class="btn btn-warning add_party_btn" (click)="openAddPartyModal('','')">+ ADD PARTY</button>
+              <button class="btn btn-warning add_party_btn" (click)="openAddPartyModal('')">+ ADD PARTY</button>
             </div>
         </div>
 
@@ -44,9 +44,9 @@
             <tbody>
               <!-- Loop to generate rows -->
               <!-- <tr *ngFor="let partydetail of dataService.partyList" (click)="singleClick($event,'9920279905',partydetail.partyname)" (dblclick)="doubleClick($event)"> -->
-              <tr *ngFor="let partydetail of dataService.partyList" (click)="partyHandleClick($event,'9920279905',partydetail.partyname)">
+              <tr *ngFor="let partydetail of partyList" (click)="partyHandleClick($event,partydetail.partyname)">
                 <td class="table-row">{{ partydetail.partyname }}</td>
-                <td class="table-row">{{ partydetail.partybalance }}</td>
+                <td class="table-row">{{ partydetail.toreceivefromparty - partydetail.topayparty }}</td>
               </tr>
             </tbody>
           </table>
@@ -54,14 +54,14 @@
 
     <!-- TOP CONTENT -->
     <div class="top-content">
-      <h2>{{partyName}}</h2>
+        <h3>PARTY NAME {{ partyName }}</h3>
         <div class="top-content-row">
-            <div class="phone">PHONE: {{this.dataService.partyDetailsResponse.partyList[0].phonenumber}}</div>
-            <div class="address">ADDRESS: {{this.dataService.partyDetailsResponse.partyList[0].billingaddress}}</div>
+            <div class="phone">PHONE: {{ phonenumber }}</div>
+            <div class="address">ADDRESS: {{ billingaddress }}</div>
         </div>
         <div class="top-content-row">
-            <div class="phone">EMAIL: {{this.dataService.partyDetailsResponse.partyList[0].emailid}}</div>
-            <div class="address">GSTIN: {{this.dataService.partyDetailsResponse.partyList[0].gst}}</div>
+            <div class="phone">EMAIL: {{ emailid }}</div>
+            <div class="address">GSTIN: {{ gst }}</div>
         </div>
     </div>
 
@@ -79,7 +79,7 @@
                 <th class="table-column">STATUS</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf="this.dataService.transactionDetailsResponse?.length > 0">
               <!-- Loop to generate rows -->
               <tr *ngFor="let transaction of this.dataService.transactionDetailsResponse" >
                 <td class="table-row">{{ transaction.typeofpay }}</td>
@@ -106,20 +106,20 @@
               <input type="text" [(ngModel)]="searchGroup" class="form-control" placeholder="Search here..">
             </div>
             <div class="col-auto">
-              <button class="btn btn-warning add_party_btn" (click)="openAddPartyGroupModal('','')">+ ADD PARTY GROUP</button>
+              <button class="btn btn-warning add_party_btn" (click)="openAddPartyGroupModal('')">+ ADD PARTY GROUP</button>
             </div>
         </div>
 
-        <table class="table table-hover party_list">
+        <table class="table table-hover party_list" *ngIf = "ispartygrouplistresponse">
             <thead class="thead-dark">
               <tr>
                 <th class="table-column">GROUP</th>
                 <th class="table-column">PARTY</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf = "dataService.partyGroupListResponse?.length > 0">
               <!-- Loop to generate rows -->
-              <tr *ngFor="let party of dataService.partyGroupListResponse" (click)="groupHandleClick($event,9920279905, party.partygroup)">                
+              <tr *ngFor="let party of dataService.partyGroupListResponse" (click)="groupHandleClick($event, party.partygroup)">                
                 <td class="table-row">{{ party.partygroup }}</td>
                 <td class="table-row">{{ party.partygroupcount }}</td>
               </tr>
@@ -128,15 +128,15 @@
     </div>
 
     <!-- TOP CONTENT -->
-    <div class="top-content">
-        <h2>{{groupname}}</h2>
+    <div class="top-content" *ngIf = "ispartygrouplistresponse">
+        <h3>GROUP NAME</h3>
         <div class="top-content-row">
             <div class="phone">Parties (no.ofparties) <span>(totalofParties)</span> </div>
         </div>
     </div>
 
     <!-- BOTTOM CONTENT -->
-    <div class="bottom-content">
+    <div class="bottom-content" *ngIf = "ispartygrouplistresponse">
         <h2>PARTIES</h2>
         <table class="table table-hover transaction-list">
             <thead class="thead-dark">

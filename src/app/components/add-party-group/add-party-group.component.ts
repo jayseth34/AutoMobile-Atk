@@ -27,6 +27,9 @@ export class AddPartyGroupComponent {
   constructor(private api: ApiService, private dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+    this.registeredMobileNumber = parseInt(
+      JSON.parse(localStorage.getItem('phonenumber') as string)
+    );
     this.addPartyGroup = new UntypedFormGroup({
       partyGroupNameControl: new UntypedFormControl('', [Validators.required]),
     });
@@ -57,7 +60,7 @@ export class AddPartyGroupComponent {
       this.oldPartyGroupName = this.partyGroupName;
       console.log("after return");
       let body = {
-        registeredPhoneNumber: 9920279905,
+        registeredPhoneNumber: this.registeredMobileNumber,
         oldgroupname:  this.oldPartyGroupName,
         newgroupname: this.partyGroupName
       }
@@ -71,8 +74,8 @@ export class AddPartyGroupComponent {
       }
       // this.dataService.partyName = this.addPartyData.partyName;
       // debugger;
-      this.api.AddGroupDetails(JSON.stringify(body)).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        if (res.status == 'SUCCESS') {
+      this.api.AddGroupDetails(JSON.stringify(body)).subscribe(res => {
+        if (res.status != 'SUCCESS') {
           Swal.fire({
             text: res.status,
             confirmButtonText: 'OK',

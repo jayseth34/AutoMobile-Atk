@@ -1,5 +1,5 @@
 import { Component, Inject, Input } from '@angular/core';
-import { FormControl, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { SelectUnitComponent } from '../select-unit/select-unit.component';
 import { DataService } from 'src/app/services/data.service';
@@ -7,6 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import Swal from 'sweetalert2';
 import { AddItemCategoryComponent } from '../add-item-category/add-item-category.component';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-add-item',
@@ -43,77 +44,98 @@ export class AddItemComponent {
 
   isSaveAndNew: boolean = false;
 
-  addItemForm: UntypedFormGroup;
+  addItemForm: FormGroup;
 
   @Input() itemDetails: any;
 
   categoryList: any;
+  registeredPhoneNmber:any;
 
-  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, private api: ApiService) {}
+  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, private api: ApiService, public cs: CommonService) {}
 
   ngOnInit() {
-    this.categoryList = this.dataService.categoryListResponse.map((getCateogoryList: { category: any; }) => getCateogoryList.category);
+    this.registeredPhoneNmber = parseInt(
+      JSON.parse(localStorage.getItem('phonenumber') as string)
+    );
+    this.initializeForm()
+    this.categorygroup()
     console.log("ITEM: ", this.categoryList)
     // if (!this.dataService.isItemUpdate){
     //   this.category = 'GENERAL'
     // }
-    this.addItemForm = new UntypedFormGroup({
-      itemNameControl: new UntypedFormControl('',),
-      itemHsnControl: new UntypedFormControl('',),
-      categoryControl: new UntypedFormControl('GENERAL',),
-      itemCodeControl: new UntypedFormControl('',),
-      salePriceControl: new UntypedFormControl('',),
-      saleWithOrWithoutTaxControl: new UntypedFormControl('',),
-      discountOnSalePriceControl: new UntypedFormControl('',),
-      percentageOrAmountControl: new UntypedFormControl('',),
-      wholeSalePriceControl: new UntypedFormControl('',),
-      wholeSaleWithOrWithoutTaxControl: new UntypedFormControl('',),
-      minimumWholeSaleQuantityControl: new UntypedFormControl('',),
-      purchasePriceControl: new UntypedFormControl('',),
-      purchaseWithOrWithoutTaxControl: new UntypedFormControl('',),
-      taxRateControl: new UntypedFormControl('',),
-      openingQuantityControl: new UntypedFormControl('',),
-      atPriceControl: new UntypedFormControl('',),
-      asOfDateControl: new UntypedFormControl('',),
-      minimumStockToMaintainControl: new UntypedFormControl('',),
-      _locationControl: new UntypedFormControl('',),
-    })
-    if(!this.dataService.isItemUpdate){
-      this.category = 'GENERAL'
-    }
-
+    
     if(this.data.status='SUCCESS'){
       this.populateForm(this.data.itemDetails) 
     }
   }
 
-  populateForm(itemDetails: any) {
-    if (itemDetails) {
-      this.itemName = this.data.itemName
-      // this.typeOfPay= itemDetails.gst
-      this.itemHsn= itemDetails.itemhsn
-      // this.baseUnit= itemDetails.partygroup
-      // this.secondaryunit= itemDetails.gsttype
-      // this.conversionrates= itemDetails._state
-      this.category= itemDetails.category
-      this.itemCode= itemDetails.itemcode
-      this.salePrice= itemDetails.saleprice
-      this.saleWithOrWithoutTax= itemDetails.salewithorwithouttax
-      this.discountOnSalePrice= itemDetails.discountonsaleprice
-      this.wholeSalePrice= itemDetails.wholesaleprice
-      this.wholeSaleWithOrWithoutTax= itemDetails.wholesalewithorwithouttax
-      this.minimumWholeSaleQuantity= itemDetails.minimumwholesalequantity
-      this.purchasePrice= itemDetails.purchaseprice
-      this.purchaseWithOrWithoutTax= itemDetails.purchasewithorwithouttax
-      this.taxRate= itemDetails.taxrate
-      this.openingQuantity= itemDetails.openingquantity
-      this.remainigQuantity= itemDetails.openingquantity
-      this.atPrice= itemDetails.atprice
-      this.asOfDate= itemDetails.asofdate
-      this.minimumStockToMaintain= itemDetails.minimumstocktomaintain
-      this._location= itemDetails._location
-      this.percentageOrAmount= itemDetails.percentageoramounttype
+  categorygroup(){
+    this.api.GetCategory(this.registeredPhoneNmber).subscribe((response:any) => {
+      if(response.status == "SUCCESS") {
+        this.categoryList = response.getCateogoryList
+        console.log("GET CATEGORY SUCCESS", response)
+      }
+      else{
+        console.log("CATEGORY FAILED")
+      }
+    })
   }
+
+  initializeForm() {
+    this.addItemForm = new FormGroup({
+      itemNameControl: new FormControl(this.data.itemName || ''),
+      itemHsnControl: new FormControl(this.data.itemDetails?.itemhsn || ''),
+      categoryControl: new FormControl(this.data.itemDetails?.category || ''),
+      itemCodeControl: new FormControl(this.data.itemDetails?.itemcode || ''),
+      salePriceControl: new FormControl(this.data.itemDetails?.saleprice || ''),
+      saleWithOrWithoutTaxControl: new FormControl(this.data.itemDetails?.salewithorwithouttax || 'Without Tax'),
+      discountOnSalePriceControl: new FormControl(this.data.itemDetails?.discountonsaleprice || ''),
+      percentageOrAmountControl: new FormControl(this.data.itemDetails?.percentageoramounttype || 'Percentage'),
+      wholeSalePriceControl: new FormControl(this.data.itemDetails?.wholesaleprice || ''),
+      wholeSaleWithOrWithoutTaxControl: new FormControl(this.data.itemDetails?.wholesalewithorwithouttax || 'Without Tax'),
+      minimumWholeSaleQuantityControl: new FormControl(this.data.itemDetails?.minimumwholesalequantity || ''),
+      purchasePriceControl: new FormControl(this.data.itemDetails?.purchaseprice || ''),
+      purchaseWithOrWithoutTaxControl: new FormControl(this.data.itemDetails?.purchasewithorwithouttax || 'Without Tax'),
+      taxRateControl: new FormControl(this.data.itemDetails?.taxrate || 'None'),
+      openingQuantityControl: new FormControl(this.data.itemDetails?.openingquantity || ''),
+      atPriceControl: new FormControl(this.data.itemDetails?.atprice || ''),
+      asOfDateControl: new FormControl(this.data.itemDetails?.asofdate || ''),
+      minimumStockToMaintainControl: new FormControl(this.data.itemDetails?.minimumstocktomaintain || ''),
+      _locationControl: new FormControl(this.data.itemDetails?._location || ''),
+      baseunit: new FormControl(''),
+      secondaryunit: new FormControl(''),
+      conversionrates: new FormControl('')
+    });
+  }
+
+  populateForm(itemDetails: any) {
+      this.addItemForm.patchValue({
+        itemNameControl: this.data.itemName,
+        itemHsnControl: itemDetails.itemhsn,
+        categoryControl: itemDetails.category,
+        itemCodeControl: itemDetails.itemcode,
+        salePriceControl: itemDetails.saleprice,
+        saleWithOrWithoutTaxControl: this.cs.isUndefineOrNull(itemDetails.salewithorwithouttax)? 'Without Tax' : itemDetails.salewithorwithouttax,
+        discountOnSalePriceControl: itemDetails.discountonsaleprice,
+        percentageOrAmountControl: this.cs.isUndefineOrNull(itemDetails.percentageoramounttype)? 'Percentage' : itemDetails.percentageoramounttype,
+        wholeSalePriceControl: itemDetails.wholesaleprice,
+        wholeSaleWithOrWithoutTaxControl: this.cs.isUndefineOrNull(itemDetails.wholesalewithorwithouttax) ? 'Without Tax' : itemDetails.wholesalewithorwithouttax,
+        minimumWholeSaleQuantityControl: itemDetails.minimumwholesalequantity,
+        purchasePriceControl: itemDetails.purchaseprice,
+        purchaseWithOrWithoutTaxControl: this.cs.isUndefineOrNull(itemDetails.purchasewithorwithouttax)? 'Without Tax' : itemDetails.purchasewithorwithouttax,
+        taxRateControl: itemDetails.taxrate,
+        openingQuantityControl: itemDetails.openingquantity,
+        atPriceControl: itemDetails.atprice,
+        asOfDateControl: itemDetails.asofdate,
+        minimumStockToMaintainControl: itemDetails.minimumstocktomaintain,
+        _locationControl: itemDetails._location,
+        typeOfPayControl: itemDetails.typeOfPay,
+        remainingQuantityControl: itemDetails.remainingQuantity,
+        baseunit: itemDetails.baseunit,
+        secondaryunit: itemDetails.secondaryunit,
+        conversionrates: itemDetails.conversionrates
+      });
+      
   }
 
   selectTab(tab: string) {
@@ -125,27 +147,34 @@ export class AddItemComponent {
   // }
 
   toggleWholesalePrice() {
-    // debugger;
     this.isWholesalePriceEnabled = !this.isWholesalePriceEnabled;
   }
 
   openSelectUnitModal() {
-    // debugger;
+    debugger
+    this.dataService.selectedOption1$.subscribe(value => {
+      this.addItemForm.patchValue({ baseunit: value });
+    });
+
+    this.dataService.selectedOption2$.subscribe(value => {
+      this.addItemForm.patchValue({ secondaryunit: value });
+    });
+
+    this.dataService.conversionRate$.subscribe(value => {
+      this.addItemForm.patchValue({ conversionrates: value });
+    });
     const dialogRef = this.dialog.open(SelectUnitComponent, {
       width: '40%',
-      // height: '35%', 
-      // Adjust the width as needed
-      // Other configuration options (e.g., height, data) can be added here
+      data : {baseunit : this.addItemForm.get('baseunit')?.value, secondaryunit : this.addItemForm.get('secondaryunit')?.value,
+        conversionrates : this.addItemForm.get('conversionrates')?.value, status: "SUCCESS"
+      }
     });
   
-    // Optionally, handle the result from the modal dialog
     dialogRef.afterClosed().subscribe(result => {
-      // Handle the result here if needed
     });
   }
 
   submit(isSaveAndNew: boolean) {
-    // debugger;
     if(this.addItemForm.valid) {
 
     this.AddItemData(this.addItemForm.value);
@@ -164,41 +193,40 @@ export class AddItemComponent {
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   AddItemData(body: any): Promise<void> {
-    // debugger
     console.log("BEFore return");
     return new Promise((resolve) => {
       console.log("after return");
       let body = {
         typeOfPay: this.typeOfPay,
-        registeredPhoneNumber: 9920279905,
-        itemName: this.itemName,
-        itemHsn: this.itemHsn,
-        baseunit: this.dataService.selectedOption1, 
-        secondaryunit: this.dataService.selectedOption2,
-        conversionrates: this.dataService.conversionRate,
-        category: this.category,
-        itemCode: this.itemCode,
-        salePrice: this.salePrice,
-        saleWithOrWithoutTax: this.saleWithOrWithoutTax,
-        discountOnSalePrice: this.discountOnSalePrice,
-        percentageOrAmountType: this.percentageOrAmount,
-        wholeSalePrice: this.wholeSalePrice,
-        wholeSaleWithOrWithoutTax: this.wholeSaleWithOrWithoutTax,
-        minimumWholeSaleQuantity: this.minimumWholeSaleQuantity,
-        purchasePrice: this.purchasePrice,
-        purchaseWithOrWithoutTax:this.purchaseWithOrWithoutTax,
-        taxRate: this.taxRate,
-        openingQuantity: this.openingQuantity,
-        // remainingQunatity: this.remainingQunatity,
-        atPrice: this.atPrice,
-        asOfDate: this.asOfDate,
-        minimumStockToMaintain: this.minimumStockToMaintain,
-        _location: this._location,
+        registeredPhoneNumber: this.registeredPhoneNmber,
+        itemName: this.addItemForm.value.itemNameControl,
+        itemHsn: this.addItemForm.value.itemHsnControl,
+        baseunit: this.addItemForm.value.baseunit,
+        secondaryunit: this.addItemForm.value.secondaryunit,
+        conversionrates: this.addItemForm.value.conversionrates,
+        category: this.addItemForm.value.categoryControl.category,
+        itemCode: this.addItemForm.value.itemCodeControl,
+        salePrice: this.addItemForm.value.salePriceControl,
+        saleWithOrWithoutTax: this.addItemForm.value.saleWithOrWithoutTaxControl,
+        discountOnSalePrice: this.addItemForm.value.discountOnSalePriceControl,
+        percentageOrAmountType: this.addItemForm.value.percentageOrAmountControl,
+        wholeSalePrice: this.addItemForm.value.wholeSalePriceControl,
+        wholeSaleWithOrWithoutTax: this.addItemForm.value.wholeSaleWithOrWithoutTaxControl,
+        minimumWholeSaleQuantity: this.addItemForm.value.minimumWholeSaleQuantityControl,
+        purchasePrice: this.addItemForm.value.purchasePriceControl,
+        purchaseWithOrWithoutTax: this.addItemForm.value.purchaseWithOrWithoutTaxControl,
+        taxRate: this.addItemForm.value.taxRateControl,
+        openingQuantity: this.addItemForm.value.openingQuantityControl,
+        remainingQuantity: this.addItemForm.value.remainingQuantityControl,
+        atPrice: this.addItemForm.value.atPriceControl,
+        asOfDate: this.addItemForm.value.asOfDateControl,
+        minimumStockToMaintain: this.addItemForm.value.minimumStockToMaintainControl,
+        _location: this.addItemForm.value._locationControl,
       }
       // if(this.dataService.isItemUpdate){
       //   body.oldPartyName = this.dataService.oldPartyName
       // }
-      this.api.AddItemDetails(JSON.stringify(body)).pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.api.AddItemDetails(JSON.stringify(body)).subscribe(res => {
         if (res == "Success") {
           console.log("Success")
         }

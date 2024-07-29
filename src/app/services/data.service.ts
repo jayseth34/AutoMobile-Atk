@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -79,8 +80,27 @@ export class DataService {
   selectedOption1: any;
   selectedOption2: any;
   conversionRate: any;
+  private selectedOption1Subject = new BehaviorSubject<any>(null);
+  private selectedOption2Subject = new BehaviorSubject<any>(null);
+  private conversionRateSubject = new BehaviorSubject<any>(null);
 
+  selectedOption1$ = this.selectedOption1Subject.asObservable();
+  selectedOption2$ = this.selectedOption2Subject.asObservable();
+  conversionRate$ = this.conversionRateSubject.asObservable();
+
+  
   constructor() { }
+  setSelectedOption1(value: any) {
+    this.selectedOption1Subject.next(value);
+  }
+
+  setSelectedOption2(value: any) {
+    this.selectedOption2Subject.next(value);
+  }
+
+  setConversionRate(value: any) {
+    this.conversionRateSubject.next(value);
+  }
 
 
 }

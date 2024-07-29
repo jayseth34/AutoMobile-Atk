@@ -1,4 +1,4 @@
-import { Component, Inject, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, Input, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { AddItemComponent } from '../add-item/add-item.component';
 import { DataService } from 'src/app/services/data.service';
@@ -16,14 +16,23 @@ export class ItemHomepageComponent {
   // selectedTab: string = 'product'; // Initially select the 'address' tab
   clickSubscription: Subscription;
   clicks: any[] = [];
-  itemName: any;
+  registeredMobileNumber:any;
+  itemlist: any[] = [];
+  itemName:any;
+  saleprice:any;
+  purchaseprice:any;
+  minimumwholesalequantity:any;
+  minimumstocktomaintain:any;
   categoryName: any;
 
   @ViewChild('app-add-item') addItemModal: AddItemComponent;
 
-  constructor(private dialog: MatDialog, public dataService: DataService, private api: ApiService){}
+  constructor(private dialog: MatDialog, public dataService: DataService, private api: ApiService, private cdr: ChangeDetectorRef){}
 
   ngOnInit() {
+    this.registeredMobileNumber = parseInt(
+      JSON.parse(localStorage.getItem('phonenumber') as string)
+    );
     // Listen to click events on the document
     this.clickSubscription = fromEvent(document, 'click')
       .pipe(
@@ -38,6 +47,7 @@ export class ItemHomepageComponent {
           console.log('Double click');
         }
       });
+      this.selectTab('product');
     }
 
 
@@ -50,18 +60,22 @@ export class ItemHomepageComponent {
   
   destroy$: Subject<boolean> = new Subject<boolean>();
 
-  openAddItemModal(registeredMobileNumber:any, itemName: any ) {
-    if(registeredMobileNumber!='' && itemName!=''){
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges();
+  }
 
-      this.api.GetItemDetails(registeredMobileNumber,itemName).subscribe({
+  openAddItemModal(itemName: any ) {
+    if(!isNaN(this.registeredMobileNumber) && itemName!=''){
+      this.api.GetItemDetails(this.registeredMobileNumber,itemName).subscribe({
         next: (res) =>{
           if (res.status === "SUCCESS") {
             this.dataService.isItemUpdate = true;
             this.dataService.oldItemName = itemName
+            this.cdr.detectChanges(); // Manually trigger change detection
             const dialogRef = this.dialog.open(AddItemComponent, {
               width: '60%',
               height: '99%',
-              data: { itemDetails: res.itemList[0] , itemName} // Pass the data here
+              data: { itemDetails: res.itemList[0] , itemName, status: 'SUCCESS'} // Pass the data here
             });
           } else {
             this.dataService.isPartyUpdate = false;
@@ -75,9 +89,11 @@ export class ItemHomepageComponent {
     }
     else {
       this.dataService.isItemUpdate = false;
+      this.cdr.detectChanges(); // Manually trigger change detection
       const dialogRef = this.dialog.open(AddItemComponent, {
         width: '60%',
         height: '99%', 
+        data: { itemDetails: null, itemName: ''},
       });
       dialogRef.afterClosed().subscribe(result => {
         // Handle the result here if needed
@@ -87,11 +103,25 @@ export class ItemHomepageComponent {
 
   selectTab(tab: string) {
     this.dataService.itemHomePageSelectedTab = tab;
+    if (this.dataService.itemHomePageSelectedTab == 'product'){
+      this.getitemlistdata()
+    } else if (this.dataService.itemHomePageSelectedTab == 'category'){
+        this.api.GetCategory(this.registeredMobileNumber).subscribe((response:any) => {
+          if(response.status == "SUCCESS") {
+            this.dataService.categoryListResponse = response.getCateogoryList
+            console.log("CATEGORRYYY: ", this.dataService.categoryListResponse[1].category)
+            console.log("GET CATEGORY SUCCESS", response)
+          }
+          else{
+            console.log("CATEGORY FAILED")
+          }
+        })
+    }
   }
 
-  openAddItemCategoryModal(registeredMobileNumber: any, categoryname: any) {
-    if (registeredMobileNumber!==''){
-      this.api.GetItemByCategory(registeredMobileNumber,categoryname).subscribe({
+  openAddItemCategoryModal(categoryname: any) {
+    if (categoryname !== '' && !isNaN(this.registeredMobileNumber)){
+      this.api.GetItemByCategory(this.registeredMobileNumber,categoryname).subscribe({
         next: (res) => {
           if (res.status === "SUCCESS") {
             // if (res!=null) {
@@ -121,45 +151,30 @@ export class ItemHomepageComponent {
     }
   }
 
-  GetItemDetailsData(registeredMobileNumber: any, itemname: any){
-    this.api.GetItemDetails(registeredMobileNumber,itemname).pipe(takeUntil(this.destroy$)).subscribe({
-      next:(res) => {
-        console.log("GETITEMDETS API: ",res);
-        if(res.status == "SUCCESS") {
-          this.dataService.getItemDetailsData =  res.itemList
-          this.api.GetItemTransactions(registeredMobileNumber,itemname).pipe(takeUntil(this.destroy$)).subscribe({
-            next:(response) => {
+  GetItemDetailsData(itemname: any){
+          this.api.GetItemTransactions(this.registeredMobileNumber,itemname).subscribe((response:any) => {
               if(response.status == "SUCCESS"){
                 this.dataService.GetItemTransactionsResponse = response.itemTransactionsList
+                this.saleprice = response.saleprice
+                this.purchaseprice = response.purchaseprice
+                this.minimumstocktomaintain = 10
+                this.minimumwholesalequantity = 10
                 console.log("ITEMS DATA SUCCESS")
               }
               else{
                 console.log("ITEMS DATA FAILED")
               }
-            },
-            error:() => {
-              console.log("ITEMS DATA ERROR")
-            },
           })
-        }
-        else {
-          console.log("GETITEMS API failed")
-        }
-      },
-      error:() => {
-        console.log("errorrrr")
-      }
-    })
   }
 
-  GetItemByCategoryData(registeredMobileNumber: any, category: any){
-    this.api.GetItemByCategory(registeredMobileNumber,category).pipe(takeUntil(this.destroy$)).subscribe({
+  GetItemByCategoryData(category: any){
+    this.api.GetItemByCategory(this.registeredMobileNumber,category).subscribe({
       next:(res) => {
         console.log("GETITEMDETS API: ",res);
         if(res.status == "SUCCESS") {
           this.dataService.isCategoryUpdate = true
           this.dataService.GetItemByCategoryResponse = res.getItemList;
-          // this.api.GetItemByCategory(registeredMobileNumber,category).pipe(takeUntil(this.destroy$)).subscribe({
+          // this.api.GetItemByCategory(registeredMobileNumber,category).subscribe({
           //   next:(response) => {
           //     if(res.status == "SUCCESS"){
           //       this.dataService.getItemByCategoryData =  response.getItemList
@@ -185,38 +200,60 @@ export class ItemHomepageComponent {
     })
   }
 
-  productHandleClick(event: MouseEvent,registeredMobileNumber:any, itemName: any) {
+  productHandleClick(event: MouseEvent, itemName: any) {
     this.clicks.push(event);
     this.itemName = itemName
     setTimeout(() => {
       if (this.clicks.length === 1) {
         // Single click detected
-        this.GetItemDetailsData('9920279905',itemName);
+        this.GetItemDetailsData(itemName);
       } else if (this.clicks.length === 2) {
         // Double click detected
-        this.openAddItemModal('9920279905',itemName);
+        this.openAddItemModal(itemName);
       }
       this.clicks = [];
     }, 250);
   }
   
-  categoryHandleClick(event: MouseEvent,registeredMobileNumber:any, itemCategoryName: any){
+  categoryHandleClick(event: MouseEvent,itemCategoryName: any){
     this.clicks.push(event);
     this.categoryName = itemCategoryName
     setTimeout(() => {
       if (this.clicks.length === 1) {
         // Single click detected
-        this.GetItemByCategoryData('9920279905',itemCategoryName);
+        this.GetItemByCategoryData(itemCategoryName);
       } else if (this.clicks.length === 2) {
         // Double click detected
-        this.openAddItemCategoryModal('9920279905',itemCategoryName);
+        this.openAddItemCategoryModal(itemCategoryName);
       }
       this.clicks = [];
     }, 250);
   }
 
+  getitemlistdata(){
+    this.api.GetItemList(this.registeredMobileNumber).subscribe((res:any) => {
+        console.log("GETITEMLIST API: ",res);
+        if(res.status == 'SUCCESS') {
+          if(res.getItemList && res.getItemList.length > 0){
+            this.itemlist = res.getItemList.map((item:any) => ({
+              itemname: item.itemname,
+              remainingquantity: item.remainingquantity
+            }))
+          }
+          this.dataService.itemListResponse = res.getItemList
+          if(this.itemlist.length > 0){
+            this.itemName = this.itemlist[0].itemname
+          }
+          console.log("ITEMMM: ", this.dataService.itemListResponse[1].saleprice)
+          console.log("GETITEMLIST successs")
+        }
+        else {
+          console.log("GETITEMLIST failed")
+        }
+    })
+  }
+
   ngOnDestroy() {
-    // Unsubscribe to prevent memory leaks
     this.clickSubscription.unsubscribe();
   }
 }

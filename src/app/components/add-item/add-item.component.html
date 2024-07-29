@@ -1,4 +1,4 @@
-<form class="main" [formGroup]="addItemForm" >
+<form class="main" [formGroup]="addItemForm">
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="mr-auto">Add Item</h1>
         <!-- <div class="form-check form-switch" style="margin-right: 5%;">
@@ -16,88 +16,52 @@
         <div class="form-row three-columns">
             <!-- First Column -->
             <div class="col">
-            <div class="form-floating">
-                <input type="text" class="form-control item-name" placeholder="Item Name*" id="itemName" name="itemName" formControlName="itemNameControl" 
-                oninput="this.value = this.value.toUpperCase()" [(ngModel)]="itemName" >
-                <label for="itemName">Item Name*</label>
-            </div>
+                <div class="form-floating">
+                    <input type="text" class="form-control item-name" placeholder="Item Name*" id="itemName" name="itemName" formControlName="itemNameControl" oninput="this.value = this.value.toUpperCase()">
+                    <label for="itemName">Item Name*</label>
+                </div>
             </div>
         
             <!-- Second Column -->
             <div class="col">
-            <div class="form-floating">
-                <input type="text" class="form-control item-hsn" placeholder="Item HSN" id="item-hsn" name="item-hsn" formControlName="itemHsnControl" 
-                oninput="this.value = this.value.toUpperCase()" [(ngModel)]="itemHsn" >
-                <label for="item-hsn">Item HSN</label>
-            </div>
+                <div class="form-floating">
+                    <input type="text" class="form-control item-hsn" placeholder="Item HSN" id="item-hsn" name="item-hsn" formControlName="itemHsnControl" oninput="this.value = this.value.toUpperCase()">
+                    <label for="item-hsn">Item HSN</label>
+                </div>
             </div>
 
             <!-- Third Column -->
             <div class="col select-unit-btn">
-            <div class="form-floating d-flex justify-content-center align-items-center">
-                <input type="button" style="margin-right:50%; margin-top: 5%;" class="btn btn-secondary" name="selectunit" id="selectunit" value="SELECT UNIT" (click)="openSelectUnitModal()">
-            </div>
+                <div class="form-floating d-flex justify-content-center align-items-center">
+                    <input type="button" style="margin-right:50%; margin-top: 5%;" class="btn btn-secondary" name="selectunit" id="selectunit" value="SELECT UNIT" (click)="openSelectUnitModal()">
+                </div>
             </div>
         </div>
-
-        <!-- when clicked on select unit this will open -->
-        <!-- <div *ngIf="showSelectUnitModal()" class="modal-popup">
-            <div class="modal" tabindex="-1" role="dialog" [class.show]="showSelectUnit">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">Modal Title</h5>
-                      <button type="button" class="close" (click)="showSelectUnitModal()">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      <p>This is your modal content.</p>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" (click)="showSelectUnitModal()">Close</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-        </div> -->
-        
         
         <!-- Second Row -->
         <div class="row second-row">
             <!-- Category Dropdown Column -->
             <div class="col">
                 <div class="form-row party-group">
-                  <div class="form-floating">
-                    <mat-form-field class="partyGroupDropDown">
-                      <mat-label>Category</mat-label>
-                      <input type="text" matInput [matAutocomplete]="autoCategory" formControlName="categoryControl" oninput="this.value = this.value.toUpperCase()"
-                      [(ngModel)]="category">
-                      <mat-autocomplete #autoCategory="matAutocomplete">
-                        <mat-option (click)="openAddItemCategoryModal()">+ ADD CATEGORY</mat-option>
-                        <mat-option *ngFor="let category of categoryList" [value]="category">{{ category }}</mat-option>
-                      </mat-autocomplete>
-                    </mat-form-field> 
-                  </div>
+                    <div class="form-floating">
+                        <mat-form-field class="partyGroupDropDown">
+                            <mat-label>Category</mat-label>
+                            <mat-select formControlName="categoryControl">
+                                <mat-option value="+ add category" *ngIf="!dataService.isItemUpdate" (click)="openAddItemCategoryModal()">+ add category</mat-option>
+                                <mat-option *ngFor="let category of categoryList" [value]="category">{{ category.category }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
                 </div>
-              </div>              
+            </div>              
             
             <!-- Item Code Input Field Column -->
             <div class="col">
                 <div class="form-floating">
-                    <input type="text" class="form-control item-code" placeholder="Item Code" id="item-code" name="item-code" formControlName="itemCodeControl" [(ngModel)]="itemCode" >
+                    <input type="text" class="form-control item-code" placeholder="Item Code" id="item-code" name="item-code" formControlName="itemCodeControl">
                     <label for="item-code">Item Code</label>
                 </div>
             </div>
-            <!-- <div class="col">
-                <div class="input-group form-floating">
-                    <input type="text" class="form-control item-code" placeholder="Item Code" id="item-code" name="item-code" formControlName="item_code" required>
-                    <label for="item-code">Item Code</label>
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button">Assign Code</button>
-                    </div>
-                </div>
-            </div> -->
             
             <!-- Add Item Image Column -->
             <!-- <div class="col">
@@ -110,7 +74,6 @@
                 </div>
             </div>
         </div>
-           
     </div>
 
     <!-- two tabs -->
@@ -133,12 +96,12 @@
             <div class="row">
               <div class="col p-0 h-300">
                     <div class="form-floating">
-                        <input type="text" class="form-control sale-price-input" placeholder="Sale Price" id="sale-price" name="sale-price" formControlName="salePriceControl" [(ngModel)]="salePrice">
+                        <input type="text" class="form-control sale-price-input" placeholder="Sale Price" id="sale-price" name="sale-price" formControlName="salePriceControl">
                         <label for="sale-price">Sale Price(&#8377;)</label>
                     </div>
               </div>
               <div class="col-auto p-0">
-                <select class="form-select" formControlName="saleWithOrWithoutTaxControl" [(ngModel)]="saleWithOrWithoutTax">
+                <select class="form-select" formControlName="saleWithOrWithoutTaxControl" >
                   <option selected>Without Tax</option>
                   <option>With Tax</option>
                 </select>
@@ -148,12 +111,12 @@
             <div class="row" style="margin-left: 5%;">
                 <div class="col p-0">
                     <div class="form-floating">
-                        <input type="text" class="form-control disc-sale-price" placeholder="Disc. on Sale Price" id="disc-sale-price" name="disc-sale-price" formControlName="discountOnSalePriceControl" [(ngModel)]="discountOnSalePrice">
+                        <input type="text" class="form-control disc-sale-price" placeholder="Disc. on Sale Price" id="disc-sale-price" name="disc-sale-price" formControlName="discountOnSalePriceControl">
                         <label for="sale-price">Discount on Sale Price</label>
                     </div>
                 </div>
                 <div class="col-auto p-0">
-                  <select class="form-select" formControlName="percentageOrAmountControl" [(ngModel)]="percentageOrAmount">
+                  <select class="form-select" formControlName="percentageOrAmountControl">
                     <option selected>Percentage</option>
                     <option>Amount</option>
                   </select>
@@ -173,12 +136,12 @@
                 <div class="row" style="margin-bottom: 5%;">
                   <div class="col p-0">
                         <div class="form-floating">
-                            <input type="text" class="form-control wholesale-price" placeholder="Wholesale Price" id="wholesale-price" name="eholesale-price" formControlName="wholeSalePriceControl" [(ngModel)]="wholeSalePrice">
+                            <input type="text" class="form-control wholesale-price" placeholder="Wholesale Price" id="wholesale-price" name="eholesale-price" formControlName="wholeSalePriceControl" >
                             <label for="wholesale-price">Wholesale Price(&#8377;)</label>
                         </div>
                   </div>
                   <div class="col-auto p-0">
-                    <select class="form-select" formControlName="wholeSaleWithOrWithoutTaxControl" [(ngModel)]="wholeSaleWithOrWithoutTax">
+                    <select class="form-select" formControlName="wholeSaleWithOrWithoutTaxControl">
                       <option selected>Without Tax</option>
                       <option>With Tax</option>
                     </select>
@@ -187,7 +150,7 @@
     
                 <div class="row" style="margin-left: 5%;">
                     <div class="form-floating">
-                        <input type="text" class="form-control min-wholesale-qty" placeholder="Minimum Wholesale Quantity" id="min-wholesale-qty" name="min-wholesale-qty" formControlName="minimumWholeSaleQuantityControl" [(ngModel)]="minimumWholeSaleQuantity">
+                        <input type="text" class="form-control min-wholesale-qty" placeholder="Minimum Wholesale Quantity" id="min-wholesale-qty" name="min-wholesale-qty" formControlName="minimumWholeSaleQuantityControl">
                         <label style="margin-left: 10px;" for="wholesale-price">Minimum Wholesale Quantity</label>
                     </div>
                 </div>
@@ -200,12 +163,12 @@
                 <h2 style="padding-left: 0%;">Purchase Price</h2>
               <div class="col p-0">
                     <div class="form-floating">
-                        <input type="text" class="form-control sale-price-input" placeholder="Sale Price" id="purchase-sale-price" name="purchase-sale-price" formControlName="purchasePriceControl" [(ngModel)]="purchasePrice">
+                        <input type="text" class="form-control sale-price-input" placeholder="Sale Price" id="purchase-sale-price" name="purchase-sale-price" formControlName="purchasePriceControl">
                         <label for="purchase-sale-price">Sale Price(&#8377;)</label>
                     </div>
               </div>
               <div class="col-auto p-0">
-                <select class="form-select" formControlName="purchaseWithOrWithoutTaxControl" [(ngModel)]="purchaseWithOrWithoutTax">
+                <select class="form-select" formControlName="purchaseWithOrWithoutTaxControl">
                   <option selected>Without Tax</option>
                   <option>With Tax</option>
                 </select>
@@ -215,7 +178,7 @@
             <div class="row" style="margin-left: 5%;">
                 <h2 class="text-end">Taxes</h2>
                 <div class="col p-0">
-                    <select class="form-select" formControlName="taxRateControl" [(ngModel)]="taxRate">
+                    <select class="form-select" formControlName="taxRateControl">
                         <option selected disabled>None</option>
                         <option>IGST@.0%</option>
                         <option>GST@0%</option>
@@ -243,21 +206,21 @@
         <div class="form-row three-columns">
             <div class="col">
                 <div class="form-floating">
-                    <input type="text" class="form-control openingquantity" placeholder="Opening Quantity" id="openingquantity" name="openingquantity" formControlName="openingQuantityControl" [(ngModel)]="openingQuantity">
+                    <input type="text" class="form-control openingquantity" placeholder="Opening Quantity" id="openingquantity" name="openingquantity" formControlName="openingQuantityControl">
                     <label for="openingquantity">Opening Quantity</label>
                 </div>
             </div>
         
             <div class="col">
                 <div class="form-floating">
-                    <input type="text" class="form-control at-price" placeholder="At Price" id="atprice" name="atprice" formControlName="atPriceControl" [(ngModel)]="atPrice">
+                    <input type="text" class="form-control at-price" placeholder="At Price" id="atprice" name="atprice" formControlName="atPriceControl">
                     <label for="atprice">At Price(&#8377;)</label>
                 </div>
             </div>
         
             <div class="col">
                 <div class="form-floating">
-                    <input type="date" class="form-control asofdate" placeholder="As Of Date" id="asofdate" name="asofdate" formControlName="asOfDateControl" [(ngModel)]="asOfDate">
+                    <input type="date" class="form-control asofdate" placeholder="As Of Date" id="asofdate" name="asofdate" formControlName="asOfDateControl">
                     <label for="asofdate">As of Date</label>
                 </div>
             </div>
@@ -266,7 +229,7 @@
         <div class="form-row two-columns">
             <div class="col">
                 <div class="form-floating">
-                    <input type="text" class="form-control minstock" placeholder="Min Stock to Maintain" id="minstock" name="minstock" formControlName="minimumStockToMaintainControl" [(ngModel)]="minimumStockToMaintain">
+                    <input type="text" class="form-control minstock" placeholder="Min Stock to Maintain" id="minstock" name="minstock" formControlName="minimumStockToMaintainControl">
                     <label for="minstock">Min Stock to Maintain</label>
                 </div>
             </div>
@@ -274,7 +237,7 @@
             <div class="col">
                 <div class="form-floating">
                     <input type="text" class="form-control location" placeholder="Location" id="location" name="location" formControlName="_locationControl" 
-                    oninput="this.value = this.value.toUpperCase()" [(ngModel)]="_location">
+                    oninput="this.value = this.value.toUpperCase()">
                     <label for="location">Location</label>
                 </div>
             </div>

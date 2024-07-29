@@ -49,8 +49,6 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    // Remove this!
-    // localStorage.setItem("phonenumber", "9920279905");
     this.transactionType = this.route.url.split('/')[1] == 'Sale' ? 0 : 1;
     this.transactionTypeString = TransactionTypeEnum[this.transactionType];
     this.phonenumber = parseInt(JSON.parse(localStorage.getItem("phonenumber") as string));

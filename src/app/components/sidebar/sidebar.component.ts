@@ -14,51 +14,39 @@ import { BusinessInformationComponent } from '../business-information/business-i
 export class SidebarComponent {
   // totalGroupCount: any;
   // totalGroupCountSum: any;
+  registeredPhoneNumber:any;
 
   constructor(public dialog: MatDialog, private api: ApiService, public dataService: DataService) { }
  
-  openDialog(): void {
-    const dialogRef = this.dialog.open(AddPartyComponent, {
-      width: '1000px',
-      maxHeight: '1000px' 
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+  ngOnInit(){
+    this.registeredPhoneNumber = parseInt(
+      JSON.parse(localStorage.getItem('phonenumber') as string)
+    );
   }
 
-  destroy$: Subject<boolean> = new Subject<boolean>();
-
-  getPartyListData(registeredMobileNumber: any) {
-    // debugger
+  getPartyListData() {
     this.dataService.partyHomePageSelectedTab = 'party';
-    this.api.getPartyList(registeredMobileNumber).pipe(takeUntil(this.destroy$)).subscribe({
-      next:(res) => {
-        console.log("GETPARTYLIST API: ",res);
-        if(res.status == "SUCCESS") {
-          console.log("partynames:",this.dataService.partyList)
-          let amount: any;
-          this.dataService.partyList = res.getPartyList.map((item: { partyname: any; toreceivefromparty: any; topayparty: any}) => {
-            amount = item.toreceivefromparty - item.topayparty
-            return {
-              partyname: item.partyname,
-              partybalance: amount
-            }
-          })
-          console.log("successs")
-          // console.log("HEY : ", res.getPartyList[0].partyname)
-          // console.log("HEY : ", res.getPartyList[0].partybalance)
-        }
-        else {
-          console.log("failed")
-        }
-      },
-      error:() => {
-        console.log("errorrrr")
+    this.api.getPartyList(this.registeredPhoneNumber).subscribe((res:any) => {
+      console.log("GETPARTYLIST API: ",res);
+      if(res.status == "SUCCESS") {
+        console.log("partynames:",this.dataService.partyList)
+        let amount: any;
+        this.dataService.partyList = res.getPartyList.map((item: any) => ({
+          partyname: item.partyname,
+          phonenumber: item.phonenumber,
+          billingaddress: item.billingaddress,
+          shipppingaddress: item.shipppingaddress,
+          creditlimit: item.creditlimit,
+          topayparty: item.topayparty,
+          toreceivefromparty: item.toreceivefromparty,
+        }))
+        console.log("successs")
       }
-    })
-    this.api.GetPartyGroup(registeredMobileNumber).pipe(takeUntil(this.destroy$)).subscribe({
+      else {
+        console.log("failed")
+      }
+  })
+    this.api.GetPartyGroup(this.registeredPhoneNumber).subscribe({
       next:(response) => {
         if(response.status == "SUCCESS") {
           this.dataService.partyGroupListResponse = response.getPartyGroupList
@@ -75,6 +63,24 @@ export class SidebarComponent {
     })
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(AddPartyComponent, {
+      width: '1000px',
+      maxHeight: '1000px' 
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  destroy$: Subject<boolean> = new Subject<boolean>();
+
+
+  gotopartypage(){
+    window.location.href = 'http://localhost:4201/party-homepage';
+  }
+
   openBusinessInfoModal() {
     const dialogRef = this.dialog.open(BusinessInformationComponent, {
       width: '50%',
@@ -84,10 +90,10 @@ export class SidebarComponent {
     });
   }
 
-  getItemListData(registeredMobileNumber: any) {
+  getItemListData() {
     // debugger
     this.dataService.itemHomePageSelectedTab = 'product';
-    this.api.GetItemList(registeredMobileNumber).pipe(takeUntil(this.destroy$)).subscribe({
+    this.api.GetItemList(this.registeredPhoneNumber).subscribe({
       next:(res) => {
         console.log("GETITEMLIST API: ",res);
         if(res) {
@@ -103,7 +109,7 @@ export class SidebarComponent {
         console.log("GETITEMLIST errorrrr")
       }
     })
-    this.api.GetCategory(registeredMobileNumber).pipe(takeUntil(this.destroy$)).subscribe({
+    this.api.GetCategory(this.registeredPhoneNumber).subscribe({
       next:(response) => {
         if(response.status == "SUCCESS") {
           this.dataService.categoryListResponse = response.getCateogoryList

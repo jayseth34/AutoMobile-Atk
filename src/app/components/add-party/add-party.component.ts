@@ -1,5 +1,5 @@
-import { Component, Inject, Input, OnInit, SimpleChanges } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, AbstractControl, Validators, FormsModule } from '@angular/forms';
+import { ChangeDetectorRef, Component, Inject, Input, OnInit, SimpleChanges } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, AbstractControl, Validators, FormsModule, FormGroup, FormControl } from '@angular/forms';
 import { takeUntil, Subject } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
@@ -77,44 +77,23 @@ export class AddPartyComponent implements OnInit {
   
   @Input() partyDetails: any;
 
-  constructor(private dialog: MatDialog, private api: ApiService, public dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(private dialog: MatDialog,private api: ApiService, public dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any, public cdr: ChangeDetectorRef) {
     // this.partyDetails = data.partyDetails; // Access the injected data
   }
 
   ngOnInit(): void {
+    this.registeredPhoneNumber = parseInt(
+      JSON.parse(localStorage.getItem('phonenumber') as string)
+    );
+    this.initializeForm()
+    this.cdr.detectChanges();
+    this.partygroup()
     this.asOfDate = moment().format('YYYY-MM-DDTHH:mm:ss');
     // this.additionalFieldName4Value = moment().format('YYYY-MM-DDTHH:mm:ss');
     // const today = moment().format('DD-MM-YYYY');
     // this.showPrint = 'Dont show in print';
     this.partyGroupList = this.dataService.partyGroupListResponse.map((group: { partygroup: any; }) => group.partygroup);
     // debugger;
-    this.addPartyForm = new UntypedFormGroup({
-      partyNameControl: new UntypedFormControl('', [Validators.required]),
-      gstControl: new UntypedFormControl('',),
-      phoneNumberControl: new UntypedFormControl('',Validators.pattern("^[0-9]*$")),
-      partyGroupControl: new UntypedFormControl('GENERAL', [Validators.required]),
-      gstTypeControl: new UntypedFormControl('',),
-      _stateControl: new UntypedFormControl('',),
-      emailIdControl: new UntypedFormControl('', [Validators.email]),
-      billingAddressControl: new UntypedFormControl('',),
-      shippingAddressControl: new UntypedFormControl('',),
-      openingBalanceControl: new UntypedFormControl('',Validators.pattern("^[0-9]*$")),
-      toPayOrReceiveControl: new UntypedFormControl('',),
-      asOfDateControl: new UntypedFormControl('',),
-      creditLimitControl: new UntypedFormControl('',Validators.pattern("^[0-9]*$")),
-      additionalFieldName1Control: new UntypedFormControl('',),
-      additionalFieldName2Control: new UntypedFormControl('',),
-      additionalFieldName3Control: new UntypedFormControl('',),
-      additionalFieldName4Control: new UntypedFormControl('',),
-      additionalField1ValueControl: new UntypedFormControl('',), 
-      additionalField2ValueControl: new UntypedFormControl('',),
-      additionalField3ValueControl: new UntypedFormControl('',),
-      additionalField4ValueControl: new UntypedFormControl('',),   
-      additionalField1CheckedControl: new UntypedFormControl('',),
-      additionalField2CheckedControl: new UntypedFormControl('',),
-      additionalField3CheckedControl: new UntypedFormControl('',),
-      additionalField4CheckedControl: new UntypedFormControl('',),
-    });
     if (!this.dataService.isPartyUpdate){
       this.partyGroup = 'GENERAL'
     }
@@ -122,32 +101,83 @@ export class AddPartyComponent implements OnInit {
       this.populateForm(this.data.partyDetails) 
     }
   }
+
+  partygroup(){
+    this.api.GetPartyGroup(this.registeredPhoneNumber).subscribe({
+      next:(response) => {
+        if(response.status == "SUCCESS") {
+          this.dataService.partyGroupListResponse = response.getPartyGroupList
+          // this.calculateSummary(response.getPartyGroupList);
+          console.log("GET PARTY GROUP SUCCESS", response)
+        }
+        else{
+          console.log("PARTYGROUP FAILED")
+        }
+      },
+      error:() => {
+        console.log("PARTY GROUP ERROR")
+      }
+    })
+  }
+
+  initializeForm() {
+    this.addPartyForm = new FormGroup({
+      partyNameControl: new FormControl(this.data.partyName || '', Validators.required),
+      gstControl: new FormControl(this.data.partyDetails?.gst || ''),
+      phoneNumberControl: new FormControl(this.data.partyDetails?.phonenumber || '', Validators.pattern("^[0-9]*$")),
+      partyGroupControl: new FormControl(this.data.partyDetails?.partygroup || 'GENERAL', Validators.required),
+      gstTypeControl: new FormControl(this.data.partyDetails?.gsttype || ''),
+      _stateControl: new FormControl(this.data.partyDetails?._state || ''),
+      emailIdControl: new FormControl(this.data.partyDetails?.emailid || '', Validators.email),
+      billingAddressControl: new FormControl(this.data.partyDetails?.billingaddress || ''),
+      shippingAddressControl: new FormControl(this.data.partyDetails?.shippingaddress || ''),
+      openingBalanceControl: new FormControl(this.data.partyDetails?.openingbalance || '', Validators.pattern("^[0-9]*$")),
+      toPayOrReceiveControl: new FormControl(this.data.partyDetails?.topayorreceive || ''),
+      asOfDateControl: new FormControl(this.data.partyDetails?.asofdate || ''),
+      creditLimitControl: new FormControl(this.data.partyDetails?.creditlimit || '', Validators.pattern("^[0-9]*$")),
+      additionalFieldName1Control: new FormControl(this.data.partyDetails?.additionalfieldname1 || ''),
+      additionalFieldName2Control: new FormControl(this.data.partyDetails?.additionalfieldname2 || ''),
+      additionalFieldName3Control: new FormControl(this.data.partyDetails?.additionalfieldname3 || ''),
+      additionalFieldName4Control: new FormControl(this.data.partyDetails?.additionalfieldname4 || ''),
+      additionalField1ValueControl: new FormControl(this.data.partyDetails?.additionalfieldname1value || ''),
+      additionalField2ValueControl: new FormControl(this.data.partyDetails?.additionalfieldname2value || ''),
+      additionalField3ValueControl: new FormControl(this.data.partyDetails?.additionalfieldname3value || ''),
+      additionalField4ValueControl: new FormControl(this.data.partyDetails?.additionalfieldname4value || ''),
+      additionalField1CheckedControl: new FormControl(this.data.partyDetails?.additionalfield1Checked || false),
+      additionalField2CheckedControl: new FormControl(this.data.partyDetails?.additionalfield2Checked || false),
+      additionalField3CheckedControl: new FormControl(this.data.partyDetails?.additionalfield3Checked || false),
+      additionalField4CheckedControl: new FormControl(this.data.partyDetails?.additionalfield4Checked || false),
+    });
+  }
   
   populateForm(partyDetails: any) {
-    if (partyDetails) {
-        this.partyName = this.data.partyName
-        this.gst= partyDetails.gst
-        this.phoneNumber= partyDetails.phonenumber
-        this.partyGroup= partyDetails.partygroup
-        this.gstType= partyDetails.gsttype
-        this._state= partyDetails._state
-        this.emailId= partyDetails.emailid
-        this.billingAddress= partyDetails.billingaddress
-        this.shippingAddress= partyDetails.shippingaddress
-        this.openingBalance= partyDetails.openingbalance
-        this.asOfDate= partyDetails.asofdate
-        this.creditLimit= partyDetails.creditlimit
-        this.additionalFieldName1= partyDetails.additionalfieldname1
-        this.additionalFieldName2= partyDetails.additionalfieldname2
-        this.additionalFieldName3= partyDetails.additionalfieldname3
-        this.additionalFieldName4= partyDetails.additionalfieldname4
-        this.additionalFieldName1Value= partyDetails.additionalfieldname1value
-        this.additionalFieldName2Value= partyDetails.additionalfieldname2value
-        this.additionalFieldName3Value= partyDetails.additionalfieldname3value
-        this.additionalFieldName4Value= null
-        this.toPayOrReceive= partyDetails.topayorreceive
-        this.partyBalance= partyDetails.partybalance
-    }
+    this.addPartyForm.patchValue({
+      partyNameControl: this.data.partyName,
+      gstControl: partyDetails.gst,
+      phoneNumberControl: partyDetails.phonenumber,
+      partyGroupControl: partyDetails.partygroup,
+      gstTypeControl: partyDetails.gsttype,
+      _stateControl: partyDetails._state,
+      emailIdControl: partyDetails.emailid,
+      billingAddressControl: partyDetails.billingaddress,
+      shippingAddressControl: partyDetails.shippingaddress,
+      openingBalanceControl: partyDetails.openingbalance,
+      toPayOrReceiveControl: partyDetails.topayorreceive,
+      asOfDateControl: partyDetails.asofdate,
+      creditLimitControl: partyDetails.creditlimit,
+      additionalFieldName1Control: partyDetails.additionalfieldname1,
+      additionalFieldName2Control: partyDetails.additionalfieldname2,
+      additionalFieldName3Control: partyDetails.additionalfieldname3,
+      additionalFieldName4Control: partyDetails.additionalfieldname4,
+      additionalField1ValueControl: partyDetails.additionalfieldname1value,
+      additionalField2ValueControl: partyDetails.additionalfieldname2value,
+      additionalField3ValueControl: partyDetails.additionalfieldname3value,
+      additionalField4ValueControl: partyDetails.additionalfieldname4value,
+      additionalField1CheckedControl: partyDetails.additionalfield1Checked,
+      additionalField2CheckedControl: partyDetails.additionalfield2Checked,
+      additionalField3CheckedControl: partyDetails.additionalfield3Checked,
+      additionalField4CheckedControl: partyDetails.additionalfield4Checked,
+    });
   }
     
   selectTab(tab: string) {
@@ -274,7 +304,7 @@ export class AddPartyComponent implements OnInit {
       console.log("after return");
       let body = {
         partyBalance: this.partyBalance,
-        registeredPhoneNumber: 9920279905,
+        registeredPhoneNumber: this.registeredPhoneNumber,
         partyName: this.partyName,
         gst: this.gst,
         phoneNumber: this.phoneNumber,
@@ -305,7 +335,7 @@ export class AddPartyComponent implements OnInit {
       if(this.dataService.isPartyUpdate){
         body.oldPartyName = this.dataService.oldPartyName
       }
-      this.api.AddPartyDetails(JSON.stringify(body)).pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.api.AddPartyDetails(JSON.stringify(body)).subscribe(res => {
         if (res.status != null) {
           Swal.fire({
             text: res.status,
