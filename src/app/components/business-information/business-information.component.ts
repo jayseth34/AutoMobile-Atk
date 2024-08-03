@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApiService } from 'src/app/services/api.service';
+import { CommonService } from 'src/app/services/common.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,12 +14,34 @@ export class BusinessInformationComponent {
   businessInfoGroup: UntypedFormGroup;
   registeredphonenumber: any;
 
-  constructor(public api: ApiService){ }
+  constructor(public api: ApiService, public cs: CommonService){ }
 
   ngOnInit(){
     this.registeredphonenumber = parseInt(
       JSON.parse(localStorage.getItem('phonenumber') as string)
     );
+
+    this.api.getBusinessInfo(this.registeredphonenumber).subscribe(res => {
+      debugger
+      if(res.status == 'SUCCESS' && !this.cs.isUndefineOrNull(res.businessInfo)){
+        this.businessInfoGroup.setValue({
+          businessNameControl: res.businessInfo.businessName || '',
+          gstinControl: res.businessInfo.gstin || '',
+          phoneNumberControl: res.businessInfo.phoneNumber || '',
+          emailIdControl: res.businessInfo.emailId || '',
+          businessAddressControl: res.businessInfo.businessAddress || '',
+          businessTypeControl: res.businessInfo.businessType || '',
+          businessCategoryControl: res.businessInfo.businessCategory || '',
+          pincodeControl: res.businessInfo.pincode || '',
+          stateControl: res.businessInfo.state || '',
+          businessDescriptionControl: res.businessInfo.businessDescription || ''
+        }, { emitEvent: false });
+      
+
+      } else {
+        console.log("BI FAIL")
+      }
+    })
 
     this.businessInfoGroup = new UntypedFormGroup({
       businessNameControl: new UntypedFormControl('',[Validators.required]),
@@ -45,25 +68,28 @@ export class BusinessInformationComponent {
         registeredphonenumber: this.registeredphonenumber,
         businessName: this.businessNameControl?.value,
         gstin: this.gstinControl?.value,
-        phoneNumber: this.phoneNumberControl?.value,
+        phoneNumber: this.phoneNumberControl?.value ? parseInt(this.phoneNumberControl?.value, 10) : 0,
         emailId: this.emailIdControl?.value,
         businessAddress: this.businessAddressControl?.value,
         businessType: this.businessTypeControl?.value,
         businessCategory: this.businessCategoryControl?.value,
-        pincode: this.pincodeControl?.value,
+        pincode: this.pincodeControl?.value ? parseInt(this.pincodeControl?.value, 10) : 0,
         state: this.stateControl?.value,
         businessDescription: this.businessDescriptionControl?.value,
-      }
+    };    
 
       this.api.addBusinessInfo(JSON.stringify(body)).subscribe(res => {
-        if (res.status != null) {
+        if (res.status == 'Success') {
           Swal.fire({
-            text: res.status,
+            text: res.statusmsg,
             confirmButtonText: 'OK',
           })
         }
         else{
-          console.log("Failed")
+           Swal.fire({
+            text: res.statusmsg,
+            confirmButtonText: 'OK',
+          })
         }
         resolve();
       });
@@ -71,7 +97,6 @@ export class BusinessInformationComponent {
   }
 
   submit() {
-    // debugger;
     if(this.businessInfoGroup.valid) {
       this.addBusinessInfoData(this.businessInfoGroup.value);
       console.log("BUSINESS INFO: ", this.businessInfoGroup.value)

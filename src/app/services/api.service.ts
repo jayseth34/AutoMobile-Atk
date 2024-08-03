@@ -16,8 +16,14 @@ export class ApiService {
   }
 
   // BUSINESS INFO
+  getBusinessInfo(registeredphonenumber: number) {       
+    return this.cs.get(
+      "Login/GetBusinessInfo?registeredphonenumber=" + registeredphonenumber
+    );
+  }
+
   addBusinessInfo(body: any){
-    return this.cs.Post("Login/AddBusinessInformation", body)
+    return this.cs.Post("Login/AddUpdateBusinessInformation", body)
   }
 
   // PARTY TAB
