@@ -77,6 +77,9 @@ export class ItemHomepageComponent {
               height: '99%',
               data: { itemDetails: res.itemList[0] , itemName, status: 'SUCCESS'} // Pass the data here
             });
+            dialogRef.afterClosed().subscribe(result => {
+              this.selectTab('product');
+            })
           } else {
             this.dataService.isPartyUpdate = false;
             console.log("Failed to retrieve item details");
@@ -96,7 +99,7 @@ export class ItemHomepageComponent {
         data: { itemDetails: null, itemName: ''},
       });
       dialogRef.afterClosed().subscribe(result => {
-        // Handle the result here if needed
+        this.selectTab('product');
       });
     }
   }
@@ -132,6 +135,9 @@ export class ItemHomepageComponent {
               height: '35%', 
               data: { categorynameDetails: categoryname } // Pass the data here
             });
+            dialogRef.afterClosed().subscribe(result => {
+              this.selectTab('category');
+            });
           } else {
             this.dataService.isCategoryUpdate = false;
             console.log("Failed to retrieve party group details");
@@ -147,6 +153,7 @@ export class ItemHomepageComponent {
         height: '35%', 
       });
       dialogRef.afterClosed().subscribe(result => {
+        this.selectTab('category');
       });
     }
   }

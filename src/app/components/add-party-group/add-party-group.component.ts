@@ -1,6 +1,6 @@
 import { Component, Inject, Input } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
@@ -24,7 +24,7 @@ export class AddPartyGroupComponent {
   @Input() groupDetails: any;
 
 
-  constructor(private api: ApiService, private dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(private api: ApiService, private dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any,public dialogRef: MatDialogRef<AddPartyGroupComponent>,) { }
 
   ngOnInit() {
     this.registeredMobileNumber = parseInt(
@@ -54,7 +54,6 @@ export class AddPartyGroupComponent {
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   AddGroupData(body: any): Promise<void> {
-    // debugger
     console.log("BEFore return");
     return new Promise((resolve) => {
       this.oldPartyGroupName = this.partyGroupName;
@@ -73,17 +72,22 @@ export class AddPartyGroupComponent {
         body.oldgroupname =   this.newPartyGroupName
       }
       // this.dataService.partyName = this.addPartyData.partyName;
-      // debugger;
       this.api.AddGroupDetails(JSON.stringify(body)).subscribe(res => {
-        if (res.status != 'SUCCESS') {
+        if (res.status == 'SUCCESS') {
+          this.partyGroupName = this.newPartyGroupName
           Swal.fire({
-            text: res.status,
+            text: res.statusmessage,
+            confirmButtonText: 'OK',
+          }).then(() => {
+            this.dialogRef.close();
+          });
+          
+        }
+        else if (res.status == 'FAILED') {
+          Swal.fire({
+            text: res.statusmessage,
             confirmButtonText: 'OK',
           })
-          this.partyGroupName = this.newPartyGroupName
-        }
-        else{
-          console.log("Failed")
         }
         resolve();
       });
@@ -92,7 +96,6 @@ export class AddPartyGroupComponent {
 
 
   submit() {
-    // debugger;
     if(this.addPartyGroup.valid) {
       this.AddGroupData(this.addPartyGroup.value);
       // window.location.href = 'http://localhost:4200/party-homepage';

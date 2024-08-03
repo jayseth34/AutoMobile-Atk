@@ -1,9 +1,10 @@
 import { Component, Inject, Input } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-item-category',
@@ -21,7 +22,7 @@ export class AddItemCategoryComponent {
   itemCategory: any = '';
   @Input() categorynameDetails: any;
 
-  constructor(private api: ApiService, @Inject(MAT_DIALOG_DATA) public data: any, private dataService: DataService) { }
+  constructor(private api: ApiService, @Inject(MAT_DIALOG_DATA) public data: any, private dataService: DataService,public dialogRef: MatDialogRef<AddItemCategoryComponent>,) { }
 
   ngOnInit() {
     this.registeredMobileNumber = parseInt(
@@ -51,7 +52,6 @@ export class AddItemCategoryComponent {
   }
 
   AddCategoryData(body: any): Promise<void> {
-    // debugger
     console.log("BEFore return");
     return new Promise((resolve) => {
       console.log("after return");
@@ -69,13 +69,22 @@ export class AddItemCategoryComponent {
         body.oldcategory = this.newcategory
       }
       // this.dataService.partyName = this.addPartyData.partyName;
-      // debugger;
       this.api.AddUpdateCategory(JSON.stringify(body)).subscribe(res => {
         if (res.status == "Success") {
           this.itemCategoryName = this.newcategory
+          Swal.fire({
+            text: res.statusmessage,
+            confirmButtonText: 'OK',
+          }).then(() => {
+            this.dialogRef.close();
+          });
           console.log("Success category", res)
         }
-        else{
+        else if (res.status == "Failed"){
+          Swal.fire({
+            text: res.statusmessage,
+            confirmButtonText: 'OK',
+          })
           console.log("Failed")
         }
         resolve();
@@ -84,7 +93,6 @@ export class AddItemCategoryComponent {
   }
 
   submit() {
-    // debugger;
     if(this.addItemCategory.valid) {
       this.AddCategoryData(this.addItemCategory.value);
     } 

@@ -1,6 +1,6 @@
 import { Component, Inject, Input } from '@angular/core';
 import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SelectUnitComponent } from '../select-unit/select-unit.component';
 import { DataService } from 'src/app/services/data.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -8,6 +8,7 @@ import { ApiService } from 'src/app/services/api.service';
 import Swal from 'sweetalert2';
 import { AddItemCategoryComponent } from '../add-item-category/add-item-category.component';
 import { CommonService } from 'src/app/services/common.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-item',
@@ -51,7 +52,7 @@ export class AddItemComponent {
   categoryList: any;
   registeredPhoneNmber:any;
 
-  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, private api: ApiService, public cs: CommonService) {}
+  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, private api: ApiService, public cs: CommonService, public dialogRef: MatDialogRef<AddItemComponent>) {}
 
   ngOnInit() {
     this.registeredPhoneNmber = parseInt(
@@ -82,10 +83,11 @@ export class AddItemComponent {
   }
 
   initializeForm() {
+    const defaultDate = moment().format('YYYY-MM-DD');
     this.addItemForm = new FormGroup({
       itemNameControl: new FormControl(this.data.itemName || ''),
       itemHsnControl: new FormControl(this.data.itemDetails?.itemhsn || ''),
-      categoryControl: new FormControl(this.data.itemDetails?.category || ''),
+      categoryControl: new FormControl(this.data.itemDetails?.category || 'GENERAL'),
       itemCodeControl: new FormControl(this.data.itemDetails?.itemcode || ''),
       salePriceControl: new FormControl(this.data.itemDetails?.saleprice || ''),
       saleWithOrWithoutTaxControl: new FormControl(this.data.itemDetails?.salewithorwithouttax || 'Without Tax'),
@@ -99,7 +101,8 @@ export class AddItemComponent {
       taxRateControl: new FormControl(this.data.itemDetails?.taxrate || 'None'),
       openingQuantityControl: new FormControl(this.data.itemDetails?.openingquantity || ''),
       atPriceControl: new FormControl(this.data.itemDetails?.atprice || ''),
-      asOfDateControl: new FormControl(this.data.itemDetails?.asofdate || ''),
+      asOfDateControl: new FormControl(this.data.itemDetails?.asofdate  ? moment(this.data.itemDetails?.asofdate).format('YYYY-MM-DD')
+      : defaultDate),
       minimumStockToMaintainControl: new FormControl(this.data.itemDetails?.minimumstocktomaintain || ''),
       _locationControl: new FormControl(this.data.itemDetails?._location || ''),
       baseunit: new FormControl(''),
@@ -126,7 +129,8 @@ export class AddItemComponent {
         taxRateControl: itemDetails.taxrate,
         openingQuantityControl: itemDetails.openingquantity,
         atPriceControl: itemDetails.atprice,
-        asOfDateControl: itemDetails.asofdate,
+        asOfDateControl: itemDetails.asofdate ? moment(itemDetails.asofdate).format('YYYY-MM-DD')
+        : moment().format('YYYY-MM-DD'),
         minimumStockToMaintainControl: itemDetails.minimumstocktomaintain,
         _locationControl: itemDetails._location,
         typeOfPayControl: itemDetails.typeOfPay,
@@ -151,7 +155,6 @@ export class AddItemComponent {
   }
 
   openSelectUnitModal() {
-    debugger
     this.dataService.selectedOption1$.subscribe(value => {
       this.addItemForm.patchValue({ baseunit: value });
     });
@@ -222,15 +225,28 @@ export class AddItemComponent {
         asOfDate: this.addItemForm.value.asOfDateControl,
         minimumStockToMaintain: this.addItemForm.value.minimumStockToMaintainControl,
         _location: this.addItemForm.value._locationControl,
+        remainingquantity: this.addItemForm.value.openingQuantityControl,
+        isitemupdate: this.dataService.isItemUpdate,
+        olditemname: this.addItemForm.value.itemNameControl
       }
-      // if(this.dataService.isItemUpdate){
-      //   body.oldPartyName = this.dataService.oldPartyName
-      // }
+      if(this.dataService.isItemUpdate){
+        body.olditemname = this.dataService.oldItemName
+      }
       this.api.AddItemDetails(JSON.stringify(body)).subscribe(res => {
-        if (res == "Success") {
-          console.log("Success")
+        if (res.status == "Success") {
+          Swal.fire({
+            text: res.statusmessage,
+            allowOutsideClick:false
+          }).then(() => {
+            this.dataService.isItemUpdate = false;
+            this.dialogRef.close();
+          });
         }
-        else{
+        else if (res.status == 'Failed') {
+          Swal.fire({
+            text: res.statusmessage,
+            confirmButtonText: 'OK',
+          })
           console.log("Failed")
         }
         resolve();
@@ -244,6 +260,7 @@ export class AddItemComponent {
       height: '35%', 
     });
     dialogRef.afterClosed().subscribe(result => {
+      this.categorygroup()
     });
   }
 

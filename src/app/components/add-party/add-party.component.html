@@ -4,7 +4,7 @@
       <!-- Party Name Field --> 
     <div class="form-row three-columns">
       <div class="form-floating">
-        <input type="text" class="form-control party-name" placeholder="Party Name*" id="partyName" name="partyName" formControlName="partyNameControl" [(ngModel)]="partyName"
+        <input type="text" class="form-control party-name" placeholder="Party Name*" id="partyName" name="partyName" formControlName="partyNameControl"
         [class.is-invalid]="partyNameControl?.errors?.['required'] && (partyNameControl?.touched || ifFormSubmitted)" oninput="this.value = this.value.toUpperCase()">
         <label for="partyName">Party Name*</label>
         <!-- <div>
@@ -18,14 +18,14 @@
 
       <!-- GSTIN Field -->
       <div class="form-floating">
-        <input type="text" class="form-control gst-in" placeholder="GSTIN" id="floatingPassword" name="gstin" formControlName="gstControl" [(ngModel)]="gst"
+        <input type="text" class="form-control gst-in" placeholder="GSTIN" id="floatingPassword" name="gstin" formControlName="gstControl" 
         oninput="this.value = this.value.toUpperCase()">
         <label for="floatingPassword">GSTIN</label>
       </div>
       
       <!-- Phone no. Field -->
       <div class="form-floating">
-        <input type="text" class="form-control phone-num" placeholder="Phone Number" id="phoneNo" name="phoneNo" formControlName="phoneNumberControl" [(ngModel)]="phoneNumber"
+        <input type="text" class="form-control phone-num" placeholder="Phone Number" id="phoneNo" name="phoneNo" formControlName="phoneNumberControl" 
         [class.is-invalid]="phoneNumberControl?.errors">
         <label for="phoneNo">Phone Number</label>
         <div>
@@ -38,11 +38,10 @@
       <div class="form-floating">
         <mat-form-field class="partyGroupDropDown">
           <mat-label>Party Group</mat-label>
-          <input type="text" matInput [matAutocomplete]="auto" formControlName="partyGroupControl" oninput="this.value = this.value.toUpperCase()"
-          [(ngModel)]="partyGroup">
+          <input type="text" matInput [matAutocomplete]="auto" formControlName="partyGroupControl" oninput="this.value = this.value.toUpperCase()">
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option (click)="openAddPartyGroupModal()">+ ADD PARTY</mat-option>
-            <mat-option *ngFor="let party of partyGroupList" [value]="party">{{ party }}</mat-option>
+            <mat-option *ngFor="let party of dataService.partyGroupListResponse" [value]="party.partygroup">{{ party.partygroup }}</mat-option>
           </mat-autocomplete>
         </mat-form-field>
       </div>
@@ -67,7 +66,7 @@
         <!-- First Column -->
         <div class="col-md-4">
           <div class="form-floating">
-            <select class="form-select gstFields" id="gstType" name="gstType" formControlName="gstTypeControl" [(ngModel)]="gstType">
+            <select class="form-select gstFields" id="gstType" name="gstType" formControlName="gstTypeControl" >
               <option value=""></option>
               <option value="Unregistered/Consumer">Unregistered/Consumer</option>
               <option value="Registered Business - Regular">Registered Business - Regular</option>
@@ -78,17 +77,15 @@
           
           
           <div class="form-floating">
-            <select class="form-select gstFields" id="state" name="state" formControlName="_stateControl" [(ngModel)]="_state">
+            <select class="form-select gstFields" id="state" name="state" formControlName="_stateControl" placeholder="State">
               <option value="" disabled selected class="dropdown-item"></option>
-              <option value="state1" class="dropdown-item">state1</option>
-              <option value="state2" class="dropdown-item">state2</option>
-              <option value="state3" class="dropdown-item">state3</option>
+              <option *ngFor="let state of states" [value]="state" class="dropdown-item">{{ state }}</option>
             </select>
             <label for="state">State</label>
           </div>
     
           <div class="form-floating">
-            <input type="text" class="form-control gstFields" id="emailId" name="emailId" placeholder="Enter Email" formControlName="emailIdControl" [(ngModel)]="emailId"
+            <input type="text" class="form-control gstFields" id="emailId" name="emailId" placeholder="Enter Email" formControlName="emailIdControl" 
             [class.is-invalid]="emailIdControl?.errors">
             <label for="emailId">Email ID</label>
           </div>
@@ -98,7 +95,7 @@
         <div class="col-md-4">
           <div class="form-floating">
             <textarea class="form-control gstFields" id="billingAddress" name="billingAddress" rows="5" placeholder="Enter Billing Address" formControlName="billingAddressControl" 
-            [(ngModel)]="billingAddress" style="height: 200px;" oninput="this.value = this.value.toUpperCase()"></textarea>
+             style="height: 200px;" oninput="this.value = this.value.toUpperCase()"></textarea>
             <label for="billingAddress">Billing Address</label>
             <a type="button" (click)="toggleShippingAddress()">
               {{ isShippingAddressEnabled ? '- Disable Shipping Address' : '+ Enable Shipping Address' }}
@@ -111,7 +108,7 @@
           <div id="shippingAddressContainer" *ngIf="isShippingAddressEnabled">
           <div class="form-floating">
             <textarea class="form-control gstFields" id="shippingAddress" name="shippingAddress" rows="5" placeholder="Enter Shipping Address" formControlName="shippingAddressControl" 
-            [(ngModel)]="shippingAddress" style="height: 200px;" oninput="this.value = this.value.toUpperCase()"></textarea>
+             style="height: 200px;" oninput="this.value = this.value.toUpperCase()"></textarea>
             <label for="shippingAddress">Shipping Address</label>
           </div>   
           <div class="text-end">
@@ -126,7 +123,7 @@
     <div class="creditAndBalanceForm row" id="creditAndBalance" *ngIf="selectedTab === 'creditAndBalance'">
       <div class="col-md-6">
         <div class="form-floating">
-          <input class="form-control creditAndBalanceFields" type="text" id="openingbalanceAmt" name="openingbalanceAmt" placeholder="Enter Opening Balance" formControlName="openingBalanceControl" [(ngModel)]="openingBalance">
+          <input class="form-control creditAndBalanceFields" type="text" id="openingbalanceAmt" name="openingbalanceAmt" placeholder="Enter Opening Balance" formControlName="openingBalanceControl">
           <label for="openingbalanceAmt">Opening Balance</label>
         </div>
         <div>
@@ -134,11 +131,11 @@
         </div>
         <div *ngIf="openingBalance != null">
           <label class="pay-recieve">
-            <input type="radio" name="toPayorReceiveControl" value="PAY" formControlName="toPayorReceiveControl" [(ngModel)]="toPayOrReceive" (change)="updateValue($event)"> To Pay
+            <input type="radio" name="toPayOrReceiveControl" value="PAY" formControlName="toPayOrReceiveControl" (change)="updateValue($event)"> To Pay
           </label>
-
+        
           <label>
-            <input type="radio" name="toPayorReceiveControl" value="RECEIVE" formControlName="toPayorReceiveControl" [(ngModel)]="toPayOrReceive" (change)="updateValue($event)"> To Recieve
+            <input type="radio" name="toPayOrReceiveControl" value="RECEIVE" formControlName="toPayOrReceiveControl" (change)="updateValue($event)"> To Receive
           </label>
         </div>
  
@@ -151,7 +148,7 @@
         
         <div [class.hidden]="!isCustomLimit">
           <div class="form-floating mt-3">
-            <input type="text" class="form-control" [(ngModel)]="customLimit" name="customLimit" placeholder="Enter Custom Limit" formControlName="creditLimitControl" [(ngModel)]="creditLimit">
+            <input type="text" class="form-control" name="customLimit" placeholder="Enter Custom Limit" formControlName="creditLimitControl">
             <label for="customLimit">Credit Limit</label>
           </div>
           <div>
@@ -164,7 +161,7 @@
       </div>
       <div class="col-md-6">
         <div class="form-floating">
-          <input class="form-control creditAndBalanceFields" type="date" id="asofdate" name="asofdate" formControlName="asOfDateControl" [(ngModel)]="asOfDate">
+          <input class="form-control creditAndBalanceFields" type="date" id="asofdate" name="asofdate" formControlName="asOfDateControl">
           <label for="asofdate">As of date</label>
         </div>
       </div>
@@ -175,11 +172,11 @@
       <div class="row  col-md-12">
         <div class="row addtional-fields">
           <div class="col-md-1">
-            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField1Checked" name="additionalField1Checked" [(ngModel)]="additionalField1Checked" (change)="toggleAdditionalField($event, 'additionalField1')">
+            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField1Checked" name="additionalField1Checked"  (change)="toggleAdditionalField($event, 'additionalField1')">
           </div>
           <div class="col-md-5">
             <div class="form-floating">
-              <input type="text" class="form-control" name="additionalField1" placeholder="Additional Field 1" formControlName="additionalFieldName1Control" [(ngModel)]="additionalFieldName1"
+              <input type="text" class="form-control" name="additionalField1" placeholder="Additional Field 1" formControlName="additionalFieldName1Control" 
               [class.is-invalid]="additionalFieldName1Control?.errors?.['required'] && ifFormSubmitted" oninput="this.value = this.value.toUpperCase()">
 
               <label for="additionalField1">Additional Field 1</label>
@@ -187,7 +184,7 @@
           </div>
           <div class="col-md-5" *ngIf="isAdditionalField1Checked">
             <div class="form-floating">
-              <input type="text" class="form-control" name="additionalFieldName1Value" placeholder="Additional Field 1 Value" formControlName="additionalFieldName1ValueControl" [(ngModel)]="additionalFieldName1Value"
+              <input type="text" class="form-control" name="additionalFieldName1Value" placeholder="Additional Field 1 Value" formControlName="additionalFieldName1ValueControl" 
               [class.is-invalid]="additionalFieldName1ValueControl?.errors?.['required'] && (additionalFieldName1ValueControl?.touched || ifFormSubmitted)"
               oninput="this.value = this.value.toUpperCase()">
               <label for="additionalFieldName1Value">Enter value for additionalFieldName1</label>
@@ -201,11 +198,11 @@
 
         <div class="row addtional-fields">
           <div class="col-md-1">
-            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField2Checked" name="additionalField2Checked" [(ngModel)]="additionalField2Checked" (change)="toggleAdditionalField($event, 'additionalField2')">
+            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField2Checked" name="additionalField2Checked"  (change)="toggleAdditionalField($event, 'additionalField2')">
           </div>
           <div class="col-md-5">
             <div class="form-floating">
-              <input type="text" class="form-control" name="additionalField2" placeholder="Additional Field 2" formControlName="additionalFieldName2Control" [(ngModel)]="additionalFieldName2"
+              <input type="text" class="form-control" name="additionalField2" placeholder="Additional Field 2" formControlName="additionalFieldName2Control" 
               [class.is-invalid]="additionalFieldName2Control?.errors?.['required'] && ifFormSubmitted" oninput="this.value = this.value.toUpperCase()">
 
               <label for="additionalField2">Additional Field 2</label>
@@ -213,7 +210,7 @@
           </div>
           <div class="col-md-5" *ngIf="isAdditionalField2Checked">
             <div class="form-floating">
-              <input type="text" class="form-control" name="additionalFieldName2Value" placeholder="Additional Field 2 Value" formControlName="additionalFieldName2ValueControl" [(ngModel)]="additionalFieldName2Value"
+              <input type="text" class="form-control" name="additionalFieldName2Value" placeholder="Additional Field 2 Value" formControlName="additionalFieldName2ValueControl" 
               [class.is-invalid]="additionalFieldName2ValueControl?.errors?.['required'] && (additionalFieldName2ValueControl?.touched || ifFormSubmitted)"
               oninput="this.value = this.value.toUpperCase()">
               <label for="additionalFieldName2Value">Enter value for additionalFieldName2</label>
@@ -227,11 +224,11 @@
 
         <div class="row addtional-fields">
           <div class="col-md-1">
-            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField3Checked" name="additionalField3Checked" [(ngModel)]="additionalField3Checked" (change)="toggleAdditionalField($event, 'additionalField3')">
+            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField3Checked" name="additionalField3Checked"  (change)="toggleAdditionalField($event, 'additionalField3')">
           </div>
           <div class="col-md-5">
             <div class="form-floating">
-              <input type="text" class="form-control" name="additionalField3" placeholder="Additional Field 3" formControlName="additionalFieldName3Control" [(ngModel)]="additionalFieldName3"
+              <input type="text" class="form-control" name="additionalField3" placeholder="Additional Field 3" formControlName="additionalFieldName3Control" 
               [class.is-invalid]="additionalFieldName3Control?.errors?.['required'] && ifFormSubmitted" oninput="this.value = this.value.toUpperCase()">
 
               <label for="additionalField3">Additional Field 3</label>
@@ -239,7 +236,7 @@
           </div>
           <div class="col-md-5" *ngIf="isAdditionalField3Checked">
             <div class="form-floating">
-              <input type="text" class="form-control" name="additionalFieldName3Value" placeholder="Additional Field 3 Value" formControlName="additionalFieldName3ValueControl" [(ngModel)]="additionalFieldName3Value"
+              <input type="text" class="form-control" name="additionalFieldName3Value" placeholder="Additional Field 3 Value" formControlName="additionalFieldName3ValueControl" 
               [class.is-invalid]="additionalFieldName3ValueControl?.errors?.['required'] && (additionalFieldName3ValueControl?.touched || ifFormSubmitted)"
               oninput="this.value = this.value.toUpperCase()">
               <label for="additionalFieldName3Value">Enter value for additionalFieldName3</label>
@@ -253,11 +250,11 @@
 
         <div class="row addtional-fields">
           <div class="col-md-1">
-            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField4Checked" name="additionalField4Checked" [(ngModel)]="additionalField4Checked" (change)="toggleAdditionalField($event, 'additionalField4')">
+            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField4Checked" name="additionalField4Checked" (change)="toggleAdditionalField($event, 'additionalField4')">
           </div>
           <div class="col-md-5">
             <div class="form-floating">
-              <input type="text" class="form-control" name="additionalField4" placeholder="Additional Field 4" formControlName="additionalFieldName4Control" [(ngModel)]="additionalFieldName4"
+              <input type="text" class="form-control" name="additionalField4" placeholder="Additional Field 4" formControlName="additionalFieldName4Control" 
               [class.is-invalid]="additionalFieldName4Control?.errors?.['required'] && ifFormSubmitted" oninput="this.value = this.value.toUpperCase()">
 
               <label for="additionalField4">Additional Field 4</label>
@@ -265,7 +262,7 @@
           </div>
           <div class="col-md-5" *ngIf="isAdditionalField4Checked">
             <div class="form-floating">
-              <input type="date" class="form-control" name="additionalFieldName4Value" placeholder="Additional Field 4 Value" formControlName="additionalFieldName4ValueControl" [(ngModel)]="additionalFieldName4Value"
+              <input type="date" class="form-control" name="additionalFieldName4Value" placeholder="Additional Field 4 Value" formControlName="additionalFieldName4ValueControl"
               [class.is-invalid]="additionalFieldName4ValueControl?.errors?.['required'] && (additionalFieldName4ValueControl?.touched || ifFormSubmitted)"
               oninput="this.value = this.value.toUpperCase()">
               <label for="additionalFieldName4Value">Enter value for additionalFieldName4</label>

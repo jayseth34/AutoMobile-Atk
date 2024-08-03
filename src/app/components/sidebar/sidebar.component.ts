@@ -91,7 +91,6 @@ export class SidebarComponent {
   }
 
   getItemListData() {
-    // debugger
     this.dataService.itemHomePageSelectedTab = 'product';
     this.api.GetItemList(this.registeredPhoneNumber).subscribe({
       next:(res) => {
@@ -127,7 +126,6 @@ export class SidebarComponent {
   }
 
   // calculateSummary(partyGroups: any[]): void {
-  //   debugger
   //   partyGroups.forEach(group => {
   //     this.totalGroupCount = this.totalGroupCount + 1;
   //     this.totalGroupCountSum = this.totalGroupCountSum + group.partygroupcount;

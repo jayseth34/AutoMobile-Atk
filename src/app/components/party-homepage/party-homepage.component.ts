@@ -174,7 +174,11 @@ export class PartyHomepageComponent {
             const dialogRef = this.dialog.open(AddPartyComponent, {
               width: '60%',
               height: '99%',
-              data: { partyDetails: res.partyList[0], partyName, status : 'SUCCESS' },
+              data: { partyDetails: res.partyList[0], partyName, status: 'SUCCESS' },
+            });
+  
+            dialogRef.afterClosed().subscribe(result => {
+              this.selectTab('party');
             });
           } else {
             this.dataService.isPartyUpdate = false;
@@ -195,6 +199,10 @@ export class PartyHomepageComponent {
         height: '99%',
         data: { partyDetails: null, partyName: '' },
       });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        this.selectTab('party');
+      });
     }
   }
 
@@ -204,7 +212,6 @@ export class PartyHomepageComponent {
         .GetPartyByGroup(this.registeredMobileNumber, groupname)
         .subscribe({
           next: (res) => {
-            // if (res.status === "SUCCESS") {
             if (res != null) {
               this.dataService.isGroupUpdate = true;
               this.dataService.oldPartyGroupName = groupname;
@@ -212,6 +219,9 @@ export class PartyHomepageComponent {
                 width: '40%',
                 height: '35%',
                 data: { groupDetails: groupname }, // Pass the data here
+              });
+              dialogRef.afterClosed().subscribe((result) => {
+                this.selectTab('group');
               });
             } else {
               this.dataService.isGroupUpdate = false;
@@ -227,7 +237,9 @@ export class PartyHomepageComponent {
         width: '40%',
         height: '35%',
       });
-      dialogRef.afterClosed().subscribe((result) => {});
+      dialogRef.afterClosed().subscribe((result) => {
+        this.selectTab('group');
+      });
     }
   }
 

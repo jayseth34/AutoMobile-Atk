@@ -58,7 +58,7 @@ export class DataService {
   partyHomePageSelectedTab: any ='party';
 
   itemHomePageSelectedTab: any ='item';
-
+  isitemupdate:boolean = false;  
   isPartyUpdate:boolean = false;
   isGroupUpdate:boolean = false;
   isItemUpdate:boolean = false;
