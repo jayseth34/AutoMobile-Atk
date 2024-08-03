@@ -1,4 +1,4 @@
-import { Component, Inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, Input } from '@angular/core';
 import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SelectUnitComponent } from '../select-unit/select-unit.component';
@@ -52,13 +52,14 @@ export class AddItemComponent {
   categoryList: any;
   registeredPhoneNmber:any;
 
-  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, private api: ApiService, public cs: CommonService, public dialogRef: MatDialogRef<AddItemComponent>) {}
+  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, private api: ApiService, public cs: CommonService, public dialogRef: MatDialogRef<AddItemComponent>, public cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.registeredPhoneNmber = parseInt(
       JSON.parse(localStorage.getItem('phonenumber') as string)
     );
     this.initializeForm()
+    this.cdr.detectChanges();
     this.categorygroup()
     console.log("ITEM: ", this.categoryList)
     // if (!this.dataService.isItemUpdate){
@@ -89,25 +90,25 @@ export class AddItemComponent {
       itemHsnControl: new FormControl(this.data.itemDetails?.itemhsn || ''),
       categoryControl: new FormControl(this.data.itemDetails?.category || 'GENERAL'),
       itemCodeControl: new FormControl(this.data.itemDetails?.itemcode || ''),
-      salePriceControl: new FormControl(this.data.itemDetails?.saleprice || ''),
+      salePriceControl: new FormControl(this.data.itemDetails?.saleprice || 0),
       saleWithOrWithoutTaxControl: new FormControl(this.data.itemDetails?.salewithorwithouttax || 'Without Tax'),
-      discountOnSalePriceControl: new FormControl(this.data.itemDetails?.discountonsaleprice || ''),
+      discountOnSalePriceControl: new FormControl(this.data.itemDetails?.discountonsaleprice || 0),
       percentageOrAmountControl: new FormControl(this.data.itemDetails?.percentageoramounttype || 'Percentage'),
-      wholeSalePriceControl: new FormControl(this.data.itemDetails?.wholesaleprice || ''),
+      wholeSalePriceControl: new FormControl(this.data.itemDetails?.wholesaleprice || 0),
       wholeSaleWithOrWithoutTaxControl: new FormControl(this.data.itemDetails?.wholesalewithorwithouttax || 'Without Tax'),
-      minimumWholeSaleQuantityControl: new FormControl(this.data.itemDetails?.minimumwholesalequantity || ''),
-      purchasePriceControl: new FormControl(this.data.itemDetails?.purchaseprice || ''),
+      minimumWholeSaleQuantityControl: new FormControl(this.data.itemDetails?.minimumwholesalequantity || 0),
+      purchasePriceControl: new FormControl(this.data.itemDetails?.purchaseprice || 0),
       purchaseWithOrWithoutTaxControl: new FormControl(this.data.itemDetails?.purchasewithorwithouttax || 'Without Tax'),
       taxRateControl: new FormControl(this.data.itemDetails?.taxrate || 'None'),
-      openingQuantityControl: new FormControl(this.data.itemDetails?.openingquantity || ''),
-      atPriceControl: new FormControl(this.data.itemDetails?.atprice || ''),
+      openingQuantityControl: new FormControl(this.data.itemDetails?.openingquantity || 0),
+      atPriceControl: new FormControl(this.data.itemDetails?.atprice || 0),
       asOfDateControl: new FormControl(this.data.itemDetails?.asofdate  ? moment(this.data.itemDetails?.asofdate).format('YYYY-MM-DD')
       : defaultDate),
-      minimumStockToMaintainControl: new FormControl(this.data.itemDetails?.minimumstocktomaintain || ''),
+      minimumStockToMaintainControl: new FormControl(this.data.itemDetails?.minimumstocktomaintain || 0),
       _locationControl: new FormControl(this.data.itemDetails?._location || ''),
-      baseunit: new FormControl(''),
-      secondaryunit: new FormControl(''),
-      conversionrates: new FormControl('')
+      baseunit: new FormControl(this.data.itemDetails?.baseunit || ''),
+      secondaryunit: new FormControl(this.data.itemDetails?.secondaryunit || ''),
+      conversionrates: new FormControl(this.data.itemDetails?.conversionrates || 0)
     });
   }
 
@@ -155,17 +156,6 @@ export class AddItemComponent {
   }
 
   openSelectUnitModal() {
-    this.dataService.selectedOption1$.subscribe(value => {
-      this.addItemForm.patchValue({ baseunit: value });
-    });
-
-    this.dataService.selectedOption2$.subscribe(value => {
-      this.addItemForm.patchValue({ secondaryunit: value });
-    });
-
-    this.dataService.conversionRate$.subscribe(value => {
-      this.addItemForm.patchValue({ conversionrates: value });
-    });
     const dialogRef = this.dialog.open(SelectUnitComponent, {
       width: '40%',
       data : {baseunit : this.addItemForm.get('baseunit')?.value, secondaryunit : this.addItemForm.get('secondaryunit')?.value,
@@ -174,7 +164,16 @@ export class AddItemComponent {
     });
   
     dialogRef.afterClosed().subscribe(result => {
+      this.updateValues(result)
     });
+  }
+
+  updateValues(result: any) {
+    this.addItemForm.patchValue({
+        baseunit: result.baseunit,
+        secondaryunit: result.secondaryunit,
+        conversionrates: result.conversionrates,
+    })
   }
 
   submit(isSaveAndNew: boolean) {
@@ -207,7 +206,7 @@ export class AddItemComponent {
         baseunit: this.addItemForm.value.baseunit,
         secondaryunit: this.addItemForm.value.secondaryunit,
         conversionrates: this.addItemForm.value.conversionrates,
-        category: this.addItemForm.value.categoryControl.category,
+        category: this.addItemForm.value.categoryControl,
         itemCode: this.addItemForm.value.itemCodeControl,
         salePrice: this.addItemForm.value.salePriceControl,
         saleWithOrWithoutTax: this.addItemForm.value.saleWithOrWithoutTaxControl,

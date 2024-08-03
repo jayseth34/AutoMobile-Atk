@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm">
         <label for="base-unit">BASE UNIT</label>
-        <select class="form-select" formControlName="selectedOption1" [(ngModel)]="selectedOption1" (ngModelChange)="unitConversion()" name="base-unit">
+        <select class="form-select" formControlName="selectedOption1" (ngModelChange)="unitConversion()" name="base-unit">
           <option value="null" disabled>None</option>
           <option *ngFor="let option of options1" [ngValue]="option.value">
             {{ option.label }}
@@ -12,7 +12,7 @@
       </div>
       <div class="col-sm">
         <label for="secondary-unit">SECONDARY UNIT</label>
-        <select class="form-select" formControlName="selectedOption2" [(ngModel)]="selectedOption2" (ngModelChange)="unitConversion()" name="secondary-unit">
+        <select class="form-select" formControlName="selectedOption2" (ngModelChange)="unitConversion()" name="secondary-unit">
           <option value="null" disabled>None</option>
           <option *ngFor="let option of options2" [ngValue]="option.value">
             {{ option.label }}
@@ -25,7 +25,7 @@
     <div *ngIf="showConversion">
         <h3 class="conversion-rate">Conversion rates</h3>
         <div class="conversion-rate-line">
-            <span>1 {{selectedOption1}} = <input type="text" formControlName="conversionRate"> {{selectedOption2}}</span>
+          <span>{{ selectedOption1?.value }}  =  <input type="text" formControlName="conversionRate"> {{ selectedOption2?.value }}</span>
         </div>
     </div>
 

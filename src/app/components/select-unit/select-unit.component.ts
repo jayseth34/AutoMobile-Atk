@@ -1,6 +1,6 @@
 import { Component, Inject, Input } from '@angular/core';
 import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({
@@ -10,8 +10,6 @@ import { DataService } from 'src/app/services/data.service';
 })
 export class SelectUnitComponent {
 
-  selectedOption1: any = null;
-  selectedOption2: any = null;
   base_unit: any = 'QUINTAL (Qtl)';
   secondary_unit: any = 'PAIRS'
   showConversion: boolean = false;
@@ -28,32 +26,45 @@ export class SelectUnitComponent {
     { label: 'G', value: 'G' }
   ];
 
-  constructor(public dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(public dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<SelectUnitComponent>) { }
 
   ngOnInit(){
     this.selectUnitForm = new FormGroup({
-      selectedOption1: new FormControl('',),
-      selectedOption2: new FormControl('',),
-      conversionRate: new FormControl(0,Validators.pattern("^[0-9]*$")),
+      selectedOption1: new FormControl(this.data.baseunit || '',),
+      selectedOption2: new FormControl(this.data.secondaryunit || '',),
+      conversionRate: new FormControl(this.data.conversionrates || 0, Validators.pattern("^[0-9]*$")),
     });
+
+    this.selectUnitForm.get('selectedOption1')?.valueChanges.subscribe(() => this.unitConversion());
+    this.selectUnitForm.get('selectedOption2')?.valueChanges.subscribe(() => this.unitConversion());
     console.log("SELECT UNIT", this.selectUnitForm)
     if(this.data.status='SUCCESS'){
       this.populateForm(this.data.baseunit, this.data.secondaryunit,this.data.conversionrates) 
     }
   }
 
-  unitConversion(){
-    if (this.selectUnitForm.get('selectedOption1')?.value && this.selectUnitForm.get('selectedOption2')?.value){
-      this.showConversion = true;
-    } else {
-      this.showConversion = false;
-    }
+  unitConversion() {
+    const option1 = this.selectUnitForm.get('selectedOption1')?.value;
+    const option2 = this.selectUnitForm.get('selectedOption2')?.value;
+    this.showConversion = !!(option1 && option2);
   }
 
   save() {
-    this.dataService.setSelectedOption1(this.selectUnitForm.get('selectedOption1')?.value);
-    this.dataService.setSelectedOption2(this.selectUnitForm.get('selectedOption2')?.value);
-    this.dataService.setConversionRate(this.selectUnitForm.get('conversionRate')?.value);
+    const selectedOption1 = this.selectUnitForm.get('selectedOption1')?.value;
+  const selectedOption2 = this.selectUnitForm.get('selectedOption2')?.value;
+  const conversionRate = this.selectUnitForm.get('conversionRate')?.value;
+
+  // Save data in the data service
+  this.dataService.setSelectedOption1(selectedOption1);
+  this.dataService.setSelectedOption2(selectedOption2);
+  this.dataService.setConversionRate(conversionRate);
+
+  // Pass data back to the parent component and close the dialog
+  this.dialogRef.close({
+    baseunit: selectedOption1,
+    secondaryunit: selectedOption2,
+    conversionrates: conversionRate
+  });
   }
 
   populateForm(baseunit: any, secondaryunit: any, conversionrates: any){
@@ -63,5 +74,9 @@ export class SelectUnitComponent {
       conversionRate: conversionrates 
     })
   }
+
+  get selectedOption1() { return this.selectUnitForm.get('selectedOption1')}
+  get selectedOption2() { return this.selectUnitForm.get('selectedOption2')}
+  get conversionRate() { return this.selectUnitForm.get('conversionRate')}
 
 }
