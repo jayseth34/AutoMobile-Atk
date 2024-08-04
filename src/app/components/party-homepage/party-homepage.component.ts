@@ -233,6 +233,7 @@ export class PartyHomepageComponent {
           },
         });
     } else {
+      this.dataService.isGroupUpdate = false;
       const dialogRef = this.dialog.open(AddPartyGroupComponent, {
         width: '40%',
         height: '35%',

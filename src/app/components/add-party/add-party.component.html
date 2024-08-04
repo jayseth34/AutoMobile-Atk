@@ -40,7 +40,7 @@
           <mat-label>Party Group</mat-label>
           <input type="text" matInput [matAutocomplete]="auto" formControlName="partyGroupControl" oninput="this.value = this.value.toUpperCase()">
           <mat-autocomplete #auto="matAutocomplete">
-            <mat-option (click)="openAddPartyGroupModal()">+ ADD PARTY</mat-option>
+            <mat-option (click)="openAddPartyGroupModal()">+ ADD PARTY GROUP</mat-option>
             <mat-option *ngFor="let party of dataService.partyGroupListResponse" [value]="party.partygroup">{{ party.partygroup }}</mat-option>
           </mat-autocomplete>
         </mat-form-field>

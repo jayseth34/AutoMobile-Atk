@@ -24,7 +24,7 @@ export class AddPartyGroupComponent {
   @Input() groupDetails: any;
 
 
-  constructor(private api: ApiService, private dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any,public dialogRef: MatDialogRef<AddPartyGroupComponent>,) { }
+  constructor(private api: ApiService, public dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any,public dialogRef: MatDialogRef<AddPartyGroupComponent>,) { }
 
   ngOnInit() {
     this.registeredMobileNumber = parseInt(

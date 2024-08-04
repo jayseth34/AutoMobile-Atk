@@ -254,6 +254,7 @@ export class AddItemComponent {
   }
 
   openAddItemCategoryModal() {
+    this.dataService.isCategoryUpdate = false;
     const dialogRef = this.dialog.open(AddItemCategoryComponent, {
       width: '40%',
       height: '35%', 

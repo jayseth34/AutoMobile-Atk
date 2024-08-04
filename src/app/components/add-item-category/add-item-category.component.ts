@@ -22,7 +22,7 @@ export class AddItemCategoryComponent {
   itemCategory: any = '';
   @Input() categorynameDetails: any;
 
-  constructor(private api: ApiService, @Inject(MAT_DIALOG_DATA) public data: any, private dataService: DataService,public dialogRef: MatDialogRef<AddItemCategoryComponent>,) { }
+  constructor(private api: ApiService, @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService,public dialogRef: MatDialogRef<AddItemCategoryComponent>,) { }
 
   ngOnInit() {
     this.registeredMobileNumber = parseInt(

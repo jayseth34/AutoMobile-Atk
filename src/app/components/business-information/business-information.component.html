@@ -93,8 +93,9 @@
 <!-- </div> -->
 
 <div class="businessDets" *ngIf="showBusinessDetails">
-<h3 class="business-details">Business Details</h3>
-
+  <div class="business-details">
+    <h3 style="padding: 5px;">Business Details</h3>
+  </div>
 
 <div class="row">
 
@@ -116,11 +117,7 @@
 
     <div class="form-floating">
       <select class="form-select state" id="state" name="state" formControlName="stateControl">
-        <!-- <option value="" disabled selected class="dropdown-item"></option> -->
-        <option value="state1" class="dropdown-item" selected disabled>None</option>
-        <option value="state1" class="dropdown-item">state1</option>
-        <option value="state2" class="dropdown-item">state2</option>
-        <option value="state3" class="dropdown-item">state3</option>
+        <option *ngFor="let state of states" [value]="state" class="dropdown-item">{{ state }}</option>
       </select>
       <label for="state">State</label>
     </div>
@@ -161,7 +158,8 @@
   </div>
 </div>
 </div>
-<div class="text-md-end"> <!-- Use 'text-md-end' to align content to the right on medium and larger screens -->
-  <input type="submit" class="btn btn-warning save_btn" value="SAVE" (click)="submit()">
+<div class="text-md-end"> 
+  <button type="submit" class="btn btn-warning add_item_btn" *ngIf="!isBusinessInfoUpdate" (click)="submit()">SAVE</button>
+  <button type="submit"class="btn btn-warning add_item_btn" *ngIf="isBusinessInfoUpdate" (click)="submit()">UPDATE</button>
 </div>
 </form>

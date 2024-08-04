@@ -54,7 +54,7 @@
 
     <!-- TOP CONTENT -->
     <div class="top-content">
-        <h3>PARTY NAME {{ partyName }}</h3>
+        <h2>{{ partyName }}</h2>
         <div class="top-content-row">
             <div class="phone">PHONE: {{ phonenumber }}</div>
             <div class="address">ADDRESS: {{ billingaddress }}</div>
@@ -129,7 +129,7 @@
 
     <!-- TOP CONTENT -->
     <div class="top-content" *ngIf = "ispartygrouplistresponse">
-        <h3>GROUP NAME</h3>
+        <h2>{{groupname}}</h2>
         <div class="top-content-row">
             <div class="phone">Parties (no.ofparties) <span>(totalofParties)</span> </div>
         </div>

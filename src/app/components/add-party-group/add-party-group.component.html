@@ -7,6 +7,6 @@
     </div>
 
     <hr>
-    <button type="submit" class="btn btn-primary" (click)="submit()">SAVE</button>
-
+    <button type="submit" class="btn btn-warning add_item_btn" (click)="submit()" *ngIf="!dataService.isGroupUpdate">SAVE</button>
+    <button type="submit" class="btn btn-warning add_item_btn" (click)="submit()" *ngIf="dataService.isGroupUpdate">UPDATE</button>
   </form>

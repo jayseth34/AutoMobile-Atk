@@ -148,6 +148,7 @@ export class ItemHomepageComponent {
         }
       });
     } else {
+      this.dataService.isCategoryUpdate = false;
       const dialogRef = this.dialog.open(AddItemCategoryComponent, {
         width: '40%',
         height: '35%', 
