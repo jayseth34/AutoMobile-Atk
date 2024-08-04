@@ -67,7 +67,10 @@ export class AddItemComponent {
     // }
     
     if(this.data.status='SUCCESS'){
-      this.populateForm(this.data.itemDetails) 
+      this.populateForm(this.data.itemDetails)
+      if(this.data.itemDetails.wholesaleprice > 0 || this.data.itemDetails.minimumwholesalequantity > 0){
+        this.isWholesalePriceEnabled = false
+      } 
     }
   }
 
@@ -238,6 +241,7 @@ export class AddItemComponent {
             allowOutsideClick:false
           }).then(() => {
             this.dataService.isItemUpdate = false;
+            this.isWholesalePriceEnabled = true;
             this.dialogRef.close();
           });
         }

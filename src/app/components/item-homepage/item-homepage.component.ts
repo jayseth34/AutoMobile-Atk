@@ -127,7 +127,6 @@ export class ItemHomepageComponent {
       this.api.GetItemByCategory(this.registeredMobileNumber,categoryname).subscribe({
         next: (res) => {
           if (res.status === "SUCCESS") {
-            // if (res!=null) {
             this.dataService.isCategoryUpdate = true;
             this.dataService.oldCategoryName = categoryname
             const dialogRef = this.dialog.open(AddItemCategoryComponent, {

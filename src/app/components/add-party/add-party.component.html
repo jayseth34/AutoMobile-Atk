@@ -142,7 +142,7 @@
 
         <!-- improvement required -->
         <div class="form-check form-switch">
-          <input class="form-check-input" style="height: 25px; width:45px;" type="checkbox" role="switch" id="customNoLimit" (change)="updateLabel($event)">
+          <input class="form-check-input" style="height: 25px; width:45px;" type="checkbox" role="switch" id="customNoLimit" [checked]="isCustomLimit" (change)="updateLabel($event)">
           <label class="form-check-label" style="margin-left: 5%; margin-top: 2%;" for="customNoLimit">{{ labelText }}</label>
         </div>
         
