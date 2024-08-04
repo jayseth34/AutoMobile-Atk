@@ -32,6 +32,10 @@ export class AddItemCategoryComponent {
       itemCategoryNameControl: new UntypedFormControl('', [Validators.required]),
     });
 
+    this.itemCategoryNameControl?.valueChanges.subscribe(value => {
+      this.newcategory = value;
+    });
+
     if(this.data!=null){
       this.populateForm(this.data.categorynameDetails) 
     }
@@ -44,12 +48,6 @@ export class AddItemCategoryComponent {
   }
 
   destroy$: Subject<boolean> = new Subject<boolean>();
-
-  onInputChange(event: any) {
-    // Update newgroupname with the new value
-    this.newcategory = event.target.value;
-    console.log("OLD: ",this.oldcategory,"NEW: ",this.newcategory)
-  }
 
   AddCategoryData(body: any): Promise<void> {
     console.log("BEFore return");

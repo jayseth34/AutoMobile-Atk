@@ -1,7 +1,8 @@
 .sidebar {
-  width: 200px;
+  width: 250px;
   background-color: #f8f9fa;
   border-right: 1px solid #dee2e6;
+  height: 100%;
 
   .menu {
     list-style-type: none;
@@ -66,3 +67,6 @@
   margin-right: 8px; /* Adjust as needed */
 }
 
+.rotated {
+  transform: rotate(180deg);
+}

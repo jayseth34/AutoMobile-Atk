@@ -34,6 +34,10 @@ export class AddPartyGroupComponent {
       partyGroupNameControl: new UntypedFormControl('', [Validators.required]),
     });
 
+    this.partyGroupNameControl?.valueChanges.subscribe(value => {
+      this.newPartyGroupName = value;
+    });
+
     if(this.data!=null){
       this.populateForm(this.data.groupDetails) 
     }
@@ -43,12 +47,6 @@ export class AddPartyGroupComponent {
     if(fetchedPartyGroupName){
       this.partyGroupName = fetchedPartyGroupName;
     }
-  }
-
-  onInputChange(event: any) {
-    // Update newgroupname with the new value
-    this.newPartyGroupName = event.target.value;
-    console.log("OLD: ",this.oldPartyGroupName,"NEW: ",this.newPartyGroupName)
   }
 
   destroy$: Subject<boolean> = new Subject<boolean>();

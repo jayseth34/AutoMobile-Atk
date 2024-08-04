@@ -4,8 +4,13 @@
       <a [routerLink]="tab.link" (click)="tab.action ? tab.action() : null" (click)="toggleSubMenu(tab)">
         <div class="tab-content">
           <img [src]="tab.icon" [alt]="tab.name + ' Icon'" class="icon" />
+          {{ tab.name }}
+          <span *ngIf="tab.subTabs" class="dropdown-icon">
+            <img style="width: 25px; height: 25px;"
+              [src]="'https://icons.veryicon.com/png/o/miscellaneous/decon/dropdown-1.png'"
+              [ngClass]="{ 'rotated': tab.isOpen }" alt="Dropdown Icon" />
+          </span>
         </div>
-        {{ tab.name }}
       </a>
       <ul class="sub-menu" *ngIf="tab.subTabs && tab.isOpen">
         <li class="sub-tabs" *ngFor="let subTab of tab.subTabs">
