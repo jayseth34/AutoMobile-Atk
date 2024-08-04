@@ -1,73 +1,17 @@
-<!-- Creates a layout with a left-positioned sidenav and explicit content. -->
-<mat-sidenav-container class="sidebar bg-body-secondary">
-  <mat-sidenav-content>
-    <h4 class="text-center mt-3">Menu</h4>
-    <ul class="menu">
-      <li class="tabs">
-        <img
-          src="https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png"
-          alt="Home Icon"
-          class="icon"
-        />
-        <a href="#">Home</a>
-      </li>
-      <li class="tabs" (click)="openBusinessInfoModal()">
-        <img
-          src="https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png"
-          alt="Home Icon"
-          class="icon"
-        />
-        <a>Business Information</a>
-      </li>
-      <li
-        class="tabs"
-        routerLink="/party-homepage"
-        (click)="getPartyListData()"
-      >
-        <img
-          src="https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png"
-          alt="Home Icon"
-          class="icon"
-        />
-        <a>Parties</a>
-        <!-- <a (click)="openDialog()" >Parties</a> -->
-      </li>
-      <li class="tabs" routerLink="/item-homepage" (click)="getItemListData()">
-        <img src="https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png" alt="Home Icon" class="icon">
-        <a>Items</a>
-      </li>
-      <li class="tabs" routerLink="/Sale">
-        <img
-          src="https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png"
-          alt="Home Icon"
-          class="icon"
-        />
-        <a>Sale</a>
-      </li>
-      <li class="tabs" routerLink="/Purchase">
-        <img
-          src="https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png"
-          alt="Home Icon"
-          class="icon"
-        />
-        <a>Purchase</a>
-      </li>
-      <li class="tabs" routerLink="/inout">
-        <img
-          src="https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png"
-          alt="Home Icon"
-          class="icon"
-        />
-        <a>PAYMENT IN</a>
-      </li>
-      <li class="tabs" routerLink="/plans">
-        <img
-          src="https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png"
-          alt="Home Icon"
-          class="icon"
-        />
-        <a>PLANS</a>
-      </li>
-    </ul>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<div class="sidebar">
+  <ul class="menu">
+    <li class="tabs" *ngFor="let tab of tabs" [ngClass]="{ 'has-sub-menu': tab.subTabs }">
+      <a [routerLink]="tab.link" (click)="tab.action ? tab.action() : null" (click)="toggleSubMenu(tab)">
+        <div class="tab-content">
+          <img [src]="tab.icon" [alt]="tab.name + ' Icon'" class="icon" />
+        </div>
+        {{ tab.name }}
+      </a>
+      <ul class="sub-menu" *ngIf="tab.subTabs && tab.isOpen">
+        <li class="sub-tabs" *ngFor="let subTab of tab.subTabs">
+          <a [routerLink]="subTab.link">{{ subTab.name }}</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

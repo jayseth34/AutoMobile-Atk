@@ -24,6 +24,61 @@ export class SidebarComponent {
     );
   }
 
+  tabs = [
+    {
+      name: 'Home',
+      link: '/',
+      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+    },
+    {
+      name: 'Business Information',
+      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+      action: () => this.openBusinessInfoModal()
+    },
+    {
+      name: 'Parties',
+      link: '/party-homepage',
+      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+      action: () => this.getPartyListData()
+    },
+    {
+      name: 'Items',
+      link: '/item-homepage',
+      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+      action: () => this.getItemListData()
+    },
+    {
+      name: 'Sale',
+      // link: '/Sale',
+      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+      subTabs: [
+        { name: 'Sale Invoices', link: '/Sale/sale-invoice' },
+        { name: 'Estimate/ Quotation', link: '/sale-sub2' },
+        { name: 'Payment In', link: '/sale-sub3' },
+        { name: 'Sale Order', link: '/sale-sub4' },
+        { name: 'Delivery Challan', link: '/sale-sub4' },
+        { name: 'Sale Return/ Cr. Note', link: '/sale-sub4' }
+      ],
+      isOpen: false
+    },
+    {
+      name: 'Purchase',
+      // link: '/purchase',
+      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+      subTabs: [
+        { name: 'Purchase Bills', link: '/Purchase/puchase-bills' },
+        { name: 'Payment Out', link: '/purchase-sub2' },
+        { name: 'Purchase Order', link: '/purchase-sub3' },
+        { name: 'Purchase Return/ Dr. Note', link: '/purchase-sub4' },
+      ],
+      isOpen: false
+    }
+  ];
+
+  toggleSubMenu(tab: any) {
+    tab.isOpen = !tab.isOpen;
+  }
+
   getPartyListData() {
     this.dataService.partyHomePageSelectedTab = 'party';
     this.api.getPartyList(this.registeredPhoneNumber).subscribe((res:any) => {
@@ -124,13 +179,4 @@ export class SidebarComponent {
       }
     })
   }
-
-  // calculateSummary(partyGroups: any[]): void {
-  //   partyGroups.forEach(group => {
-  //     this.totalGroupCount = this.totalGroupCount + 1;
-  //     this.totalGroupCountSum = this.totalGroupCountSum + group.partygroupcount;
-  //     console.log("GROUP SUMMAYR:", this.totalGroupCount,  this.totalGroupCountSum)
-  //   });
-  // }
-
 }

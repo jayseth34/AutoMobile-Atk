@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class DataService {
+  isLogin: boolean = false;
   partyName:any;
   addPartyData = {
     partyName: "",

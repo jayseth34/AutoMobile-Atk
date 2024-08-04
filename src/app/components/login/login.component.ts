@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginRequest } from 'src/app/models';
 import { ApiService } from 'src/app/services/api.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent implements OnInit {
   showOtpInput:boolean = true;
   details:any;
 
-  constructor(private api: ApiService, private router: Router) { };
+  constructor(private api: ApiService, private router: Router, public dataService: DataService) { };
 
   ngOnInit(): void {
     localStorage.clear();
@@ -24,6 +25,7 @@ export class LoginComponent implements OnInit {
       password: new FormControl(""),
       otp: new FormControl(""),
     });
+    this.dataService.isLogin = true;
   }
 
   handleLoginFormSubmit() {
@@ -31,6 +33,7 @@ export class LoginComponent implements OnInit {
       const formValue = this.loginForm.getRawValue() as LoginRequest;
       this.api.AuthenticateUser(formValue).subscribe((res) => {
         if (res.status.toLowerCase().trim() === "success") {
+          this.dataService.isLogin = false;
           const AuthToken = {
             "token": res.accessToken,
             "expiryDate": res.expiryDate
@@ -69,6 +72,7 @@ export class LoginComponent implements OnInit {
       }
       this.api.VerifyOtp(body).subscribe((res:any) => {
         if (res.status.toLowerCase().trim() === "success") {
+          this.dataService.isLogin = false;
           const AuthToken = {
             "token": res.accessToken,
             "expiryDate": res.expiryDate
