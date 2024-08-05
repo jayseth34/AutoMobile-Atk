@@ -26,24 +26,26 @@ const routes: Routes = [
   { path: 'addPartyGroup', component: AddPartyGroupComponent },
   { path: 'Sale', pathMatch: 'full', redirectTo: '/Sale/sale-invoice' },
   { path: 'Sale/sale-invoice', component: DetailsComponent },
+  { path: 'Sale/estimate-quotation', component: DetailsComponent },
+  { path: 'Sale/payment-in', component: DetailsComponent },
+  { path: 'Sale/sale-order', component: DetailsComponent },
+  { path: 'Sale/delivery-challan', component: DetailsComponent },
+  { path: 'Sale/sale-return', component: DetailsComponent },
+
+  { path: 'Purchase', pathMatch: 'full', redirectTo: '/Purchase/purchase-bills' },
+  { path: 'Purchase/purchase-bills', component: DetailsComponent },
+  { path: 'Purchase/payment-out', component: DetailsComponent },
+  { path: 'Purchase/purchase-order', component: DetailsComponent },
+  { path: 'Purchase/purchase-return', component: DetailsComponent },
+
   { path: ':type/edit/:invoiceNo', component: EditDetailComponent },
   { path: ':type/add', component: EditDetailComponent },
-
-  { path: 'Purchase', pathMatch: 'full', redirectTo: '/Purchase/puchase-bills' },
-  { path: 'Purchase/puchase-bills', component: DetailsComponent },
-  // { path: 'Purchase/edit/:invoiceNo', component: EditDetailComponent },
-  // {path: 'sale', pathMatch: 'full', children: [
-  //   {path: '', redirectTo: 'sale-invoice', pathMatch: 'full'},
-  //   {path: 'sale-invoice', component: DetailsComponent},
-  // ]},
   { path: 'party-homepage', component: PartyHomepageComponent },
   { path: 'item-homepage', component: ItemHomepageComponent },
   { path: 'inout', component: PaymentInoutComponent },
   { path: 'linked', component: LinkPaymentComponent },
   { path: 'plans', component: PlansComponent },
   { path: 'register', component: RegisterComponent },
-
-
 ];
 
 @NgModule({
