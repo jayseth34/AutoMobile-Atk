@@ -24,28 +24,21 @@ const routes: Routes = [
   { path: 'addparty', component: AddPartyComponent },
   { path: 'additem', component: AddItemComponent },
   { path: 'addPartyGroup', component: AddPartyGroupComponent },
-  { path: 'Sale', pathMatch: 'full', redirectTo: '/Sale/sale-invoice' },
-  { path: 'Sale/sale-invoice', component: DetailsComponent },
-  { path: 'Sale/estimate-quotation', component: DetailsComponent },
-  { path: 'Sale/payment-in', component: DetailsComponent },
-  { path: 'Sale/sale-order', component: DetailsComponent },
-  { path: 'Sale/delivery-challan', component: DetailsComponent },
-  { path: 'Sale/sale-return', component: DetailsComponent },
 
-  { path: 'Purchase', pathMatch: 'full', redirectTo: '/Purchase/purchase-bills' },
-  { path: 'Purchase/purchase-bills', component: DetailsComponent },
-  { path: 'Purchase/payment-out', component: DetailsComponent },
-  { path: 'Purchase/purchase-order', component: DetailsComponent },
-  { path: 'Purchase/purchase-return', component: DetailsComponent },
-
-  { path: ':type/edit/:invoiceNo', component: EditDetailComponent },
-  { path: ':type/add', component: EditDetailComponent },
   { path: 'party-homepage', component: PartyHomepageComponent },
   { path: 'item-homepage', component: ItemHomepageComponent },
-  { path: 'inout', component: PaymentInoutComponent },
-  { path: 'linked', component: LinkPaymentComponent },
-  { path: 'plans', component: PlansComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: 'Payment-In', component: PaymentInoutComponent },
+  { path: 'Payment-Link', component: LinkPaymentComponent },
+  { path: 'Plans', component: PlansComponent },
+  { path: 'Register', component: RegisterComponent },
+
+  { path: 'Sale', pathMatch: 'full', redirectTo: '/Sale-Invoice' },
+  { path: 'Purchase', pathMatch: 'full', redirectTo: '/Puchase-Bills' },
+  // All other paths above this line.
+  { path: ':type', component: DetailsComponent},
+  { path: ':type/:fnType', component: EditDetailComponent},
+  { path: ':type/:fnType/:invoiceNo', component: EditDetailComponent},
+
 ];
 
 @NgModule({

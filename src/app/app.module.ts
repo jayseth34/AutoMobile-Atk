@@ -42,6 +42,7 @@ import { LinkPaymentComponent } from './components/link-payment/link-payment.com
 import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
 import { PlansComponent } from './components/plans/plans.component';
 import { RegisterComponent } from './components/register/register.component';
+import { RemoveHyphenPipe } from './remove-hyphen.pipe';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { RegisterComponent } from './components/register/register.component';
     PaymentHistoryComponent,
     PlansComponent,
     RegisterComponent,
+    RemoveHyphenPipe,
   ],
   imports: [
     BrowserModule,

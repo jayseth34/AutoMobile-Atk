@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild, ɵɵi18nApply } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 
@@ -8,6 +8,7 @@ import { TransactionTypeEnum, TimeFilterEnum } from 'src/app/models';
 import { ApiService } from 'src/app/services/api.service';
 import { Transaction } from 'src/app/models';
 import { CommonService } from 'src/app/services/common.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-details',
@@ -25,6 +26,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   fullData: any = [];
   transactonData: MatTableDataSource<Transaction>;
   phonenumber: number;
+  showFilterSection: boolean = true;
 
   // For Mat Table
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
@@ -38,7 +40,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     endDate: new FormControl(''),
   });
 
-  constructor(private route: Router, private api: ApiService) {
+  constructor(private _route: ActivatedRoute, private _api: ApiService, private _location: Location, private _router: Router) {
     this.transactonData = new MatTableDataSource();
   }
 
@@ -49,12 +51,40 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.transactionType = this.route.url.split('/')[1] == 'Sale' ? 0 : 1;
-    this.transactionTypeString = TransactionTypeEnum[this.transactionType];
-    this.phonenumber = parseInt(JSON.parse(localStorage.getItem("phonenumber") as string));
+    this._route.paramMap.subscribe((params: ParamMap) => {
+      this.phonenumber = parseInt(JSON.parse(localStorage.getItem("phonenumber") as string));
+      if(!params.has("type")){
+        this._location.back();
+      }
 
-    // API Call to get data
-    this.api.getTypeOfTransactions(this.transactionTypeString, this.phonenumber).subscribe((res) => {
+      this.transactionTypeString = params.get("type") as string;
+      // Add conditions here if required
+      switch(this.transactionTypeString){
+        case "Sale":
+          this._router.navigate(['Sale-Invoce']);
+          break;
+        case "Purchase":
+          this._router.navigate(['Purchase-Bills']);
+          break;
+        case "Sale-Invoice":
+          this.transactionTypeString = 'Sale';
+          this.showFilterSection = true;
+          this.transactionType = 0;
+          break;
+        case "Purchase-Bills":
+          this.transactionTypeString = 'Purchase';
+          this.showFilterSection = true;
+          this.transactionType = 1;
+          break;
+        case "Sale-Order":
+          this.showFilterSection = false;
+          this.transactionType = 4;
+          break;
+      }
+      
+
+      // API Call to get data
+    this._api.getTypeOfTransactions(this.transactionTypeString.replace('-', ' '), this.phonenumber).subscribe((res) => {
       if (res.status === "SUCCESS") {
         // Setting the inv count
         let curInvCount = res?.invoicenumbercount;
@@ -67,6 +97,9 @@ export class DetailsComponent implements OnInit, AfterViewInit {
         }
       }
     });
+    });
+    // this.transactionType = this.route.url.split('/')[1] == 'Sale' ? 0 : 1;
+    // this.transactionTypeString = TransactionTypeEnum[this.transactionType];
   }
 
   handleRangeChange(): void {
@@ -139,7 +172,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     this.transactonData.data = this.fullData.filter((item: any) => {
       let itemDate = new Date(item.invoicedate);
       this.updatePayment(item.paymentstatus, item.balance, item.total)
-      return (itemDate >= start && itemDate <= end && item.typeofpay == TransactionTypeEnum[this.transactionType].toUpperCase());
+      return (itemDate >= start && itemDate <= end && item.typeofpay == TransactionTypeEnum[this.transactionType].toUpperCase().replace('-', ' '));
     });
     // console.log(this.transactonData);
   }

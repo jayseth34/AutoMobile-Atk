@@ -32,7 +32,7 @@
   </section>
 
   <!-- Filters -->
-  <section class="bg-body-secondary">
+  <section class="bg-body-secondary" *ngIf="this.showFilterSection">
     <form [formGroup]="filterForm">
       <div class="row p-2 mt-1 mb-2">
         <div class="col-3">
@@ -101,7 +101,7 @@
   </section>
 
   <!-- Table Contents -->
-  <section class="bg-body-secondary p-2">
+  <section class="bg-body-secondary p-2" [class.mt-2]="!this.showFilterSection">
     <h3 class="ms-3 pt-2">Transactions</h3>
 
     <div class="container-fluid">
@@ -126,7 +126,7 @@
           routerLink="/{{ this.transactionTypeString }}/add"
         >
           <mat-icon>add</mat-icon>
-          Add {{ this.transactionTypeString }}
+          Add {{ this.transactionTypeString | removeHyphen }}
         </button>
       </div>
     </div>

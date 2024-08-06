@@ -12,6 +12,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { ReceivedValidator } from 'src/app/received-validator';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
+import { Location } from '@angular/common';
 
 type BalanceColors = "green" | "red" | "black";
 
@@ -116,7 +117,7 @@ export class EditDetailComponent implements OnInit {
     "Kg"
   ]
 
-  constructor(private router: Router, private route: ActivatedRoute, private api: ApiService, private fb: FormBuilder, public cs: CommonService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private api: ApiService, private fb: FormBuilder, public cs: CommonService, public _location: Location) { }
 
   public get itemDetailValue(): AbstractControl[] {
     return (this.modifyDetail.get("itemdetailslist") as FormArray).controls.filter((item) => item.status != "DISABLED");
@@ -183,8 +184,9 @@ export class EditDetailComponent implements OnInit {
       }
       else {
         // Route them back
-        this.router.navigateByUrl(`${this.transactionType}/sale-invoice`);
+        this._location.back();
       }
+
 
       if (params.has("invoiceNo")) {
         // If param contain invoice number, then we are editing sale.
@@ -193,7 +195,7 @@ export class EditDetailComponent implements OnInit {
         this.modifyDetail.get("partyname")?.disable();
         this.invNo = parseInt(params.get("invoiceNo") ?? "");
         // Getting details from api and setting the values
-        this.api.getTransactionDetails(this.registeredPhoneNumber, this.invNo, this.transactionType, this.isSaleConvert, this.isSaleOrderConvert)
+        this.api.getTransactionDetails(this.registeredPhoneNumber, this.invNo, this.transactionType.replace("-", " "), this.isSaleConvert, this.isSaleOrderConvert)
           .subscribe((transaction: TransactionDetails) => {
             this.modifyDetail.patchValue({
               customername: transaction.customername,
@@ -498,8 +500,7 @@ export class EditDetailComponent implements OnInit {
   }
 
   goToSaleInvoice() {
-    console.log("helloworld");
-    this.router.navigateByUrl("Sale/sale-invoice");
+    this.router.navigate([this.transactionType]);
   }
 
   handleItemChange(prev: any, next: any, element: any) {
@@ -600,7 +601,7 @@ export class EditDetailComponent implements OnInit {
 
     // Updating the quantity
 
-    body.typeofpay = this.transactionType.toUpperCase();
+    body.typeofpay = this.transactionType.replace("-", " ").toUpperCase();
     body.itemdetailslist = body.itemdetailslist.filter((val) => val.item.length > 0);
     body.registeredphonenumber = this.registeredPhoneNumber;
     console.log(body);

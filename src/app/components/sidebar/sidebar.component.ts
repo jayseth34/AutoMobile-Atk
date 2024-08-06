@@ -52,12 +52,12 @@ export class SidebarComponent {
       // link: '/Sale',
       icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
       subTabs: [
-        { name: 'Sale Invoices', link: '/Sale/sale-invoice' },
-        { name: 'Estimate/ Quotation', link: '/Sale/estimate-quotation' },
-        { name: 'Payment In', link: '/Sale/payment-in' },
-        { name: 'Sale Order', link: '/Sale/sale-order' },
-        { name: 'Delivery Challan', link: '/Sale/delivery-challan' },
-        { name: 'Sale Return/ Cr. Note', link: '/Sale/sale-return' }
+        { name: 'Sale Invoices', link: '/Sale-Invoice' },
+        { name: 'Estimate/ Quotation', link: '/Estimate-Quotation' },
+        { name: 'Payment In', link: '/Payment-In' },
+        { name: 'Sale Order', link: '/Sale-Order' },
+        { name: 'Delivery Challan', link: '/Delivery-Challan' },
+        { name: 'Sale Return/ Cr. Note', link: '/Sale-Return' }
       ],
       isOpen: false
     },
@@ -66,10 +66,10 @@ export class SidebarComponent {
       // link: '/purchase',
       icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
       subTabs: [
-        { name: 'Purchase Bills', link: '/Purchase/purchase-bills' },
-        { name: 'Payment Out', link: '/Purchase/payment-out' },
-        { name: 'Purchase Order', link: '/Purchase/purchase-order' },
-        { name: 'Purchase Return/ Dr. Note', link: '/Purchase/purchase-return' },
+        { name: 'Purchase Bills', link: '/Purchase-Bills' },
+        { name: 'Payment Out', link: '/Payment-Out' },
+        { name: 'Purchase Order', link: '/Purchase-Order' },
+        { name: 'Purchase Return/ Dr. Note', link: '/Purchase-Return' },
       ],
       isOpen: false
     }

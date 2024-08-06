@@ -1,4 +1,4 @@
-export enum TransactionTypeEnum { Sale, Purchase, CreditNote, PaymentIn }
+export enum TransactionTypeEnum { Sale, Purchase, CreditNote, PaymentIn, 'Sale-Order' };
 
 export enum TimeFilterEnum {
     All, CurMonth, LastMonth, CurQuarter, CurYear, Custom
