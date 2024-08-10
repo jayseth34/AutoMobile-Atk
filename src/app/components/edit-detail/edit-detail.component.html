@@ -6,8 +6,10 @@
           <mat-icon>arrow_back_ios_new</mat-icon>
         </button>
       </div>
-      <div class="col-2 align-self-center">
-        <h1 class="m-0">{{ transactionType | removeHyphen}}</h1>
+      <div class="col-5 align-self-center">
+        <h1 class="m-0" *ngIf="!(isSaleConvert || isPurchaseConvert || isSaleOrderConvert)"> {{ transactionType | removeHyphen}} </h1>
+        <h1 class="m-0" *ngIf="(isSaleConvert || isSaleOrderConvert)"> Sale </h1>
+        <h1 class="m-0" *ngIf="isPurchaseConvert"> Purchase </h1>
       </div>
     </div>
   </div>
@@ -462,7 +464,7 @@
         <!-- </div> -->
 
         <!-- Full Paymnt Checkbox -->
-        <div class="form-check col-1 mb-1">
+        <div class="form-check col-1 mb-1" *ngIf="showAmtDetails">
           <input
             class="form-check-input"
             type="checkbox"
@@ -474,7 +476,7 @@
         </div>
 
         <!-- Received Amount -->
-        <div class="col-6 d-flex mb-1">
+        <div class="col-6 d-flex mb-1" *ngIf="showAmtDetails">
           <!-- @if(transactionType == "Sale"){
           <span class="input-group-text transparent w-50px"> Received </span>
           } @else {
@@ -501,7 +503,7 @@
         </div>
 
         <!-- Balance Amount -->
-        <div class="col-6 d-flex mb-1">
+        <div class="col-6 d-flex mb-1" *ngIf="showAmtDetails">
           <span class="input-group-text transparent w-50px"> Balance </span>
           <input
             id="balance"

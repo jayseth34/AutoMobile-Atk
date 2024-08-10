@@ -154,7 +154,7 @@ export class ApiService {
 
   // Update Sale Details
   PostUpdateSaleDetails(req: SaveUpdateTransactionRq, isEdit: boolean) {
-    if (isEdit)
+    if (isEdit && !req.issaleconvert && !req.ispurchaseconvert && !req.issaleorderconvert)
       return this.cs.PostType<string, SaveUpdateTransactionRq>("Sale/UpdateSale", req);
     else
       return this.cs.PostType<string, SaveUpdateTransactionRq>("Sale/AddSale", req);

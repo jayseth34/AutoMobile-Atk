@@ -80,6 +80,15 @@ export class DetailsComponent implements OnInit, AfterViewInit {
           this.showFilterSection = false;
           this.transactionType = 4;
           break;
+        case "Purchase-Order":
+          this.showFilterSection = false;
+          this.transactionType = 5;
+          break;
+        case "Delivery-Challan":
+          this.showFilterSection = false;
+          this.transactionType = 6;
+          break;
+
       }
       
 

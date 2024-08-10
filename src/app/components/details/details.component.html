@@ -185,12 +185,20 @@
       <ng-container matColumnDef="icons">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
-          <mat-icon class="ms-2" (click)="handlePrintClick(element.invoiceNo)"
-            >print</mat-icon
-          >
-          <mat-icon class="ms-2" (click)="handleShareClick(element.invoiceNo)"
-            >share</mat-icon
-          >
+          <div *ngIf="transactionType == 4 || transactionType == 6">
+            <button mat-menu-item [routerLink]="['/' + transactionTypeString + '/convert', element.invoicenumber]" > Convert to Sale </button>
+          </div>
+          <div *ngIf="transactionType == 5">
+            <button mat-menu-item [routerLink]="['/' + transactionTypeString + '/convert', element.invoicenumber]" > Convert to Purchase </button>
+          </div>
+          <div *ngIf="transactionType != 4 && transactionType != 5 && transactionType != 6">
+            <mat-icon class="ms-2" (click)="handlePrintClick(element.invoiceNo)">
+              print
+            </mat-icon>
+            <mat-icon class="ms-2" (click)="handleShareClick(element.invoiceNo)">
+              share
+            </mat-icon>
+          </div>
         </td>
       </ng-container>
 

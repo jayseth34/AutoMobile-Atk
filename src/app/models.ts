@@ -1,4 +1,4 @@
-export enum TransactionTypeEnum { Sale, Purchase, CreditNote, PaymentIn, 'Sale-Order' };
+export enum TransactionTypeEnum { Sale, Purchase, CreditNote, PaymentIn, 'Sale-Order', 'Purchase-Order', 'Delivery-Challan' };
 
 export enum TimeFilterEnum {
     All, CurMonth, LastMonth, CurQuarter, CurYear, Custom
@@ -187,6 +187,7 @@ export interface GetTypeOfPayTransactionsRq {
 export interface SaveUpdateTransactionRq {
     typeofpay: string
     invoicenumber: number
+    convertinvoicenumber: number
     invoicedate: string
     stateofsupply: any
     paymenttype: any
@@ -198,11 +199,12 @@ export interface SaveUpdateTransactionRq {
     registeredphonenumber: number
     topayparty: number
     toreceivefromparty: number
-    partybalance: number
     billingaddress: string
     shippingaddress: string
     paymentstatus: any
-    isconvert: boolean
+    ispurchaseconvert: boolean
+    issaleconvert: boolean
+    issaleorderconvert: boolean
     isupdate: boolean
     itemdetailslist: Itemdetailslist[]
 }

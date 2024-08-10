@@ -34,6 +34,8 @@ export class EditDetailComponent implements OnInit {
   invNo: number;
   isSaleConvert: boolean = false;
   isSaleOrderConvert: boolean = false;
+  isPurchaseConvert: boolean = false;
+  convertInvoiceNumber: number;
   deletedItem: Item;
   totalQuantity: number = 0;
   totalDiscount: number = 0
@@ -44,6 +46,7 @@ export class EditDetailComponent implements OnInit {
   balanceColor: BalanceColors;
   roundOff: boolean = true;
   fullpayment: boolean = false;
+  showAmtDetails: boolean = true;
   ogBalance: number = 0;
 
   // For AutoComplete
@@ -71,7 +74,8 @@ export class EditDetailComponent implements OnInit {
         'location': ''
       };
     });
-  });;
+  });
+
   itemColumnInfo: ColumnInfo[] = [
     {
       columnName: "Item Name",
@@ -180,6 +184,26 @@ export class EditDetailComponent implements OnInit {
           this.modifyDetail.get("state")?.disable();
           this.modifyDetail.get("invoicenumber")?.disable();
           this.modifyDetail.get("invoicedate")?.disable();
+        } else if (this.transactionType == "Sale-Order" || this.transactionType == 'Purchase-Order' || this.transactionType == 'Delivery-Challan'){
+          this.showAmtDetails = false;
+        }
+
+        // Check for the function type whether edit or convert
+        if(params.has("fnType")){
+          let fnType = params.get("fnType");
+          if((this.transactionType === 'Sale-Order' || this.transactionType === 'Delivery-Challan') && fnType == 'convert'){
+            this.isSaleConvert = true;
+            if(params.has("invoiceNo"))
+              this.convertInvoiceNumber = parseInt(params.get("invoiceNo") ?? "");
+            else
+              this._location.back();
+          } else if (this.transactionType === 'Purchase-Order' && fnType == 'convert'){
+            this.isPurchaseConvert = true;
+            if(params.has("invoiceNo"))
+              this.convertInvoiceNumber = parseInt(params.get("invoiceNo") ?? "");
+            else
+              this._location.back();
+          }
         }
       }
       else {
@@ -197,13 +221,16 @@ export class EditDetailComponent implements OnInit {
         // Getting details from api and setting the values
         this.api.getTransactionDetails(this.registeredPhoneNumber, this.invNo, this.transactionType.replace("-", " "), this.isSaleConvert, this.isSaleOrderConvert)
           .subscribe((transaction: TransactionDetails) => {
+            if(transaction.status != 'SUCCESS'){
+              Swal.fire(transaction.status, "", "error").then(_ => this._location.back());
+            }
             this.modifyDetail.patchValue({
               customername: transaction.customername,
               phonenumber: transaction.phonenumber,
               billingaddress: transaction.billingaddress,
               invoicedate: this.cs.formatDate(new Date(transaction.invoicedate)),
               state: transaction.stateofsupply,
-              invoicenumber: this.invNo,
+              invoicenumber: transaction.invoicenumbercount,
               paymenttype: transaction.paymenttype,
               total: transaction.total,
               received: transaction.received,
@@ -236,7 +263,8 @@ export class EditDetailComponent implements OnInit {
     let finalAmount = 0
     let totalElementControl = this.modifyDetail.get("total");
     if (data != null) {
-      finalAmount = data?.priceperunit * data.qty + 0 - 0;
+      // TODO: Add default tax amount from item to totalAmount
+      finalAmount = data?.priceperunit * data.qty + 0 - data?.discountamount;
       this.totalAmount += finalAmount;
       this.totalQuantity += data.qty;
       totalElementControl?.setValue(this.totalAmount, { emitevent: false });
@@ -253,8 +281,8 @@ export class EditDetailComponent implements OnInit {
       priceperunit: new FormControl({ value: data?.priceperunit ?? 0.0, disabled: true }),
       discountpercent: new FormControl(data?.discountpercent ?? 0.0),
       discountamount: new FormControl(data?.discountamount ?? 0.0),
-      taxrate: new FormControl(data?.discountamount ?? 0.0),
-      taxrateamount: new FormControl(data?.discountamount ?? 0.0),
+      taxrate: new FormControl(data?.taxrate ?? 0.0),
+      taxrateamount: new FormControl(data?.taxrateamount ?? 0.0),
       totalAmount: new FormControl({ value: finalAmount, disabled: true }),
       queryoperationtype: new FormControl(data != null ? "" : "INSERT"),
       remainingquantity: new FormControl(data?.remainingquantity ?? 0)
@@ -538,14 +566,24 @@ export class EditDetailComponent implements OnInit {
     // Updating the row containing the new element
     if (item) {
       // If item is present, then perform calc.
-      const itemTotalAmt = (item?.saleprice ?? 0) - (item?.discountonsaleprice ?? 0);
-      let discountPercent = ((item?.discountonsaleprice ?? 0) / (item?.saleprice ?? 0)) * 100;
+      
+      let discountPercent, discountAmt;
+      if(item?.percentageoramounttype == "Percentage"){
+        discountPercent = item?.discountonsaleprice;
+        discountAmt = item.saleprice * (discountPercent/100);
+      }
+      else{
+        discountAmt = item?.discountonsaleprice;
+        discountPercent = ((item?.discountonsaleprice ?? 0) / (item?.saleprice ?? 0)) * 100;
+      }
+
+      const itemTotalAmt = (item?.saleprice ?? 0) - (discountAmt ?? 0);
       let receivedAmt = this.modifyDetail.get("received")?.value;
 
       if (Number.isNaN(discountPercent)) discountPercent = 0;
 
       this.totalAmount += itemTotalAmt;
-      this.totalDiscount += item.discountonsaleprice;
+      this.totalDiscount += discountAmt;``
       this.totalQuantity += 1;
       this.modifyDetail.get("total")?.setValue(this.totalAmount, { emitevent: false });
       element.patchValue({
@@ -554,7 +592,7 @@ export class EditDetailComponent implements OnInit {
         "unit": item.baseunit ?? "None",
         "priceperunit": item.saleprice ?? 0,
         "discountpercent": discountPercent,
-        "discountamount": item.discountonsaleprice,
+        "discountamount": discountAmt,
         "taxrate": 0.0,
         "taxrateamount": 0.0,
         "totalAmount": itemTotalAmt,
@@ -577,15 +615,32 @@ export class EditDetailComponent implements OnInit {
 
     // console.log(body.toreceivefromparty);
     // Updating Party Balance
-    if (this.transactionType == "Sale") {
-      body.toreceivefromparty += body.balance;
-      if (this.isEdit)
-        body.toreceivefromparty -= this.ogBalance;
-    } else {
-      body.itemdetailslist.forEach(item => item.qty = -item.qty);
-      body.topayparty += body.balance;
-      if (this.isEdit)
-        body.topayparty -= this.ogBalance;
+    switch(this.transactionType){
+      case "Sale":
+        body.toreceivefromparty += body.balance;
+        if(this.isEdit)
+          body.toreceivefromparty -= this.ogBalance;
+        break;
+      case "Purchase":
+        body.itemdetailslist.forEach(item => item.qty = -item.qty);
+        body.topayparty += body.balance;
+        if (this.isEdit)
+          body.topayparty -= this.ogBalance;
+        break;
+      case "Sale-Order":
+        body.convertinvoicenumber = this.convertInvoiceNumber;
+        break;
+      case "Purchase-Order":
+        body.convertinvoicenumber = this.convertInvoiceNumber;
+        if (this.isPurchaseConvert)
+          body.itemdetailslist.forEach(item => item.qty = -item.qty);
+        break;
+      case "Delivery-Challan":
+      body.convertinvoicenumber = this.convertInvoiceNumber;
+      break;
+      default:
+        console.log(`Invalid Transaction Type: ${this.transactionType}`);
+        break;
     }
 
     // Updating the payment status
@@ -596,7 +651,9 @@ export class EditDetailComponent implements OnInit {
     else
       body.paymentstatus = "PARTIAL";
 
-    body.isconvert = this.isSaleConvert;
+    body.issaleconvert = this.isSaleConvert;
+    body.issaleorderconvert = this.isSaleOrderConvert;
+    body.ispurchaseconvert = this.isPurchaseConvert;
     body.isupdate = this.isEdit;
 
     // Updating the quantity
