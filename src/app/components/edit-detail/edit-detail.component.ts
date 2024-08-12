@@ -184,7 +184,7 @@ export class EditDetailComponent implements OnInit {
           this.modifyDetail.get("state")?.disable();
           this.modifyDetail.get("invoicenumber")?.disable();
           this.modifyDetail.get("invoicedate")?.disable();
-        } else if (this.transactionType == "Sale-Order" || this.transactionType == 'Purchase-Order' || this.transactionType == 'Delivery-Challan'){
+        } else if (this.transactionType == "Sale-Order" || this.transactionType == 'Purchase-Order' || this.transactionType == 'Delivery-Challan' || this.transactionType == 'Estimate-Quotation'){
           this.showAmtDetails = false;
         }
 
