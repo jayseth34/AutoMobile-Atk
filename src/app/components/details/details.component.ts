@@ -51,6 +51,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    // TODO: Handling when the order is already converted.
     this._route.paramMap.subscribe((params: ParamMap) => {
       this.phonenumber = parseInt(JSON.parse(localStorage.getItem("phonenumber") as string));
       if(!params.has("type")){

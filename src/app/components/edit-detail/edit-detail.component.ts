@@ -191,6 +191,7 @@ export class EditDetailComponent implements OnInit {
         // Check for the function type whether edit or convert
         if(params.has("fnType")){
           let fnType = params.get("fnType");
+
           if((this.transactionType === 'Sale-Order' || this.transactionType === 'Delivery-Challan') && fnType == 'convert'){
             this.isSaleConvert = true;
             if(params.has("invoiceNo"))
@@ -204,6 +205,12 @@ export class EditDetailComponent implements OnInit {
             else
               this._location.back();
           }
+
+
+          // Show Amt details when sale convert or purchase convert
+          // Handle condition for estimate/ quotation where convert to sale order is present
+          if(fnType == 'convert' && !this.isSaleOrderConvert)
+            this.showAmtDetails = true
         }
       }
       else {
@@ -629,15 +636,26 @@ export class EditDetailComponent implements OnInit {
         break;
       case "Sale-Order":
         body.convertinvoicenumber = this.convertInvoiceNumber;
+        if(this.isSaleConvert){
+          body.toreceivefromparty += body.balance;
+          // Not testing for isEdit.. bcause the functionality is same as AddSale..
+          // When creating sale-order, cannot increase receive amount so it will always be 0
+          // Hence, no need to subtract ogBalance when converting because it will always be equal to full amt.
+        }
         break;
       case "Purchase-Order":
         body.convertinvoicenumber = this.convertInvoiceNumber;
-        if (this.isPurchaseConvert)
+        if (this.isPurchaseConvert){
           body.itemdetailslist.forEach(item => item.qty = -item.qty);
+          body.topayparty += body.balance;
+        }
         break;
       case "Delivery-Challan":
-      body.convertinvoicenumber = this.convertInvoiceNumber;
-      break;
+        body.convertinvoicenumber = this.convertInvoiceNumber;
+        if(this.isSaleConvert){
+          body.toreceivefromparty += body.balance;
+        }
+        break;
       default:
         console.log(`Invalid Transaction Type: ${this.transactionType}`);
         break;
