@@ -28,7 +28,7 @@ export class SidebarComponent {
   tabs = [
     {
       name: 'Home',
-      link: '/',
+      link: '/dashboard',
       icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
     },
     {
@@ -39,7 +39,7 @@ export class SidebarComponent {
     {
       name: 'Parties',
       link: '/party-homepage',
-      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+      icon: 'https://toppng.com/uploads/preview/ost-navigation-people-icon-grey-11563250547z5nvtwig34.png',
       action: () => this.getPartyListData()
     },
     {
@@ -65,7 +65,7 @@ export class SidebarComponent {
     {
       name: 'Purchase',
       // link: '/purchase',
-      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+      icon: 'https://png.pngtree.com/png-vector/20190129/ourmid/pngtree-vector-verified-cart-items-icon-png-image_423353.jpg',
       subTabs: [
         { name: 'Purchase Bills', link: '/Purchase-Bills' },
         { name: 'Payment Out', link: '/Payment-Out' },

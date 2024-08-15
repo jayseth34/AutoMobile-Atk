@@ -11,14 +11,14 @@ body, html {
 }
 
 .payment-in-container {
-  width: 80%;
-  height: 60%;
+  width: 90%;
+  height: 95%;
   max-width: 1500px;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f7f7f7;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
@@ -97,4 +97,83 @@ body, html {
 
 .positive-balance {
   color: green;
+}
+
+.fixed-height-textarea {
+  margin-top: 5%;
+  /* height: 200px;  */
+  resize: none; 
+}
+
+.form-floating {
+  margin: 5%;
+}
+
+mat-form-field{
+  width: 100%;
+}
+
+.custome-btn {
+  padding: 2%; 
+  width: 200px; 
+  height: 50px;
+}
+
+.payment-histort-btn{
+  padding: 2%; 
+  width: 200px; 
+  height: 40px;
+  background-color: darkgray;
+}
+
+.payment-type{
+  margin-top: 5%;
+  margin-bottom: 5%;
+  border: 1px solid lightgray;
+  padding: 5%;
+  border-radius: 5px ;
+}
+
+.form-floating input[readonly] {
+  background-color: inherit;
+  color: inherit;
+  cursor: default; 
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1050; 
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  width: 600px; 
+  padding: 20px; 
+  border-radius: 8px; 
+  display: none; 
+}
+
+.modal.show {
+  display: block; 
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 1040; 
+  display: none; 
+}
+
+.modal-backdrop.show {
+  display: block; 
+}
+
+.add-payment {
+  margin-left: 2%;
+  color: rgb(16, 78, 171);
 }

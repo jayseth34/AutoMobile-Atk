@@ -34,6 +34,7 @@ const routes: Routes = [
   { path: 'Payment-Link', component: LinkPaymentComponent },
   { path: 'Plans', component: PlansComponent },
   { path: 'Register', component: RegisterComponent },
+  { path: 'linked', component: LinkPaymentComponent },
 
   { path: 'Sale', pathMatch: 'full', redirectTo: '/Sale-Invoice' },
   { path: 'Purchase', pathMatch: 'full', redirectTo: '/Puchase-Bills' },

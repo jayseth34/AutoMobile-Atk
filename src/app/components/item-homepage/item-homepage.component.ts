@@ -13,7 +13,8 @@ import { AddItemCategoryComponent } from '../add-item-category/add-item-category
   styleUrls: ['./item-homepage.component.css']
 })
 export class ItemHomepageComponent {
-  // selectedTab: string = 'product'; // Initially select the 'address' tab
+  selectedCategory: any = '';
+  selectedItem: any = ''; 
   clickSubscription: Subscription;
   clicks: any[] = [];
   registeredMobileNumber:any;
@@ -69,6 +70,7 @@ export class ItemHomepageComponent {
       this.api.GetItemDetails(this.registeredMobileNumber,itemName).subscribe({
         next: (res) =>{
           if (res.status === "SUCCESS") {
+            this.selectedItem = itemName
             this.dataService.isItemUpdate = true;
             this.dataService.oldItemName = itemName
             this.cdr.detectChanges(); // Manually trigger change detection
@@ -111,6 +113,7 @@ export class ItemHomepageComponent {
     } else if (this.dataService.itemHomePageSelectedTab == 'category'){
         this.api.GetCategory(this.registeredMobileNumber).subscribe((response:any) => {
           if(response.status == "SUCCESS") {
+            this.selectedCategory = response.getCateogoryList[0].category
             this.dataService.categoryListResponse = response.getCateogoryList
             console.log("CATEGORRYYY: ", this.dataService.categoryListResponse[1].category)
             console.log("GET CATEGORY SUCCESS", response)
@@ -127,6 +130,7 @@ export class ItemHomepageComponent {
       this.api.GetItemByCategory(this.registeredMobileNumber,categoryname).subscribe({
         next: (res) => {
           if (res.status === "SUCCESS") {
+            this.selectedCategory = categoryname
             this.dataService.isCategoryUpdate = true;
             this.dataService.oldCategoryName = categoryname
             const dialogRef = this.dialog.open(AddItemCategoryComponent, {
@@ -161,6 +165,7 @@ export class ItemHomepageComponent {
   GetItemDetailsData(itemname: any){
           this.api.GetItemTransactions(this.registeredMobileNumber,itemname).subscribe((response:any) => {
               if(response.status == "SUCCESS"){
+                this.selectedItem = itemname
                 this.dataService.GetItemTransactionsResponse = response.itemTransactionsList
                 this.saleprice = response.saleprice
                 this.purchaseprice = response.purchaseprice
@@ -179,6 +184,7 @@ export class ItemHomepageComponent {
       next:(res) => {
         console.log("GETITEMDETS API: ",res);
         if(res.status == "SUCCESS") {
+          this.selectedCategory = category
           this.dataService.isCategoryUpdate = true
           this.dataService.GetItemByCategoryResponse = res.getItemList;
           // this.api.GetItemByCategory(registeredMobileNumber,category).subscribe({
@@ -241,6 +247,7 @@ export class ItemHomepageComponent {
     this.api.GetItemList(this.registeredMobileNumber).subscribe((res:any) => {
         console.log("GETITEMLIST API: ",res);
         if(res.status == 'SUCCESS') {
+          this.selectedItem = res.getItemList[0].itemname
           if(res.getItemList && res.getItemList.length > 0){
             this.itemlist = res.getItemList.map((item:any) => ({
               itemname: item.itemname,
@@ -262,5 +269,13 @@ export class ItemHomepageComponent {
 
   ngOnDestroy() {
     this.clickSubscription.unsubscribe();
+  }
+
+  isSelectedItem(itemName: any): boolean {
+    return this.selectedItem === itemName;
+  }
+  
+  isSelectedCategory(categoryName: any): boolean {
+    return this.selectedCategory === categoryName;
   }
 }

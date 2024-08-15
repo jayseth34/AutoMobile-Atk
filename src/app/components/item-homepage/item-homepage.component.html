@@ -1,9 +1,9 @@
 <div>
-  <ul class="nav nav-tabs navbar-light bg-light row tabMain" role="tablist">
-    <li class="nav-item tabSubMain col-sm-6 d-flex justify-content-center align-items-center">
+  <ul class="nav" role="tablist">
+    <li class="nav-item tabMain">
       <a class="nav-link tabTitle" [class.active]="dataService.itemHomePageSelectedTab === 'product'"  id="tab1-tab" data-toggle="tab"  role="tab" aria-controls="tab1" (click)="selectTab('product')">PRODUCT</a>
     </li>
-    <li class="nav-item tabSubMain col-sm-6 d-flex justify-content-center align-items-center">
+    <li class="nav-item tabMain">
       <a class="nav-link tabTitle" [class.active]="dataService.itemHomePageSelectedTab === 'category'" id="tab2-tab" data-toggle="tab"  role="tab" aria-controls="tab2" (click)="selectTab('category')">CATEGORY</a>
     </li>
   </ul>  
@@ -31,18 +31,19 @@
             </div>
         </div>
 
-        <table class="table table-bordered item_list">
+        <table class="table item_list">
             <thead class="thead-dark">
               <tr>
-                <th>ITEM</th>
-                <th>QUANTITY</th>
+                <th class="table-column">ITEM</th>
+                <th class="table-column">QUANTITY</th>
               </tr>
             </thead>
             <tbody>
               <!-- Loop to generate rows -->
-              <tr *ngFor="let item of itemlist" (click)="productHandleClick($event,item.itemname)">
-                <td>{{ item.itemname }}</td>
-                <td>{{ item.remainingquantity }}</td>
+              <tr *ngFor="let item of itemlist" (click)="productHandleClick($event,item.itemname)"  [ngClass]="{ 'selectedParty-row-tr': isSelectedItem( item.itemname ) }">
+                <td class="table-row" [ngClass]="{ 'selectedParty-row-td': isSelectedItem(item.itemname) }">{{ item.itemname }}</td>
+                <td class="table-row" [ngClass]="{ 'selectedParty-row-td': isSelectedItem(item.itemname) }"
+                [ngStyle]="{ 'color': dataService.getColor(item.remainingquantity, 0) }">{{ item.remainingquantity }}</td>
               </tr>
             </tbody>
           </table>
@@ -64,28 +65,28 @@
     <!-- BOTTOM CONTENT -->
     <div class="bottom-content">
         <h2>TRANSACTIONS</h2>
-        <table class="table table-bordered">
+        <table class="table table-list">
             <thead class="thead-dark">
               <tr>
-                <th>TYPE</th>
-                <th>INVOICE/REF</th>
-                <th>NAME</th>
-                <th>DATE</th>
-                <th>QUANTITY</th>
-                <th>PRICE/UNIT</th>
-                <th>STATUS</th>
+                <th class="table-column" >TYPE</th>
+                <th class="table-column" >INVOICE/REF</th>
+                <th class="table-column" >NAME</th>
+                <th class="table-column" >DATE</th>
+                <th class="table-column" >QUANTITY</th>
+                <th class="table-column" >PRICE/UNIT</th>
+                <th class="table-column" >STATUS</th>
               </tr>
             </thead>
             <tbody>
               <!-- Loop to generate rows -->
               <tr *ngFor="let transaction of this.dataService.GetItemTransactionsResponse">
-                <td>{{ transaction.typeofpay }}</td>
-                <td>{{ transaction.invoicenumber }}</td>
-                <td>{{ transaction.partyname }}</td>
-                <td>{{ transaction.invoicedate }}</td>
-                <td>{{ transaction.qty }}</td>
-                <td>{{ transaction.priceperunit }}</td>
-                <td>{{ transaction.paymentstatus }}</td>
+                <td class="table-row" >{{ transaction.typeofpay }}</td>
+                <td class="table-row" >{{ transaction.invoicenumber }}</td>
+                <td class="table-row" >{{ transaction.partyname }}</td>
+                <td class="table-row" >{{ transaction.invoicedate }}</td>
+                <td class="table-row" >{{ transaction.qty }}</td>
+                <td class="table-row" >{{ transaction.priceperunit }}</td>
+                <td class="table-row" >{{ transaction.paymentstatus }}</td>
               </tr>
             </tbody>
           </table>
@@ -118,18 +119,18 @@
               </div>
           </div>
   
-          <table class="table table-bordered item_list">
+          <table class="table item_list">
               <thead class="thead-dark">
                 <tr>
-                  <th>CATEGORY</th>
-                  <th>ITEM</th>
+                  <th class="table-column">CATEGORY</th>
+                  <th class="table-column">ITEM</th>
                 </tr>
               </thead>
               <tbody>
                 <!-- Loop to generate rows -->
-                <tr *ngFor="let category of this.dataService.categoryListResponse" (click)="categoryHandleClick($event,category.category)">
-                  <td>{{ category.category }}</td>
-                  <td>{{ category.categorycount }}</td>
+                <tr *ngFor="let category of this.dataService.categoryListResponse" (click)="categoryHandleClick($event,category.category)"  [ngClass]="{ 'selectedParty-row-tr': isSelectedCategory( category.category ) }">
+                  <td class="table-row" [ngClass]="{ 'selectedParty-row-td': isSelectedCategory(category.category) }">{{ category.category }}</td>
+                  <td class="table-row" [ngClass]="{ 'selectedParty-row-td': isSelectedCategory(category.category) }">{{ category.categorycount }}</td>
                 </tr>
               </tbody>
             </table>
@@ -146,20 +147,20 @@
       <!-- BOTTOM CONTENT -->
       <div class="bottom-content">
           <h2>ITEMS</h2>
-          <table class="table table-bordered">
+          <table class="table table-list">
               <thead class="thead-dark">
                 <tr>
-                  <th>NAME</th>
-                  <th>QUANTITY</th>
-                  <th>STOCK VALUE</th>
+                  <th class="table-column">NAME</th>
+                  <th class="table-column">QUANTITY</th>
+                  <th class="table-column">STOCK VALUE</th>
                 </tr>
               </thead>
               <tbody>
                 <!-- Loop to generate rows -->
                 <tr *ngFor="let category of this.dataService.GetItemByCategoryResponse">
-                  <td>{{ category.itemname }}</td>
-                  <td>{{ category.minimumwholesalequantity }}</td>
-                  <td>{{ category.wholesaleprice }}</td>
+                  <td class="table-row">{{ category.itemname }}</td>
+                  <td class="table-row">{{ category.minimumwholesalequantity }}</td>
+                  <td class="table-row">{{ category.wholesaleprice }}</td>
                 </tr>
               </tbody>
             </table>

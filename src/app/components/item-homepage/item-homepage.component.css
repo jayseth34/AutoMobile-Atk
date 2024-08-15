@@ -20,6 +20,16 @@
     color: white;
   }
 
+.table-column {
+  padding: 2%;
+  text-align: center;
+}
+
+ .table-row {
+    /* margin-top: 50%; */
+  text-align: center;
+}
+
 .item_list {
     margin-top: 10px;
     box-shadow: 1px 1px 1px 1px lightgray;
@@ -71,4 +81,30 @@
 .tabMain {
   /* margin-left: 20%; */
   text-align: center;
+}
+
+/* NAVBAR */
+.tabMain {
+  /* margin-left: 20%; */
+  text-align: center;
+  width: 50%; 
+  background-color:#474746;
+}
+
+.nav-link.active {
+  font-size: large;
+  font-weight: 500;
+  background-color:#363636;
+}
+
+.nav-link.tabTitle {
+  color: white;
+}
+
+.selectedParty-row-tr {
+  border: 2px solid #a8a3a4; /* Red line on the left */
+}
+
+.selectedParty-row-td {
+  background-color: #c0c4c1;
 }

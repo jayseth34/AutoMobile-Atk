@@ -103,5 +103,15 @@ export class DataService {
     this.conversionRateSubject.next(value);
   }
 
+  getColor(param1: any, param2: any): any {
+    const difference = param1 - param2;
+    if (difference > 0)  {
+      return 'green';
+    } else if (difference < 0) {
+      return 'red';
+    } else {
+      return '';
+    }
+  }
 
 }

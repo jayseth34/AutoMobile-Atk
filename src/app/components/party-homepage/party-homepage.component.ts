@@ -16,7 +16,10 @@ import { CommonService } from 'src/app/services/common.service';
   templateUrl: './party-homepage.component.html',
   styleUrls: ['./party-homepage.component.css'],
 })
+
 export class PartyHomepageComponent {
+  selectedGroup: any = '';
+  selectedParty: any = ''; 
   searchParty: string = '';
   searchGroup: string = '';
   // partyHomePageSelectedTab: string = 'party'; // Initially select the 'address' tab
@@ -103,6 +106,11 @@ export class PartyHomepageComponent {
       });
 
     this.selectTab('party');
+
+    // this.getPartyListData();
+    // if (this.partyList.length > 0) {
+    //   this.selectedParty = this.partyList[0].partyname; // Set the first party as selected
+    // }
   }
 
   ngAfterViewInit(): void {
@@ -152,6 +160,7 @@ export class PartyHomepageComponent {
       this.api
         .GetPartyGroup(this.registeredMobileNumber).subscribe((response: any) => {
           if (response.status == 'SUCCESS') {
+            this.selectedGroup = response.getPartyGroupList[0].partygroup
             this.dataService.partyGroupListResponse =
               response.getPartyGroupList;
             console.log('GET PARTY GROUP SUCCESS', response);
@@ -167,6 +176,7 @@ export class PartyHomepageComponent {
       this.api.getPartyDetails(this.registeredMobileNumber, partyName).subscribe({
         next: (res) => {
           if (res.status === 'SUCCESS') {
+            this.selectedParty = partyName; 
             this.dataService.isPartyUpdate = true;
             this.dataService.oldPartyName = partyName;
             console.log('Party Details:', res.partyList[0]);
@@ -213,6 +223,7 @@ export class PartyHomepageComponent {
         .subscribe({
           next: (res) => {
             if (res != null) {
+              this.selectedGroup = groupname;
               this.dataService.isGroupUpdate = true;
               this.dataService.oldPartyGroupName = groupname;
               const dialogRef = this.dialog.open(AddPartyGroupComponent, {
@@ -249,6 +260,7 @@ export class PartyHomepageComponent {
     console.log('onclick: ', partyName);
     this.api.getPartyTransactions(this.registeredMobileNumber, partyName).subscribe((response: any) => {
       if (response.status == 'SUCCESS') {
+        this.selectedParty = partyName; 
         this.dataService.transactionDetailsResponse = response.partyTransactionsList;
         this.gst = response.gst;
         this.emailid = response.emailid;
@@ -270,7 +282,9 @@ export class PartyHomepageComponent {
         next: (res) => {
           console.log('GETPARTYGROUPLIST API: ', res);
           if (res) {
+            this.selectedGroup = groupname;
             this.dataService.partyByGroupResponse = res.getPartyList;
+            this.selectedGroup = groupname
             console.log('successs');
           } else {
             console.log('failed');
@@ -288,9 +302,11 @@ export class PartyHomepageComponent {
       if (this.clicks.length === 1) {
         // Single click detected
         this.GetPartyDetailsData(partyName);
+        this.selectedParty = partyName; // Set selected party
       } else if (this.clicks.length === 2) {
         // Double click detected
         this.openAddPartyModal(partyName);
+        this.selectedParty = partyName; 
       }
       this.clicks = [];
     }, 250);
@@ -303,14 +319,24 @@ export class PartyHomepageComponent {
       if (this.clicks.length === 1) {
         // Single click detected
         this.GetPartyByGroupData(partyGroupName);
+        // this.selectedGroup === partyGroupName;
       } else if (this.clicks.length === 2) {
         // Double click detected
         this.openAddPartyGroupModal(partyGroupName);
+        // this.selectedGroup === partyGroupName;
       }
       this.clicks = [];
     }, 250);
   }
 
+  isSelectedParty(partyName: any): boolean {
+    return this.selectedParty === partyName;
+  }
+  
+  isSelectedGroup(groupName: any): boolean {
+    return this.selectedGroup === groupName;
+  }
+  
   // filteredData: { column1: string, column2: string }[] = [];
 
   // onSearch() {
