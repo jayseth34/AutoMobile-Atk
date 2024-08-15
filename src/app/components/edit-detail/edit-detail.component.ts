@@ -656,6 +656,11 @@ export class EditDetailComponent implements OnInit {
           body.toreceivefromparty += body.balance;
         }
         break;
+      case "Sale-Return":
+        body.topayparty += body.balance;
+        if (this.isEdit)
+          body.topayparty += this.ogBalance;
+        break;
       default:
         console.log(`Invalid Transaction Type: ${this.transactionType}`);
         break;
