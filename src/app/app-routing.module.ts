@@ -15,6 +15,7 @@ import { LinkPaymentComponent } from './components/link-payment/link-payment.com
 import { AutoCompleteComponent } from './components/auto-complete/auto-complete.component';
 import { PlansComponent } from './components/plans/plans.component';
 import { RegisterComponent } from './components/register/register.component';
+import { BanksComponent } from './components/banks/banks.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -24,6 +25,8 @@ const routes: Routes = [
   { path: 'addparty', component: AddPartyComponent },
   { path: 'additem', component: AddItemComponent },
   { path: 'addPartyGroup', component: AddPartyGroupComponent },
+  { path: 'banks', component: BanksComponent},
+
 
   { path: 'party-homepage', component: PartyHomepageComponent },
   { path: 'item-homepage', component: ItemHomepageComponent },

@@ -20,6 +20,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -43,6 +44,7 @@ import { PaymentHistoryComponent } from './components/payment-history/payment-hi
 import { PlansComponent } from './components/plans/plans.component';
 import { RegisterComponent } from './components/register/register.component';
 import { RemoveHyphenPipe } from './remove-hyphen.pipe';
+import { BanksComponent } from './components/banks/banks.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +69,7 @@ import { RemoveHyphenPipe } from './remove-hyphen.pipe';
     PlansComponent,
     RegisterComponent,
     RemoveHyphenPipe,
+    BanksComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,7 +93,8 @@ import { RemoveHyphenPipe } from './remove-hyphen.pipe';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSlideToggleModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]

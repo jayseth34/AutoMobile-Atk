@@ -198,4 +198,16 @@ export class ApiService {
     return this.cs.Post("Login/RegisterUser", body)
   }
 
+  getAccounts(): Observable<any[]> {
+    return this.cs.get("/accounts");
+  }
+
+  saveTransferDetails(data: any): Observable<any> {
+    return this.cs.Post("/transfers", data);
+  }
+
+  getTransferDetails(id: number): Observable<any> {
+    return this.cs.get("transfers/${id}");
+  }
+
 }

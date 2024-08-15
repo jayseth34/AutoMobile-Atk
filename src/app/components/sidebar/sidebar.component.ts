@@ -5,6 +5,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { takeUntil, Subject } from 'rxjs';
 import { DataService } from 'src/app/services/data.service';
 import { BusinessInformationComponent } from '../business-information/business-information.component';
+import { BanksComponent } from '../banks/banks.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -72,7 +73,13 @@ export class SidebarComponent {
         { name: 'Purchase Return/ Dr. Note', link: '/Purchase-Return' },
       ],
       isOpen: false
-    }
+    },
+    {
+      name: 'Banks',
+      link: '/Sale-Invoice',
+      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+      action: () => this.redirecttobanks()
+    },
   ];
 
   toggleSubMenu(tab: any) {
@@ -178,5 +185,18 @@ export class SidebarComponent {
         console.log("CATEGORY ERROR")
       }
     })
+  }
+
+  redirecttobanks(){
+    //  window.location.href = 'http://localhost:4201/party-homepage'
+    const dialogRef = this.dialog.open(BanksComponent, {
+      width: '900px',
+      height: '700px',
+      data: { }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 }

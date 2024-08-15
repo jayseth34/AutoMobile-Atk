@@ -222,3 +222,8 @@ interface Itemdetailslist {
     discountpercent: number
     discountamount: number
 }
+
+export interface Account {
+    id: number;
+    name: string;
+  }
