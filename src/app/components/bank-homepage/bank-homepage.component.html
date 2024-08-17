@@ -1,0 +1,84 @@
+<div>
+    <ul class="nav" role="tablist">
+      <li class="nav-item tabMain">
+        <a class="nav-link tabTitle" id="tab1-tab" role="tab">BANKS</a>
+      </li>
+    </ul>  
+  </div>
+
+  <ng-container>
+  <div class="grid-container">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+          <div class="row">
+              <div class="col">
+                <!-- <input type="text" [(ngModel)]="searchGroup" class="form-control" placeholder="Search here.."> -->
+                <input type="text" class="form-control" placeholder="Search here..">
+              </div>
+              <div class="col-auto">
+                <button class="btn btn-warning add_banks_btn" (click)="openAddBanksModal()">+ ADD BANKS</button>
+              </div>
+          </div>
+  
+          <table class="table table-hover bank_list">
+          <!-- <table class="table table-hover bank_list" *ngIf = "ispartygrouplistresponse"> -->
+            <thead class="thead-dark">
+                <tr>
+                  <th class="table-column">ACCOUNT NAME</th>
+                  <th class="table-column">AMOUNT</th>
+                </tr>
+              </thead>
+              <!-- <tbody *ngIf = "dataService.partyGroupListResponse?.length > 0"> -->
+                
+              <tbody>
+                <!-- Loop to generate rows -->
+                <!-- <tr *ngFor="let party of dataService.partyGroupListResponse" (click)="groupHandleClick($event, party.partygroup)" [ngClass]="{ 'selectedParty-row-tr': isSelectedGroup(party.partygroup ) }">                
+                  <td class="table-row" [ngClass]="{ 'selectedParty-row-td': isSelectedGroup(party.partygroup ) }">{{ party.partygroup }}</td>
+                  <td class="table-row" [ngClass]="{ 'selectedParty-row-td': isSelectedGroup(party.partygroup ) }">{{ party.partygroupcount }}</td>
+                </tr> -->
+                <tr>                
+                    <td class="table-row">bank1</td>
+                    <td class="table-row">amount1</td>
+                  </tr>
+              </tbody>
+            </table>
+      </div>
+  
+      <!-- TOP CONTENT -->
+      <div class="top-content">
+        <div class="top-content-row">
+            <div class="bank-name">Bank Name:</div>
+            <div class="acct-number">Account Number:</div>
+            <div class="ifsc-code">IFSC Code:</div>
+            <div class="upi-id">UPI ID:</div>
+        </div>
+      </div>
+  
+      <!-- BOTTOM CONTENT -->
+      <div class="bottom-content">
+        <h2>TRANSACTIONS</h2>
+        <table class="table table-hover transaction-list">
+            <thead class="thead-dark">
+              <tr>
+                <th class="table-column">TYPE</th>
+                <th class="table-column">NAME</th>
+                <th class="table-column">DATE</th>
+                <th class="table-column">AMOUNT</th>
+              </tr>
+            </thead>
+            <!-- <tbody *ngIf="this.dataService.transactionDetailsResponse?.length > 0"> -->
+            <tbody>
+              <!-- Loop to generate rows -->
+              <!-- <tr *ngFor="let transaction of this.dataService.transactionDetailsResponse" > -->
+            <tr>
+                <td class="table-row">typ1</td>
+                <td class="table-row">name1</td>
+                <td class="table-row">date1</td>
+                <td class="table-row">amount1</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+  
+  </div>
+  </ng-container>

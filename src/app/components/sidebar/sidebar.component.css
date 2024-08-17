@@ -71,9 +71,18 @@
 }
 
 .sidebar .menu .tabs .icon {
-  margin-right: 8px; /* Adjust as needed */
+  margin-right: 8px; 
 }
 
 .rotated {
   transform: rotate(180deg);
 }
+
+.tabs.selected > a,
+.sub-tabs.selected > a {
+  background-color: #363636;
+  color: white;
+  font-size: medium;
+  border-left: 4px solid #bf1336;
+}
+

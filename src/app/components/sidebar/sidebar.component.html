@@ -1,6 +1,7 @@
 <div class="sidebar">
   <ul class="menu">
-    <li class="tabs" *ngFor="let tab of tabs" [ngClass]="{ 'has-sub-menu': tab.subTabs }">
+    <li class="tabs" *ngFor="let tab of tabs" 
+        [ngClass]="{ 'has-sub-menu': tab.subTabs, 'selected': tab === selectedTab }">
       <a [routerLink]="tab.link" (click)="tab.action ? tab.action() : null" (click)="toggleSubMenu(tab)">
         <div class="tab-content">
           <img [src]="tab.icon" [alt]="tab.name + ' Icon'" class="icon" />
@@ -13,8 +14,9 @@
         </div>
       </a>
       <ul class="sub-menu" *ngIf="tab.subTabs && tab.isOpen">
-        <li class="sub-tabs" *ngFor="let subTab of tab.subTabs">
-          <a [routerLink]="subTab.link">{{ subTab.name }}</a>
+        <li class="sub-tabs" *ngFor="let subTab of tab.subTabs"
+        [ngClass]="{ 'selected': subTab === selectedTab }">
+          <a [routerLink]="subTab.link" (click)="selectSubTab(subTab)">{{ subTab.name }}</a>
         </li>
       </ul>
     </li>

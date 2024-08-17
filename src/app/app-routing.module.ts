@@ -16,6 +16,7 @@ import { AutoCompleteComponent } from './components/auto-complete/auto-complete.
 import { PlansComponent } from './components/plans/plans.component';
 import { RegisterComponent } from './components/register/register.component';
 import { BanksComponent } from './components/banks/banks.component';
+import { BankHomepageComponent } from './components/bank-homepage/bank-homepage.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -26,11 +27,11 @@ const routes: Routes = [
   { path: 'additem', component: AddItemComponent },
   { path: 'addPartyGroup', component: AddPartyGroupComponent },
   { path: 'banks', component: BanksComponent},
-
+  { path: 'banks-homepage', component: BankHomepageComponent},
 
   { path: 'party-homepage', component: PartyHomepageComponent },
   { path: 'item-homepage', component: ItemHomepageComponent },
-  // { path: 'Payment-In', component: PaymentInoutComponent },
+  { path: 'Payment-In', component: PaymentInoutComponent },
   { path: 'Payment-Link', component: LinkPaymentComponent },
   { path: 'Plans', component: PlansComponent },
   { path: 'Register', component: RegisterComponent },

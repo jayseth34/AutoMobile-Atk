@@ -16,6 +16,7 @@ export class SidebarComponent {
   // totalGroupCount: any;
   // totalGroupCountSum: any;
   registeredPhoneNumber:any;
+  selectedTab: any = null; 
 
   constructor(public dialog: MatDialog, private api: ApiService, public dataService: DataService) { }
  
@@ -83,7 +84,12 @@ export class SidebarComponent {
   ];
 
   toggleSubMenu(tab: any) {
+    this.selectedTab = tab; 
     tab.isOpen = !tab.isOpen;
+  }
+
+  selectSubTab(subTab: any) {
+    this.selectedTab = subTab; 
   }
 
   getPartyListData() {
