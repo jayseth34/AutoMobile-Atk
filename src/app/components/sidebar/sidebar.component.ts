@@ -77,9 +77,8 @@ export class SidebarComponent {
     },
     {
       name: 'Banks',
-      link: '/Sale-Invoice',
+      link: '/banks-homepage',
       icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
-      action: () => this.redirecttobanks()
     },
   ];
 

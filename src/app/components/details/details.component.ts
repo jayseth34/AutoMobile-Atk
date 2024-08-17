@@ -102,6 +102,9 @@ export class DetailsComponent implements OnInit, AfterViewInit {
         case "Sale-Return":
           this.transactionType = 9;
           break;
+        case "Purchase-Return":
+          this.transactionType = 10;
+          break;
       
       }
       

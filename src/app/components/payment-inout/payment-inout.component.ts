@@ -164,9 +164,9 @@ export class PaymentInoutComponent implements OnInit {
     this.paymentInForm = this.fb.group({
       party: ['', Validators.required],
       paymentType1: ['Cash', Validators.required],
-      amount1: ['0', Validators.required],
+      amount1: [0, Validators.required],
       paymentType2: ['', ],
-      amount2: ['0',],
+      amount2: [0,],
       referenceNo: ['',],
       receiptNo: ['', Validators.required],
       date: ['', Validators.required],
