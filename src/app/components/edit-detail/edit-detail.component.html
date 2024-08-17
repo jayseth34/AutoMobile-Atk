@@ -8,7 +8,8 @@
       </div>
       <div class="col-5 align-self-center">
         <h1 class="m-0" *ngIf="!(isSaleConvert || isPurchaseConvert || isSaleOrderConvert)"> {{ transactionType | removeHyphen}} </h1>
-        <h1 class="m-0" *ngIf="(isSaleConvert || isSaleOrderConvert)"> Sale </h1>
+        <h1 class="m-0" *ngIf="isSaleConvert"> Sale </h1>
+        <h1 class="m-0" *ngIf="isSaleOrderConvert"> Sale Order </h1>
         <h1 class="m-0" *ngIf="isPurchaseConvert"> Purchase </h1>
       </div>
     </div>
@@ -400,26 +401,35 @@
   </form>
 
   <div class="container-fluid">
-    <form [formGroup]="modifyDetail" class="mt-4 row justify-content-between">
-      <div class="col-3">
-        <div class="form-floating">
-          <select
-            class="form-select"
-            id="paymentType"
-            aria-label="Payment Type Select"
-            formControlName="paymenttype"
-          >
-            <option value="CASH">CASH</option>
-            <option value="CREDIT">
-              CREDIT
-              <!-- <option value="3">Three</option> -->
-            </option>
-          </select>
-          <label for="floatingSelect">Payment Type</label>
+    <form [formGroup]="modifyDetail" class="mt-4 row" [ngClass]="!showAmtDetails ? 'justify-content-end' : 'justify-content-between'">
+      <div class="col-5" *ngIf="showAmtDetails">
+        <div class="container-fluid row">
+          <div class="col-6">
+            <div class="form-floating">
+              <select
+                class="form-control form-select-sm"
+                id="paymentType"
+                aria-label="Payment Type Select"
+                formControlName="paymenttype"
+              >
+                <option value="CASH"> CASH </option>
+                <option value="CREDIT"> CREDIT </option>
+                <option value="CHEQUE"> CHEQUE </option>
+              </select>
+              <label for="floatingSelect"> Payment Type </label>
+            </div>
+          </div>
+          
+          <div class="col-6">
+            <div class="form-floating">
+              <input type="number" name="checkAmt" id="checkAmt" class="form-control form-control-sm">
+              <label for="floatingSelect"> Amount </label>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="col-5 row justify-content-end">
+      <div class="col-6 row justify-content-end">
         <!-- Round Off Checkbox -->
         <div class="form-check col-3 mb-1">
           <input
