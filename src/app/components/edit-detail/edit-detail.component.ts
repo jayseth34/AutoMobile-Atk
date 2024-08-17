@@ -184,7 +184,7 @@ export class EditDetailComponent implements OnInit {
           this.modifyDetail.get("state")?.disable();
           this.modifyDetail.get("invoicenumber")?.disable();
           this.modifyDetail.get("invoicedate")?.disable();
-        } else if (this.transactionType == "Sale-Order" || this.transactionType == 'Purchase-Order' || this.transactionType == 'Delivery-Challan' || this.transactionType == 'Estimate-Quotation'){
+        } else if (this.transactionType == "Sale-Order" || this.transactionType == 'Purchase-Order' || this.transactionType == 'Delivery-Challan'  || this.transactionType === 'Estimate-Quotation'){
           this.showAmtDetails = false;
         }
 
@@ -192,7 +192,7 @@ export class EditDetailComponent implements OnInit {
         if(params.has("fnType")){
           let fnType = params.get("fnType");
 
-          if((this.transactionType === 'Sale-Order' || this.transactionType === 'Delivery-Challan') && fnType == 'convert'){
+          if((this.transactionType === 'Sale-Order' || this.transactionType === 'Delivery-Challan' || this.transactionType === 'Estimate-Quotation') && fnType == 'convert'){
             this.isSaleConvert = true;
             if(params.has("invoiceNo"))
               this.convertInvoiceNumber = parseInt(params.get("invoiceNo") ?? "");
@@ -203,6 +203,12 @@ export class EditDetailComponent implements OnInit {
             if(params.has("invoiceNo"))
               this.convertInvoiceNumber = parseInt(params.get("invoiceNo") ?? "");
             else
+              this._location.back();
+          } else if (this.transactionType === 'Estimate-Quotation' && fnType == 'convertOrder'){
+            this.isSaleOrderConvert = true;
+            if(params.has("invoiceNo")){
+              this.convertInvoiceNumber = parseInt(params.get("invoiceNo") ?? "");
+            } else 
               this._location.back();
           }
 
@@ -237,7 +243,7 @@ export class EditDetailComponent implements OnInit {
               billingaddress: transaction.billingaddress,
               invoicedate: this.cs.formatDate(new Date(transaction.invoicedate)),
               state: transaction.stateofsupply,
-              invoicenumber: transaction.invoicenumbercount,
+              invoicenumber: transaction.invoicenumbercount,  
               paymenttype: transaction.paymenttype,
               total: transaction.total,
               received: transaction.received,
@@ -655,6 +661,11 @@ export class EditDetailComponent implements OnInit {
         if(this.isSaleConvert){
           body.toreceivefromparty += body.balance;
         }
+        break;
+      case "Estimate-Quotation":
+        body.convertinvoicenumber = this.convertInvoiceNumber;
+        if(this.isSaleConvert)
+          body.toreceivefromparty += body.balance;
         break;
       case "Sale-Return":
         body.topayparty += body.balance;

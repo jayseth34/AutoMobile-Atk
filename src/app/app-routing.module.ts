@@ -37,7 +37,7 @@ const routes: Routes = [
   { path: 'linked', component: LinkPaymentComponent },
 
   { path: 'Sale', pathMatch: 'full', redirectTo: '/Sale-Invoice' },
-  { path: 'Purchase', pathMatch: 'full', redirectTo: '/Puchase-Bills' },
+  { path: 'Purchase', pathMatch: 'full', redirectTo: '/Purchase-Bills' },
   // All other paths above this line.
   { path: ':type', component: DetailsComponent},
   { path: ':type/:fnType', component: EditDetailComponent},

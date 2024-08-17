@@ -219,6 +219,26 @@
               Edit
             </button>
             <button mat-menu-item>Delete</button>
+            <button
+              mat-menu-item
+              [routerLink]="[
+                '/' + transactionTypeString + '/convert',
+                element.invoicenumber
+              ]"
+              *ngIf="transactionType == 8"
+            >
+              Convert to Sale
+            </button>
+            <button
+              mat-menu-item
+              [routerLink]="[
+                '/' + transactionTypeString + '/convertOrder',
+                element.invoicenumber
+              ]"
+              *ngIf="transactionType == 8"
+            >
+              Convert to Sale Order
+            </button>
           </mat-menu>
         </td>
       </ng-container>
