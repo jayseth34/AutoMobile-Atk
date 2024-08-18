@@ -1,94 +1,22 @@
 <form [formGroup]="bankForm" class="bank-form">
-    <!-- Bank Details Row -->
-    <div class="row">
-      <mat-form-field class="half-width">
-        <mat-label>Account Display Name</mat-label>
-        <input matInput formControlName="accountDisplayName" />
-      </mat-form-field>
-      <mat-form-field class="half-width">
-        <mat-label>Opening Balance</mat-label>
-        <input matInput type="number" formControlName="openingBalance" />
-      </mat-form-field>
-      <mat-form-field class="half-width">
-        <mat-label>As of Date</mat-label>
-        <input matInput [matDatepicker]="asOfDatePicker" formControlName="asOfDate" />
-        <mat-datepicker-toggle matSuffix [for]="asOfDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #asOfDatePicker></mat-datepicker>
-      </mat-form-field>
-    </div>
-  
-    <!-- Transfer Type Radio Buttons -->
-    <div class="row">
-      <mat-radio-group formControlName="transferType" (change)="onTransferTypeChange($event)">
-        <mat-radio-button value="none">None</mat-radio-button>
-        <mat-radio-button value="bankToCash">Bank to Cash Transfer</mat-radio-button>
-        <mat-radio-button value="cashToBank">Cash to Bank Transfer</mat-radio-button>
-        <mat-radio-button value="bankToBank">Bank to Bank Transfer</mat-radio-button>
-        <mat-radio-button value="adjustBalance">Adjust Balance</mat-radio-button>
-      </mat-radio-group>
-    </div>
-  
-    <!-- Transfer Specific Fields -->
-    <div *ngIf="isTransferVisible('cashToBank', 'bankToCash', 'bankToBank')" class="row">
-      <mat-form-field class="half-width">
-        <mat-label>From</mat-label>
-        <input matInput formControlName="fromAccount" />
-      </mat-form-field>
-      <mat-form-field class="half-width">
-        <mat-label>To</mat-label>
-        <mat-select formControlName="toAccount">
-          <mat-option *ngFor="let account of accounts" [value]="account.id">{{ account.name }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div *ngIf="isTransferVisible('cashToBank', 'bankToCash', 'bankToBank')" class="row">
-      <mat-form-field class="half-width">
-        <mat-label>Amount</mat-label>
-        <input matInput type="number" formControlName="amount" />
-      </mat-form-field>
-      <mat-form-field class="half-width">
-        <mat-label>Adjustment Date</mat-label>
-        <input matInput [matDatepicker]="adjustmentDatePicker" formControlName="adjustmentDate" />
-        <mat-datepicker-toggle matSuffix [for]="adjustmentDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #adjustmentDatePicker></mat-datepicker>
-      </mat-form-field>
-    </div>
-  
-    <!-- Adjust Balance Specific Fields -->
-    <div *ngIf="isTransferVisible('adjustBalance')" class="row">
-      <mat-form-field class="half-width">
-        <mat-label>Account Name</mat-label>
-        <input matInput formControlName="accountName" />
-      </mat-form-field>
-      <mat-form-field class="half-width">
-        <mat-label>Type</mat-label>
-        <mat-select formControlName="adjustmentType">
-          <mat-option value="increase">Increase Balance</mat-option>
-          <mat-option value="decrease">Decrease Balance</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div *ngIf="isTransferVisible('adjustBalance')" class="row">
-      <mat-form-field class="half-width">
-        <mat-label>Amount</mat-label>
-        <input matInput type="number" formControlName="amount" />
-      </mat-form-field>
-      <mat-form-field class="half-width">
-        <mat-label>Adjustment Date</mat-label>
-        <input matInput [matDatepicker]="adjustmentDatePicker" formControlName="adjustmentDate" />
-        <mat-datepicker-toggle matSuffix [for]="adjustmentDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #adjustmentDatePicker></mat-datepicker>
-      </mat-form-field>
-    </div>
-  
-    <!-- Description -->
-    <div *ngIf="isTransferVisible('cashToBank', 'bankToCash', 'bankToBank', 'adjustBalance')" class="row">
-      <mat-form-field class="half-width">
-        <mat-label>Description</mat-label>
-        <textarea matInput formControlName="description"></textarea>
-      </mat-form-field>
-    </div>
-  
+  <!-- Bank Details Row -->
+  <div class="row">
+    <mat-form-field class="half-width">
+      <mat-label>Account Display Name</mat-label>
+      <input matInput formControlName="newaccountDisplayName" />
+    </mat-form-field>
+    <mat-form-field class="half-width">
+      <mat-label>Opening Balance</mat-label>
+      <input matInput type="number" formControlName="newopeningBalance" />
+    </mat-form-field>
+    <mat-form-field class="half-width">
+      <mat-label>As of Date</mat-label>
+      <input matInput [matDatepicker]="asOfDatePicker" formControlName="asOfDate" />
+      <mat-datepicker-toggle matSuffix [for]="asOfDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #asOfDatePicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
     <!-- Submit Button -->
     <button mat-raised-button color="primary" class="save-button" (click)="submitForm()">Submit</button>
   </form>

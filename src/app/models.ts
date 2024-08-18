@@ -227,3 +227,8 @@ export interface Account {
     id: number;
     name: string;
   }
+
+  export interface Bank {
+    accountdisplayname: string;
+    amount: number;
+  }

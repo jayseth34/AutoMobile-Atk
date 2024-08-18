@@ -21,36 +21,34 @@
           </div>
   
           <table class="table table-hover bank_list">
-          <!-- <table class="table table-hover bank_list" *ngIf = "ispartygrouplistresponse"> -->
             <thead class="thead-dark">
-                <tr>
-                  <th class="table-column">ACCOUNT NAME</th>
-                  <th class="table-column">AMOUNT</th>
-                </tr>
-              </thead>
-              <!-- <tbody *ngIf = "dataService.partyGroupListResponse?.length > 0"> -->
-                
-              <tbody>
-                <!-- Loop to generate rows -->
-                <!-- <tr *ngFor="let party of dataService.partyGroupListResponse" (click)="groupHandleClick($event, party.partygroup)" [ngClass]="{ 'selectedParty-row-tr': isSelectedGroup(party.partygroup ) }">                
-                  <td class="table-row" [ngClass]="{ 'selectedParty-row-td': isSelectedGroup(party.partygroup ) }">{{ party.partygroup }}</td>
-                  <td class="table-row" [ngClass]="{ 'selectedParty-row-td': isSelectedGroup(party.partygroup ) }">{{ party.partygroupcount }}</td>
-                </tr> -->
-                <tr>                
-                    <td class="table-row">bank1</td>
-                    <td class="table-row">amount1</td>
-                  </tr>
-              </tbody>
-            </table>
+              <tr>
+                <th class="table-column">ACCOUNT NAME</th>
+                <th class="table-column">AMOUNT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let bank of bankslist" (click)="handleClick(bank)">
+                <td class="table-row">{{ bank.accountdisplayname }}</td>
+                <td class="table-row">{{ bank.amount }}</td>
+              </tr>
+            </tbody>
+          </table>
       </div>
   
       <!-- TOP CONTENT -->
       <div class="top-content">
         <div class="top-content-row">
-            <div class="bank-name">Bank Name:</div>
-            <div class="acct-number">Account Number:</div>
-            <div class="ifsc-code">IFSC Code:</div>
-            <div class="upi-id">UPI ID:</div>
+          <div class="dropdown-container">
+            <mat-form-field>
+              <mat-select placeholder="DEPOSIT/WITHDRAW" (selectionChange)="openModal($event)">
+                <mat-option value="bankToCash">Bank To Cash Transfer</mat-option>
+                <mat-option value="cashToBank">Cash To Bank Transfer</mat-option>
+                <mat-option value="bankToBank">Bank To Bank Transfer</mat-option>
+                <mat-option value="adjustBalance">Adjust Bank Balance</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
       </div>
   
@@ -58,27 +56,26 @@
       <div class="bottom-content">
         <h2>TRANSACTIONS</h2>
         <table class="table table-hover transaction-list">
-            <thead class="thead-dark">
-              <tr>
-                <th class="table-column">TYPE</th>
-                <th class="table-column">NAME</th>
-                <th class="table-column">DATE</th>
-                <th class="table-column">AMOUNT</th>
-              </tr>
-            </thead>
-            <!-- <tbody *ngIf="this.dataService.transactionDetailsResponse?.length > 0"> -->
-            <tbody>
-              <!-- Loop to generate rows -->
-              <!-- <tr *ngFor="let transaction of this.dataService.transactionDetailsResponse" > -->
+          <thead class="thead-dark">
             <tr>
-                <td class="table-row">typ1</td>
-                <td class="table-row">name1</td>
-                <td class="table-row">date1</td>
-                <td class="table-row">amount1</td>
+              <th class="table-column">ID</th>
+              <th class="table-column">TYPE</th>
+              <th class="table-column">NAME</th>
+              <th class="table-column">DATE</th>
+              <th class="table-column">AMOUNT</th>
             </tr>
-            </tbody>
-          </table>
-        </div>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of transactions">
+              <td class="table-row">{{ transaction.transactionid }}</td>
+              <td class="table-row">{{ transaction.type }}</td>
+              <td class="table-row">{{ transaction.name }}</td>
+              <td class="table-row">{{ transaction.date }}</td>
+              <td class="table-row">{{ transaction.amount }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
   
   </div>
   </ng-container>
