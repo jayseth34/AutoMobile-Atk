@@ -129,7 +129,7 @@
 
 // SHREYA
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
@@ -152,6 +152,8 @@ export class PaymentInoutComponent implements OnInit {
   registeredphonenumber: number;
   partyName:any;
   paymentType: any;
+  totalAmount: number = 0;
+  amount1Value: number = 0;
 
   constructor(private fb: FormBuilder, private api: ApiService, private dataService : DataService, private router: Router, private cs: CommonService) {
     this.balance = 0;
@@ -165,15 +167,18 @@ export class PaymentInoutComponent implements OnInit {
       party: ['', Validators.required],
       paymentType1: ['Cash', Validators.required],
       amount1: [0, Validators.required],
-      paymentType2: ['', ],
-      amount2: [0,],
-      referenceNo: ['',],
+      payments: this.fb.array([]), 
       receiptNo: ['', Validators.required],
       date: ['', Validators.required],
       description: [''],
       received: ['', Validators.required]
     });
+
+    this.paymentInForm.get('amount1')?.valueChanges.subscribe(value => {
+      this.amount1Value = value;
+  });
   }
+  
 
   getPartyList() {
     this.api.getPartyList(this.registeredphonenumber).subscribe(data => {
@@ -225,6 +230,7 @@ export class PaymentInoutComponent implements OnInit {
   }
 
   linkPayment() {
+    console.log("FORM:", this.paymentInForm.value)
     if(this.cs.isUndefineOrNull(this.partyName)){
       Swal.fire({ text : "Kindly Enter Party Name" })
     } else if(this.receivedValue == 0){
@@ -259,5 +265,46 @@ export class PaymentInoutComponent implements OnInit {
     this.paymentType = event.value;
     this.dataService.paymentType = event.value;
     console.log(this.paymentType);
+  }
+
+  get payments(): FormArray {
+    return this.paymentInForm.get('payments') as FormArray;
+  }
+
+  // createPaymentGroup(): FormGroup {
+  //   return this.fb.group({
+  //     paymentType: ['', Validators.required],
+  //     amount: ['', Validators.required],
+  //     referenceNo: ['']
+  //   });
+  // }
+
+  addPayment(): void {
+    const paymentGroup = this.fb.group({
+      paymentType: ['', Validators.required],
+      amount: ['', Validators.required],
+      referenceNo: [''],
+    });
+
+    this.payments.push(paymentGroup);
+    paymentGroup.get('amount')?.valueChanges.subscribe(value => {
+      this.updateTotalAmount();
+    });
+  }
+
+  updateTotalAmount(): void {
+    const amount1 = this.paymentInForm.get('amount1')?.value || 0;
+    const paymentsTotal = this.payments.controls
+        .map(group => group.get('amount')?.value || 0)
+        .reduce((acc, value) => acc + parseFloat(value), 0);
+    this.totalAmount = parseFloat(amount1) + paymentsTotal;
+
+}
+
+  
+
+  removePayment(index: number): void {
+    this.payments.removeAt(index);
+    this.updateTotalAmount();
   }
 }

@@ -4,6 +4,7 @@ import { BanksComponent } from '../banks/banks.component';
 import { TransferModalComponent } from '../transfer-modal/transfer-modal.component';
 import { ApiService } from 'src/app/services/api.service';
 import { Bank } from 'src/app/models';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-bank-homepage',
@@ -11,6 +12,7 @@ import { Bank } from 'src/app/models';
   styleUrls: ['./bank-homepage.component.css']
 })
 export class BankHomepageComponent implements OnInit {
+  selectedBank: any = ''; 
   registeredPhoneNmber: number;
   bankslist: Bank[] = [];
   transactions: any[] = [];
@@ -18,7 +20,7 @@ export class BankHomepageComponent implements OnInit {
   private clickTimeout: any;
   private singleClickFlag = false;
   
-  constructor(public dialog: MatDialog, public api: ApiService) {
+  constructor(public dialog: MatDialog, public api: ApiService, public dataService: DataService) {
     this.registeredPhoneNmber = parseInt(
       JSON.parse(localStorage.getItem('phonenumber') as string)
     );
@@ -35,6 +37,7 @@ export class BankHomepageComponent implements OnInit {
 
     this.api.getAccounts(body).subscribe((response: any) => {
       if (response.status === "SUCCESS") {
+        this.selectedBank = response.accountdisplayname
         this.bankslist = response.bankslist.map((bank: any) => ({
           accountdisplayname: bank.accountdisplayname,
           amount: bank.amount
@@ -57,6 +60,7 @@ export class BankHomepageComponent implements OnInit {
 
     this.api.getbanksDetails(body).subscribe((response: any) => {
       if (response.status === "SUCCESS") {
+        this.selectedBank = body.accountdisplayname
         this.transactions = response.bankTrnxDetails.map((transaction: any) => ({
           type: transaction.typeofpay,
           name: transaction.customername,
@@ -71,6 +75,7 @@ export class BankHomepageComponent implements OnInit {
   }
 
   handleClick(bank: Bank) {
+    this.selectedBank = bank.accountdisplayname
     if (this.singleClickFlag) {
       // Handle double click
       clearTimeout(this.clickTimeout);
@@ -98,6 +103,7 @@ export class BankHomepageComponent implements OnInit {
   
     this.api.getAccounts(body).subscribe((response: any) => {
       if (response.status === "SUCCESS") {
+        this.selectedBank = response.accountdisplayname
         const accounts = response.bankslist.map((bank: any) => ({
           name: bank.accountdisplayname,
           amount: bank.amount
@@ -151,5 +157,9 @@ export class BankHomepageComponent implements OnInit {
         this.loadBanks();
       }
     });
+  }
+
+  isSelectedBank(bankName: any): boolean {
+    return this.selectedBank === bankName;
   }
 }

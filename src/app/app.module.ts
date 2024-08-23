@@ -47,6 +47,7 @@ import { RemoveHyphenPipe } from './remove-hyphen.pipe';
 import { BanksComponent } from './components/banks/banks.component';
 import { BankHomepageComponent } from './components/bank-homepage/bank-homepage.component';
 import { TransferModalComponent } from './components/transfer-modal/transfer-modal.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { TransferModalComponent } from './components/transfer-modal/transfer-mod
     BanksComponent,
     BankHomepageComponent,
     TransferModalComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,

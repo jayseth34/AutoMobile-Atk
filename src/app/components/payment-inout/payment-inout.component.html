@@ -104,39 +104,46 @@
                 </div>
               </div>
             </div>
-            <div>
-            <div class="row mt-3">
-              <!-- Second Row -->
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <select class="form-select" id="paymentType2" formControlName="paymentType2">
-                    <option value="" disabled selected>Select Type</option>
-                    <option value="credit">Cheque</option>
-                    <option value="debit">Debit Card</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="bank">Bank Transfer</option>
-                  </select>
-                  <label for="paymentType2">Payment Type</label>
+              <div formArrayName="payments" class="payment-container">
+                <div *ngFor="let payment of payments.controls; let i = index" [formGroupName]="i">
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <div class="form-floating">
+                        <select class="form-select" formControlName="paymentType">
+                          <option value="" disabled selected>Select Type</option>
+                          <option value="credit">Cheque</option>
+                          <option value="debit">Debit Card</option>
+                          <option value="paypal">PayPal</option>
+                          <option value="bank">Bank Transfer</option>
+                        </select>
+                        <label>Payment Type</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating">
+                        <input type="text" class="form-control" formControlName="amount" placeholder="Amount">
+                        <label>Amount</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <div class="form-floating">
+                        <input type="text" class="form-control" formControlName="referenceNo" placeholder="Reference No.">
+                        <label>Reference no.</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <button type="button" class="btn btn-danger btn-sm mt-2 remove-btn" (click)="removePayment(i)">Remove</button>
+                    </div>
+                  </div>
                 </div>
-                
               </div>
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="amount2" placeholder="Amount" formControlName="amount2">
-                  <label for="amount2">Amount</label>
-                </div>
-              </div>
+              <div class="payment-header">
+                <h3 class="add-payment" (click)="addPayment()">+ Add Payment Type</h3>
+                <span class="total">Total: {{totalAmount}}</span>
             </div>
-            <div class="row mt-3">
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="referenceNo" placeholder="Reference No." formControlName="referenceNo">
-                  <label for="referenceNo">Reference no.</label>
-                </div>
-              </div>
-              <h3 class="add-payment">+ Add Payment Type</h3>
-            </div>
-          </div>
+                      
           </div>
           
 

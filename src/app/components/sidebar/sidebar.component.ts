@@ -33,6 +33,11 @@ export class SidebarComponent {
       icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
     },
     {
+      name: 'Plans',
+      link: '/plans',
+      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+    },
+    {
       name: 'Business Information',
       icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
       action: () => this.openBusinessInfoModal()

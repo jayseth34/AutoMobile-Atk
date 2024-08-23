@@ -15,6 +15,13 @@ export class ApiService {
     return this.cs.PostType<LoginReponse, any>("Login/AuthenticateUser", body)
   }
 
+  // DASHBOARD
+  getDashboardDetails(registeredphonenumber: number) {       
+    return this.cs.get(
+      "Login/DashboardDetails?registeredphonenumber=" + registeredphonenumber
+    );
+  }
+
   // BUSINESS INFO
   getBusinessInfo(registeredphonenumber: number) {       
     return this.cs.get(

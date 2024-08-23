@@ -17,6 +17,7 @@ import { PlansComponent } from './components/plans/plans.component';
 import { RegisterComponent } from './components/register/register.component';
 import { BanksComponent } from './components/banks/banks.component';
 import { BankHomepageComponent } from './components/bank-homepage/bank-homepage.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -28,12 +29,13 @@ const routes: Routes = [
   { path: 'addPartyGroup', component: AddPartyGroupComponent },
   { path: 'banks', component: BanksComponent},
   { path: 'banks-homepage', component: BankHomepageComponent},
+  { path: 'dashboard', component: DashboardComponent},
 
   { path: 'party-homepage', component: PartyHomepageComponent },
   { path: 'item-homepage', component: ItemHomepageComponent },
   { path: 'Payment-In', component: PaymentInoutComponent },
   { path: 'Payment-Link', component: LinkPaymentComponent },
-  { path: 'Plans', component: PlansComponent },
+  { path: 'plans', component: PlansComponent },
   { path: 'Register', component: RegisterComponent },
   { path: 'linked', component: LinkPaymentComponent },
 

@@ -28,9 +28,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let bank of bankslist" (click)="handleClick(bank)">
-                <td class="table-row">{{ bank.accountdisplayname }}</td>
-                <td class="table-row">{{ bank.amount }}</td>
+              <tr *ngFor="let bank of bankslist" (click)="handleClick(bank)"  [ngClass]="{ 'selectedBank-row-tr': isSelectedBank(bank.accountdisplayname) }">
+                <td class="table-row"  [ngClass]="{ 'selectedBank-row-td': isSelectedBank(bank.accountdisplayname) }">{{ bank.accountdisplayname }}</td>
+                <td class="table-row"  [ngClass]="{ 'selectedBank-row-td': isSelectedBank(bank.accountdisplayname) }"
+                [ngStyle]="{ 'color': dataService.getColor(bank.amount,0) }">{{ bank.amount }}</td>
               </tr>
             </tbody>
           </table>

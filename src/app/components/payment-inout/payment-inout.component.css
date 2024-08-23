@@ -17,7 +17,7 @@ body, html {
   padding: 20px;
   border: 2px solid #ccc;
   border-radius: 8px;
-  background-color: #f7f7f7;
+  background-color: #E9ECEF;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
 }
@@ -100,7 +100,7 @@ body, html {
 }
 
 .fixed-height-textarea {
-  margin-top: 5%;
+  margin-top: 3%;
   /* height: 200px;  */
   resize: none; 
 }
@@ -176,4 +176,33 @@ mat-form-field{
 .add-payment {
   margin-left: 2%;
   color: rgb(16, 78, 171);
+}
+
+.payment-container {
+  max-height: 200px; 
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin; 
+  scrollbar-color: #d3d3d3 #f5f5f5;
+}
+
+.remove-btn {
+  margin-left: 30%;
+  margin-top: 12% !important;
+}
+
+.payment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px; 
+}
+
+.add-payment {
+  margin: 0; 
+  cursor: pointer;
+}
+
+.total {
+  font-weight: bold;
 }

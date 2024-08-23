@@ -1,0 +1,93 @@
+<div class="dashboard-content">
+    <!-- Main Content and Sidebar Wrapper -->
+    <div class="main-grid">
+        <!-- Left Content Area -->
+        <div class="content-area">
+            <!-- First Row -->
+            <div class="row">
+                <div class="col-3-4 sale">
+                    <div class="box">
+                        <h3>Sale</h3>
+                        <p class="amount">₹ 25000.00</p>
+                        <p class="description">Total Sale (May)</p>
+                        <div class="growth">20% This Month Growth</div>
+                        <div class="chart"></div> <!-- Placeholder for chart -->
+                    </div>
+                </div>
+                                <!-- FUTUTRE SCOPE -->
+                <!-- <div class="col-1-4 expenses">
+                    <div class="box">
+                        <h3>Expenses</h3>
+                        <p class="amount">₹ 5200.00</p>
+                        <p class="description">Total Expense (May)</p>
+                        <div class="growth">10% This Month Growth</div>
+                        <div class="chart"></div> 
+                    </div>
+                </div> -->
+            </div>
+
+            <!-- Second Row -->
+            <div class="row">
+                <div class="col-1-3 pay">
+                    <div class="box">
+                        <h2><b><span style="font-size:20px; margin-right: 5px; text-shadow: 0.5px 0.5px 0 red, -0.5px -0.5px 0 red; color: red;">&#8593;</span></b>You'll Pay</h2>
+                        <p class="amount" style="margin-left: 5%;">₹ {{youllpay}}</p>
+                        <ul class="details" *ngFor="let youllpayreceivepartyobj of youllpayreceiveparty" >
+                            <li  *ngIf="youllpayreceivepartyobj.partypay > 0">        
+                                <span style="color: #888;">{{ youllpayreceivepartyobj.partyname }}</span> <span style="color: red;float: right;"> {{ youllpayreceivepartyobj.partypay }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-1-3 receive">
+                    <div class="box">
+                        <h2><b><span style="font-size:20px; margin-right: 5px; text-shadow: 0.5px 0.5px 0 green, -0.5px -0.5px 0 green; color: green;">&#8595;</span></b>You'll Receive</h2>
+                        <p class="amount" style="margin-left: 5%;">₹ {{youllreceive}}</p>
+                        <ul class="details" *ngFor="let youllpayreceivepartyobj of youllpayreceiveparty" >
+                            <li  *ngIf="youllpayreceivepartyobj.partyreceive > 0">        
+                               <span style="color: #888;">{{ youllpayreceivepartyobj.partyname }}</span> <span style="color: green;float: right;"> {{ youllpayreceivepartyobj.partyreceive }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-1-3 purchases">
+                    <div class="box">
+                        <h3>Purchases</h3>
+                        <p class="amount">₹ {{totalpurchase}}</p>
+                        <ul class="details">
+                            <li>Books</li>
+                            <li>Grocery</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="stock-inventory">
+                <h3>Stock Inventory</h3>
+                <h2>Stock Value</h2>
+                <p class="stock-value">₹ {{stockvalue}}</p>
+                <div class="low-stocks">
+                    <h4>Low Stocks</h4>
+                    <ul *ngFor="let lowstock of lowstocks" >
+                        <li [ngStyle]="{ 'color': dataService.getColor(lowstock.qty, 0) }">{{lowstock.item}} - {{lowstock.qty}}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="cash-bank">
+                <h3>Cash & Bank</h3>
+                <h4>Cash in hand</h4>
+                <h5 class="cash-in-hand" [ngStyle]="{ 'color': dataService.getColor(cashinhand, 0) }">₹ {{cashinhand}}</h5>
+                <p class="cash-in-hand">₹ {{bankamount}}</p>
+                <div class="bank-accounts">
+                    <h4>Bank Accounts</h4>
+                    <ul *ngFor="let bankaccount of bankaccounts">
+                        <li [ngStyle]="{ 'color': dataService.getColor(bankaccount.bankamount, 0) }">{{bankaccount.bankname}} - ₹ {{bankaccount.bankamount}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
