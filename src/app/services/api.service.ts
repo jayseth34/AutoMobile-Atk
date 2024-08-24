@@ -225,4 +225,8 @@ export class ApiService {
     return this.cs.Post("Sale/transfers", body);
   }
 
+  GetUpdatedTrnxInOutVal(body:any):Observable<any>{
+    return this.cs.Post("Sale/GetUpdatedTrnxInOutVal", body)
+  }
+
 }

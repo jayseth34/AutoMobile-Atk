@@ -143,6 +143,8 @@ export interface PaymentInOut {
     customername: string;
     typeofpay: string;
     registeredphonenumber: number;
+    invoicedate:Date;
+    amountdetails:any;
 }
 
 // ---------------- Request - Response Models ------------------

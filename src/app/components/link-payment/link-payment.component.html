@@ -1,55 +1,87 @@
-<!-- app.component.html -->
 <div class="popup-container">
     <div class="header">
-        <h2>Link Payment to Txns</h2>
-        <button class="close-button">&times;</button>
+      <h2>Link Payment to Txns</h2>
+      <button mat-icon-button class="close-button">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
     <div class="input-row">
-        <div class="input-group">
-            <label for="party">Party</label>
-            <input type="text" id="party" [value]="customername" readonly>
-        </div>
-        <div class="input-group">
-            <label for="received">Received</label>
-            <input type="text" id="received" [value]="received" readonly>
-        </div>
+      <div class="input-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Party</mat-label>
+          <input matInput id="party" [value]="customername" readonly>
+        </mat-form-field>
+      </div>
+      <div class="input-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Received</mat-label>
+          <input matInput id="received" [value]="received" readonly>
+        </mat-form-field>
+      </div>
     </div>
     <div class="filters">
-        <select>
-            <option>All transactions</option>
-            <!-- Other options here -->
-        </select>
-        <input type="text" placeholder="Search">
+      <mat-form-field appearance="fill">
+        <mat-label>Filter Transactions</mat-label>
+        <mat-select>
+          <mat-option value="all">All transactions</mat-option>
+          <!-- Other options here -->
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Search</mat-label>
+        <input matInput placeholder="Search">
+      </mat-form-field>
     </div>
     <div class="table-container">
-    <table>
-        <thead>
-            <tr>
-                <th>Disable</th>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Ref/Inv No.</th>
-                <th>Total</th>
-                <th>Balance</th>
-                <th>Linked Amount</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let transaction of transactions">
-                <td><input type="checkbox" [(ngModel)]="transaction.disabled" (change)="updateLinkedAmount(transaction)"></td>
-                <td>{{ transaction.invoicedate }}</td>
-                <td>{{ transaction.typeofpay }}</td>
-                <td>{{ transaction.invoicenumber }}</td>
-                <td>{{ transaction.total }}</td>
-                <td>{{ transaction.balance }}</td>
-                <td><input type="text" [value]="transaction.linkedAmount" [disabled]="transaction.disabled"></td>
-            </tr>
-        </tbody>
-    </table>
+      <table mat-table [dataSource]="transactions" class="mat-elevation-z8">
+        <ng-container matColumnDef="disable">
+          <th mat-header-cell *matHeaderCellDef>Disable</th>
+          <td mat-cell *matCellDef="let transaction">
+            <mat-checkbox [(ngModel)]="transaction.disabled" (change)="updateLinkedAmount(transaction)"></mat-checkbox>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let transaction">{{ transaction.invoicedate }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let transaction">{{ transaction.typeofpay }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="refInvNo">
+          <th mat-header-cell *matHeaderCellDef>Ref/Inv No.</th>
+          <td mat-cell *matCellDef="let transaction">{{ transaction.invoicenumber }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <td mat-cell *matCellDef="let transaction">{{ transaction.total }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="balance">
+          <th mat-header-cell *matHeaderCellDef>Balance</th>
+          <td mat-cell *matCellDef="let transaction">{{ transaction.balance }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="linkedAmount">
+          <th mat-header-cell *matHeaderCellDef>Linked Amount</th>
+          <td mat-cell *matCellDef="let transaction">
+            <input matInput type="text" [value]="transaction.linkedAmount" [disabled]="transaction.disabled">
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="['disable', 'date', 'type', 'refInvNo', 'total', 'balance', 'linkedAmount']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['disable', 'date', 'type', 'refInvNo', 'total', 'balance', 'linkedAmount'];"></tr>
+      </table>
     </div>
     <div class="footer">
-        <p>Total Unused: {{ totalUnused }}</p>
-        <button class="reset-button" (click)="reset()">RESET</button>
-        <button class="done-button" (click)="saveChanges()">DONE</button>
+      <p>Total Unused: {{ totalUnused }}</p>
+      <button mat-button class="reset-button" (click)="reset()">RESET</button>
+      <button class="autolink-button" (click)="autoLinkTransactions()">Auto-Link</button>
+      <button mat-raised-button color="primary" class="done-button" (click)="saveChanges()">DONE</button>
     </div>
-</div>
+  </div>
+  

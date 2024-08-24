@@ -4,6 +4,7 @@ import { LinkedTransaction } from 'src/app/models';
 import { DataService } from 'src/app/services/data.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-link-payment',
@@ -45,7 +46,7 @@ export class LinkPaymentComponent {
         if (data.status === 'SUCCESS') {
           this.transactions = data.getLinkedPaymentTransactionList.map(
             (item: any) => ({
-              invoicedate: item.invoicedate,
+              invoicedate: moment(item.invoicedate).format('YYYY-MM-DD'),
               typeofpay: item.typeofpay,
               invoicenumber: item.invoicenumber,
               total: item.total,
@@ -63,39 +64,44 @@ export class LinkPaymentComponent {
             })
           );
           this.updateTotalUnused();
-        } else {
+        } else if (data.status === 'FAILED' && data.statusmessage == "No Records Found") {
           Swal.fire({
-            text: 'Something Went Wrong.',
+            text: data.statusmessage + "To link",
             allowOutsideClick: false,
           }).then((res: any) => {
-            this.router.navigate(['inout']);
+            this.router.navigate(['Payment-In']);
           });
         }
       });
   }
 
   updateLinkedAmount(transaction: LinkedTransaction) {
-    if (this.totalUnused != 0 && this.totalUnused > 0) {
-      if (transaction.disabled) {
-        const maxLinkedAmount = Math.min(this.totalUnused, transaction.balance);
-        transaction.linkedAmount += maxLinkedAmount;
-        transaction.balance -= maxLinkedAmount;
-        transaction.unused = maxLinkedAmount;
-        this.updateTotalUnused();
-      } else {
-        transaction.balance = transaction.originalBalance;
-        transaction.linkedAmount = transaction.originalLinkedAmount;
-        this.totalUnused = this.received;
-      }
+    if (transaction.disabled) {
+        // When disabling a transaction
+        if (this.totalUnused > 0) {
+            const maxLinkedAmount = Math.min(this.totalUnused, transaction.balance);
+            transaction.linkedAmount += maxLinkedAmount;
+            transaction.balance -= maxLinkedAmount;
+            transaction.unused = maxLinkedAmount;
+            this.updateTotalUnused();
+        } else {
+            Swal.fire({
+                text: 'You Have No Unused Amount Left',
+                allowOutsideClick: false,
+            }).then(() => {
+                transaction.disabled = false; // Revert the checkbox to enabled
+                
+            });
+        }
     } else {
-      Swal.fire({
-        text: 'You Have No Unused Amount Left',
-        allowOutsideClick: false,
-      }).then(() => {
-        transaction.disabled = false;
-      });
+        // When enabling a transaction
+        transaction.balance = transaction.originalBalance;
+        this.totalUnused += transaction.unused;
+        transaction.linkedAmount = transaction.originalLinkedAmount;
+        transaction.unused = 0; // Reset unused amount since it's being re-enabled
+        this.updateTotalUnused(); // Update total unused amount
     }
-  }
+}
 
   updateTotalUnused() {
     const totalLinkedAmount = this.transactions
@@ -113,6 +119,23 @@ export class LinkPaymentComponent {
       transaction.linkedAmount = transaction.originalLinkedAmount;
     });
     this.totalUnused = this.received;
+  }
+
+  autoLinkTransactions() {
+    let remainingAmount = this.totalUnused;
+  
+    this.transactions.forEach((transaction) => {
+      if (!transaction.disabled && remainingAmount > 0) {
+        const maxLinkableAmount = Math.min(remainingAmount, transaction.balance);
+        transaction.linkedAmount = maxLinkableAmount;
+        transaction.balance -= maxLinkableAmount;
+        remainingAmount -= maxLinkableAmount;
+        transaction.unused = transaction.linkedAmount; // Update unused field
+        transaction.disabled = true; // Mark the transaction as linked
+      }
+    });
+    
+    this.totalUnused = remainingAmount; // Directly update totalUnused
   }
 
   saveChanges() {
@@ -134,7 +157,9 @@ export class LinkPaymentComponent {
         }
       });
     }
+    console.log(updatedTransactions)
     if (updatedTransactions.length > 0) {
+      console.log(updatedTransactions)
       this.api.updateTransactions(updatedTransactions).subscribe((response) => {
         if (response.status === 'SUCCESS') {
           let body = {
@@ -144,6 +169,9 @@ export class LinkPaymentComponent {
             customername: this.customername,
             typeofpay: this.typeofpay,
             registeredphonenumber: this.registeredphonenumber,
+            paymentininvoicenumber: this.dataService.invoicenumber,
+            invoicedate: this.dataService.invoicedate,
+            amountdetails: this.dataService.amountdetails
           };
           this.api.UpdatePaymentInOutTrnx(body).subscribe((res: any) => {
             if (res.status == 'SUCCESS') {

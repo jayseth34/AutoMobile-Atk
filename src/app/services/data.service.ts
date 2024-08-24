@@ -74,6 +74,8 @@ export class DataService {
   typeofpay:any;
   invoicenumber:number;
   paymentType: any;
+  invoicedate:any;
+  amountdetails: any;
   // totalNoOfParties: any;
 
   // totalAmountOfParties: any;

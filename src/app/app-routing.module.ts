@@ -30,6 +30,7 @@ const routes: Routes = [
   { path: 'banks', component: BanksComponent},
   { path: 'banks-homepage', component: BankHomepageComponent},
   { path: 'dashboard', component: DashboardComponent},
+  { path: 'inout', component: LinkPaymentComponent},
 
   { path: 'party-homepage', component: PartyHomepageComponent },
   { path: 'item-homepage', component: ItemHomepageComponent },

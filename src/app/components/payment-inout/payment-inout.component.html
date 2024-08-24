@@ -1,64 +1,3 @@
-<!-- <div class="container">
-  <div class="payment-in-container">
-    <form [formGroup]="paymentInForm" (ngSubmit)="onSubmit()">
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="party">Party *</label>
-          <select id="party" formControlName="party" class="form-control" [(ngModel)]="partyName" (change)="onPartyChange($event)">
-            <option value="">Select Party</option>
-            <option *ngFor="let party of partyList" [ngValue]="party.partyname">
-              {{ party.partyname }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span class="balance">{{ calculateBalance(party) }}</span>
-            </option>
-          </select>
-          <small class="form-text text-muted">BAL: <b><span [ngClass]="{'negative-balance': balance < 0, 'positive-balance': balance >= 0}">{{ balance }}</span></b></small>
-
-          <label for="paymentType">Payment Type</label>
-          <select id="paymentType" formControlName="paymentType" [(ngModel)]="paymentType" (ngModelChange)="updatepaymenttype($event)" class="form-control">
-            <option value="Cash">Cash</option>
-            <option value="Cheque">Cheque</option>
-          </select>
-
-          <label for="description">Description</label>
-          <textarea id="description" formControlName="description" class="form-control"></textarea>
-        </div>
-
-        <div class="form-group col-md-6">
-          <label for="receiptNo">Receipt No</label>
-          <input id="receiptNo" type="text" formControlName="receiptNo" class="form-control" 
-          [(ngModel)]= "receiptno" (ngModelChange)="updateReceiptValue($event)"/>
-
-          <label for="date">Date</label>
-          <input id="date" type="date" formControlName="date" class="form-control" />
-
-          <div class="received-container">
-            <label for="received">Received</label>
-            <input id="received" type="text" formControlName="received" class="form-control"
-                   [(ngModel)]="receivedValue" (ngModelChange)="updateReceivedValue($event)" />
-          </div>
-        </div>
-      </div>
-
-      <div class="btn-container">
-        <button type="button" class="btn btn-success" (click)="linkPayment()">Link Payment</button>
-      </div>
-
-      <div class="right-btn-container">
-        <button type="button" class="btn btn-light">Share</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-        <button (click)="paymentHistory.openModal()">Open Payment History</button>
-        <app-payment-history #paymentHistory></app-payment-history>
-      </div>
-    </form>
-  </div>
-</div> -->
-
-
-<!-- APPROACH - 2 -->
 <div class="container">
   <div class="payment-in-container">
     <form [formGroup]="paymentInForm" (ngSubmit)="onSubmit()">
@@ -69,7 +8,7 @@
 
           <mat-form-field>
             <mat-label>Party</mat-label>
-            <mat-select id="party" formControlName="party" [(ngModel)]="partyName" (selectionChange)="onPartyChange($event)">
+            <mat-select id="party" formControlName="party" (selectionChange)="onPartyChange($event)">
               <mat-option value="" [disabled]="true">Select Party</mat-option>
               <mat-option *ngFor="let party of partyList" [value]="party.partyname">
                 {{ party.partyname }} - 
@@ -80,41 +19,22 @@
 
           <p style="font-size: 14px; margin-left: 20px;" class="form-text text-muted">BAL: <b><span [ngClass]="{'negative-balance': balance < 0, 'positive-balance': balance >= 0}">{{ balance }}</span></b></p>
 
-          <!-- <mat-form-field>
-            <mat-label>Payment Type</mat-label>
-            <mat-select id="paymentType" formControlName="paymentType" [(ngModel)]="paymentType" (selectionChange)="updatepaymenttype($event)">
-              <mat-option value="Cash">CASH</mat-option>
-              <mat-option value="Cheque">CHEQUE</mat-option>
-            </mat-select>
-          </mat-form-field> -->
-
           <div class="payment-type">
             <div class="row">
               <!-- First Row -->
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="paymentType1" placeholder="Payment Type" formControlName="paymentType1" readonly>
-                  <label for="paymentType1">Payment Type</label>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="amount1" placeholder="Amount" formControlName="amount1">
-                  <label for="amount1">Amount</label>
-                </div>
-              </div>
             </div>
               <div formArrayName="payments" class="payment-container">
                 <div *ngFor="let payment of payments.controls; let i = index" [formGroupName]="i">
                   <div class="row mt-3">
                     <div class="col-md-6">
                       <div class="form-floating">
-                        <select class="form-select" formControlName="paymentType">
+                        <select class="form-select" formControlName="type" (change)="handlePaymentTypeChange(i)">
                           <option value="" disabled selected>Select Type</option>
-                          <option value="credit">Cheque</option>
-                          <option value="debit">Debit Card</option>
-                          <option value="paypal">PayPal</option>
-                          <option value="bank">Bank Transfer</option>
+                          <option value="CASH">Cash</option>
+                          <option value="CHEQUE">Cheque</option>
+                          <option value="DEBIT">Debit Card</option>
+                          <option value="PAYPAL">PayPal</option>
+                          <option value="BANK">Bank Transfer</option>
                         </select>
                         <label>Payment Type</label>
                       </div>
@@ -128,13 +48,13 @@
                   </div>
                   <div class="row mt-3">
                     <div class="col-md-6">
-                      <div class="form-floating">
-                        <input type="text" class="form-control" formControlName="referenceNo" placeholder="Reference No.">
+                      <div class="form-floating" *ngIf="shouldShowReferenceNo(i)">
+                        <input type="text" class="form-control" formControlName="refno" placeholder="Reference No.">
                         <label>Reference no.</label>
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <button type="button" class="btn btn-danger btn-sm mt-2 remove-btn" (click)="removePayment(i)">Remove</button>
+                      <button *ngIf="shouldShowReferenceNo(i)" type="button" class="btn btn-danger btn-sm mt-2 remove-btn" (click)="removePayment(i)">Remove</button>
                     </div>
                   </div>
                 </div>
@@ -158,7 +78,7 @@
           <mat-form-field>
             <mat-label>Receipt No</mat-label>
             <input id="receiptNo" type="text" formControlName="receiptNo" matInput
-                   [(ngModel)]="receiptno" (ngModelChange)="updateReceiptValue($event)" placeholder="Receipt No"/>
+                   (ngModelChange)="updateReceiptValue($event)" placeholder="Receipt No"/>
           </mat-form-field>
 
           <mat-form-field>
@@ -172,7 +92,7 @@
           <mat-form-field>
             <mat-label>Received</mat-label>
             <input id="received" type="text" matInput formControlName="received"
-                   [(ngModel)]="receivedValue" (ngModelChange)="updateReceivedValue($event)" placeholder="Received"/>
+                   (ngModelChange)="updateReceivedValue($event)" placeholder="Received"/>
           </mat-form-field>
           
           
@@ -180,13 +100,11 @@
       </div>
 
       <div class="btn-container">
-        <button type="button" class="btn btn-success custom-btn" (click)="linkPayment()">LINK PAYMENT</button>
+        <button *ngIf="!isview" type="button" class="btn btn-success custom-btn" (click)="linkPayment()">LINK PAYMENT</button>
       </div>
 
       <div class="right-btn-container">
-        <button type="button" class="btn btn-warning custom-btn">SHARE</button>
-        <button type="submit" class="btn btn-warning custom-btn">SAVE</button>
-        <button class="payment-histort-btn" (click)="paymentHistory.openModal()">OPEN PAYMENT HISTORY</button>
+        <button *ngIf="isview" class="btn btn-success custom-btn" (click)="paymentHistory.openModal()">OPEN PAYMENT HISTORY</button>
         <app-payment-history #paymentHistory></app-payment-history>
       </div>
     </form>

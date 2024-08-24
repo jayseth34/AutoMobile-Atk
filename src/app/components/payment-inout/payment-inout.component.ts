@@ -1,133 +1,3 @@
-// import { Component, OnInit } from '@angular/core';
-// import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-// import { MatSelectChange } from '@angular/material/select';
-// import { Router } from '@angular/router';
-// import { ApiService } from 'src/app/services/api.service';
-// import { CommonService } from 'src/app/services/common.service';
-// import { DataService } from 'src/app/services/data.service';
-// import Swal from 'sweetalert2';
-
-// @Component({
-//   selector: 'app-payment-inout',
-//   templateUrl: './payment-inout.component.html',
-//   styleUrls: ['./payment-inout.component.css']
-// })
-// export class PaymentInoutComponent implements OnInit {
-//   paymentInForm: FormGroup;
-//   partyList: any[] = [];
-//   balance: number = 0;
-//   typeofpay :any = 'PAYMENT IN';
-//   receivedValue: number | undefined; // Track received value separately
-//   receiptno:number;
-//   registeredphonenumber: number;
-//   partyName:any;
-//   paymentType: any;
-
-//   constructor(private fb: FormBuilder, private api: ApiService, private dataService : DataService, private router: Router, private cs: CommonService) {
-//     this.balance = 0;
-//   }
-
-//   ngOnInit() {
-//     this.registeredphonenumber = parseInt(JSON.parse(localStorage.getItem("phonenumber") as string));
-//     this.paymentType = "Cash";
-//     this.getPartyList();
-//     this.paymentInForm = this.fb.group({
-//       party: ['', Validators.required],
-//       paymentType: ['', Validators.required],
-//       receiptNo: ['', Validators.required],
-//       date: ['', Validators.required],
-//       description: [''],
-//       received: ['', Validators.required]
-//     });
-//   }
-
-//   getPartyList() {
-//     this.api.getPartyList(this.registeredphonenumber).subscribe(data => {
-//       if (data.status === 'SUCCESS') {
-//         if(this.typeofpay == "PAYMENT IN"){
-//           this.partyList = data.getPartyList.filter((party:any) => party.toreceivefromparty > 0)
-//         } else if (this.typeofpay == "PAYMENT OUT"){
-//           this.partyList = data.getPartyList.filter((party:any) => party.topayparty > 0)
-//         }
-//       } else {
-//         console.error('Failed to load party list:', data.status);
-//       }
-//     });
-//   }
-
-//   calculateBalance(party: any): number {
-//     // debugger
-//     let calculatedBalance = 0;
-//     if (this.typeofpay === 'PAYMENT IN') {
-//       this.dataService.typeofpay = 'PAYMENT IN';
-//       calculatedBalance = party.toreceivefromparty;
-//       this.dataService.toreceivefromparty = party.toreceivefromparty
-//     } else if (this.typeofpay === 'PAYMENT OUT') {
-//       this.dataService.typeofpay = 'PAYMENT OUT';
-//       calculatedBalance = party.topayparty;
-//       this.dataService.topayparty = party.topayparty
-//     }
-//     return calculatedBalance;
-//   }
-
-//   onPartyChange(event: Event) {
-//     debugger
-//     const selectElement = event.target as HTMLSelectElement;
-//     const selectedIndex = selectElement.selectedIndex;
-//     const selectedParty = this.partyList[selectedIndex - 1];
-//     if (selectedParty) {
-//       this.balance = this.calculateBalance(selectedParty)
-//       this.partyName = selectedParty.partyname
-//       this.dataService.partyName = this.partyName
-//       this.receivedValue = this.balance
-//     } else {
-//       this.balance = 0;
-//     }
-//   }
-
-//   onSubmit() {
-//     if (this.paymentInForm.valid) {
-//       console.log('Form Submitted', this.paymentInForm.value);
-//     }
-//   }
-
-//   linkPayment() {
-//     if(this.cs.isUndefineOrNull(this.partyName)){
-//       Swal.fire({ text : "Kindly Enter Party Name" })
-//     } else if(this.receivedValue == 0){
-//       Swal.fire({ text : "Kindly Enter An amount In The Received Input Field" })
-//     }
-//     else if (this.cs.isUndefineOrNull(this.receiptno)){
-//       Swal.fire({ text : "Kindly Enter Receipt No Input Field" })
-
-//     }
-//     else{
-//       this.router.navigate(['/linked']);
-//     }
-//   }
-//   updateReceivedValue(value: number) {
-//     debugger
-//     this.receivedValue = value;
-//     this.dataService.received = value;
-//     if(this.receivedValue > this.balance){
-//       Swal.fire({ text : "Received Value Cannot Be More Than Balance"}).then(() => {
-//         this.receivedValue = 0
-//       })
-//     }
-//   }
-//   updateReceiptValue(value:number){
-//     this.receiptno = value;
-//     this.dataService.invoicenumber = this.receiptno;
-//     console.log(this.receiptno)
-//   }
-//   updatepaymenttype(event: MatSelectChange){
-//     this.paymentType = event.value;
-//     this.dataService.paymentType = event.value;
-//     console.log(this.paymentType)
-//   }
-// }
-
-// SHREYA
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
@@ -146,47 +16,126 @@ export class PaymentInoutComponent implements OnInit {
   paymentInForm: FormGroup;
   partyList: any[] = [];
   balance: number = 0;
-  typeofpay :any = 'PAYMENT IN';
-  receivedValue: number | undefined; // Track received value separately
-  receiptno:number;
+  typeofpay: any = 'PAYMENT IN';
+  receivedValue: number; // Track received value separately
+  receiptno: number;
   registeredphonenumber: number;
-  partyName:any;
+  partyName: any;
   paymentType: any;
   totalAmount: number = 0;
   amount1Value: number = 0;
+  isview: boolean = true;
 
-  constructor(private fb: FormBuilder, private api: ApiService, private dataService : DataService, private router: Router, private cs: CommonService) {
+  constructor(private fb: FormBuilder, private api: ApiService, private dataService: DataService, private router: Router, private cs: CommonService) {
     this.balance = 0;
   }
 
   ngOnInit() {
     this.registeredphonenumber = parseInt(JSON.parse(localStorage.getItem("phonenumber") as string));
-    this.paymentType = "Cash";
     this.getPartyList();
     this.paymentInForm = this.fb.group({
       party: ['', Validators.required],
-      paymentType1: ['Cash', Validators.required],
-      amount1: [0, Validators.required],
-      payments: this.fb.array([]), 
+      payments: this.fb.array([]),
       receiptNo: ['', Validators.required],
       date: ['', Validators.required],
       description: [''],
       received: ['', Validators.required]
     });
 
-    this.paymentInForm.get('amount1')?.valueChanges.subscribe(value => {
-      this.amount1Value = value;
-  });
+    this.paymentInForm.get('received')?.valueChanges.subscribe(value => {
+      this.receivedValue = parseFloat(value);
+      if ((this.receivedValue > this.balance) && !this.isview) {
+        Swal.fire('Warning', 'Received amount cannot exceed balance', 'warning');
+        this.paymentInForm.get('received')?.setValue(this.balance); // Revert to balance
+      }
+    });
+
+    let body = {
+      registeredphonenumber: this.registeredphonenumber,
+      invoicenumber: 1111,
+      typeofpay: "PAYMENT IN"
+    }
+    if (this.isview) {
+      this.api.GetUpdatedTrnxInOutVal(body).subscribe((response: any) => {
+        if (response.status === "SUCCESS") {
+          this.patchFormValues(response);
+        }
+      });
+    } else {
+      this.addPayment()
+    }
   }
+
+  patchFormValues(data: any) {
+    this.paymentInForm.patchValue({
+      party: data.partyname,
+      receiptNo: data.invoicenumber,
+      date: data.invoicedate,
+      received: data.received
+    });
+    this.balance = data.received
+
+    data.amountdetails.forEach((payment: any) => {
+      const paymentGroup = this.fb.group({
+        type: [payment.type, Validators.required],
+        amount: [payment.amount, Validators.required],
+        refno: [payment.refno]
+      });
+
+      this.payments.push(paymentGroup);
+    });
+    this.calculateTotal()
+  }
+
+  get payments(): FormArray {
+    return this.paymentInForm.get('payments') as FormArray;
+  }
+
+  addPayment() {
+    console.log('Adding payment block');
+    const isFirstPaymentGroup = this.payments.length === 0;
+
+  // Create a new payment group
+  const paymentGroup = this.fb.group({
+    type: [isFirstPaymentGroup ? 'CASH' : '', Validators.required],
+    amount: [0, Validators.required],
+    refno: ['']
+  });
+
+    paymentGroup.get('amount')?.valueChanges.subscribe(() => {
+      this.calculateTotal();
+    });
+
+    this.payments.push(paymentGroup);
+    this.calculateTotal();
+  }
+
+  removePayment(index: number) {
+    if (this.payments.length <= 1) {
+      Swal.fire('Error', 'You must have at least one payment entry.', 'error');
+      return; // Exit the method if only one payment group remains
+    }
   
+    this.payments.removeAt(index);
+    this.calculateTotal(); // Update total amount
+  }
+
+  calculateTotal() {
+    let total = 0;
+    this.payments.controls.forEach(payment => {
+      const amount = payment.get('amount')?.value || 0;
+      total += parseFloat(amount); // Ensure the value is parsed as a number
+    });
+    this.totalAmount = total;
+  }
 
   getPartyList() {
     this.api.getPartyList(this.registeredphonenumber).subscribe(data => {
       if (data.status === 'SUCCESS') {
-        if(this.typeofpay == "PAYMENT IN"){
-          this.partyList = data.getPartyList.filter((party:any) => party.toreceivefromparty > 0)
-        } else if (this.typeofpay == "PAYMENT OUT"){
-          this.partyList = data.getPartyList.filter((party:any) => party.topayparty > 0)
+        if (this.typeofpay === "PAYMENT IN") {
+          this.partyList = data.getPartyList.filter((party: any) => party.toreceivefromparty > 0);
+        } else if (this.typeofpay === "PAYMENT OUT") {
+          this.partyList = data.getPartyList.filter((party: any) => party.topayparty > 0);
         }
       } else {
         console.error('Failed to load party list:', data.status);
@@ -199,112 +148,128 @@ export class PaymentInoutComponent implements OnInit {
     if (this.typeofpay === 'PAYMENT IN') {
       this.dataService.typeofpay = 'PAYMENT IN';
       calculatedBalance = party.toreceivefromparty;
-      this.dataService.toreceivefromparty = party.toreceivefromparty
     } else if (this.typeofpay === 'PAYMENT OUT') {
       this.dataService.typeofpay = 'PAYMENT OUT';
       calculatedBalance = party.topayparty;
-      this.dataService.topayparty = party.topayparty
     }
     return calculatedBalance;
   }
 
   onPartyChange(event: MatSelectChange) {
-    const selectedParty = this.partyList.find(party => party.partyname === event.value);
+    const selectedParty = this.partyList.find(p => p.partyname === event.value);
     if (selectedParty) {
+      this.dataService.partyName = selectedParty.partyname
       this.balance = this.calculateBalance(selectedParty);
-      this.partyName = selectedParty.partyname;
-      this.dataService.partyName = this.partyName;
-      this.receivedValue = this.balance;
-      this.paymentInForm.get('received')?.setValue(this.receivedValue);
-    } else {
-      this.balance = 0;
-      this.paymentInForm.get('received')?.setValue(0);
+      this.dataService.topayparty = selectedParty.topayparty
+      this.dataService.toreceivefromparty = selectedParty.toreceivefromparty
+      this.paymentInForm.get('received')?.setValue(this.balance);
+      this.payments.clear();
+      this.addPayment();
+      if (this.payments.length > 0) {
+        const firstPaymentGroup = this.payments.at(0);
+        firstPaymentGroup.get('amount')?.setValue(this.balance);
+      }
+    }
+  }
 
+  updateReceivedValue(value: any) {
+    this.receivedValue = parseFloat(value);
+    if ((this.receivedValue > this.balance) && !this.isview) {
+      Swal.fire('Warning', 'Received amount cannot exceed balance', 'warning');
+      this.paymentInForm.get('received')?.setValue(this.balance); // Revert to balance
+    }
+  }
+
+  updateReceiptValue(value: any) {
+    this.receiptno = value;
+  }
+
+  handlePaymentTypeChange(index: number) {
+    const paymentGroup = this.payments.at(index);
+    const paymentType = paymentGroup.get('type')?.value;
+  
+    // Check for duplicate payment types
+    const paymentTypes = this.payments.controls.map(control => control.get('type')?.value);
+    const isDuplicate = paymentTypes.filter(type => type === paymentType).length > 1;
+  
+    if (isDuplicate) {
+      Swal.fire('Error', 'The payment type already exists in the list', 'error');
+      paymentGroup.get('type')?.setValue(''); // Clear duplicate payment type
+      return; // Exit function
+    }
+  
+    // Handle referenceNo visibility based on payment type
+    if (paymentType === 'CASH') {
+      paymentGroup.get('refno')?.setValue(null); // Set referenceNo to null
+      paymentGroup.get('refno')?.disable(); // Hide referenceNo field
+    } else {
+      paymentGroup.get('refno')?.enable(); // Show referenceNo field
+    }
+  
+    // Recalculate total whenever payment type changes
+    this.calculateTotal();
+  }
+
+  shouldShowReferenceNo(index: number): boolean {
+    const paymentGroup = this.payments.at(index);
+    const paymentType = paymentGroup.get('type')?.value;
+    return paymentType !== 'CASH'; // Show field if payment type is not Cash
+  }
+
+  linkPayment() {
+    if (!this.paymentInForm.valid) {
+      Swal.fire('Error', 'Please fill all required fields correctly in the main form.', 'error');
+      return;
+    }
+  
+    // Check each payment group for completeness
+    let allPaymentsValid = true;
+    this.payments.controls.forEach(paymentGroup => {
+      if (!paymentGroup.valid) {
+        allPaymentsValid = false;
+      }
+    });
+  
+    if (!allPaymentsValid) {
+      Swal.fire('Error', 'Please fill all required fields in each payment entry.', 'error');
+      return;
+    }
+    this.matchamounts()
+  }
+
+  matchamounts() {
+    const totalPayments = this.totalAmount;
+    const receivedAmount = this.receivedValue;
+
+    if (totalPayments !== receivedAmount) {
+      Swal.fire('Error', 'Total payments must be equal to the received amount', 'error');
+    } else {
+      console.log(this.paymentInForm.value);
+      this.dataService.received = this.receivedValue;
+      this.dataService.invoicenumber = parseInt(this.receiptno.toString());
+      this.dataService.invoicedate = new Date(this.paymentInForm.get('date')?.value);
+      this.dataService.amountdetails = this.payments.value
+      const concatenatedPaymentTypes = this.payments.controls.map(paymentGroup =>
+        paymentGroup.get('type')?.value
+      ).filter(type => type).join(',');
+      this.dataService.paymentType = concatenatedPaymentTypes;
+      console.log(typeof(this.payments.value), this.dataService.invoicedate, this.dataService.topayparty, this.dataService.toreceivefromparty)
+      this.router.navigateByUrl('inout');
+      // Swal.fire('Success', 'Payment Linked', 'success');
     }
   }
 
   onSubmit() {
     if (this.paymentInForm.valid) {
-      console.log('Form Submitted', this.paymentInForm.value);
+      const formData = this.paymentInForm.value;
+      formData.payments.forEach((payment:any) => {
+        if (payment.paymentType === 'CASH') {
+          payment.referenceNo = null;
+        }
+      });
+      console.log('Form Data:', formData);
+    } else {
+      Swal.fire('Error', 'Please fill all required fields correctly', 'error');
     }
-  }
-
-  linkPayment() {
-    console.log("FORM:", this.paymentInForm.value)
-    if(this.cs.isUndefineOrNull(this.partyName)){
-      Swal.fire({ text : "Kindly Enter Party Name" })
-    } else if(this.receivedValue == 0){
-      Swal.fire({ text : "Kindly Enter An amount In The Received Input Field" })
-    } 
-    else if (this.cs.isUndefineOrNull(this.receiptno)){
-      Swal.fire({ text : "Kindly Enter Receipt No Input Field" })
-
-    }
-    else{
-      this.router.navigate(['/linked']);
-    }
-  }
-
-  updateReceivedValue(value: number) {
-    this.receivedValue = value;
-    this.dataService.received = value;
-    if(this.receivedValue > this.balance){
-      Swal.fire({ text : "Received Value Cannot Be More Than Balance"}).then(() => {
-        this.receivedValue = 0
-      })
-    }
-  }
-
-  updateReceiptValue(value:number){
-    this.receiptno = value;
-    this.dataService.invoicenumber = this.receiptno;
-    console.log(this.receiptno)
-  }
-
-  updatepaymenttype(event: MatSelectChange) {
-    this.paymentType = event.value;
-    this.dataService.paymentType = event.value;
-    console.log(this.paymentType);
-  }
-
-  get payments(): FormArray {
-    return this.paymentInForm.get('payments') as FormArray;
-  }
-
-  // createPaymentGroup(): FormGroup {
-  //   return this.fb.group({
-  //     paymentType: ['', Validators.required],
-  //     amount: ['', Validators.required],
-  //     referenceNo: ['']
-  //   });
-  // }
-
-  addPayment(): void {
-    const paymentGroup = this.fb.group({
-      paymentType: ['', Validators.required],
-      amount: ['', Validators.required],
-      referenceNo: [''],
-    });
-
-    this.payments.push(paymentGroup);
-    paymentGroup.get('amount')?.valueChanges.subscribe(value => {
-      this.updateTotalAmount();
-    });
-  }
-
-  updateTotalAmount(): void {
-    const amount1 = this.paymentInForm.get('amount1')?.value || 0;
-    const paymentsTotal = this.payments.controls
-        .map(group => group.get('amount')?.value || 0)
-        .reduce((acc, value) => acc + parseFloat(value), 0);
-    this.totalAmount = parseFloat(amount1) + paymentsTotal;
-
-}
-
-  
-
-  removePayment(index: number): void {
-    this.payments.removeAt(index);
-    this.updateTotalAmount();
   }
 }

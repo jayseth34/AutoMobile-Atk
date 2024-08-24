@@ -24,7 +24,7 @@ export class PaymentHistoryComponent implements OnInit {
   loadTrnxInOut(registeredPhoneNumber:number){
     let body = {
       registeredphonenumber : this.registeredphonenumber,
-      invoicenumber : 2,
+      invoicenumber : 1111,
       typeofpay: 'PAYMENT IN',
       issaleconvert: false,
       issaleorderconvert: false 
