@@ -9,6 +9,8 @@ import { ApiService } from 'src/app/services/api.service';
 import { Transaction } from 'src/app/models';
 import { CommonService } from 'src/app/services/common.service';
 import { Location } from '@angular/common';
+import { DataService } from 'src/app/services/data.service';
+import { RemoveHyphenPipe } from 'src/app/remove-hyphen.pipe';
 
 @Component({
   selector: 'app-details',
@@ -40,7 +42,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     endDate: new FormControl(''),
   });
 
-  constructor(private _route: ActivatedRoute, private _api: ApiService, private _location: Location, private _router: Router) {
+  constructor(private _route: ActivatedRoute, private _api: ApiService, private _location: Location, private _router: Router, public dataService : DataService) {
     this.transactonData = new MatTableDataSource();
   }
 
@@ -224,6 +226,32 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   tableSort(data: any, sortHeaderId: string): string | number {
     // console.log(data, sortHeaderId);
     return sortHeaderId;
+  }
+
+  getRouterLink() {
+    this.dataService.isview = false
+    if (this.transactionTypeString === 'Payment-In' || this.transactionTypeString === 'Payment-Out') {
+      if(this.transactionTypeString === 'Payment-In')
+        this.dataService.typeofpay = 'PAYMENT IN'
+      else if (this.transactionTypeString === 'Payment-Out')
+        this.dataService.typeofpay = 'PAYMENT OUT'
+      return this._router.navigateByUrl('/pin');
+    }
+    return this._router.navigateByUrl(`/${this.transactionTypeString}/add`);
+  }
+
+  getEditLink(invoiceNumber: number) {
+    if (this.transactionTypeString === 'Payment-In' || this.transactionTypeString === 'Payment-Out') {
+      this.dataService.invoicenumber = invoiceNumber
+      this.dataService.isview = true
+      if(this.transactionTypeString === 'Payment-In')
+        this.dataService.typeofpay = 'PAYMENT IN'
+      else if (this.transactionTypeString === 'Payment-Out')
+        this.dataService.typeofpay = 'PAYMENT OUT'
+      return this._router.navigateByUrl('/pin');
+    }
+    this.dataService.isview = false
+    return this._router.navigateByUrl(`/${this.transactionTypeString}/edit/${invoiceNumber}`);
   }
 
 }

@@ -34,7 +34,7 @@ const routes: Routes = [
 
   { path: 'party-homepage', component: PartyHomepageComponent },
   { path: 'item-homepage', component: ItemHomepageComponent },
-  { path: 'Payment-In', component: PaymentInoutComponent },
+  { path: 'pin', component: PaymentInoutComponent },
   { path: 'Payment-Link', component: LinkPaymentComponent },
   { path: 'plans', component: PlansComponent },
   { path: 'Register', component: RegisterComponent },

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TrnxInOut } from 'src/app/models';
 import { ApiService } from 'src/app/services/api.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-payment-history',
@@ -12,7 +13,7 @@ export class PaymentHistoryComponent implements OnInit {
   payments: any[] = [];
   registeredphonenumber: number;
 
-  constructor(public api: ApiService) { }
+  constructor(public api: ApiService, public dataservice: DataService) { }
 
   ngOnInit(): void {
     this.registeredphonenumber = parseInt(
@@ -24,8 +25,8 @@ export class PaymentHistoryComponent implements OnInit {
   loadTrnxInOut(registeredPhoneNumber:number){
     let body = {
       registeredphonenumber : this.registeredphonenumber,
-      invoicenumber : 1111,
-      typeofpay: 'PAYMENT IN',
+      invoicenumber : this.dataservice.invoicenumber,
+      typeofpay: this.dataservice.typeofpay,
       issaleconvert: false,
       issaleorderconvert: false 
     }

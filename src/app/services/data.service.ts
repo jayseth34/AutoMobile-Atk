@@ -76,6 +76,7 @@ export class DataService {
   paymentType: any;
   invoicedate:any;
   amountdetails: any;
+  isview:boolean = false;
   // totalNoOfParties: any;
 
   // totalAmountOfParties: any;

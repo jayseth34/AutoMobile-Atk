@@ -175,7 +175,10 @@ export class LinkPaymentComponent {
           };
           this.api.UpdatePaymentInOutTrnx(body).subscribe((res: any) => {
             if (res.status == 'SUCCESS') {
-              this.router.navigate(['Sale/sale-invoice']);
+              if(this.typeofpay == "PAYMENT IN")
+                this.router.navigate(['Payment-In/']);
+              else if (this.typeofpay == "PAYMENT OUT")
+                this.router.navigate(['Payment-Out/'])
             }
           });
         } else {

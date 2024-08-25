@@ -16,7 +16,7 @@ export class PaymentInoutComponent implements OnInit {
   paymentInForm: FormGroup;
   partyList: any[] = [];
   balance: number = 0;
-  typeofpay: any = 'PAYMENT IN';
+  typeofpay: any;
   receivedValue: number; // Track received value separately
   receiptno: number;
   registeredphonenumber: number;
@@ -24,7 +24,7 @@ export class PaymentInoutComponent implements OnInit {
   paymentType: any;
   totalAmount: number = 0;
   amount1Value: number = 0;
-  isview: boolean = true;
+  isview: boolean = false;
 
   constructor(private fb: FormBuilder, private api: ApiService, private dataService: DataService, private router: Router, private cs: CommonService) {
     this.balance = 0;
@@ -32,6 +32,8 @@ export class PaymentInoutComponent implements OnInit {
 
   ngOnInit() {
     this.registeredphonenumber = parseInt(JSON.parse(localStorage.getItem("phonenumber") as string));
+    this.typeofpay = this.dataService.typeofpay
+    this.isview = this.dataService.isview
     this.getPartyList();
     this.paymentInForm = this.fb.group({
       party: ['', Validators.required],
@@ -52,8 +54,8 @@ export class PaymentInoutComponent implements OnInit {
 
     let body = {
       registeredphonenumber: this.registeredphonenumber,
-      invoicenumber: 1111,
-      typeofpay: "PAYMENT IN"
+      invoicenumber: this.dataService.invoicenumber,
+      typeofpay: this.typeofpay
     }
     if (this.isview) {
       this.api.GetUpdatedTrnxInOutVal(body).subscribe((response: any) => {

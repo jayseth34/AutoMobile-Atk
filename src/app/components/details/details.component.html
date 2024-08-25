@@ -123,7 +123,7 @@
           mat-fab
           extended
           class="col-2 me-3"
-          routerLink="/{{ this.transactionTypeString }}/add"
+          (click)="getRouterLink()"
         >
           <mat-icon>add</mat-icon>
           Add {{ this.transactionTypeString | removeHyphen }}
@@ -211,10 +211,7 @@
           <mat-menu #appMenu="matMenu">
             <button
               mat-menu-item
-              [routerLink]="[
-                '/' + transactionTypeString + '/edit',
-                element.invoicenumber
-              ]"
+              (click)="getEditLink(element.invoicenumber)"
             >
               Edit
             </button>
