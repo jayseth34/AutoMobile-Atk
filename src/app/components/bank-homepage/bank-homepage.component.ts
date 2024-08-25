@@ -143,6 +143,100 @@ export class BankHomepageComponent implements OnInit {
     });
   }
 
+  
+  openModalOnTransaction(transaction: any) {
+    let type = transaction.type;
+    let id = transaction.transactionid;
+    let increasedecrease: string;
+    let from: string;
+    let to: string;
+    let amount: number;
+    let date: any;
+    let data: any = {};
+    let banktobank: string;
+    const body = {
+        registeredphonenumber: this.registeredPhoneNmber
+    };
+
+    this.api.getAccounts(body).subscribe((response1: any) => {
+        if (response1.status === "SUCCESS") {
+            let body1 = {
+                transactionid: id,
+                typeofpay: type,
+                registeredphonenumber: this.registeredPhoneNmber
+            };
+
+            this.selectedBank = response1.accountdisplayname;
+            const accounts = response1.bankslist.map((bank: any) => ({
+                name: bank.accountdisplayname,
+                amount: bank.amount
+            }));
+
+            // Handle the asynchronous nature of the GetTransferDetailsValues calls
+            const handleResponse = (response: any) => {
+                if (response.status === "SUCCESS") {
+                    from = response.customername;
+                    to = response.customername;
+                    banktobank = response.banktobank
+                    amount = response.amount;
+                    date = new Date(response.adjustmentDate);
+
+                    const dialogRef = this.dialog.open(TransferModalComponent, {
+                        width: '70%',
+                        height: '70%',
+                        data: { type: type, increasedecrease: increasedecrease, from: from, to: to, amount: amount, date: date, ...data, isupdate: true, banktobank:banktobank }
+                    });
+
+                    dialogRef.afterClosed().subscribe(result => {
+                        if (result) {
+                            this.loadBanks();
+                        }
+                    });
+                } else {
+                    console.error('Failed to fetch transfer details:', response.statusmessage);
+                }
+            };
+
+            switch (type) {
+                case 'CASH WITHDRAW':
+                    type = 'bankToCash';
+                    data.fromAccounts = accounts;
+                    data.toAccount = 'CASH';
+                    this.api.GetTransferDetailsValues(body1).subscribe(handleResponse);
+                    break;
+                case 'CASH DEPOSIT':
+                    type = 'cashToBank';
+                    data.fromAccount = 'CASH';
+                    data.toAccounts = accounts;
+                    this.api.GetTransferDetailsValues(body1).subscribe(handleResponse);
+                    break;
+                case 'BANK TO BANK':
+                    type = 'bankToBank';
+                    data.fromAccounts = accounts;
+                    data.toAccounts = accounts;
+                    this.api.GetTransferDetailsValues(body1).subscribe(handleResponse);
+                    break;
+                case 'BANK ADJ INCREASE':
+                    type = 'adjustBalance';
+                    increasedecrease = 'increase';
+                    data.accountNames = accounts;
+                    this.api.GetTransferDetailsValues(body1).subscribe(handleResponse);
+                    break;
+                case 'BANK ADJ DECREASE':
+                    type = 'adjustBalance';
+                    increasedecrease = 'decrease';
+                    data.accountNames = accounts;
+                    this.api.GetTransferDetailsValues(body1).subscribe(handleResponse);
+                    break;
+                default:
+                    console.error('Unknown transaction type:', type);
+            }
+        } else {
+            console.error('Failed to fetch accounts:', response1.statusmessage);
+        }
+    });
+}
+
   openAddBanksModal(bank?: Bank): void {
     const data = bank ? { ...bank, isbanksupdateflag: this.isbanksupdateflag } : { isbanksupdateflag: this.isbanksupdateflag };
     const dialogRef = this.dialog.open(BanksComponent, {
@@ -162,4 +256,5 @@ export class BankHomepageComponent implements OnInit {
   isSelectedBank(bankName: any): boolean {
     return this.selectedBank === bankName;
   }
+
 }

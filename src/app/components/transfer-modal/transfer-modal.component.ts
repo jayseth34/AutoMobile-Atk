@@ -29,6 +29,8 @@ export class TransferModalComponent {
       accountName: [''] // Add accountName here
     });
 
+    
+
     this.registeredPhoneNmber = parseInt(
       JSON.parse(localStorage.getItem('phonenumber') as string)
     );
@@ -64,7 +66,48 @@ export class TransferModalComponent {
     }
 
     this.setValidators()
+
+    if(this.data.isupdate){
+      this.patchValues()
+    }
   }
+
+  patchValues(): void {
+    // Patch common values
+    this.transferForm.patchValue({
+      fromAccount: this.data.from,
+      toAccount: this.data.to,
+      amount: this.data.amount,
+      adjustmentDate: this.data.date,
+      description: this.data.description,
+      adjustmentType: this.data.increasedecrease,
+      accountName: this.data.from
+    });
+
+    // Additional logic for specific cases
+    if (this.data.type === 'cashToBank') {
+      this.transferForm.patchValue({ fromAccount: 'CASH' });
+    }
+
+    if (this.data.type === 'bankToCash') {
+      this.transferForm.patchValue({ toAccount: 'CASH' });
+    }
+
+    if (this.data.type === 'bankToBank') {
+      this.transferForm.patchValue({
+        fromAccount: this.data.from,
+        toAccount: this.data.banktobank
+      });
+    }
+
+    if (this.data.type === 'adjustBalance') {
+      this.transferForm.patchValue({
+        accountName: this.data.from,
+        adjustmentType: this.data.increasedecrease
+      });
+    }
+  }
+
 
   setValidators(): void {
     const type = this.data.type;

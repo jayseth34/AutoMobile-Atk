@@ -67,7 +67,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let transaction of transactions">
+            <tr *ngFor="let transaction of transactions" (click)="openModalOnTransaction(transaction)">
               <td class="table-row">{{ transaction.transactionid }}</td>
               <td class="table-row">{{ transaction.type }}</td>
               <td class="table-row">{{ transaction.name }}</td>
