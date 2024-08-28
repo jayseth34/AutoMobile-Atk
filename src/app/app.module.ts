@@ -48,6 +48,7 @@ import { BanksComponent } from './components/banks/banks.component';
 import { BankHomepageComponent } from './components/bank-homepage/bank-homepage.component';
 import { TransferModalComponent } from './components/transfer-modal/transfer-modal.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -100,7 +101,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     MatNativeDateModule,
     MatSlideToggleModule,
     MatCheckboxModule,
-    MatRadioModule
+    MatRadioModule,
+    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
