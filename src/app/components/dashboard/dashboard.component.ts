@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,6 +22,8 @@ export class DashboardComponent implements OnInit{
   youllpayreceiveparty: any[];
   bankaccounts: any[];
   purchasedash: any[];
+  currentDate: string;
+  daysDiff: number;
   constructor(public api: ApiService, public dataService: DataService){}
 
   ngOnInit(){
@@ -45,6 +49,17 @@ export class DashboardComponent implements OnInit{
         console.error('Failed ', response.statusmessage);
       }
     });
-  }
 
+    this.currentDate = moment().format('YYYY-MM-DD');
+    this.daysDiff = moment(JSON.parse(localStorage.getItem("expiryDate") as string)).diff(this.currentDate, 'days');
+    this.dataService.checkPlanExpiry()
+
+    if (this.dataService.isPlanActive && this.daysDiff == 1) {
+      Swal.fire({
+        title: 'Alert!',
+        text: 'Your plan will expire tomorrow',
+        confirmButtonText: 'OK',
+      });
+    }
+  }
 }

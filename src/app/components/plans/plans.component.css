@@ -18,7 +18,7 @@ body {
 
 .plan {
   background-color: white;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   width: 300px;
@@ -67,45 +67,91 @@ body {
 }
 
 button {
-  background-color: #000000;
+  background-color: #6f6d6d;
   color: white;
-  border: none;
   padding: 15px 20px;
   cursor: pointer;
-  border-radius: 0 0 10px 10px;
+  border-radius: 25px;
   font-size: 18px;
 }
 
 button:hover {
-  background-color: #000000;
+  background-color: #494949;
 }
 
 .most-popular {
-  background-color: #a2a6a8;
+  background-color: #b76e37;
   color: white;
   padding: 5px 10px;
   font-size: 14px;
   position: absolute;
   top: 10px;
-  right: 10px;
+  right: 3px;
   border-radius: 5px;
 }
 
 .plan.free .plan-header {
-  background-color: #7c8485;
+  background-color: #b31b1b;
 }
 
 .plan.silver .plan-header {
-  background-color: #7c8485;
+  background-color: #b31b1b;
 }
 
 .plan.gold .plan-header {
-  background-color: #7c8485;
+  background-color: #b31b1b;
   /* color: #000; */
+}
+
+.free{
+  background-color: #f2f2f1;
+}
+
+.silver{
+  background-color: #dfe9ed;
+}
+
+.gold{
+  background-color: #f7ecd1;
 }
 
 .alignment{
   text-align: center;
   font-size: large;
   box-shadow: #000000;
+}
+
+.active-label {
+  background-color: green;
+  color: white;
+  /* font-weight: bold; */
+  font-size: 20px;
+  text-shadow: 2px 2px 2px rgb(18, 18, 18);
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px 5px 0 0;
+  margin-bottom: 10px;
+  width: 80%;
+  margin-left: 10%;
+  box-shadow: 2px 2px 2px  rgb(112, 113, 112);
+}
+
+.active-plan {
+  border: 2px solid rgb(76, 74, 74);
+  /* border-radius: 5px; */
+  box-shadow: 10px 10px 10px rgb(185, 183, 183) !important;
+  position: relative;
+  padding-top: 5px; 
+}
+
+.plans-container .plan {
+  padding: 20px;
+  box-shadow: 2 2 2px rgba(170, 12, 12, 0.1);
+  /* border-radius: 5px; */
+  margin: 10px;
+}
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
 }

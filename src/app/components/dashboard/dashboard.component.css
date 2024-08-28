@@ -105,12 +105,15 @@ body {
     flex-direction: column;
 }
 
-.pinned-cards, .stock-inventory, .cash-bank {
+.pinned-cards, .stock-inventory, .cash-bank, .low-stocks {
     background-color: white;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    overflow-y: auto; 
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #d3d3d3 #f5f5f5;
 }
 
 .pinned-cards .pinned-area {
@@ -140,4 +143,9 @@ body {
 .cash-in-hand {
     font-size: 24px;
     margin-bottom: 15px;
+}
+
+.purchase-cart {
+    height: 35%;
+    width: 35%;
 }

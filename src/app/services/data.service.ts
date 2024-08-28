@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import * as moment from 'moment';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+  isPlanActive: any;
   isLogin: boolean = false;
   partyName:any;
   addPartyData = {
@@ -114,6 +117,30 @@ export class DataService {
       return 'red';
     } else {
       return '';
+    }
+  }
+
+  checkPlanExpiry(){
+    const expiryDate = moment(JSON.parse(localStorage.getItem("expiryDate") as string)).format('YYYY-MM-DD');
+    const currentDate = moment().format('YYYY-MM-DD');
+    const differenceInDays = moment(expiryDate).diff(moment(currentDate), 'days');
+    if(expiryDate===currentDate || differenceInDays<0){
+      this.isPlanActive = false;
+    }
+    else {
+      this.isPlanActive = true
+    }
+    if(!this.isPlanActive){
+      Swal.fire({
+        title: 'Alert!',
+        text: 'Your plan has expired! Please recharge to continue.',
+        confirmButtonText: 'OK',
+        allowOutsideClick: true, 
+      }).then((result) => {
+        if (result.isConfirmed || result.isDismissed) {
+          window.location.href = 'http://localhost:4200/plans';
+        }
+      });
     }
   }
 

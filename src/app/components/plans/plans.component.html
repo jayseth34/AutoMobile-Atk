@@ -1,17 +1,21 @@
 <div class="plans-container">
   <!-- Free Plan -->
-  <div class="plan free">
+  <div class="plan free" [ngClass]="{'active-plan': activePlan === 'free', 'disabled': activePlan === 'silver' || activePlan === 'gold'}">
+    <!-- <div class="plan free" [ngClass]="{'active-plan': activePlan === 'free'}"> -->
+    <div *ngIf="activePlan === 'free'" class="active-label">ACTIVE PLAN</div>
     <div class="plan-header">Free Trial</div>
     <div class="plan-price">₹ 0</div>
     <ul class="plan-features">
       <li>7 Days Access</li>
       <li>Desktop View</li>
     </ul>
-    <button (click)="buyPlan('free')">Start Free Trial</button>
+    <button (click)="buyPlan('free')" [disabled]="activePlan === 'silver' || activePlan === 'gold'">Start Free Trial</button>
+    <!-- <button (click)="buyPlan('free')">Start Free Trial</button> -->
   </div>
 
   <!-- Silver Plan -->
-  <div class="plan silver">
+  <div class="plan silver" [ngClass]="{'active-plan': activePlan === 'silver'}">
+    <div *ngIf="activePlan === 'silver'" class="active-label">ACTIVE PLAN</div>
     <div class="plan-header">Silver Plan</div>
     <div class="plan-price">₹ 3399 <span class="original-price">₹ 4999</span></div>
     <ul class="plan-features">
@@ -22,7 +26,8 @@
   </div>
 
   <!-- Gold Plan -->
-  <div class="plan gold">
+  <div class="plan gold" [ngClass]="{'active-plan': activePlan === 'gold'}">
+    <div *ngIf="activePlan === 'gold'" class="active-label">ACTIVE PLAN</div>
     <div class="plan-header">Gold Plan</div>
     <div class="plan-price">₹ 3999 <span class="original-price">₹ 7799</span></div>
     <ul class="plan-features">
