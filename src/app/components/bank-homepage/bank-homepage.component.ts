@@ -237,21 +237,28 @@ export class BankHomepageComponent implements OnInit {
     });
 }
 
-  openAddBanksModal(bank?: Bank): void {
-    const data = bank ? { ...bank, isbanksupdateflag: this.isbanksupdateflag } : { isbanksupdateflag: this.isbanksupdateflag };
-    const dialogRef = this.dialog.open(BanksComponent, {
-      width: '60%',
-      height: '60%',
-      data: data
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log('Modal closed with result:', result);
-        this.loadBanks();
-      }
-    });
+openAddBanksModal(bank?: Bank): void {
+  if (!bank) {
+    this.isbanksupdateflag = false;
   }
+
+  const data = bank 
+    ? { ...bank, isbanksupdateflag: this.isbanksupdateflag } 
+    : { isbanksupdateflag: this.isbanksupdateflag };
+
+  const dialogRef = this.dialog.open(BanksComponent, {
+    width: '60%',
+    height: '60%',
+    data: data
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      console.log('Modal closed with result:', result);
+      this.loadBanks();
+    }
+  });
+}
 
   isSelectedBank(bankName: any): boolean {
     return this.selectedBank === bankName;

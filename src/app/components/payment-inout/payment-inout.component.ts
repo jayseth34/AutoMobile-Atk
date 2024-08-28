@@ -25,6 +25,7 @@ export class PaymentInoutComponent implements OnInit {
   totalAmount: number = 0;
   amount1Value: number = 0;
   isview: boolean = false;
+  paymentOptions: any[] = [];
 
   constructor(private fb: FormBuilder, private api: ApiService, private dataService: DataService, private router: Router, private cs: CommonService) {
     this.balance = 0;
@@ -35,6 +36,7 @@ export class PaymentInoutComponent implements OnInit {
     this.typeofpay = this.dataService.typeofpay
     this.isview = this.dataService.isview
     this.getPartyList();
+    this.getPaymentOptions()
     this.paymentInForm = this.fb.group({
       party: ['', Validators.required],
       payments: this.fb.array([]),
@@ -273,5 +275,20 @@ export class PaymentInoutComponent implements OnInit {
     } else {
       Swal.fire('Error', 'Please fill all required fields correctly', 'error');
     }
+  }
+
+  getPaymentOptions() {
+    let body = {
+      registeredphonenumber:this.registeredphonenumber
+    }
+    this.api.getAccounts(body).subscribe((data:any) => {
+      if (data.status === 'SUCCESS') {
+        const apiOptions = data.bankslist.map((bank: any) => bank.accountdisplayname);
+        this.paymentOptions = [...apiOptions, 'CASH', 'CHEQUE'];
+      } else {
+        console.error('Failed to load payment options:', data.status);
+        this.paymentOptions = ['CASH', 'CHEQUE'];
+      }
+    });
   }
 }

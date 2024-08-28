@@ -1,11 +1,8 @@
 <div class="container">
   <div class="payment-in-container">
     <form [formGroup]="paymentInForm" (ngSubmit)="onSubmit()">
-
       <div class="form-row">
-
         <div class="form-group col-md-6">
-
           <mat-form-field>
             <mat-label>Party</mat-label>
             <mat-select id="party" formControlName="party" (selectionChange)="onPartyChange($event)">
@@ -20,58 +17,48 @@
           <p style="font-size: 14px; margin-left: 20px;" class="form-text text-muted">BAL: <b><span [ngClass]="{'negative-balance': balance < 0, 'positive-balance': balance >= 0}">{{ balance }}</span></b></p>
 
           <div class="payment-type">
-            <div class="row">
-              <!-- First Row -->
-            </div>
-              <div formArrayName="payments" class="payment-container">
-                <div *ngFor="let payment of payments.controls; let i = index" [formGroupName]="i">
-                  <div class="row mt-3">
-                    <div class="col-md-6">
-                      <div class="form-floating">
-                        <select class="form-select" formControlName="type" (change)="handlePaymentTypeChange(i)">
-                          <option value="" disabled selected>Select Type</option>
-                          <option value="CASH">Cash</option>
-                          <option value="CHEQUE">Cheque</option>
-                          <option value="DEBIT">Debit Card</option>
-                          <option value="PAYPAL">PayPal</option>
-                          <option value="BANK">Bank Transfer</option>
-                        </select>
-                        <label>Payment Type</label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-floating">
-                        <input type="text" class="form-control" formControlName="amount" placeholder="Amount">
-                        <label>Amount</label>
-                      </div>
-                    </div>
+            <div formArrayName="payments" class="payment-container">
+              <div *ngFor="let payment of payments.controls; let i = index" [formGroupName]="i" class="payment-group">
+                <div class="row mt-3">
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <mat-label>Payment Type</mat-label>
+                      <mat-select formControlName="type" (selectionChange)="handlePaymentTypeChange(i)">
+                        <mat-option value="" disabled>Select Type</mat-option>
+                        <mat-option *ngFor="let option of paymentOptions" [value]="option">{{ option }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
                   </div>
-                  <div class="row mt-3">
-                    <div class="col-md-6">
-                      <div class="form-floating" *ngIf="shouldShowReferenceNo(i)">
-                        <input type="text" class="form-control" formControlName="refno" placeholder="Reference No.">
-                        <label>Reference no.</label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <button *ngIf="shouldShowReferenceNo(i)" type="button" class="btn btn-danger btn-sm mt-2 remove-btn" (click)="removePayment(i)">Remove</button>
-                    </div>
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <mat-label>Amount</mat-label>
+                      <input matInput formControlName="amount" placeholder="Amount">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mt-3" *ngIf="shouldShowReferenceNo(i)">
+                  <div class="col-md-6">
+                    <mat-form-field>
+                      <mat-label>Reference No.</mat-label>
+                      <input matInput formControlName="refno" placeholder="Reference No.">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <button type="button" class="btn btn-danger btn-sm mt-2 remove-btn" (click)="removePayment(i)">Remove</button>
                   </div>
                 </div>
               </div>
-              <div class="payment-header">
-                <h3 class="add-payment" (click)="addPayment()">+ Add Payment Type</h3>
-                <span class="total">Total: {{totalAmount}}</span>
             </div>
-                      
+            <div class="payment-header">
+              <h3 class="add-payment" (click)="addPayment()">+ Add Payment Type</h3>
+              <span class="total">Total: {{totalAmount}}</span>
+            </div>
           </div>
-          
 
           <mat-form-field>
             <mat-label>Description</mat-label>
             <textarea id="description" formControlName="description" matInput class="fixed-height-textarea" placeholder="Description"></textarea>
           </mat-form-field>
-                
         </div>
 
         <div class="form-group col-md-6">
@@ -83,19 +70,16 @@
 
           <mat-form-field>
             <mat-label>Date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Date"  readonly style="cursor: pointer;"/>
+            <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Date" readonly style="cursor: pointer;"/>
             <mat-datepicker-toggle matSuffix [for]="picker" formControlName="date"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-                   
-          
+
           <mat-form-field>
             <mat-label>Received</mat-label>
             <input id="received" type="text" matInput formControlName="received"
                    (ngModelChange)="updateReceivedValue($event)" placeholder="Received"/>
           </mat-form-field>
-          
-          
         </div>
       </div>
 
@@ -109,4 +93,4 @@
       </div>
     </form>
   </div>
-</div>  
+</div>
