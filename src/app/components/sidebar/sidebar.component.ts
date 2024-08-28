@@ -89,11 +89,13 @@ export class SidebarComponent {
 
   toggleSubMenu(tab: any) {
     this.selectedTab = tab; 
+    this.dataService.checkPlanExpiry()
     tab.isOpen = !tab.isOpen;
   }
 
   selectSubTab(subTab: any) {
     this.selectedTab = subTab; 
+    this.dataService.checkPlanExpiry()
   }
 
   getPartyListData() {

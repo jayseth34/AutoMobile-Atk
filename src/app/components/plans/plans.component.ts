@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { CommonService } from 'src/app/services/common.service';
+import { DataService } from 'src/app/services/data.service';
 declare var Razorpay: any;
 
 @Component({
@@ -15,10 +16,12 @@ export class PlansComponent implements OnInit {
   hidefreeplan: boolean = true;
   show:boolean = false;
   planType: any;
-  constructor(private api: ApiService, public cs: CommonService) {}
+  activePlan: any;
+  constructor(private api: ApiService, public cs: CommonService, public dataService: DataService) {}
 
   ngOnInit(): void {
     this.planType = JSON.parse(localStorage.getItem("planType") as string);
+    this.activePlan = JSON.parse(localStorage.getItem("planType") as string);
   }
 
   buyPlan(plan: string) {
@@ -34,7 +37,9 @@ export class PlansComponent implements OnInit {
       this.api.createOrder(0, 'INR', this.planType, this.registeredphonenumber).subscribe((response: any) => {
         if(response.status == "SUCCESS"){
           localStorage.setItem("planType", JSON.stringify(this.planType))
+          this.activePlan = JSON.parse(localStorage.getItem("planType") as string);
           alert('Free trial activated');
+          location.reload(); 
         }
       });
       return;
@@ -51,7 +56,10 @@ export class PlansComponent implements OnInit {
           this.api.UpdateExpiryDate(this.planType, this.registeredphonenumber).subscribe((res:any) => {
             if(res.status == "SUCCESS"){
               localStorage.setItem("planType", JSON.stringify(this.planType))
+              this.activePlan = JSON.parse(localStorage.getItem("planType") as string);
               alert(`Payment successful. Payment ID: ${response.razorpay_payment_id}`);
+              location.reload(); 
+              // this.dataService.checkPlanExpiry()
             }
           })
         },
