@@ -209,6 +209,7 @@ export interface SaveUpdateTransactionRq {
     issaleorderconvert: boolean
     isupdate: boolean
     itemdetailslist: Itemdetailslist[]
+    paymentinfo: PaymentInfo[]
 }
 
 interface Itemdetailslist {
@@ -225,12 +226,28 @@ interface Itemdetailslist {
     discountamount: number
 }
 
+export interface PaymentInfo {
+    type: string
+    amount: number
+    refno: string
+}
+
 export interface Account {
     id: number;
     name: string;
-  }
+}
 
-  export interface Bank {
+export interface Bank {
     accountdisplayname: string;
     amount: number;
-  }
+}
+
+export interface GetBankRq {
+    registeredphonenumber: number
+}
+
+export interface GetBankRs {
+    status: string
+    statusmessage: string
+    bankslist: Bank[]
+}

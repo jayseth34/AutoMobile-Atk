@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonService } from './common.service';
-import { GetPartyTransactionDetailsRq, GetTypeOfPayTransactionsRq, ItemListRs, LinkedTransaction, LoginReponse, LoginRequest, Party, PartyListRs, PaymentInOut, SaveUpdateTransactionRq, TransactionDetails, TrnxInOut } from '../models';
+import { GetBankRq, GetBankRs, GetPartyTransactionDetailsRq, GetTypeOfPayTransactionsRq, ItemListRs, LinkedTransaction, LoginReponse, LoginRequest, Party, PartyListRs, PaymentInOut, SaveUpdateTransactionRq, TransactionDetails, TrnxInOut } from '../models';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -86,6 +86,11 @@ export class ApiService {
   getItemList(phonenumber: number) {
     let endpoint = `Item/GetItemList?registeredphonenumber=${phonenumber}`;
     return this.cs.typeGet<ItemListRs>(endpoint);
+  }
+
+  getBankList(rq: GetBankRq){
+    let endpoint = 'Sale/GetBanks';
+    return this.cs.PostType<GetBankRs ,GetBankRq>(endpoint, rq);
   }
 
   getTransactionDetails(phNo: number, invNo: number, type: string, isSaleConvert: boolean, isSaleOrder: boolean) {

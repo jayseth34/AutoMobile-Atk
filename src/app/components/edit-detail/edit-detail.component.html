@@ -407,20 +407,17 @@
           <div [ngClass]="i == 0 ? 'mt-1' : 'mt-3'" *ngFor="let control of paymentInfoValue.controls; let i = index" formArrayName="paymentinfo">
             <div [formGroup]="control" class="row">
               <div class="col-6">
-                <div class="form-floating">
-                  <select
-                    class="form-control form-select-sm"
-                    id="type_{{i}}"
-                    name="type_{{i}}"
-                    aria-label="Payment Type Select"
-                    formControlName="type"
+                <!-- TODO: Updated payment type api call and dynamic list -->
+                  <app-auto-complete
+                    [controlName]="'type'"
+                    [dataList]="bankNameList()"
+                    [placeholder]="'Payment Type'"
+                    [dataIsObject]="false"
+                    [design]="true"
+                    [value]="getBankAccountName(i)"
+                    (click)="handlePaymentInputClick()"
                   >
-                    <option value="CASH"> CASH </option>
-                    <option value="CREDIT"> CREDIT </option>
-                    <option value="CHEQUE"> CHEQUE </option>
-                  </select>
-                  <label for="type_{{i}}"> Payment Type </label>
-                </div>
+                  </app-auto-complete>
               </div>
               
               <div class="col-6">
@@ -439,7 +436,13 @@
             </div>
           </div>
 
-          <a (click)="createNewPaymentRow('CHEQUE')">Add Payment Type</a>
+          <div class="mt-1">
+            <a class="add-payment-type" (click)="createNewPaymentRow('CHEQUE')">Add Payment Type</a>
+            <span class="payment-type-total">
+              <b>Total: </b>
+              {{ itemReceivedAmt }}
+            </span>
+          </div>
         </div>
       </div>
 

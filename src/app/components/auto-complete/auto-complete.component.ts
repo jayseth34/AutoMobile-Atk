@@ -22,6 +22,8 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   @Input() label?: string;
   @Input() columns: ColumnInfo[];
   @Input() maxContentWidth: boolean = false;
+  @Input() design: boolean = false;
+  @Input() value: string = '';
   calledFirst: boolean = false;
   itemList: any[];
   name: string;
@@ -63,7 +65,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['ogItemList']) {
       this.itemList = this.ogItemList;
-      if (this.ogItemList && this.ogItemList.length > 0) {
+      if (this.ogItemList && this.ogItemList.length > 0 && !this.design) {
         if (this.getFormControl?.value)
           this.filterList(this.getFormControl.value);
       }
