@@ -11,3 +11,19 @@ export const ReceivedValidator: ValidatorFn = (control: AbstractControl): Valida
     }
     return null;
 }
+
+export const PaymentRefNoValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const typeControl = control.get("type");
+    const refNoControl = control.get("refno");
+
+    if(!typeControl || !refNoControl || typeControl.value.length == 0){
+        return {
+            type: "Payment Type Cannot be empty",
+        }
+    } else if (typeControl.value !== 'CASH' && refNoControl.value.length == 0){
+        return {
+            refno: "Reference No cannot be empyt when payment type is not CASH",
+        }
+    }
+    return null;
+}

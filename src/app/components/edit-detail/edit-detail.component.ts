@@ -9,7 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from 'src/app/services/api.service';
 import { distinctUntilChanged, map, of, pairwise, startWith } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
-import { ReceivedValidator } from 'src/app/received-validator';
+import { PaymentRefNoValidator, ReceivedValidator } from 'src/app/received-validator';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
@@ -130,7 +130,11 @@ export class EditDetailComponent implements OnInit {
   public get partyBalance(): number {
     return this.modifyDetail.get("partybalance")?.value;
   }
-
+  
+  public get paymentInfoValue() {
+    return (this.modifyDetail.get("paymentinfo") as FormArray<FormGroup>);
+  }
+  
   getItemName(item: Item): string {
     return item.itemname
   }
@@ -156,7 +160,11 @@ export class EditDetailComponent implements OnInit {
       topayparty: new FormControl<number>(0),
       toreceivefromparty: new FormControl<number>(0),
       itemdetailslist: new FormArray([]),
+      paymentinfo: new FormArray([])
     }, ReceivedValidator);
+
+    // To add the payment type with defalt value being cash
+    this.createNewPaymentRow('CASH');
 
     this.modifyDetail.get("partybalance")?.disable();
 
@@ -277,6 +285,7 @@ export class EditDetailComponent implements OnInit {
     let totalElementControl = this.modifyDetail.get("total");
     if (data != null) {
       // TODO: Add default tax amount from item to totalAmount
+      // TODO: Handle user input for item name. Currently when not selected, all the input are not editable
       finalAmount = data?.priceperunit * data.qty + 0 - data?.discountamount;
       this.totalAmount += finalAmount;
       this.totalQuantity += data.qty;
@@ -380,6 +389,15 @@ export class EditDetailComponent implements OnInit {
     });
 
     return element;
+  }
+
+  createNewPaymentRow(defaultPaymentType: string){
+    let control = this.modifyDetail.get("paymentinfo") as FormArray;
+    control.push(new FormGroup({
+      type: new FormControl<string>(defaultPaymentType),
+      amount: new FormControl<number>(0),
+      refno: new FormControl<string>("")
+    }, PaymentRefNoValidator));
   }
 
   addNewFormRow(row: FormGroup) {
