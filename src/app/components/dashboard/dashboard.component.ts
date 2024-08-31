@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,7 +25,7 @@ export class DashboardComponent implements OnInit{
   purchasedash: any[];
   currentDate: string;
   daysDiff: number;
-  constructor(public api: ApiService, public dataService: DataService){}
+  constructor(public api: ApiService, public dataService: DataService, private router: Router){}
 
   ngOnInit(){
     this.registeredPhoneNumber = parseInt(
@@ -50,6 +51,14 @@ export class DashboardComponent implements OnInit{
       }
     });
 
+    let body = {
+      registeredPhoneNumber: this.registeredPhoneNumber,
+      month: 'This Month'    }
+
+    this.api.getDashboardSaleDetails(body).subscribe((response: any) =>{
+      console.log('response:', response)
+    });
+
     this.currentDate = moment().format('YYYY-MM-DD');
     this.daysDiff = moment(JSON.parse(localStorage.getItem("expiryDate") as string)).diff(this.currentDate, 'days');
     this.dataService.checkPlanExpiry()
@@ -59,6 +68,13 @@ export class DashboardComponent implements OnInit{
         title: 'Alert!',
         text: 'Your plan will expire tomorrow',
         confirmButtonText: 'OK',
+        showCancelButton: true,
+        cancelButtonText: 'Buy Now',
+        cancelButtonColor: '#d33',
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.cancel) {
+          this.router.navigate(['/plans']);
+        }
       });
     }
   }

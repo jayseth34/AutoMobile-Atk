@@ -56,7 +56,7 @@
                         <p class="amount">₹ {{totalpurchase}}<span style="font-size: 20px; color: #888;">.00</span></p>
                         <ul class="details" *ngFor="let purchase of purchasedash">
                             <li *ngIf="purchase.typeofpay=='PURCHASE' && purchase.total!=0" style="margin-top: 15px;">
-                                <span style="color: #888;">{{ purchase.item }}</span> <span [ngStyle]="{ 'color': dataService.getColor(purchase.total, 0), 'float': 'right' }"> {{ purchase.total }}</span>
+                                <span style="color: #888;">{{ purchase.item }}</span> <span [ngStyle]="{ 'color': dataService.getColor(0, purchase.total), 'float': 'right' }"> {{ purchase.total }}</span>
                             </li>
                         </ul>
                     </div>

@@ -81,6 +81,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem("phonenumber", JSON.stringify(formValue.phonenumber));
           localStorage.setItem("AuthToken", JSON.stringify(AuthToken));
           localStorage.setItem("planType", JSON.stringify(res.plantype))
+          localStorage.setItem("expiryDate", JSON.stringify(res.expiryDate));
           this.router.navigateByUrl("/businessinfo");
         }
       });

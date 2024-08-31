@@ -56,6 +56,7 @@ export class PlansComponent implements OnInit {
           this.api.UpdateExpiryDate(this.planType, this.registeredphonenumber).subscribe((res:any) => {
             if(res.status == "SUCCESS"){
               localStorage.setItem("planType", JSON.stringify(this.planType))
+              localStorage.setItem("expiryDate", JSON.stringify(res.expiryDate));
               this.activePlan = JSON.parse(localStorage.getItem("planType") as string);
               alert(`Payment successful. Payment ID: ${response.razorpay_payment_id}`);
               location.reload(); 
