@@ -1,4 +1,5 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms"
+import { AbstractControl, FormArray, ValidationErrors, ValidatorFn } from "@angular/forms"
+import { Bank } from "./models";
 
 export const ReceivedValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const totalControl = control.get("total");
@@ -26,4 +27,19 @@ export const PaymentRefNoValidator: ValidatorFn = (control: AbstractControl): Va
         }
     }
     return null;
+}
+
+export const PaymentTypeValidator: ValidatorFn = (controlArr: AbstractControl): ValidationErrors | null => {
+    if(!(controlArr instanceof FormArray)){
+        return null;
+    }
+
+    let bankNames = (controlArr as FormArray).controls.map((bank) => bank.get('type')?.value);
+    if(!bankNames.every(isUnique))
+        return {error: "Payment Type value should be unique"};
+    return null;
+}
+
+function isUnique(value: any, index: any, array: any[]) {
+    return array.indexOf(value) === array.lastIndexOf(value);
 }

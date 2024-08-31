@@ -9,7 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from 'src/app/services/api.service';
 import { distinctUntilChanged, map, of, pairwise, startWith, Subscription } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
-import { PaymentRefNoValidator, ReceivedValidator } from 'src/app/received-validator';
+import { PaymentRefNoValidator, PaymentTypeValidator, ReceivedValidator } from 'src/app/received-validator';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
@@ -28,7 +28,6 @@ export class EditDetailComponent implements OnInit {
   selectedParty?: Party;
   currentInvNo?: number;
   stateList: string[];
-  banks = signal<Bank[]>([]);
   partyList: Party[];
   registeredPhoneNumber: number;
   isEdit: boolean = false; // False for add transaction and true for edit transaction
@@ -49,6 +48,20 @@ export class EditDetailComponent implements OnInit {
   fullpayment: boolean = false;
   showAmtDetails: boolean = true;
   ogBalance: number = 0;
+  banks = signal<Bank[]>([
+    {
+      accountdisplayname: 'CASH',
+      amount: 0,
+      refno: '',
+      type: 'CHEQUE'
+    },
+    {
+      accountdisplayname: 'CHEQUE',
+      amount: 0,
+      refno: '',
+      type: 'CHEQUE'
+    }
+  ]);
 
   // Subscriptions
   $FormSubscription: Subscription[] = [];
@@ -81,7 +94,7 @@ export class EditDetailComponent implements OnInit {
   });
 
   bankNameList = computed(() => {
-    return this.banks().map((bank) => bank.accountdisplayname);
+    return this.banks().map((bank) => bank.accountdisplayname ?? bank.type);
   });
 
   itemColumnInfo: ColumnInfo[] = [
@@ -177,11 +190,8 @@ export class EditDetailComponent implements OnInit {
       topayparty: new FormControl<number>(0),
       toreceivefromparty: new FormControl<number>(0),
       itemdetailslist: new FormArray([]),
-      amountdetailslist: new FormArray([])
+      amountdetailslist: new FormArray([], PaymentTypeValidator)
     }, ReceivedValidator);
-
-    // To add the payment type with defalt value being cash
-    this.createNewPaymentRow('CASH');
 
     this.modifyDetail.get("partybalance")?.disable();
 
@@ -197,7 +207,6 @@ export class EditDetailComponent implements OnInit {
 
     // If Received value changed, then update the balance accordingly
     this.modifyDetail.get("received")?.valueChanges.subscribe((val) => {
-      console.log(`Received Value: ${val}`);
       let total = this.modifyDetail.get("total")?.value;
       this.modifyDetail.get("balance")?.setValue(total - val, { emitEvent: false });
 
@@ -289,6 +298,7 @@ export class EditDetailComponent implements OnInit {
 
             this.updateBalanceColor(transaction.toreceivefromparty - transaction.topayparty);
             transaction.itemdetailslist.forEach(item => this.addNewFormRow(this.createNewFormRow(item)));
+            transaction.amountdetailslist.forEach(bank => this.createNewPaymentRow(bank));
             // For the extra row
             this.addNewFormRow(this.createNewFormRow(null));
             this.updateTransactionData();
@@ -296,6 +306,9 @@ export class EditDetailComponent implements OnInit {
       } else {
         this.addNewFormRow(this.createNewFormRow(null));
         this.updateTransactionData();
+
+        // To add the payment type with defalt value being cash
+        this.createNewPaymentRow();
       }
     });
   }
@@ -415,16 +428,23 @@ export class EditDetailComponent implements OnInit {
     return element;
   }
 
-  createNewPaymentRow(defaultPaymentType: string){
+  createNewPaymentRow(data?: Bank) {
     let control = this.modifyDetail.get("amountdetailslist") as FormArray;
+    let defaltValue = this.bankNameList()[0];
+
+    if(this.banks().length > 1)
+      this.banks.update(banks => banks.slice(1))
+    else
+      this.handlePaymentInputClick();
+
     let nfg = new FormGroup({
-      type: new FormControl<string>(defaultPaymentType),
-      amount: new FormControl<number>(0),
-      refno: new FormControl<string>("")
+      type: new FormControl<string>((data?.accountdisplayname ?? data?.type) ?? defaltValue),
+      amount: new FormControl<number>(data?.amount ?? 0),
+      refno: new FormControl<string>(data?.refno ?? "")
     }, PaymentRefNoValidator);
 
     let $amtSubs = nfg.get("amount")?.valueChanges
-    .pipe(startWith(null), pairwise())
+    .pipe(startWith(data?.amount), pairwise())
     .subscribe(amt => {
       this.modifyDetail.patchValue({
       received: this.itemReceivedAmt + (amt[1] ?? 0) - (amt[0] ?? 0),
@@ -432,14 +452,17 @@ export class EditDetailComponent implements OnInit {
     });
 
     let $typeSubs = nfg.get("type")?.valueChanges
-    .pipe(startWith(null), pairwise())
+    .pipe(startWith(defaltValue), pairwise())
     .subscribe(type => {
+      console.log('Payent Type: ', type)
       this.banks.update((items) => {
         let filteredItems = items.filter(item => item.accountdisplayname != type[1]);
 
         let obj: Bank = {
           accountdisplayname: "",
-          amount: 0
+          amount: 0,
+          refno: "",
+          type: "",
         };
         let addItem: boolean = true;
         switch(type[0]){
@@ -604,9 +627,11 @@ export class EditDetailComponent implements OnInit {
   }
 
   handlePaymentInputClick(){
-    console.log("Payment Info clicked");
-    if (this.banks() == undefined || this.banks().length == 0){
-      const paymentInfoList = this.paymentInfoValue.value.map(item => item.type);
+    let bankListString = localStorage.getItem('bankList');
+    let bankList: Bank[] = [];
+    const paymentInfoList = this.paymentInfoValue.value.map(item => item.type);
+  
+    if (!bankListString){
 
       let rq: GetBankRq = {
         registeredphonenumber: this.registeredPhoneNumber
@@ -614,18 +639,21 @@ export class EditDetailComponent implements OnInit {
       this.api.getBankList(rq).subscribe((rs: GetBankRs) => {
         if(rs.status === 'SUCCESS'){
           localStorage.setItem("bankList", JSON.stringify(rs.bankslist));
-          rs.bankslist.map(bank => {
-            if(!paymentInfoList.includes(bank.accountdisplayname)){
-              this.banks.update(banks => [...banks, bank]);
-            }
-          });
-
-          console.log(this.banks());
+          bankList = rs.bankslist;
         } else {
           Swal.fire(`Could not get Bank list: ${rs.statusmessage}`, "", "error");
         }
       })
+    } else {
+      bankList = JSON.parse(bankListString);
     }
+
+    bankList.map(bank => {
+      let bankName = bank.accountdisplayname ?? (bank.type ?? "")
+      if(!paymentInfoList.includes(bankName) && this.bankNameList().indexOf(bankName) == -1){
+        this.banks.update(banks => [...banks, bank]);
+      }
+    });
   }
 
   handlePartyChange = (partyName: string) => {

@@ -71,6 +71,7 @@ export interface TransactionDetails {
     topayparty: number
     toreceivefromparty: number
     itemdetailslist: ItemDetail[]
+    amountdetailslist: Bank[]
 }
 
 export interface ItemDetail {
@@ -240,6 +241,8 @@ export interface Account {
 export interface Bank {
     accountdisplayname: string;
     amount: number;
+    refno: string;
+    type: string,
 }
 
 export interface GetBankRq {
