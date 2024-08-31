@@ -404,9 +404,9 @@
     <form [formGroup]="modifyDetail" class="mt-4 row" [ngClass]="!showAmtDetails ? 'justify-content-end' : 'justify-content-between'">
       <div class="col-5" *ngIf="showAmtDetails">
         <div class="container-fluid">
-          <div [ngClass]="i == 0 ? 'mt-1' : 'mt-3'" *ngFor="let control of paymentInfoValue.controls; let i = index" formArrayName="paymentinfo">
+          <div [ngClass]="i == 0 ? 'mt-1' : 'mt-3'" *ngFor="let control of paymentInfoValue.controls; let i = index" formArrayName="amountdetailslist">
             <div [formGroup]="control" class="row">
-              <div class="col-6">
+              <div class="col-5">
                 <!-- TODO: Updated payment type api call and dynamic list -->
                   <app-auto-complete
                     [controlName]="'type'"
@@ -420,14 +420,20 @@
                   </app-auto-complete>
               </div>
               
-              <div class="col-6">
+              <div class="col-5">
                 <div class="form-floating">
                   <input type="number" name="checkAmt_{{i}}" id="checkAmt_{{i}}" class="form-control form-control-sm" formControlName="amount">
                   <label for="checkAmt_{{i}}"> Amount </label>
                 </div>
               </div>
+
+              <div class="col-1">
+                <button mat-mini-fab aria-label="Example icon button with a menu icon" class="mt-2" (click)="handleDeletePaymentInfoClick(i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
   
-              <div class="col-6 mt-1" *ngIf="control.get('type')?.value != 'CASH'">
+              <div class="col-5 mt-1" *ngIf="control.get('type')?.value != 'CASH'">
                 <div class="form-floating">
                   <input type="string" name="refno_{{i}}" id="refno_{{i}}" class="form-control form-control-sm" formControlName="refno">
                   <label for="refno_{{i}}"> Ref No </label>

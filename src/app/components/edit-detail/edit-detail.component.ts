@@ -144,11 +144,11 @@ export class EditDetailComponent implements OnInit {
   }
   
   public get paymentInfoValue() {
-    return (this.modifyDetail.get("paymentinfo") as FormArray<FormGroup>);
+    return (this.modifyDetail.get("amountdetailslist") as FormArray<FormGroup>);
   }
 
   public getBankAccountName(i: number): string {
-    return (this.modifyDetail.get('paymentinfo') as FormArray).at(i).get('type')?.value;
+    return (this.modifyDetail.get('amountdetailslist') as FormArray).at(i).get('type')?.value;
   }
 
   
@@ -177,7 +177,7 @@ export class EditDetailComponent implements OnInit {
       topayparty: new FormControl<number>(0),
       toreceivefromparty: new FormControl<number>(0),
       itemdetailslist: new FormArray([]),
-      paymentinfo: new FormArray([])
+      amountdetailslist: new FormArray([])
     }, ReceivedValidator);
 
     // To add the payment type with defalt value being cash
@@ -202,7 +202,7 @@ export class EditDetailComponent implements OnInit {
       this.modifyDetail.get("balance")?.setValue(total - val, { emitEvent: false });
 
       // Update the payment amount when only 1 payment type available
-      let paymentArr = this.modifyDetail.get("paymentinfo") as FormArray;
+      let paymentArr = this.modifyDetail.get("amountdetailslist") as FormArray;
       if(paymentArr.length == 1){
         paymentArr.at(0).get('amount')?.setValue(val, { emitEvent: false });
       }
@@ -416,7 +416,7 @@ export class EditDetailComponent implements OnInit {
   }
 
   createNewPaymentRow(defaultPaymentType: string){
-    let control = this.modifyDetail.get("paymentinfo") as FormArray;
+    let control = this.modifyDetail.get("amountdetailslist") as FormArray;
     let nfg = new FormGroup({
       type: new FormControl<string>(defaultPaymentType),
       amount: new FormControl<number>(0),
@@ -521,7 +521,7 @@ export class EditDetailComponent implements OnInit {
     }, { emitEvent: false })
 
     // Updating Payment array only if one payment type is present
-    let paymentArr = this.modifyDetail.get('paymentinfo') as FormArray;
+    let paymentArr = this.modifyDetail.get('amountdetailslist') as FormArray;
     if(paymentArr.length == 1)
       paymentArr.at(0).get('amount')?.setValue(received, { emitEvent: false });
   }
@@ -559,6 +559,22 @@ export class EditDetailComponent implements OnInit {
     // this.itemDetailValue?.at(ind).disable()
     // this.itemDetailValue.removeAt(ind);
     this.updateTransactionData();
+  }
+
+  handleDeletePaymentInfoClick(ind: number){
+    let paymentFormArray = this.paymentInfoValue;
+    let paymentControl = paymentFormArray.at(ind);
+    let currAccDisplayName = paymentControl.get("type")?.value;
+
+    this.paymentInfoValue.removeAt(ind);
+
+    let banksList: Bank[] = JSON.parse(localStorage.getItem('bankList') ?? "");
+    if(banksList.length == 0)
+      console.error("Nothing to delete in banklist");
+
+    let bank = banksList.find((bank) => bank.accountdisplayname === currAccDisplayName);
+    if (bank != undefined)
+      this.banks.update((banks) => [...banks, bank as Bank]);
   }
 
   handleAddRowClick() {
@@ -813,7 +829,7 @@ export class EditDetailComponent implements OnInit {
     body.isupdate = this.isEdit;
 
     // Updating the payment type
-    let paymentTypes = body.paymentinfo.map((pi: PaymentInfo) => pi.type);
+    let paymentTypes = body.amountdetailslist.map((pi: PaymentInfo) => pi.type);
     body.paymenttype = paymentTypes.join(',');
 
     body.typeofpay = this.transactionType.replace("-", " ").toUpperCase();

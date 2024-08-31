@@ -209,7 +209,7 @@ export interface SaveUpdateTransactionRq {
     issaleorderconvert: boolean
     isupdate: boolean
     itemdetailslist: Itemdetailslist[]
-    paymentinfo: PaymentInfo[]
+    amountdetailslist: PaymentInfo[]
 }
 
 interface Itemdetailslist {
