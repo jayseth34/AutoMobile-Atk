@@ -4,7 +4,7 @@
   (clickOutside)="closeList()"
   [formGroup]="form"
 >
-  <div class="autocomplete input-group">
+  <div class="autocomplete input-group" *ngIf="!design">
     <span for="inputElement" *ngIf="label" class="input-group-text transparent">
       {{ label }}
     </span>
@@ -19,7 +19,7 @@
   </div>
   <div
     class="autocomplete-items"
-    *ngIf="showList"
+    *ngIf="showList && !design"
     [ngClass]="maxContentWidth ? 'max-content-width' : ''"
   >
     <table class="table table-hover table-borderless" *ngIf="dataIsObject">
@@ -64,4 +64,20 @@
       </div>
     </div>
   </div>
-</form>
+  
+  <!-- Showed when Mat required -->
+  <div *ngIf="design">
+    <div class="form-floating">
+      <select
+        class="form-control form-select-sm"
+        (click)="handleInputCLick()"
+        aria-label="Payment Type Select"
+        formControlName="type"
+      >
+        <option value="{{value}}"> {{ value }} </option>
+        <option *ngFor="let item of itemList" value="{{item}}"> {{item}} </option>
+      </select>
+      <label > Payment Type </label>
+    </div>
+  </div>
+</form> 

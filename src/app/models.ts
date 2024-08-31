@@ -71,6 +71,7 @@ export interface TransactionDetails {
     topayparty: number
     toreceivefromparty: number
     itemdetailslist: ItemDetail[]
+    amountdetailslist: Bank[]
 }
 
 export interface ItemDetail {
@@ -209,6 +210,7 @@ export interface SaveUpdateTransactionRq {
     issaleorderconvert: boolean
     isupdate: boolean
     itemdetailslist: Itemdetailslist[]
+    amountdetailslist: PaymentInfo[]
 }
 
 interface Itemdetailslist {
@@ -225,12 +227,30 @@ interface Itemdetailslist {
     discountamount: number
 }
 
+export interface PaymentInfo {
+    type: string
+    amount: number
+    refno: string
+}
+
 export interface Account {
     id: number;
     name: string;
-  }
+}
 
-  export interface Bank {
+export interface Bank {
     accountdisplayname: string;
     amount: number;
-  }
+    refno: string;
+    type: string,
+}
+
+export interface GetBankRq {
+    registeredphonenumber: number
+}
+
+export interface GetBankRs {
+    status: string
+    statusmessage: string
+    bankslist: Bank[]
+}

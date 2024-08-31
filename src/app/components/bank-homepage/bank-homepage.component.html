@@ -1,82 +1,97 @@
 <div>
-    <ul class="nav" role="tablist">
-      <li class="nav-item tabMain">
-        <a class="nav-link tabTitle" id="tab1-tab" role="tab">BANKS</a>
-      </li>
-    </ul>  
-  </div>
+  <mat-tab-group>
+    <mat-tab label="BANKS">
+      <!-- Content for BANKS tab -->
+    </mat-tab>
+  </mat-tab-group>
+</div>
 
-  <ng-container>
+<ng-container>
   <div class="grid-container">
-      <!-- SIDEBAR -->
-      <div class="sidebar">
-          <div class="row">
-              <div class="col">
-                <!-- <input type="text" [(ngModel)]="searchGroup" class="form-control" placeholder="Search here.."> -->
-                <input type="text" class="form-control" placeholder="Search here..">
-              </div>
-              <div class="col-auto">
-                <button class="btn btn-warning add_banks_btn" (click)="openAddBanksModal()">+ ADD BANKS</button>
-              </div>
-          </div>
-  
-          <table class="table table-hover bank_list">
-            <thead class="thead-dark">
-              <tr>
-                <th class="table-column">ACCOUNT NAME</th>
-                <th class="table-column">AMOUNT</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let bank of bankslist" (click)="handleClick(bank)"  [ngClass]="{ 'selectedBank-row-tr': isSelectedBank(bank.accountdisplayname) }">
-                <td class="table-row"  [ngClass]="{ 'selectedBank-row-td': isSelectedBank(bank.accountdisplayname) }">{{ bank.accountdisplayname }}</td>
-                <td class="table-row"  [ngClass]="{ 'selectedBank-row-td': isSelectedBank(bank.accountdisplayname) }"
-                [ngStyle]="{ 'color': dataService.getColor(bank.amount,0) }">{{ bank.amount }}</td>
-              </tr>
-            </tbody>
-          </table>
-      </div>
-  
-      <!-- TOP CONTENT -->
-      <div class="top-content">
-        <div class="top-content-row">
-          <div class="dropdown-container">
-            <mat-form-field>
-              <mat-select placeholder="DEPOSIT/WITHDRAW" (selectionChange)="openModal($event)">
-                <mat-option value="bankToCash">Bank To Cash Transfer</mat-option>
-                <mat-option value="cashToBank">Cash To Bank Transfer</mat-option>
-                <mat-option value="bankToBank">Bank To Bank Transfer</mat-option>
-                <mat-option value="adjustBalance">Adjust Bank Balance</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Search here..</mat-label>
+            <input matInput placeholder="Search here.." />
+          </mat-form-field>
+        </div>
+        <div class="col-auto">
+          <button mat-raised-button color="warn" class="add_banks_btn" (click)="openAddBanksModal()">+ ADD BANKS</button>
         </div>
       </div>
-  
-      <!-- BOTTOM CONTENT -->
-      <div class="bottom-content">
-        <h2>TRANSACTIONS</h2>
-        <table class="table table-hover transaction-list">
-          <thead class="thead-dark">
-            <tr>
-              <th class="table-column">ID</th>
-              <th class="table-column">TYPE</th>
-              <th class="table-column">NAME</th>
-              <th class="table-column">DATE</th>
-              <th class="table-column">AMOUNT</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let transaction of transactions" (click)="openModalOnTransaction(transaction)">
-              <td class="table-row">{{ transaction.transactionid }}</td>
-              <td class="table-row">{{ transaction.type }}</td>
-              <td class="table-row">{{ transaction.name }}</td>
-              <td class="table-row">{{ transaction.date }}</td>
-              <td class="table-row">{{ transaction.amount }}</td>
-            </tr>
-          </tbody>
-        </table>
+
+      <mat-table [dataSource]="bankslist" class="mat-elevation-z8 bank_list">
+        <!-- ACCOUNT NAME Column -->
+        <ng-container matColumnDef="accountdisplayname">
+          <mat-header-cell *matHeaderCellDef> ACCOUNT NAME </mat-header-cell>
+          <mat-cell *matCellDef="let bank" (click)="handleClick(bank)" [ngClass]="{ 'selectedBank-row-td': isSelectedBank(bank.accountdisplayname) }">
+            {{ bank.accountdisplayname }}
+          </mat-cell>
+        </ng-container>
+      
+        <!-- AMOUNT Column -->
+        <ng-container matColumnDef="amount">
+          <mat-header-cell *matHeaderCellDef> AMOUNT </mat-header-cell>
+          <mat-cell *matCellDef="let bank" (click)="handleClick(bank)" [ngClass]="{ 'selectedBank-row-td': isSelectedBank(bank.accountdisplayname) }" 
+                    [ngStyle]="{ 'color': dataService.getColor(bank.amount, 0) }">
+            {{ bank.amount }}
+          </mat-cell>
+        </ng-container>
+      
+        <!-- Header and Row Definitions -->
+        <mat-header-row *matHeaderRowDef="['accountdisplayname', 'amount']"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ['accountdisplayname', 'amount'];"></mat-row>
+      </mat-table>
+    </div>
+
+    <!-- TOP CONTENT -->
+    <div class="top-content">
+      <div class="top-content-row">
+        <mat-form-field appearance="fill">
+          <mat-select placeholder="DEPOSIT/WITHDRAW" (selectionChange)="openModal($event)">
+            <mat-option value="bankToCash">Bank To Cash Transfer</mat-option>
+            <mat-option value="cashToBank">Cash To Bank Transfer</mat-option>
+            <mat-option value="bankToBank">Bank To Bank Transfer</mat-option>
+            <mat-option value="adjustBalance">Adjust Bank Balance</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
-  
+    </div>
+
+    <!-- BOTTOM CONTENT -->
+    <div class="bottom-content">
+      <h2>TRANSACTIONS</h2>
+      <mat-table [dataSource]="transactions" class="mat-elevation-z8 transaction-list">
+        <ng-container matColumnDef="transactionid">
+          <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+          <mat-cell *matCellDef="let transaction">{{ transaction.transactionid }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef> TYPE </mat-header-cell>
+          <mat-cell *matCellDef="let transaction">{{ transaction.type }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef> NAME </mat-header-cell>
+          <mat-cell *matCellDef="let transaction">{{ transaction.name }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <mat-header-cell *matHeaderCellDef> DATE </mat-header-cell>
+          <mat-cell *matCellDef="let transaction">{{ transaction.date }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <mat-header-cell *matHeaderCellDef> AMOUNT </mat-header-cell>
+          <mat-cell *matCellDef="let transaction">{{ transaction.amount }}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="['transactionid', 'type', 'name', 'date', 'amount']"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ['transactionid', 'type', 'name', 'date', 'amount'];" (click)="openModalOnTransaction(row)"></mat-row>
+      </mat-table>
+    </div>
   </div>
-  </ng-container>
+</ng-container>

@@ -2,14 +2,14 @@ import { Component, OnInit, computed, signal } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
-import { PartyListRs, TransactionDetails, ItemDetail, Item, ItemListRs, SaveUpdateTransactionRq, ColumnInfo } from 'src/app/models';
+import { PartyListRs, TransactionDetails, ItemDetail, Item, ItemListRs, SaveUpdateTransactionRq, ColumnInfo, PaymentInfo, Bank, GetBankRq, GetBankRs } from 'src/app/models';
 import { STATE_LIST } from 'src/app/dummyData';
 import { Party } from 'src/app/models';
 import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from 'src/app/services/api.service';
-import { distinctUntilChanged, map, of, pairwise, startWith } from 'rxjs';
+import { distinctUntilChanged, map, of, pairwise, startWith, Subscription } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
-import { ReceivedValidator } from 'src/app/received-validator';
+import { PaymentRefNoValidator, PaymentTypeValidator, ReceivedValidator } from 'src/app/received-validator';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
@@ -48,6 +48,23 @@ export class EditDetailComponent implements OnInit {
   fullpayment: boolean = false;
   showAmtDetails: boolean = true;
   ogBalance: number = 0;
+  banks = signal<Bank[]>([
+    {
+      accountdisplayname: 'CASH',
+      amount: 0,
+      refno: '',
+      type: 'CHEQUE'
+    },
+    {
+      accountdisplayname: 'CHEQUE',
+      amount: 0,
+      refno: '',
+      type: 'CHEQUE'
+    }
+  ]);
+
+  // Subscriptions
+  $FormSubscription: Subscription[] = [];
 
   // For AutoComplete
   autoCompletePartyData: any[] = [];
@@ -74,6 +91,10 @@ export class EditDetailComponent implements OnInit {
         'location': ''
       };
     });
+  });
+
+  bankNameList = computed(() => {
+    return this.banks().map((bank) => bank.accountdisplayname ?? bank.type);
   });
 
   itemColumnInfo: ColumnInfo[] = [
@@ -130,7 +151,20 @@ export class EditDetailComponent implements OnInit {
   public get partyBalance(): number {
     return this.modifyDetail.get("partybalance")?.value;
   }
+  
+  public get itemReceivedAmt() : number {
+    return this.modifyDetail.get("received")?.value;
+  }
+  
+  public get paymentInfoValue() {
+    return (this.modifyDetail.get("amountdetailslist") as FormArray<FormGroup>);
+  }
 
+  public getBankAccountName(i: number): string {
+    return (this.modifyDetail.get('amountdetailslist') as FormArray).at(i).get('type')?.value;
+  }
+
+  
   getItemName(item: Item): string {
     return item.itemname
   }
@@ -156,6 +190,7 @@ export class EditDetailComponent implements OnInit {
       topayparty: new FormControl<number>(0),
       toreceivefromparty: new FormControl<number>(0),
       itemdetailslist: new FormArray([]),
+      amountdetailslist: new FormArray([], PaymentTypeValidator)
     }, ReceivedValidator);
 
     this.modifyDetail.get("partybalance")?.disable();
@@ -166,14 +201,20 @@ export class EditDetailComponent implements OnInit {
         this.modifyDetail.get("received")?.setValue(val);
       else {
         let rec = this.modifyDetail.get("received")?.value;
-        this.modifyDetail.get("balance")?.setValue(val - rec);
+        this.modifyDetail.get("balance")?.setValue(val - rec, { emitEvent: false });
       }
     });
 
     // If Received value changed, then update the balance accordingly
     this.modifyDetail.get("received")?.valueChanges.subscribe((val) => {
       let total = this.modifyDetail.get("total")?.value;
-      this.modifyDetail.get("balance")?.setValue(total - val);
+      this.modifyDetail.get("balance")?.setValue(total - val, { emitEvent: false });
+
+      // Update the payment amount when only 1 payment type available
+      let paymentArr = this.modifyDetail.get("amountdetailslist") as FormArray;
+      if(paymentArr.length == 1){
+        paymentArr.at(0).get('amount')?.setValue(val, { emitEvent: false });
+      }
     });
 
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -257,6 +298,7 @@ export class EditDetailComponent implements OnInit {
 
             this.updateBalanceColor(transaction.toreceivefromparty - transaction.topayparty);
             transaction.itemdetailslist.forEach(item => this.addNewFormRow(this.createNewFormRow(item)));
+            transaction.amountdetailslist.forEach(bank => this.createNewPaymentRow(bank));
             // For the extra row
             this.addNewFormRow(this.createNewFormRow(null));
             this.updateTransactionData();
@@ -264,6 +306,9 @@ export class EditDetailComponent implements OnInit {
       } else {
         this.addNewFormRow(this.createNewFormRow(null));
         this.updateTransactionData();
+
+        // To add the payment type with defalt value being cash
+        this.createNewPaymentRow();
       }
     });
   }
@@ -277,6 +322,7 @@ export class EditDetailComponent implements OnInit {
     let totalElementControl = this.modifyDetail.get("total");
     if (data != null) {
       // TODO: Add default tax amount from item to totalAmount
+      // TODO: Handle user input for item name. Currently when not selected, all the input are not editable
       finalAmount = data?.priceperunit * data.qty + 0 - data?.discountamount;
       this.totalAmount += finalAmount;
       this.totalQuantity += data.qty;
@@ -382,6 +428,70 @@ export class EditDetailComponent implements OnInit {
     return element;
   }
 
+  createNewPaymentRow(data?: Bank) {
+    let control = this.modifyDetail.get("amountdetailslist") as FormArray;
+    let defaltValue = this.bankNameList()[0];
+
+    if(this.banks().length > 1)
+      this.banks.update(banks => banks.slice(1))
+    else
+      this.handlePaymentInputClick();
+
+    let nfg = new FormGroup({
+      type: new FormControl<string>((data?.accountdisplayname ?? data?.type) ?? defaltValue),
+      amount: new FormControl<number>(data?.amount ?? 0),
+      refno: new FormControl<string>(data?.refno ?? "")
+    }, PaymentRefNoValidator);
+
+    let $amtSubs = nfg.get("amount")?.valueChanges
+    .pipe(startWith(data?.amount), pairwise())
+    .subscribe(amt => {
+      this.modifyDetail.patchValue({
+      received: this.itemReceivedAmt + (amt[1] ?? 0) - (amt[0] ?? 0),
+      });
+    });
+
+    let $typeSubs = nfg.get("type")?.valueChanges
+    .pipe(startWith(defaltValue), pairwise())
+    .subscribe(type => {
+      console.log('Payent Type: ', type)
+      this.banks.update((items) => {
+        let filteredItems = items.filter(item => item.accountdisplayname != type[1]);
+
+        let obj: Bank = {
+          accountdisplayname: "",
+          amount: 0,
+          refno: "",
+          type: "",
+        };
+        let addItem: boolean = true;
+        switch(type[0]){
+          case 'CASH':
+            obj.accountdisplayname = 'CASH';
+            break;
+          case "CHEQUE":
+            obj.accountdisplayname = 'CHEQUE';
+            break;
+          default:
+            if(type[0])
+              obj.accountdisplayname = type[0];
+            else
+              addItem = false;
+            break;
+        }
+
+        if (addItem)
+          return [...filteredItems, obj];
+        else 
+          return [...filteredItems];
+      })
+    })
+
+    if($amtSubs)
+      this.$FormSubscription.push($amtSubs);
+    control.push(nfg);
+  }
+
   addNewFormRow(row: FormGroup) {
     let control = this.modifyDetail.get("itemdetailslist") as FormArray;
     control.push(row);
@@ -432,6 +542,11 @@ export class EditDetailComponent implements OnInit {
       total: this.totalAmount,
       balance: balance,
     }, { emitEvent: false })
+
+    // Updating Payment array only if one payment type is present
+    let paymentArr = this.modifyDetail.get('amountdetailslist') as FormArray;
+    if(paymentArr.length == 1)
+      paymentArr.at(0).get('amount')?.setValue(received, { emitEvent: false });
   }
 
   getChangesNew(item1: FormGroup) {
@@ -469,6 +584,22 @@ export class EditDetailComponent implements OnInit {
     this.updateTransactionData();
   }
 
+  handleDeletePaymentInfoClick(ind: number){
+    let paymentFormArray = this.paymentInfoValue;
+    let paymentControl = paymentFormArray.at(ind);
+    let currAccDisplayName = paymentControl.get("type")?.value;
+
+    this.paymentInfoValue.removeAt(ind);
+
+    let banksList: Bank[] = JSON.parse(localStorage.getItem('bankList') ?? "");
+    if(banksList.length == 0)
+      console.error("Nothing to delete in banklist");
+
+    let bank = banksList.find((bank) => bank.accountdisplayname === currAccDisplayName);
+    if (bank != undefined)
+      this.banks.update((banks) => [...banks, bank as Bank]);
+  }
+
   handleAddRowClick() {
     this.addNewFormRow(this.createNewFormRow(null));
     this.updateTransactionData();
@@ -493,6 +624,36 @@ export class EditDetailComponent implements OnInit {
   handleStateInputClick() {
     console.log("State clicked");
     this.stateList = STATE_LIST
+  }
+
+  handlePaymentInputClick(){
+    let bankListString = localStorage.getItem('bankList');
+    let bankList: Bank[] = [];
+    const paymentInfoList = this.paymentInfoValue.value.map(item => item.type);
+  
+    if (!bankListString){
+
+      let rq: GetBankRq = {
+        registeredphonenumber: this.registeredPhoneNumber
+      }
+      this.api.getBankList(rq).subscribe((rs: GetBankRs) => {
+        if(rs.status === 'SUCCESS'){
+          localStorage.setItem("bankList", JSON.stringify(rs.bankslist));
+          bankList = rs.bankslist;
+        } else {
+          Swal.fire(`Could not get Bank list: ${rs.statusmessage}`, "", "error");
+        }
+      })
+    } else {
+      bankList = JSON.parse(bankListString);
+    }
+
+    bankList.map(bank => {
+      let bankName = bank.accountdisplayname ?? (bank.type ?? "")
+      if(!paymentInfoList.includes(bankName) && this.bankNameList().indexOf(bankName) == -1){
+        this.banks.update(banks => [...banks, bank]);
+      }
+    });
   }
 
   handlePartyChange = (partyName: string) => {
@@ -695,7 +856,9 @@ export class EditDetailComponent implements OnInit {
     body.ispurchaseconvert = this.isPurchaseConvert;
     body.isupdate = this.isEdit;
 
-    // Updating the quantity
+    // Updating the payment type
+    let paymentTypes = body.amountdetailslist.map((pi: PaymentInfo) => pi.type);
+    body.paymenttype = paymentTypes.join(',');
 
     body.typeofpay = this.transactionType.replace("-", " ").toUpperCase();
     body.itemdetailslist = body.itemdetailslist.filter((val) => val.item.length > 0);

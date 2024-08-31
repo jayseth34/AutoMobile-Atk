@@ -141,3 +141,22 @@ td.mat-cell {
   border: 1px solid black;
   border-collapse: collapse;
 } */
+
+.fit-content {
+  height: fit-content;
+}
+
+
+.add-payment-type {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0.25rem;
+  width: 30%;
+}
+
+.payment-type-total {
+  display: inline-block;
+  text-align: end;
+  width: 60%;
+  font-size: 16px;
+}
