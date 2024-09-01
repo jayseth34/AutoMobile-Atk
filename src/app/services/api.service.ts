@@ -22,6 +22,10 @@ export class ApiService {
     );
   }
 
+  getDashboardSaleDetails(body: any) {   
+    return this.cs.Post("Login/DashboardSaleDetails", body)    
+  }
+
   // BUSINESS INFO
   getBusinessInfo(registeredphonenumber: number) {       
     return this.cs.get(

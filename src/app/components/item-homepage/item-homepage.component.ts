@@ -25,6 +25,7 @@ export class ItemHomepageComponent {
   minimumwholesalequantity:any;
   minimumstocktomaintain:any;
   categoryName: any;
+  itemHomePageSelectedTabIndex: number = 0;
 
   @ViewChild('app-add-item') addItemModal: AddItemComponent;
 
@@ -48,7 +49,7 @@ export class ItemHomepageComponent {
           console.log('Double click');
         }
       });
-      this.selectTab('product');
+      this.selectTab('product',0);
     }
 
 
@@ -80,7 +81,7 @@ export class ItemHomepageComponent {
               data: { itemDetails: res.itemList[0] , itemName, status: 'SUCCESS'} // Pass the data here
             });
             dialogRef.afterClosed().subscribe(result => {
-              this.selectTab('product');
+              this.selectTab('product',0);
             })
           } else {
             this.dataService.isPartyUpdate = false;
@@ -101,13 +102,14 @@ export class ItemHomepageComponent {
         data: { itemDetails: null, itemName: ''},
       });
       dialogRef.afterClosed().subscribe(result => {
-        this.selectTab('product');
+        this.selectTab('product',0);
       });
     }
   }
 
-  selectTab(tab: string) {
+  selectTab(tab: string, index: number) {
     this.dataService.itemHomePageSelectedTab = tab;
+    this.itemHomePageSelectedTabIndex = index;
     if (this.dataService.itemHomePageSelectedTab == 'product'){
       this.getitemlistdata()
     } else if (this.dataService.itemHomePageSelectedTab == 'category'){
@@ -139,7 +141,7 @@ export class ItemHomepageComponent {
               data: { categorynameDetails: categoryname } // Pass the data here
             });
             dialogRef.afterClosed().subscribe(result => {
-              this.selectTab('category');
+              this.selectTab('category',1);
             });
           } else {
             this.dataService.isCategoryUpdate = false;
@@ -157,7 +159,7 @@ export class ItemHomepageComponent {
         height: '35%', 
       });
       dialogRef.afterClosed().subscribe(result => {
-        this.selectTab('category');
+        this.selectTab('category',1);
       });
     }
   }
