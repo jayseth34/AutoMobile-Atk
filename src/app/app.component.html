@@ -1,10 +1,11 @@
-<!-- <div class="header">
-    <h1>.</h1>
-</div> -->
-
 <div class="container root-container">
-  <app-sidebar *ngIf="!dataService.isLogin" class="col-2 p-0"></app-sidebar>
-  <div class="col-10">
+  <!-- Conditionally Show Sidebar -->
+  <div *ngIf="!dataService.isLogin" class="col-2 p-0">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- Adjust Main Content Width Based on Sidebar Visibility -->
+  <div [ngClass]="{'col-10': !dataService.isLogin, 'col-12': dataService.isLogin}">
     <router-outlet></router-outlet>
   </div>
 </div>

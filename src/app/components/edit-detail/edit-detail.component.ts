@@ -13,6 +13,7 @@ import { PaymentRefNoValidator, PaymentTypeValidator, ReceivedValidator } from '
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
+import { DataService } from 'src/app/services/data.service';
 
 type BalanceColors = "green" | "red" | "black";
 
@@ -142,7 +143,7 @@ export class EditDetailComponent implements OnInit {
     "Kg"
   ]
 
-  constructor(private router: Router, private route: ActivatedRoute, private api: ApiService, private fb: FormBuilder, public cs: CommonService, public _location: Location) { }
+  constructor(private router: Router, private route: ActivatedRoute, private api: ApiService, private fb: FormBuilder, public cs: CommonService, public _location: Location, public dataservice: DataService) { }
 
   public get itemDetailValue(): AbstractControl[] {
     return (this.modifyDetail.get("itemdetailslist") as FormArray).controls.filter((item) => item.status != "DISABLED");
@@ -172,6 +173,7 @@ export class EditDetailComponent implements OnInit {
   ngOnInit(): void {
     this.registeredPhoneNumber = parseInt(JSON.parse(localStorage.getItem("phonenumber") ?? ""));
     this.currentInvNo = parseInt(localStorage.getItem("curInvCount") ?? "");
+    this.dataservice.isLogin = true
     // Initializing the Form Group with default values
     this.modifyDetail = new FormGroup({
       customername: new FormControl("", [Validators.required, Validators.minLength(1)]),
@@ -709,6 +711,7 @@ export class EditDetailComponent implements OnInit {
   }
 
   goToSaleInvoice() {
+    this.dataservice.isLogin = false
     this.router.navigate([this.transactionType]);
   }
 
