@@ -159,11 +159,10 @@ export class PartyHomepageComponent {
       this.ispartygrouplistresponse = true;
       this.api
         .GetPartyGroup(this.registeredMobileNumber).subscribe((response: any) => {
-          if (response.status == 'SUCCESS') {
+          if (response.status == 'SUCCESS' && response.getPartyGroupList.length > 0) {
             this.selectedGroup = response.getPartyGroupList[0].partygroup
-            this.dataService.partyGroupListResponse =
-              response.getPartyGroupList;
-            console.log('GET PARTY GROUP SUCCESS', response);
+            this.dataService.partyGroupListResponse = response.getPartyGroupList;
+            this.GetPartyByGroupData(response.getPartyGroupList[0].partygroup)
           } else {
             console.log('PARTYGROUP FAILED');
           }
@@ -278,24 +277,18 @@ export class PartyHomepageComponent {
     console.log('onclick: ', groupname);
     this.groupname = groupname;
     this.api
-      .GetPartyByGroup(this.registeredMobileNumber, groupname).subscribe({
-        next: (res) => {
+      .GetPartyByGroup(this.registeredMobileNumber, groupname).subscribe((res:any) => {
           console.log('GETPARTYGROUPLIST API: ', res);
-          if (res) {
-            this.selectedGroup = groupname;
+          if (res.status == "SUCCESS") {
             this.dataService.partyByGroupResponse = res.getPartyList;
             this.selectedGroup = groupname
             console.log('successs');
           } else {
-            console.log('failed');
+            this.selectedGroup = groupname
           }
-        },
-        error: () => {
-          console.log('errorrrr');
-        },
-      });
+        })
   }
-
+  
   partyHandleClick(event: MouseEvent, partyName: any) {
     this.clicks.push(event);
     setTimeout(() => {

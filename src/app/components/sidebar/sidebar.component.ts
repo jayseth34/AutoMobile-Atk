@@ -46,13 +46,13 @@ export class SidebarComponent {
       name: 'Parties',
       link: '/party-homepage',
       icon: 'https://toppng.com/uploads/preview/ost-navigation-people-icon-grey-11563250547z5nvtwig34.png',
-      action: () => this.getPartyListData()
+      // action: () => this.getPartyListData()
     },
     {
       name: 'Items',
       link: '/item-homepage',
       icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
-      action: () => this.getItemListData()
+      // action: () => this.getItemListData()
     },
     {
       name: 'Sale',
@@ -169,10 +169,8 @@ export class SidebarComponent {
     this.api.GetItemList(this.registeredPhoneNumber).subscribe({
       next:(res) => {
         console.log("GETITEMLIST API: ",res);
-        if(res) {
+        if(res.status == "SUCCESS") {
           this.dataService.itemListResponse = res.getItemList
-          console.log("ITEMMM: ", this.dataService.itemListResponse[1].saleprice)
-          console.log("GETITEMLIST successs")
         }
         else {
           console.log("GETITEMLIST failed")
@@ -186,7 +184,6 @@ export class SidebarComponent {
       next:(response) => {
         if(response.status == "SUCCESS") {
           this.dataService.categoryListResponse = response.getCateogoryList
-          console.log("CATEGORRYYY: ", this.dataService.categoryListResponse[1].category)
           console.log("GET CATEGORY SUCCESS", response)
         }
         else{

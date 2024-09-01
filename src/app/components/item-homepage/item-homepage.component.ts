@@ -6,6 +6,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { Subject, Subscription, takeUntil, fromEvent } from 'rxjs';
 import { buffer, debounceTime, filter, map } from 'rxjs/operators';
 import { AddItemCategoryComponent } from '../add-item-category/add-item-category.component';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-item-homepage',
@@ -28,6 +29,7 @@ export class ItemHomepageComponent {
   itemHomePageSelectedTabIndex: number = 0;
 
   @ViewChild('app-add-item') addItemModal: AddItemComponent;
+  categorycount: any;
 
   constructor(private dialog: MatDialog, public dataService: DataService, private api: ApiService, private cdr: ChangeDetectorRef){}
 
@@ -107,6 +109,16 @@ export class ItemHomepageComponent {
     }
   }
 
+  onTabChange(event: MatTabChangeEvent) {
+    const index = event.index;
+    if(index == 0){
+      this.selectTab('product', index);
+    } else if (index == 1){
+      this.selectTab('category', index);
+    }
+    
+  }
+
   selectTab(tab: string, index: number) {
     this.dataService.itemHomePageSelectedTab = tab;
     this.itemHomePageSelectedTabIndex = index;
@@ -114,11 +126,11 @@ export class ItemHomepageComponent {
       this.getitemlistdata()
     } else if (this.dataService.itemHomePageSelectedTab == 'category'){
         this.api.GetCategory(this.registeredMobileNumber).subscribe((response:any) => {
-          if(response.status == "SUCCESS") {
+          if(response.status == "SUCCESS" && response.getCateogoryList.length > 0) {
             this.selectedCategory = response.getCateogoryList[0].category
+            this.categorycount = response.getCateogoryList[0].categorycount
             this.dataService.categoryListResponse = response.getCateogoryList
-            console.log("CATEGORRYYY: ", this.dataService.categoryListResponse[1].category)
-            console.log("GET CATEGORY SUCCESS", response)
+            this.GetItemByCategoryData(response.getCateogoryList[0].category)
           }
           else{
             console.log("CATEGORY FAILED")
@@ -230,7 +242,8 @@ export class ItemHomepageComponent {
     }, 250);
   }
   
-  categoryHandleClick(event: MouseEvent,itemCategoryName: any){
+  categoryHandleClick(event: MouseEvent,itemCategoryName: any, count:any){
+    this.categorycount = count;
     this.clicks.push(event);
     this.categoryName = itemCategoryName
     setTimeout(() => {
@@ -247,7 +260,6 @@ export class ItemHomepageComponent {
 
   getitemlistdata(){
     this.api.GetItemList(this.registeredMobileNumber).subscribe((res:any) => {
-        console.log("GETITEMLIST API: ",res);
         if(res.status == 'SUCCESS') {
           this.selectedItem = res.getItemList[0].itemname
           if(res.getItemList && res.getItemList.length > 0){
@@ -259,9 +271,8 @@ export class ItemHomepageComponent {
           this.dataService.itemListResponse = res.getItemList
           if(this.itemlist.length > 0){
             this.itemName = this.itemlist[0].itemname
+            this.GetItemDetailsData(this.itemName)
           }
-          console.log("ITEMMM: ", this.dataService.itemListResponse[1].saleprice)
-          console.log("GETITEMLIST successs")
         }
         else {
           console.log("GETITEMLIST failed")

@@ -1,6 +1,6 @@
-<mat-tab-group [(selectedIndex)]="itemHomePageSelectedTabIndex">
-  <mat-tab label="PRODUCT" (click)="selectTab('product', 0)"></mat-tab>
-  <mat-tab label="CATEGORY" (click)="selectTab('category', 1)"></mat-tab>
+<mat-tab-group [(selectedIndex)]="itemHomePageSelectedTabIndex" (selectedTabChange)="onTabChange($event)">
+  <mat-tab label="PRODUCT"></mat-tab>
+  <mat-tab label="CATEGORY"></mat-tab>
 </mat-tab-group>
 
 <!-- PRODUCT Tab Content -->
@@ -119,7 +119,7 @@
       <table mat-table [dataSource]="dataService.categoryListResponse" class="item_list">
         <ng-container matColumnDef="category">
           <th mat-header-cell *matHeaderCellDef>CATEGORY</th>
-          <td mat-cell *matCellDef="let category" (click)="categoryHandleClick($event, category.category)"
+          <td mat-cell *matCellDef="let category" (click)="categoryHandleClick($event, category.category, category.categorycount)"
               [ngClass]="{ 'selectedParty-row-td': isSelectedCategory(category.category) }">
             {{ category.category }}
           </td>
@@ -142,7 +142,7 @@
       <mat-card-title>{{ categoryName }}</mat-card-title>
       <mat-card-content>
         <div class="top-content-row">
-          <div class="sale-price">ITEM COUNT: 2</div>
+          <div class="sale-price">ITEM COUNT: {{categorycount}}</div>
         </div>
       </mat-card-content>
     </mat-card>
@@ -158,12 +158,12 @@
 
         <ng-container matColumnDef="minimumwholesalequantity">
           <th mat-header-cell *matHeaderCellDef>QUANTITY</th>
-          <td mat-cell *matCellDef="let category">{{ category.minimumwholesalequantity }}</td>
+          <td mat-cell *matCellDef="let category">{{ category.remainingquantity }}</td>
         </ng-container>
 
         <ng-container matColumnDef="wholesaleprice">
           <th mat-header-cell *matHeaderCellDef>STOCK VALUE</th>
-          <td mat-cell *matCellDef="let category">{{ category.wholesaleprice }}</td>
+          <td mat-cell *matCellDef="let category">{{ category.remainingquantity * category.purchaseprice }}</td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="['itemname', 'minimumwholesalequantity', 'wholesaleprice']"></tr>
