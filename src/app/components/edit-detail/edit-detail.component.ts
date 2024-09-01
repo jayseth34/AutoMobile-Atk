@@ -343,7 +343,7 @@ export class EditDetailComponent implements OnInit {
       taxrate: new FormControl(data?.taxrate ?? 0.0),
       taxrateamount: new FormControl(data?.taxrateamount ?? 0.0),
       totalAmount: new FormControl({ value: finalAmount, disabled: true }),
-      queryoperationtype: new FormControl(data != null ? "" : "INSERT"),
+      queryoperationtype: new FormControl(data != null ? "UPDATE" : "INSERT"),
       remainingquantity: new FormControl(data?.remainingquantity ?? 0)
     });
 
@@ -588,6 +588,13 @@ export class EditDetailComponent implements OnInit {
     let paymentFormArray = this.paymentInfoValue;
     let paymentControl = paymentFormArray.at(ind);
     let currAccDisplayName = paymentControl.get("type")?.value;
+    let currAccAmt = paymentControl.get('amount')?.value;
+
+    let receivedAmt = this.modifyDetail.get('received')?.value;
+
+    this.modifyDetail.patchValue({
+      received: receivedAmt - currAccAmt,
+    });
 
     this.paymentInfoValue.removeAt(ind);
 
