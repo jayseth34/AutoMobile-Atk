@@ -176,9 +176,14 @@ export class ApiService {
       return this.cs.PostType<string, SaveUpdateTransactionRq>("Sale/AddSale", req);
   }
 
-  getTransactions(registeredPhoneNumber: number, customerName: string): Observable<any> {
-    return this.cs.get(
-      "Sale/GetLinkedPaymentTransaction?registeredPhoneNumber=" + registeredPhoneNumber + "&customername=" + customerName
+  getTransactions(registeredPhoneNumber: number, customername: string, typeofpay: string): Observable<any> {
+    let body = {
+      registeredphonenumber: registeredPhoneNumber,
+      customername: customername,
+      typeofpay: typeofpay
+    }
+    return this.cs.Post(
+      "Sale/GetLinkedPaymentTransaction", body
     );
   }
 
@@ -188,6 +193,10 @@ export class ApiService {
 
   UpdatePaymentInOutTrnx(paymentInOut : PaymentInOut): Observable<any>{
     return this.cs.Post("Sale/UpdatePaymentInOutTrnx", paymentInOut)
+  }
+
+  InsertAdvanceTrnx(body:any): Observable<any>{
+    return this.cs.Post("Sale/InsertAdvanceTrnx", body)
   }
 
   getTrnxInOut(trnxInOut : any): Observable<any>{

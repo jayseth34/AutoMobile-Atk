@@ -806,7 +806,7 @@ export class EditDetailComponent implements OnInit {
           body.toreceivefromparty -= this.ogBalance;
         break;
       case "Purchase":
-        body.itemdetailslist.forEach(item => item.qty = -item.qty);
+        //body.itemdetailslist.forEach(item => item.qty = -item.qty);
         body.topayparty += body.balance;
         if (this.isEdit)
           body.topayparty -= this.ogBalance;
@@ -823,7 +823,7 @@ export class EditDetailComponent implements OnInit {
       case "Purchase-Order":
         body.convertinvoicenumber = this.convertInvoiceNumber;
         if (this.isPurchaseConvert){
-          body.itemdetailslist.forEach(item => item.qty = -item.qty);
+          // body.itemdetailslist.forEach(item => item.qty = -item.qty);
           body.topayparty += body.balance;
         }
         break;
@@ -887,7 +887,10 @@ export class EditDetailComponent implements OnInit {
         this.api.PostUpdateSaleDetails(body, this.isEdit).subscribe(
           (res: any) => {
             if (res.status == "SUCCESS") {
-              Swal.fire("Saved!", "", "success").then(_ => this.router.navigateByUrl(`${this.transactionType}`));
+              Swal.fire("Saved!", "", "success").then(_ => {
+                this.router.navigateByUrl(`${this.transactionType}`) 
+                this.dataservice.isLogin = false
+            });
             }
             else
               Swal.fire("Changes are not saved", "", "error");

@@ -72,3 +72,8 @@ input[type=submit][disabled] {
   text-decoration: underline;
   cursor: pointer;
 }
+
+.form-invalid-error{
+  color: red;
+  margin-left: -90px !important;
+}

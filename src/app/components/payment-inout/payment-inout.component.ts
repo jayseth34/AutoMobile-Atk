@@ -26,6 +26,8 @@ export class PaymentInoutComponent implements OnInit {
   amount1Value: number = 0;
   isview: boolean = false;
   paymentOptions: any[] = [];
+  isadvance: boolean;
+  isUpdatingValue: any;
 
   constructor(private fb: FormBuilder, private api: ApiService, private dataService: DataService, private router: Router, private cs: CommonService) {
     this.balance = 0;
@@ -33,13 +35,18 @@ export class PaymentInoutComponent implements OnInit {
 
   ngOnInit() {
     this.registeredphonenumber = parseInt(JSON.parse(localStorage.getItem("phonenumber") as string));
+    this.receiptno = parseInt(localStorage.getItem("curInvCount") ?? "");
     this.typeofpay = this.dataService.typeofpay
     this.isview = this.dataService.isview
+    const defaultDate = new Date(); 
+    if(this.typeofpay == "ADVANCE IN" || this.typeofpay == "ADVANCE OUT"){
+      this.isadvance = true
+    }
     this.paymentInForm = this.fb.group({
       party: ['', Validators.required],
       payments: this.fb.array([]),
-      receiptNo: ['', Validators.required],
-      date: ['', Validators.required],
+      receiptNo: [this.receiptno, Validators.required],
+      date: [defaultDate, Validators.required],
       description: [''],
       received: ['', Validators.required]
     });
@@ -60,15 +67,25 @@ export class PaymentInoutComponent implements OnInit {
     this.getPartyList();
     this.getPaymentOptions()
 
-    this.paymentInForm.get('received')?.valueChanges.subscribe(value => {
-      this.receivedValue = parseFloat(value);
-      if ((this.receivedValue > this.balance) && !this.isview) {
-        Swal.fire('Warning', 'Received amount cannot exceed balance', 'warning');
-        this.paymentInForm.get('received')?.setValue(this.balance); // Revert to balance
-      }
-    });
+    let isUpdatingValue = false;
 
-    
+  this.paymentInForm.get('received')?.valueChanges.subscribe(value => {
+    if (!isUpdatingValue) {
+      this.receivedValue = parseFloat(value);
+      if (this.receivedValue > this.balance) {
+        if (!this.isview && !this.isadvance) {
+          Swal.fire('Warning', 'Received amount cannot exceed balance', 'warning');
+          isUpdatingValue = true;
+          this.paymentInForm.get('received')?.setValue(this.balance);
+          isUpdatingValue = false;
+        } else if (this.isadvance) {
+          isUpdatingValue = true;
+          this.paymentInForm.get('received')?.setValue(this.receivedValue);
+          isUpdatingValue = false;
+        }
+      }
+    }
+  });
     
   }
 
@@ -142,6 +159,8 @@ export class PaymentInoutComponent implements OnInit {
           this.partyList = data.getPartyList.filter((party: any) => party.toreceivefromparty >= 0);
         } else if (this.typeofpay === "PAYMENT OUT") {
           this.partyList = data.getPartyList.filter((party: any) => party.topayparty >= 0);
+        } else if (this.isadvance){
+          this.partyList = data.getPartyList
         }
         if (this.isview && this.typeofpay === "PAYMENT IN") {
           const selectedParty = this.partyList.find((party: any) => party.partyname === this.paymentInForm.get('party')?.value);
@@ -153,6 +172,11 @@ export class PaymentInoutComponent implements OnInit {
           if (selectedParty) {
             this.balance = selectedParty.topayparty; // Map value to this.balance
           }
+        } else if (this.isview && this.isadvance) {
+            const selectedParty = this.partyList.find((party: any) => party.partyname === this.paymentInForm.get('party')?.value);
+            if (selectedParty) {
+              this.balance = selectedParty.toreceivefromparty - selectedParty.topayparty; // Map value to this.balance
+            }
         }
       } else {
         console.error('Failed to load party list:', data.status);
@@ -168,6 +192,18 @@ export class PaymentInoutComponent implements OnInit {
     } else if (this.typeofpay === 'PAYMENT OUT') {
       this.dataService.typeofpay = 'PAYMENT OUT';
       calculatedBalance = party.topayparty;
+    } else if (this.typeofpay === 'ADVANCE OUT') {
+      this.dataService.typeofpay = 'ADVANCE OUT';
+      calculatedBalance = party.toreceivefromparty - party.topayparty;
+      if (calculatedBalance < 0) {
+        calculatedBalance = Math.abs(calculatedBalance);
+      }    
+    } else if (this.typeofpay === 'ADVANCE IN') {
+      this.dataService.typeofpay = 'ADVANCE IN';
+      calculatedBalance = party.toreceivefromparty - party.topayparty;
+      if (calculatedBalance < 0) {
+        calculatedBalance = Math.abs(calculatedBalance);
+      }    
     }
     return calculatedBalance;
   }
@@ -177,6 +213,9 @@ export class PaymentInoutComponent implements OnInit {
     if (selectedParty) {
       this.dataService.partyName = selectedParty.partyname
       this.balance = this.calculateBalance(selectedParty);
+      // if (this.balance < 0) {
+      //   this.balance = Math.abs(this.balance);
+      // }
       this.dataService.topayparty = selectedParty.topayparty
       this.dataService.toreceivefromparty = selectedParty.toreceivefromparty
       this.paymentInForm.get('received')?.setValue(this.balance);
@@ -190,12 +229,24 @@ export class PaymentInoutComponent implements OnInit {
   }
 
   updateReceivedValue(value: any) {
+    if (this.isUpdatingValue) return; 
+    this.isUpdatingValue = true; 
+  
     this.receivedValue = parseFloat(value);
-    if ((this.receivedValue > this.balance) && !this.isview) {
-      Swal.fire('Warning', 'Received amount cannot exceed balance', 'warning');
-      this.paymentInForm.get('received')?.setValue(this.balance); // Revert to balance
+  
+    if (this.isadvance) {
+      this.paymentInForm.get('received')?.setValue(this.receivedValue);
+    } else {
+      if (this.receivedValue > this.balance && !this.isview) {
+        Swal.fire('Warning', 'Received amount cannot exceed balance', 'warning');
+        this.paymentInForm.get('received')?.setValue(this.balance); // Revert to balance
+      } else {
+        this.paymentInForm.get('received')?.setValue(this.receivedValue);
+      }
     }
+    this.isUpdatingValue = false;
   }
+  
 
   updateReceiptValue(value: any) {
     this.receiptno = value;
@@ -303,5 +354,56 @@ export class PaymentInoutComponent implements OnInit {
         this.paymentOptions = ['CASH', 'CHEQUE'];
       }
     });
+  }
+
+  saveadvanceinout(){
+    if (!this.paymentInForm.valid) {
+      Swal.fire('Error', 'Please fill all required fields correctly in the main form.', 'error');
+      return;
+    }
+  
+    // Check each payment group for completeness
+    let allPaymentsValid = true;
+    this.payments.controls.forEach(paymentGroup => {
+      if (!paymentGroup.valid) {
+        allPaymentsValid = false;
+      }
+    });
+  
+    if (!allPaymentsValid) {
+      Swal.fire('Error', 'Please fill all required fields in each payment entry.', 'error');
+      return;
+    }
+
+    this.dataService.amountdetails = this.payments.value
+      const concatenatedPaymentTypes = this.payments.controls.map(paymentGroup =>
+        paymentGroup.get('type')?.value
+      ).filter(type => type).join(',');
+      this.dataService.paymentType = concatenatedPaymentTypes;
+      if(this.typeofpay == "ADVANCE IN")
+        this.dataService.topayparty = this.dataService.topayparty + this.receivedValue
+      else if (this.typeofpay == "ADVANCE OUT")
+        this.dataService.toreceivefromparty = this.dataService.toreceivefromparty + this.receivedValue
+    let body = {
+      invoicenumber: this.receiptno,
+      received: this.receivedValue,
+      paymenttype: this.dataService.paymentType,
+      customername: this.paymentInForm.get('party')?.value,
+      typeofpay: this.typeofpay,
+      registeredphonenumber: this.registeredphonenumber,
+      paymentininvoicenumber: this.dataService.invoicenumber,
+      invoicedate: this.paymentInForm.get('date')?.value,
+      amountdetails: this.dataService.amountdetails,
+      topayparty: this.dataService.topayparty,
+      toreceivefromparty: this.dataService.toreceivefromparty
+    };
+    this.api.InsertAdvanceTrnx(body).subscribe((res:any) => {
+      if(res.status == "SUCCESS"){
+        if(this.typeofpay == "ADVANCE IN")
+          this.router.navigate(['Advance-In/']);
+        else if (this.typeofpay == "ADVANCE OUT")
+          this.router.navigate(['Advance-Out/'])
+      }
+    })
   }
 }

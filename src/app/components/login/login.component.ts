@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   showOtpInput:boolean = true;
   details:any;
+  isvalid: boolean = false;
 
   constructor(private api: ApiService, private router: Router, public dataService: DataService) { };
 
@@ -43,6 +44,8 @@ export class LoginComponent implements OnInit {
           localStorage.setItem("planType", JSON.stringify(res.plantype))
           localStorage.setItem("expiryDate", JSON.stringify(res.expiryDate));
           this.router.navigateByUrl("/dashboard");
+        } else if (res.status.toLowerCase().trim() === "failed"){
+          this.isvalid = true
         }
       });
     }
@@ -54,7 +57,7 @@ export class LoginComponent implements OnInit {
       const formValue = this.loginForm.getRawValue() as LoginRequest;
       const phoneNumber = String(formValue.phonenumber);
       this.api.GetOtp(phoneNumber).subscribe((res:any) => {
-        if(res.Status){
+        if(res.Status == "Success"){
           this.details = res.Details
           console.log(this.details)
         }
@@ -82,13 +85,14 @@ export class LoginComponent implements OnInit {
           localStorage.setItem("AuthToken", JSON.stringify(AuthToken));
           localStorage.setItem("planType", JSON.stringify(res.plantype))
           localStorage.setItem("expiryDate", JSON.stringify(res.expiryDate));
-          this.router.navigateByUrl("/businessinfo");
+          this.router.navigateByUrl("/dashboard");
         }
       });
     }
   }
 
   setflagvalue(val:any){
+    this.isvalid = false
     if(val=='otp'){
       this.showOtpInput = false
     } else if (val == 'password'){

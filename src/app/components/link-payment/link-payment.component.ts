@@ -41,7 +41,7 @@ export class LinkPaymentComponent {
 
   loadTransactions(registeredPhoneNumber: number, customerName: string) {
     this.api
-      .getTransactions(registeredPhoneNumber, customerName)
+      .getTransactions(registeredPhoneNumber, customerName, this.dataService.typeofpay)
       .subscribe((data) => {
         if (data.status === 'SUCCESS') {
           this.transactions = data.getLinkedPaymentTransactionList.map(

@@ -1,4 +1,4 @@
-export enum TransactionTypeEnum { Sale, Purchase, CreditNote, 'Payment-In', 'Sale-Order', 'Purchase-Order', 'Delivery-Challan', 'Payment-Out', 'Estimate-Quotation', 'Sale-Return', 'Purchase-Return' };
+export enum TransactionTypeEnum { Sale, Purchase, CreditNote, 'Payment-In', 'Sale-Order', 'Purchase-Order', 'Delivery-Challan', 'Payment-Out', 'Estimate-Quotation', 'Sale-Return', 'Purchase-Return', 'Advance-In', 'Advance-Out' };
 
 export enum TimeFilterEnum {
     All, CurMonth, LastMonth, CurQuarter, CurYear, Custom

@@ -1,6 +1,6 @@
 <div class="container">
   <div class="payment-in-container">
-    <form [formGroup]="paymentInForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="paymentInForm">
       <div class="form-row">
         <div class="form-group col-md-6">
           <mat-form-field>
@@ -8,7 +8,7 @@
             <mat-select id="party" formControlName="party" (selectionChange)="onPartyChange($event)">
               <mat-option value="" [disabled]="true">Select Party</mat-option>
               <mat-option *ngFor="let party of partyList" [value]="party.partyname">
-                {{ party.partyname }} - 
+                {{ party.partyname }} 
                 <span class="balance">{{ calculateBalance(party) }}</span>
               </mat-option>
             </mat-select>
@@ -79,13 +79,21 @@
           <mat-form-field>
             <mat-label>Received</mat-label>
             <input id="received" type="text" matInput formControlName="received"
-                   (ngModelChange)="updateReceivedValue($event)" placeholder="Received"/>
+              (ngModelChange)="updateReceivedValue($event)" placeholder="Received"/>
           </mat-form-field>
         </div>
       </div>
 
       <div class="btn-container">
         <button *ngIf="!isview" type="button" class="btn btn-success custom-btn" (click)="linkPayment()">LINK PAYMENT</button>
+      </div>
+
+      <div class="right-btn-container">
+        <button *ngIf="isadvance && !isview" type="button" class="btn btn-success custom-btn" (click)="saveadvanceinout()">SAVE</button>
+      </div>
+
+      <div class="right-btn-container">
+        <button *ngIf="isadvance && isview" type="button" class="btn btn-success custom-btn" (click)="saveadvanceinout()">UPDATE</button>
       </div>
 
       <div class="right-btn-container">

@@ -62,6 +62,7 @@ export class SidebarComponent {
         { name: 'Sale Invoices', link: '/Sale-Invoice' },
         { name: 'Estimate/ Quotation', link: '/Estimate-Quotation' },
         { name: 'Payment In', link: '/Payment-In' },
+        { name: 'Advance In', link: '/Advance-In' },
         { name: 'Sale Order', link: '/Sale-Order' },
         { name: 'Delivery Challan', link: '/Delivery-Challan' },
         { name: 'Sale Return/ Cr. Note', link: '/Sale-Return' }
@@ -75,6 +76,7 @@ export class SidebarComponent {
       subTabs: [
         { name: 'Purchase Bills', link: '/Purchase-Bills' },
         { name: 'Payment Out', link: '/Payment-Out' },
+        { name: 'Advance Out', link: '/Advance-Out' },
         { name: 'Purchase Order', link: '/Purchase-Order' },
         { name: 'Purchase Return/ Dr. Note', link: '/Purchase-Return' },
       ],

@@ -1,5 +1,5 @@
 <div class="login-container">
-  <form class="login-form centerAlignment" [formGroup]="loginForm" (ngSubmit)="handleLoginFormSubmit()">
+  <form class="login-form centerAlignment" [formGroup]="loginForm">
     <h2>LOGIN</h2>
     
     <div class="form-group">
@@ -51,6 +51,7 @@
         Password is required.
       </div>
     </div>
+    <p *ngIf="isvalid" class="form-invalid-error">Invalid User Credentials</p>
 
     <input 
       class="centerAlignment"
