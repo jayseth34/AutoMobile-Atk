@@ -22,7 +22,7 @@
     *ngIf="showList && !design"
     [ngClass]="maxContentWidth ? 'max-content-width' : ''"
   >
-    <table class="table table-hover table-borderless" *ngIf="dataIsObject">
+    <table class="table table-hover table-borderless mb-0" *ngIf="dataIsObject">
       <thead>
         <tr>
           <th *ngFor="let column of columns" scope="col">

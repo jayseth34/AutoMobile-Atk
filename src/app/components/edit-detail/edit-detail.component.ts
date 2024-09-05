@@ -760,9 +760,21 @@ export class EditDetailComponent implements OnInit {
         saleprice: 0,
         wholesaleprice: 0,
       }
+
+      element.get('priceperunit').enable();
+      element.get('discountpercent').enable();
+      element.get('discountamount').enable();
+      element.get('taxrate').enable();
+      element.get('taxrateamount').enable();
     } else {
       newItem = this.items()[ind];
       this.items.update(items => items.filter((item, index) => index != ind));
+
+      element.get('priceperunit').disable();
+      element.get('discountpercent').disable();
+      element.get('discountamount').disable();
+      element.get('taxrate').disable();
+      element.get('taxrateamount').disable();
     }
 
     // Adding the previous (old) item to the items list
