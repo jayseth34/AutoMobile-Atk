@@ -83,6 +83,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   handleKeyPress(event: KeyboardEvent) {
+    // console.log(event.key);
     switch (event.key) {
       case "ArrowDown":
         this.currentFocus++;
@@ -96,6 +97,9 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
         }
         event.preventDefault();
         break;
+      case "Backspace":
+        this.closeList();
+        break;
       case "Escape":
         this.closeList();
         break;
@@ -105,6 +109,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   closeList() {
+    // console.log('Closing List');
     this.showList = false;
   }
 

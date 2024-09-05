@@ -13,6 +13,5 @@ export class AppComponent {
 
   constructor(private router: Router, public dataService: DataService) {
     this.currentRouteEndPoint = router.url.split('/')[1];
-    console.log(`Current Route: ${this.currentRouteEndPoint}`);
   }
 }
