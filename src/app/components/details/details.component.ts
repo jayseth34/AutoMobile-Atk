@@ -202,6 +202,11 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     let end = new Date(endTimestamp);
     end.setHours(0, 0, 0, 0);
 
+    // Resetting the initial values
+    this.totalVal = 0;
+    this.unpaidVal = 0;
+    this.paidVal = 0;
+
     // Api Call if required
     this.transactonData.data = this.fullData.filter((item: any) => {
       let itemDate = new Date(item.invoicedate);
@@ -217,7 +222,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
   }
 
   updatePayment(payStatus: string, payBal: number, payTotal: number): void {
-    // console.log(payStatus);
+    // console.log(payStatus)
     this.totalVal += payTotal;
     if (payStatus === "UNPAID") {
       this.unpaidVal += payBal;

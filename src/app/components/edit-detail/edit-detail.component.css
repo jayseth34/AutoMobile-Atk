@@ -102,7 +102,7 @@ td.mat-mdc-footer-cell {
 
 td.mat-mdc-cell.mat-column-quantity,
 td.mat-mdc-cell.mat-column-id {
-  width: 50px;
+  width: 60px;
 }
 
 tr.mat-mdc-row:hover .hover-display {
@@ -114,19 +114,19 @@ tr.mat-mdc-row:hover .hover-none {
 }
 
 td.mat-mdc-cell.mat-column-unit {
-  width: 80px;
+  width: 85px;
 }
 
 td.mat-mdc-cell.mat-column-discountAmount,
 td.mat-mdc-cell.mat-column-taxAmount,
 td.mat-mdc-cell.mat-column-totalAmount,
 td.mat-mdc-cell.mat-column-price {
-  width: 125px;
+  width: 135px;
 }
 
 td.mat-mdc-cell.mat-column-discountPercent,
 td.mat-mdc-cell.mat-column-taxPercent {
-  width: 75px;
+  width: 85px;
 }
 
 td.mat-mdc-cell .input-group .input-group-text,

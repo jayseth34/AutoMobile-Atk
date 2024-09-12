@@ -48,13 +48,14 @@ export class EditDetailComponent implements OnInit {
   roundOff: boolean = true;
   fullpayment: boolean = false;
   showAmtDetails: boolean = true;
+  paymentInfoInitialized: boolean = false;
   ogBalance: number = 0;
   banks = signal<Bank[]>([
     {
       accountdisplayname: 'CASH',
       amount: 0,
       refno: '',
-      type: 'CHEQUE'
+      type: 'CASH'
     },
     {
       accountdisplayname: 'CHEQUE',
@@ -337,9 +338,9 @@ export class EditDetailComponent implements OnInit {
       transactionid: new FormControl(this.transactionId),
       item: new FormControl(data?.item ?? ""),
       qty: new FormControl(data?.qty ?? 0, Validators.min(0)),
-      initialCount: new FormControl({ value: data?.qty ?? 0, disabled: true }),
-      unit: new FormControl({ value: data?.unit ? data?.unit : "None", disabled: true }),
-      priceperunit: new FormControl({ value: data?.priceperunit ?? 0.0, disabled: true }),
+      initialCount: new FormControl({ value: data?.qty ?? 0, disabled: data ? true: false }),
+      unit: new FormControl({ value: data?.unit ? data?.unit : "None", disabled: data ? true: false }),
+      priceperunit: new FormControl({ value: data?.priceperunit ?? 0.0, disabled: data ? true: false }),
       discountpercent: new FormControl(data?.discountpercent ?? 0.0),
       discountamount: new FormControl(data?.discountamount ?? 0.0),
       taxrate: new FormControl(data?.taxrate ?? 0.0),
@@ -375,10 +376,8 @@ export class EditDetailComponent implements OnInit {
         const taxAmt = element.get("taxrateamount")?.value as number;
         // const remainingquantity = element.get("remainingquantity")?.value as number;
         // const initialCount = element.get("initialCount")?.value as number;
-
         switch (key) {
           case "qty":
-
             // console.log(discountPer, pricePerUnit);
             const iscountAmtQty = ((discountPer * pricePerUnit) / 100) * changeObj[key]
             // console.log(iscountAmtQty);
@@ -388,6 +387,16 @@ export class EditDetailComponent implements OnInit {
               taxrateamount: newTaxAmtQty,
               totalAmount: (pricePerUnit * changeObj[key]) - iscountAmtQty + taxAmt,
               // "remainingquantity": remainingquantity - (changeObj[key] - initialCount)
+            }, { emitEvent: false });
+            break;
+          
+          case "priceperunit":
+            const newDiscountAmtPnP = ((discountPer * changeObj[key]) / 100) * itemQty;
+            const newTaxAmtPnP = ((taxPer * changeObj[key]) / 100) * itemQty;
+            element.patchValue({
+              discountamount: newDiscountAmtPnP,
+              taxrateamount: newTaxAmtPnP,
+              totalAmount: (changeObj[key] * itemQty) - discountAmt + taxAmt,
             }, { emitEvent: false });
             break;
 
@@ -434,10 +443,20 @@ export class EditDetailComponent implements OnInit {
     let control = this.modifyDetail.get("amountdetailslist") as FormArray;
     let defaltValue = this.bankNameList()[0];
 
-    if(this.banks().length > 1)
+    // console.log(this.banks());
+
+    if(this.banks().length >= 1){
+      // console.log("Updating banks array");
       this.banks.update(banks => banks.slice(1))
-    else
+      // console.log('New Bank List: ', this.banks());
+    }
+
+    if (this.banks.length <= 1 && !this.paymentInfoInitialized){
+      // console.log("Getting Bank names");
       this.handlePaymentInputClick();
+    }
+
+    // if(bankListString && this.banks.)
 
     let nfg = new FormGroup({
       type: new FormControl<string>((data?.accountdisplayname ?? data?.type) ?? defaltValue),
@@ -456,10 +475,9 @@ export class EditDetailComponent implements OnInit {
     let $typeSubs = nfg.get("type")?.valueChanges
     .pipe(startWith(defaltValue), pairwise())
     .subscribe(type => {
-      console.log('Payent Type: ', type)
+      // console.log('Change Type: ', type)
       this.banks.update((items) => {
         let filteredItems = items.filter(item => item.accountdisplayname != type[1]);
-
         let obj: Bank = {
           accountdisplayname: "",
           amount: 0,
@@ -467,6 +485,7 @@ export class EditDetailComponent implements OnInit {
           type: "",
         };
         let addItem: boolean = true;
+
         switch(type[0]){
           case 'CASH':
             obj.accountdisplayname = 'CASH';
@@ -645,24 +664,34 @@ export class EditDetailComponent implements OnInit {
       let rq: GetBankRq = {
         registeredphonenumber: this.registeredPhoneNumber
       }
+
       this.api.getBankList(rq).subscribe((rs: GetBankRs) => {
         if(rs.status === 'SUCCESS'){
           localStorage.setItem("bankList", JSON.stringify(rs.bankslist));
           bankList = rs.bankslist;
+          bankList.map(bank => {
+            let bankName = bank.accountdisplayname ?? (bank.type ?? "")
+            if(!paymentInfoList.includes(bankName) && this.bankNameList().indexOf(bankName) == -1){
+              this.banks.update(banks => [...banks, bank]);
+            }
+          });
+          this.paymentInfoInitialized = true;
+          // console.log('Bank list after fetching: ', this.banks());
         } else {
           Swal.fire(`Could not get Bank list: ${rs.statusmessage}`, "", "error");
         }
-      })
+      });
     } else {
       bankList = JSON.parse(bankListString);
+      bankList.map(bank => {
+        let bankName = bank.accountdisplayname ?? (bank.type ?? "")
+        if(!paymentInfoList.includes(bankName) && this.bankNameList().indexOf(bankName) == -1){
+          this.banks.update(banks => [...banks, bank]);
+        }
+        this.paymentInfoInitialized = true;
+      });
+      // console.log('Bank list after locastorage: ', this.banks());
     }
-
-    bankList.map(bank => {
-      let bankName = bank.accountdisplayname ?? (bank.type ?? "")
-      if(!paymentInfoList.includes(bankName) && this.bankNameList().indexOf(bankName) == -1){
-        this.banks.update(banks => [...banks, bank]);
-      }
-    });
   }
 
   handlePartyChange = (partyName: string) => {
@@ -716,13 +745,37 @@ export class EditDetailComponent implements OnInit {
   }
 
   handleItemChange(prev: any, next: any, element: any) {
-    // console.log(`Called with parameters: ${prev} and ${next}`);
     // Removing the next(new) value from the items array
     const ind = this.items().findIndex((item: Item) => item.itemname === next)
-    if (ind < 0)
-      return;
-    const newItem: Item = this.items()[ind];
-    this.items.update(items => items.filter((item, index) => index != ind));
+    let newItem: Item;
+    if (ind < 0){
+      newItem = {
+        baseunit: '',
+        discountonsaleprice: 0,
+        itemname: next,
+        minimumwholesalequantity: 0,
+        percentageoramounttype: 0,
+        purchaseprice: 0,
+        remainingquantity: 0,
+        saleprice: 0,
+        wholesaleprice: 0,
+      }
+
+      element.get('priceperunit').enable();
+      element.get('discountpercent').enable();
+      element.get('discountamount').enable();
+      element.get('taxrate').enable();
+      element.get('taxrateamount').enable();
+    } else {
+      newItem = this.items()[ind];
+      this.items.update(items => items.filter((item, index) => index != ind));
+
+      element.get('priceperunit').disable();
+      element.get('discountpercent').disable();
+      element.get('discountamount').disable();
+      element.get('taxrate').disable();
+      element.get('taxrateamount').disable();
+    }
 
     // Adding the previous (old) item to the items list
     const arr: Item[] = JSON.parse(localStorage.getItem("itemList") ?? "")
@@ -843,11 +896,11 @@ export class EditDetailComponent implements OnInit {
         if (this.isEdit)
           body.topayparty -= this.ogBalance;
         break;
-        case "Purchase-Return":
-          body.toreceivefromparty += body.balance;
-          if (this.isEdit)
-            body.toreceivefromparty -= this.ogBalance;
-          break;
+      case "Purchase-Return":
+        body.toreceivefromparty += body.balance;
+        if (this.isEdit)
+          body.toreceivefromparty -= this.ogBalance;
+        break;
       default:
         console.log(`Invalid Transaction Type: ${this.transactionType}`);
         break;

@@ -53,9 +53,10 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
       }
     }
 
-    if (this.getFormControl.value)
-
+    if (this.getFormControl.value){
+      // console.log('FormControl value present');
       this.formSubscripton = this.getFormControl.valueChanges.subscribe((item: any) => this.filterList(item));
+    }
   }
 
   // ngOnDestroy(): void {
@@ -63,6 +64,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   // }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // console.log(changes);
     if (changes['ogItemList']) {
       this.itemList = this.ogItemList;
       if (this.ogItemList && this.ogItemList.length > 0 && !this.design) {
@@ -83,6 +85,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   handleKeyPress(event: KeyboardEvent) {
+    // console.log(event.key);
     switch (event.key) {
       case "ArrowDown":
         this.currentFocus++;
@@ -93,6 +96,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
       case "Enter":
         if (this.currentFocus > -1) {
           this.selectItem(this.itemList[this.currentFocus]);
+          this.closeList();
         }
         event.preventDefault();
         break;
@@ -105,6 +109,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   closeList() {
+    console.log('Closing List');
     this.showList = false;
   }
 
@@ -113,16 +118,18 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
     this.getFormControl.setValue(val);
     if (this.dataIsObject && this.handleChange)
       this.handleChange(item[this.columns[0].identifier]);
+    console.log(this.currentFocus);
     this.closeList();
   }
 
   filterList(value: string) {
+    console.log('Filter list called');
     value = value.toUpperCase();
     this.showList = true;
-    if (value.length == 0)
-      this.currentFocus = -1;
-    else
-      this.currentFocus = 0;
+    // if (value.length == 0)
+    //   this.currentFocus = -1;
+    // else
+    //   this.currentFocus = 0;
     this.itemList = this.ogItemList.filter((item: any) => {
       let temp: string;
       if (this.dataIsObject)
@@ -136,6 +143,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
       else
         return false;
     });
+    console.log('Filtered list:', this.itemList);
 
     if (!this.calledFirst) {
       this.calledFirst = true;
