@@ -55,8 +55,12 @@ export class PaymentInoutComponent implements OnInit {
       invoicenumber: this.dataService.invoicenumber,
       typeofpay: this.typeofpay
     }
+    
+    this.getPartyList();
+    this.getPaymentOptions()
     if (this.isview) {
       this.api.GetUpdatedTrnxInOutVal(body).subscribe((response: any) => {
+        console.log('API Response:', response);
         if (response.status === "SUCCESS") {
           this.patchFormValues(response);
         }
@@ -64,9 +68,6 @@ export class PaymentInoutComponent implements OnInit {
     } else {
       this.addPayment()
     }
-    this.getPartyList();
-    this.getPaymentOptions()
-
     let isUpdatingValue = false;
 
   this.paymentInForm.get('received')?.valueChanges.subscribe(value => {

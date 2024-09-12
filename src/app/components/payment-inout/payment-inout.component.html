@@ -14,8 +14,8 @@
             </mat-select>
           </mat-form-field>        
 
-          <p *ngIf="!isview" style="font-size: 14px; margin-left: 20px;" class="form-text text-muted">BAL: <b><span [ngClass]="{'negative-balance': balance < 0, 'positive-balance': balance >= 0}">{{ balance }}</span></b></p>
-          <p *ngIf="isview" style="font-size: 14px; margin-left: 20px;" class="form-text text-muted">BAL: <b><span [ngClass]="{'negative-balance': balance < 0, 'positive-balance': balance >= 0}">{{ balance }}</span></b></p>
+          <p *ngIf="!isview && !isadvance" style="font-size: 14px; margin-left: 20px;" class="form-text text-muted">BAL: <b><span [ngClass]="{'negative-balance': balance < 0, 'positive-balance': balance >= 0}">{{ balance }}</span></b></p>
+          <p *ngIf="isview && !isadvance" style="font-size: 14px; margin-left: 20px;" class="form-text text-muted">BAL: <b><span [ngClass]="{'negative-balance': balance < 0, 'positive-balance': balance >= 0}">{{ balance }}</span></b></p>
 
           <div class="payment-type">
             <div formArrayName="payments" class="payment-container">

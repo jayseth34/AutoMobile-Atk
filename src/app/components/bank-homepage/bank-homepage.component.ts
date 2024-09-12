@@ -182,7 +182,7 @@ export class BankHomepageComponent implements OnInit {
                     date = new Date(response.adjustmentDate);
 
                     const dialogRef = this.dialog.open(TransferModalComponent, {
-                        width: '70%',
+                        width: '50%',
                         height: '70%',
                         data: { type: type, increasedecrease: increasedecrease, from: from, to: to, amount: amount, date: date, ...data, isupdate: true, banktobank:banktobank }
                     });

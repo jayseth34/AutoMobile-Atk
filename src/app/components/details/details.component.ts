@@ -261,6 +261,14 @@ export class DetailsComponent implements OnInit, AfterViewInit {
       else if (this.transactionTypeString === 'Payment-Out')
         this.dataService.typeofpay = 'PAYMENT OUT'
       return this._router.navigateByUrl('/pin');
+    } else  if (this.transactionTypeString === 'Advance-In' || this.transactionTypeString === 'Advance-Out') {
+      this.dataService.invoicenumber = invoiceNumber
+      this.dataService.isview = true
+      if(this.transactionTypeString === 'Advance-In')
+        this.dataService.typeofpay = 'ADVANCE IN'
+      else if (this.transactionTypeString === 'Advance-Out')
+        this.dataService.typeofpay = 'ADVANCE OUT'
+      return this._router.navigateByUrl('/pin');
     }
     this.dataService.isview = false
     return this._router.navigateByUrl(`/${this.transactionTypeString}/edit/${invoiceNumber}`);
