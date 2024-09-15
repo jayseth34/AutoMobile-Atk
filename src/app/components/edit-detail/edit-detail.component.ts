@@ -787,6 +787,7 @@ export class EditDetailComponent implements OnInit {
       }
     } else {
       newItem = this.items()[ind];
+      console.log(newItem);
       this.items.update(items => items.filter((item, index) => index != ind));
     }
 
@@ -847,7 +848,7 @@ export class EditDetailComponent implements OnInit {
         "taxrateamount": 0.0,
         "totalAmount": itemTotalAmt,
         "mrp": item.mrp,
-        "itemcode": item.itemcode
+        "itemcode": item.itemcode ?? ""
       }, { emitEvent: false });
     }
   }

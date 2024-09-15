@@ -217,7 +217,7 @@ export interface SaveUpdateTransactionRq {
     amountdetailslist: PaymentInfo[]
 }
 
-interface Itemdetailslist {
+class Itemdetailslist {
     item: any
     qty: number
     unit: any
@@ -229,6 +229,8 @@ interface Itemdetailslist {
     transactionid: number
     discountpercent: number
     discountamount: number
+    mrp: number
+    itemcode: string = ''
 }
 
 export interface PaymentInfo {
