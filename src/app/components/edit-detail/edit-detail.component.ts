@@ -132,8 +132,8 @@ export class EditDetailComponent implements OnInit {
   // itemDataForm: FormGroup;
   modifyDetail: FormGroup;
   newTransactionData = new MatTableDataSource<any>();
-  newTransactionDataHeaders = ["Id", "Item", "Quantity", "Unit", "Price/unit", "Discount", "Tax", "Amount"];
-  newTransactionDataColumns = ["id", "item", "quantity", "unit", "price", "discountPercent", "discountAmount", "taxPercent", "taxAmount", "totalAmount"];
+  newTransactionDataHeaders = ["Id", "Item", "Mrp", "ItemCode","Quantity", "Unit", "Price/unit", "Discount", "Tax", "Amount"];
+  newTransactionDataColumns = ["id", "item", "mrp", "itemcode","quantity", "unit", "price", "discountPercent", "discountAmount", "taxPercent", "taxAmount", "totalAmount"];
 
   // For Footer
   paymentForm: FormGroup;
@@ -344,20 +344,24 @@ export class EditDetailComponent implements OnInit {
 
     if (this.transactionId == 0 && data != null)
       this.transactionId = data.transactionid;
+
+    console.log('Mrp: ', data?.mrp);
     let element = new FormGroup({
       transactionid: new FormControl(this.transactionId),
       item: new FormControl(data?.item ?? ""),
       qty: new FormControl(data?.qty ?? 0, Validators.min(0)),
-      initialCount: new FormControl({ value: data?.qty ?? 0, disabled: data ? true: false }),
-      unit: new FormControl({ value: data?.unit ? data?.unit : "None", disabled: data ? true: false }),
-      priceperunit: new FormControl({ value: data?.priceperunit ?? 0.0, disabled: data ? true: false }),
+      initialCount: new FormControl(data?.qty ?? 0),
+      unit: new FormControl(data?.unit ? data?.unit : "None"),
+      priceperunit: new FormControl(data?.priceperunit ?? 0.0),
       discountpercent: new FormControl(data?.discountpercent ?? 0.0),
       discountamount: new FormControl(data?.discountamount ?? 0.0),
       taxrate: new FormControl(data?.taxrate ?? 0.0),
       taxrateamount: new FormControl(data?.taxrateamount ?? 0.0),
       totalAmount: new FormControl({ value: finalAmount, disabled: true }),
       queryoperationtype: new FormControl(data != null ? "UPDATE" : "INSERT"),
-      remainingquantity: new FormControl(data?.remainingquantity ?? 0)
+      remainingquantity: new FormControl(data?.remainingquantity ?? 0),
+      mrp: new FormControl<number>(data?.mrp ?? 0),
+      itemcode: new FormControl<string>(data?.itemcode ?? ""),
     });
 
     // this.updatePayAmount();
@@ -778,22 +782,12 @@ export class EditDetailComponent implements OnInit {
         remainingquantity: 0,
         saleprice: 0,
         wholesaleprice: 0,
+        itemcode: '',
+        mrp: 0,
       }
-
-      element.get('priceperunit').enable();
-      element.get('discountpercent').enable();
-      element.get('discountamount').enable();
-      element.get('taxrate').enable();
-      element.get('taxrateamount').enable();
     } else {
       newItem = this.items()[ind];
       this.items.update(items => items.filter((item, index) => index != ind));
-
-      element.get('priceperunit').disable();
-      element.get('discountpercent').disable();
-      element.get('discountamount').disable();
-      element.get('taxrate').disable();
-      element.get('taxrateamount').disable();
     }
 
     // Adding the previous (old) item to the items list
@@ -852,6 +846,8 @@ export class EditDetailComponent implements OnInit {
         "taxrate": 0.0,
         "taxrateamount": 0.0,
         "totalAmount": itemTotalAmt,
+        "mrp": item.mrp,
+        "itemcode": item.itemcode
       }, { emitEvent: false });
     }
   }

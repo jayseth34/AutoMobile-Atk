@@ -117,11 +117,19 @@ td.mat-mdc-cell.mat-column-unit {
   width: 85px;
 }
 
+td.mat-mdc-cell.mat-column-itemcode {
+  width: 110px;
+}
+
+td.mat-mdc-cell.mat-column-mrp {
+  width: 80px;
+}
+
 td.mat-mdc-cell.mat-column-discountAmount,
 td.mat-mdc-cell.mat-column-taxAmount,
 td.mat-mdc-cell.mat-column-totalAmount,
 td.mat-mdc-cell.mat-column-price {
-  width: 135px;
+  width: 130px;
 }
 
 td.mat-mdc-cell.mat-column-discountPercent,

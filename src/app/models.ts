@@ -85,6 +85,8 @@ export interface ItemDetail {
     discountpercent: number
     discountamount: number
     remainingquantity: number
+    mrp: number
+    itemcode: string
 }
 
 export interface Item {
@@ -97,6 +99,8 @@ export interface Item {
     discountonsaleprice: number,
     percentageoramounttype: any,
     baseunit: string,
+    mrp: number
+    itemcode: string
 
     [index: string]: string | number;
 }
