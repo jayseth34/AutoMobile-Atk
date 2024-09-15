@@ -49,6 +49,7 @@ export class EditDetailComponent implements OnInit {
   fullpayment: boolean = false;
   showAmtDetails: boolean = true;
   paymentInfoInitialized: boolean = false;
+  deletePayDisabled: boolean = true;
   ogBalance: number = 0;
   banks = signal<Bank[]>([
     {
@@ -177,9 +178,9 @@ export class EditDetailComponent implements OnInit {
     this.dataservice.isLogin = true
     // Initializing the Form Group with default values
     this.modifyDetail = new FormGroup({
-      customername: new FormControl("", [Validators.required, Validators.minLength(1)]),
-      phonenumber: new FormControl("", [Validators.required, Validators.minLength(9), Validators.maxLength(10)]),
-      billingaddress: new FormControl("", [Validators.required, Validators.minLength(1)]),
+      customername: new FormControl(null, [Validators.required, Validators.minLength(1)]),
+      phonenumber: new FormControl("", [Validators.minLength(9), Validators.maxLength(10)]),
+      billingaddress: new FormControl(""),
       shippingaddress: new FormControl(""),
       invoicedate: new FormControl({ value: this.cs.formatDate(new Date()), disabled: false }),
       stateofsupply: new FormControl({ value: "Maharashtra", disabled: false }),
@@ -218,6 +219,15 @@ export class EditDetailComponent implements OnInit {
       if(paymentArr.length == 1){
         paymentArr.at(0).get('amount')?.setValue(val, { emitEvent: false });
       }
+    });
+
+    // If Payment info length changed
+    this.modifyDetail.get('amountdetailslist')?.valueChanges
+    .subscribe((val: FormArray) => {
+      if(val.length <= 1)
+        this.deletePayDisabled = true;
+      else
+        this.deletePayDisabled = false;
     });
 
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -626,6 +636,15 @@ export class EditDetailComponent implements OnInit {
     let bank = banksList.find((bank) => bank.accountdisplayname === currAccDisplayName);
     if (bank != undefined)
       this.banks.update((banks) => [...banks, bank as Bank]);
+    else if (currAccDisplayName === 'CASH' || currAccDisplayName === 'CHEQUE'){
+      let newItem: Bank = {
+        accountdisplayname: currAccDisplayName,
+        amount: 0,
+        refno: '',
+        type: currAccDisplayName
+      }
+      this.banks.update((banks) => [...banks, newItem]);
+    }
   }
 
   handleAddRowClick() {
@@ -838,6 +857,7 @@ export class EditDetailComponent implements OnInit {
   }
 
   submitDetails() {
+    console.log(this.modifyDetail);
     if (!this.modifyDetail.valid) {
       console.log("Form not valid");
       console.log(this.modifyDetail.errors);

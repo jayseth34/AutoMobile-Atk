@@ -427,7 +427,7 @@
               </div>
 
               <div class="col-1">
-                <button mat-mini-fab aria-label="Example icon button with a menu icon" class="mt-2" (click)="handleDeletePaymentInfoClick(i)">
+                <button mat-mini-fab aria-label="Example icon button with a menu icon" class="mt-2" (click)="handleDeletePaymentInfoClick(i)" [disabled]="deletePayDisabled" >
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
