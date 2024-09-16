@@ -5,25 +5,31 @@
         <div class="content-area">
             <!-- First Row -->
             <div class="row">
-                <div class="col-3-4 sale">
+                <!-- Sale Details Column -->
+                <div class="col-md-4">
                     <div class="box">
                         <h3>Sale</h3>
                         <p class="amount">₹ 25000.00</p>
                         <p class="description">Total Sale (May)</p>
-                        <div class="growth">20% This Month Growth</div>
-                        <div class="chart"></div> <!-- Placeholder for chart -->
+                        <!-- <div class="growth">20% This Month Growth</div> -->
+                        <mat-form-field class="custom-form-field-graphs" appearance="fill">
+                            <mat-label>Time Period</mat-label>
+                            <mat-select [(value)]="selectedPeriod" (selectionChange)="onPeriodChange($event.value)">
+                                <mat-option value="This Month">This Month</mat-option>
+                                <mat-option value="Last Month">Last Month</mat-option>
+                                <mat-option value="This Quarter">This Quarter</mat-option>
+                                <mat-option value="This Year">This Year</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                 </div>
-                                <!-- FUTUTRE SCOPE -->
-                <!-- <div class="col-1-4 expenses">
-                    <div class="box">
-                        <h3>Expenses</h3>
-                        <p class="amount">₹ 5200.00</p>
-                        <p class="description">Total Expense (May)</p>
-                        <div class="growth">10% This Month Growth</div>
-                        <div class="chart"></div> 
+            
+                <!-- Graph Column -->
+                <div class="col-md-8">
+                    <div class="graph-container">
+                        <canvas id="salesGraph" width="600" height="300"></canvas>
                     </div>
-                </div> -->
+                </div>
             </div>
 
             <!-- Second Row -->
