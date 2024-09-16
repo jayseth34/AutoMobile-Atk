@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit{
   daysDiff: number;
   salesData:any;
   selectedPeriod: string;
+  totalSales: number = 0;
   constructor(public api: ApiService, public dataService: DataService, private router: Router){}
 
     ngOnInit(){
@@ -151,7 +152,7 @@ export class DashboardComponent implements OnInit{
         }
         groupedData[date] += sale.total;
       });
-  
+      this.totalSales = Object.values(groupedData).reduce((acc, total) => acc + total, 0);
       return Object.keys(groupedData).map(date => ({
         date,
         total: groupedData[date]
