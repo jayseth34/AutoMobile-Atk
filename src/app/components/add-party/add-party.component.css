@@ -1,5 +1,25 @@
-form {
+.main {
+  height: 100%; /* Ensure the div has height */
+  overflow: hidden; /* Hides the scrollbar */
   padding: 5%;
+}
+
+.scroll{
+  max-height: 285px;
+  overflow-y: scroll; /* Ensures scrolling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.scrollable-div {
+  height: 600px; /* or max-height */
+  overflow-y: scroll; /* Ensures scrolling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.scrollable-div::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
 }
 
 /* phone, gstin, partyname */
@@ -194,4 +214,9 @@ li a:hover:not(.active) {
 
 .invalid-input{
   border: 2px solid red;
+}
+
+.save_update{
+  margin-top: 2%; 
+  width: 150px;
 }

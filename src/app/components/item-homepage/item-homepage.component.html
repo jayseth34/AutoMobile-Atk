@@ -7,17 +7,18 @@
 <ng-container *ngIf="itemHomePageSelectedTabIndex === 0">
   <div class="grid-container">
     <!-- SIDEBAR -->
-    <div class="sidebar">
+    <div class="sidebar scroll">
       <div class="row">
         <mat-form-field class="col">
           <mat-label>Search here..</mat-label>
           <input matInput>
         </mat-form-field>
         <div class="col-auto">
-          <button mat-raised-button color="primary" (click)="openAddItemModal('')">+ ADD ITEM</button>
+          <button mat-raised-button color="primary" (click)="openAddItemModal('')" style="height: 60%; margin-top: 2.5%;">+ ADD ITEM</button>
         </div>
       </div>
 
+      <div class="scrollable-div">
       <table mat-table [dataSource]="itemlist" class="item_list">
         <ng-container matColumnDef="itemname">
           <th mat-header-cell *matHeaderCellDef>ITEM</th>
@@ -39,6 +40,7 @@
         <tr mat-row *matRowDef="let row; columns: ['itemname', 'remainingquantity'];"></tr>
       </table>
     </div>
+    </div>
 
     <!-- TOP CONTENT -->
     <mat-card class="top-content">
@@ -56,7 +58,7 @@
     </mat-card>
 
     <!-- BOTTOM CONTENT -->
-    <mat-card class="bottom-content">
+    <mat-card class="bottom-content scrollable-div">
       <mat-card-title>TRANSACTIONS</mat-card-title>
       <table mat-table [dataSource]="dataService.GetItemTransactionsResponse" class="table-list">
         <ng-container matColumnDef="typeofpay">
@@ -105,14 +107,14 @@
 <ng-container *ngIf="itemHomePageSelectedTabIndex === 1">
   <div class="grid-container">
     <!-- SIDEBAR -->
-    <div class="sidebar">
+    <div class="sidebar scroll">
       <div class="row">
         <mat-form-field class="col">
           <mat-label>Search here..</mat-label>
           <input matInput>
         </mat-form-field>
         <div class="col-auto">
-          <button mat-raised-button color="primary" (click)="openAddItemCategoryModal('')">+ ADD CATEGORY</button>
+          <button mat-raised-button color="primary" (click)="openAddItemCategoryModal('')" style="height: 60%; margin-top: 2.5%;">+ ADD CATEGORY</button>
         </div>
       </div>
 
@@ -150,6 +152,7 @@
     <!-- BOTTOM CONTENT -->
     <mat-card class="bottom-content">
       <mat-card-title>ITEMS</mat-card-title>
+      <div class="scrollable-div">
       <table mat-table [dataSource]="dataService.GetItemByCategoryResponse" class="table-list">
         <ng-container matColumnDef="itemname">
           <th mat-header-cell *matHeaderCellDef>NAME</th>
@@ -169,6 +172,7 @@
         <tr mat-header-row *matHeaderRowDef="['itemname', 'minimumwholesalequantity', 'wholesaleprice']"></tr>
         <tr mat-row *matRowDef="let row; columns: ['itemname', 'minimumwholesalequantity', 'wholesaleprice'];"></tr>
       </table>
+    </div>
     </mat-card>
   </div>
 </ng-container>

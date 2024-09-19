@@ -1,3 +1,14 @@
+.scrollable-div {
+  height: 550px; /* or max-height */
+  overflow-y: scroll; /* Ensures scrolling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.scrollable-div::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
 .sidebar {
   width: 250px;
   background-color: #474746;

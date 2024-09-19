@@ -11,14 +11,12 @@
     <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="row">
-        <div class="col">
-          <mat-form-field appearance="fill">
-            <mat-label>Search here..</mat-label>
-            <input matInput placeholder="Search here.." />
-          </mat-form-field>
-        </div>
+        <mat-form-field class="col">
+          <mat-label>Search here..</mat-label>
+          <input matInput>
+        </mat-form-field>
         <div class="col-auto">
-          <button mat-raised-button color="warn" class="add_banks_btn" (click)="openAddBanksModal()">+ ADD BANKS</button>
+          <button mat-raised-button color="warn" class="add_banks_btn" (click)="openAddBanksModal()" style="height: 60%; margin-top: 2.5%;">+ ADD BANKS</button>
         </div>
       </div>
 

@@ -1,5 +1,11 @@
-<form [formGroup]="addPartyForm">
+<form class="main" [formGroup]="addPartyForm">
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>{{ dataService.isPartyUpdate ? 'UPDATE' : 'ADD' }} PARTY</h2>
+  </div>
   
+  <div style="border-bottom: 1px solid gray; margin-bottom: 10px;"></div>
+
+  <div class="scrollable-div">
   <!-- First row with three input columns -->
       <!-- Party Name Field --> 
     <div class="form-row three-columns">
@@ -169,7 +175,7 @@
 
     <!-- TAB 3: ADDTIONAL FIELDS -->
     <div id="addtionalFields" *ngIf="selectedTab === 'additionalFields'">
-      <div class="row  col-md-12">
+      <div class="row  col-md-12 scroll">
         <div class="row addtional-fields">
           <div class="col-md-1">
             <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField1Checked" name="additionalField1Checked"  (change)="toggleAdditionalField($event, 'additionalField1')">
@@ -349,16 +355,16 @@
             <label class="form-check-label" for="flexSwitchCheckDefault4">Show in Print</label>
           </div>
         </div> -->
-      
+      </div>
       </div>
     </div>
      
-  <div *ngIf="!dataService.isPartyUpdate" class="fixed-buttons d-flex justify-content-end position-fixed bottom-0 p-3 submit-btns">
+  <div *ngIf="!dataService.isPartyUpdate" class="fixed-buttons d-flex justify-content-end position-fixed bottom-0 submit-btns">
     <!-- <input type="submit" style="margin-right: 20px;" class="btn btn-warning add_party_btn" value="SAVE & NEW" (click)="submit(true)"> -->
-    <input type="submit" class="btn btn-warning add_party_btn" value="SAVE" (click)="submit(false)">
+    <input type="submit" class="btn btn-warning save_update" value="SAVE" (click)="submit(false)">
   </div>
   <div *ngIf="dataService.isPartyUpdate" class="fixed-buttons d-flex justify-content-end position-fixed bottom-0 p-3 submit-btns">
-    <input type="submit" class="btn btn-warning add_party_btn" value="UPDATE" (click)="submit(false)">
+    <input type="submit" class="btn btn-warning save_update" value="UPDATE" (click)="submit(false)">
   </div>
 </form>
 

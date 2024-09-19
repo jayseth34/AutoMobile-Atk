@@ -1,5 +1,5 @@
 <form class="addPartyGroup" [formGroup]="addPartyGroup">
-    <h2>Add Party Group</h2>
+  <h2>{{ dataService.isGroupUpdate ? 'UPDATE' : 'ADD' }} PARTY GROUP</h2>
     <div class="form-group">
       <label for="partyGroupName">ENTER PARTY GROUP NAME</label>
       <input type="text" class="form-control" id="partyGroupName" formControlName="partyGroupNameControl" [(ngModel)]="partyGroupName"

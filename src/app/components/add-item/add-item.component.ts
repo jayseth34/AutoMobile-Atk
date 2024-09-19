@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Inject, Input } from '@angular/core';
-import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SelectUnitComponent } from '../select-unit/select-unit.component';
 import { DataService } from 'src/app/services/data.service';
@@ -102,30 +102,30 @@ export class AddItemComponent {
   initializeForm() {
     const defaultDate = moment().format('YYYY-MM-DD');
     this.addItemForm = new FormGroup({
-      itemNameControl: new FormControl(this.data.itemName || ''),
+      itemNameControl: new FormControl(this.data.itemName || '', Validators.required),
       itemHsnControl: new FormControl(this.data.itemDetails?.itemhsn || ''),
       categoryControl: new FormControl(this.data.itemDetails?.category || 'GENERAL'),
       itemCodeControl: new FormControl(this.data.itemDetails?.itemcode || ''),
-      salePriceControl: new FormControl(this.data.itemDetails?.saleprice || 0),
+      salePriceControl: new FormControl(this.data.itemDetails?.saleprice || 0, Validators.pattern('^[0-9]*$')),
       saleWithOrWithoutTaxControl: new FormControl(this.data.itemDetails?.salewithorwithouttax || 'Without Tax'),
-      discountOnSalePriceControl: new FormControl(this.data.itemDetails?.discountonsaleprice || 0),
+      discountOnSalePriceControl: new FormControl(this.data.itemDetails?.discountonsaleprice || 0, Validators.pattern('^[0-9]*$')),
       percentageOrAmountControl: new FormControl(this.data.itemDetails?.percentageoramounttype || 'Percentage'),
-      wholeSalePriceControl: new FormControl(this.data.itemDetails?.wholesaleprice || 0),
+      wholeSalePriceControl: new FormControl(this.data.itemDetails?.wholesaleprice || 0, Validators.pattern('^[0-9]*$')),
       wholeSaleWithOrWithoutTaxControl: new FormControl(this.data.itemDetails?.wholesalewithorwithouttax || 'Without Tax'),
-      minimumWholeSaleQuantityControl: new FormControl(this.data.itemDetails?.minimumwholesalequantity || 0),
-      purchasePriceControl: new FormControl(this.data.itemDetails?.purchaseprice || 0),
+      minimumWholeSaleQuantityControl: new FormControl(this.data.itemDetails?.minimumwholesalequantity || 0, Validators.pattern('^[0-9]*$')),
+      purchasePriceControl: new FormControl(this.data.itemDetails?.purchaseprice || 0, Validators.pattern('^[0-9]*$')),
       purchaseWithOrWithoutTaxControl: new FormControl(this.data.itemDetails?.purchasewithorwithouttax || 'Without Tax'),
       taxRateControl: new FormControl(this.data.itemDetails?.taxrate || 'None'),
-      openingQuantityControl: new FormControl(this.data.itemDetails?.openingquantity || 0),
-      atPriceControl: new FormControl(this.data.itemDetails?.atprice || 0),
+      openingQuantityControl: new FormControl(this.data.itemDetails?.openingquantity || 0, Validators.pattern('^[0-9]*$')),
+      atPriceControl: new FormControl(this.data.itemDetails?.atprice || 0, Validators.pattern('^[0-9]*$')),
       asOfDateControl: new FormControl(this.data.itemDetails?.asofdate  ? moment(this.data.itemDetails?.asofdate).format('YYYY-MM-DD')
       : defaultDate),
-      minimumStockToMaintainControl: new FormControl(this.data.itemDetails?.minimumstocktomaintain || 0),
+      minimumStockToMaintainControl: new FormControl(this.data.itemDetails?.minimumstocktomaintain || 0, Validators.pattern('^[0-9]*$')),
       _locationControl: new FormControl(this.data.itemDetails?._location || ''),
       baseunit: new FormControl(this.data.itemDetails?.baseunit || ''),
       secondaryunit: new FormControl(this.data.itemDetails?.secondaryunit || ''),
-      conversionrates: new FormControl(this.data.itemDetails?.conversionrates || 0),
-      mrpControl: new FormControl(this.data.itemDetails?.mrp || 0),
+      conversionrates: new FormControl(this.data.itemDetails?.conversionrates || 0, Validators.pattern('^[0-9]*$')),
+      mrpControl: new FormControl(this.data.itemDetails?.mrp || 0, Validators.pattern('^[0-9]*$')),
     });
   }
 

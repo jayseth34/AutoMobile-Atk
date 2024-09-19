@@ -4,6 +4,13 @@
     padding: 5%;
 }
 
+.scroll{
+  max-height: 300px;
+  overflow-y: scroll; /* Ensures scrolling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
 .scrollable-div {
   height: 550px; /* or max-height */
   overflow-y: scroll; /* Ensures scrolling */
@@ -136,5 +143,10 @@ option {
 .submit-btns {
   margin: 2%;
 } 
+
+.save_update{
+  margin-top: 2%; 
+  width: 150px;
+}
 
 /* // */
