@@ -154,7 +154,7 @@ export class SidebarComponent {
 
 
   gotopartypage(){
-    window.location.href = 'http://localhost:4201/party-homepage';
+    window.location.href = 'http://localhost:4200/party-homepage';
   }
 
   openBusinessInfoModal() {

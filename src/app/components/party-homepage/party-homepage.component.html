@@ -1,150 +1,162 @@
 <div>
-  <ul class="nav" role="tablist">
-    <li class="nav-item tabMain">
-      <a class="nav-link tabTitle" [class.active]="dataService.partyHomePageSelectedTab === 'party'"  id="tab1-tab" data-toggle="tab"  role="tab" aria-controls="tab1" (click)="selectTab('party')">PARTY</a>
-    </li>
-    <li class="nav-item tabMain">
-      <a class="nav-link tabTitle" [class.active]="dataService.partyHomePageSelectedTab === 'group'" id="tab2-tab" data-toggle="tab"  role="tab" aria-controls="tab2" (click)="selectTab('group')">GROUP</a>
-    </li>
-  </ul>  
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="selectTab($event.index)">
+    <mat-tab label="PARTY">
+    </mat-tab>
+    <mat-tab label="GROUP">
+    </mat-tab>
+  </mat-tab-group>
 </div>
 
 
 <ng-container *ngIf="dataService.partyHomePageSelectedTab === 'party'">
-<div class="grid-container">
+  <div class="grid-container">
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <div class="row">
-            <div class="col">
-              <input type="text" [(ngModel)]="searchParty" class="form-control" placeholder="Search here..">
-            </div>
-            <div class="col-auto">
-              <button class="btn btn-warning add_party_btn" (click)="openAddPartyModal('')">+ ADD PARTY</button>
-            </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Search here..</mat-label>
+            <input matInput [(ngModel)]="searchParty">
+          </mat-form-field>
         </div>
+        <div class="col-auto">
+          <button mat-raised-button color="warn" (click)="openAddPartyModal('')">+ ADD PARTY</button>
+        </div>
+      </div>
 
-        <table class="table party_list">
-            <thead class="thead-dark">
-              <tr>
-                <th class="table-column">PARTY</th>
-                <th class="table-column">AMOUNT</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Loop to generate rows -->
-              <!-- <tr *ngFor="let partydetail of dataService.partyList" (click)="singleClick($event,'9920279905',partydetail.partyname)" (dblclick)="doubleClick($event)"> -->
-              <tr *ngFor="let partydetail of partyList" (click)="partyHandleClick($event,partydetail.partyname)" [ngClass]="{ 'selectedParty-row-tr': isSelectedParty(partydetail.partyname) }" >
-                <td class="table-row" [ngClass]="{ 'selectedParty-row-td': isSelectedParty(partydetail.partyname) }">{{ partydetail.partyname }}</td>
-                <td class="table-row" [ngClass]="{ 'selectedParty-row-td': isSelectedParty(partydetail.partyname) }"
-                [ngStyle]="{ 'color': dataService.getColor(partydetail.toreceivefromparty, partydetail.topayparty) }">{{ partydetail.toreceivefromparty - partydetail.topayparty }}</td>
-              </tr>
-            </tbody>
-          </table>
+      <table mat-table [dataSource]="partyList" class="mat-elevation-z8">
+        <ng-container matColumnDef="party">
+          <th mat-header-cell *matHeaderCellDef> PARTY </th>
+          <td mat-cell *matCellDef="let partydetail" (click)="partyHandleClick($event, partydetail.partyname)" [ngClass]="{ 'selectedParty-row-tr': isSelectedParty(partydetail.partyname) }">
+            <span [ngClass]="{ 'selectedParty-row-td': isSelectedParty(partydetail.partyname) }">{{ partydetail.partyname }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef> AMOUNT </th>
+          <td mat-cell *matCellDef="let partydetail" [ngClass]="{ 'selectedParty-row-td': isSelectedParty(partydetail.partyname) }" [ngStyle]="{ 'color': dataService.getColor(partydetail.toreceivefromparty, partydetail.topayparty) }">
+            {{ partydetail.toreceivefromparty - partydetail.topayparty }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['party', 'amount']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['party', 'amount']"></tr>
+      </table>
     </div>
 
     <!-- TOP CONTENT -->
     <div class="top-content">
-        <h2>{{ partyName }}</h2>
-        <div class="top-content-row">
-            <div class="phone">PHONE: {{ phonenumber }}</div>
-            <div class="address">ADDRESS: {{ billingaddress }}</div>
-        </div>
-        <div class="top-content-row">
-            <div class="phone">EMAIL: {{ emailid }}</div>
-            <div class="address">GSTIN: {{ gst }}</div>
-        </div>
+      <h2>{{ partyName }}</h2>
+      <div class="top-content-row">
+        <div class="phone">PHONE: {{ phonenumber }}</div>
+        <div class="address">ADDRESS: {{ billingaddress }}</div>
+      </div>
+      <div class="top-content-row">
+        <div class="phone">EMAIL: {{ emailid }}</div>
+        <div class="address">GSTIN: {{ gst }}</div>
+      </div>
     </div>
 
     <!-- BOTTOM CONTENT -->
     <div class="bottom-content">
-        <h2>TRANSACTIONS</h2>
-        <table class="table table-hover transaction-list">
-            <thead class="thead-dark">
-              <tr>
-                <th class="table-column">TYPE</th>
-                <th class="table-column">NUMBER</th>
-                <th class="table-column">DATE</th>
-                <th class="table-column">TOTAL</th>
-                <th class="table-column">BALANCE</th>
-                <th class="table-column">STATUS</th>
-              </tr>
-            </thead>
-            <tbody *ngIf="this.dataService.transactionDetailsResponse?.length > 0">
-              <!-- Loop to generate rows -->
-              <tr *ngFor="let transaction of this.dataService.transactionDetailsResponse" >
-                <td class="table-row">{{ transaction.typeofpay }}</td>
-                <td class="table-row">{{ transaction.invoicenumber }}</td>
-                <td class="table-row">{{ transaction.invoicedate }}</td>
-                <td class="table-row">{{ transaction.total }}</td>
-                <td class="table-row">{{ transaction.balance }}</td>
-                <td class="table-row">{{ transaction.paymentstatus }}</td>
-              </tr>
-            </tbody>
-          </table>
-          
-    </div>
+      <h2>TRANSACTIONS</h2>
+      <table mat-table [dataSource]="dataService.transactionDetailsResponse" class="mat-elevation-z8">
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef> TYPE </th>
+          <td mat-cell *matCellDef="let transaction">{{ transaction.typeofpay }}</td>
+        </ng-container>
 
-</div>
+        <ng-container matColumnDef="number">
+          <th mat-header-cell *matHeaderCellDef> NUMBER </th>
+          <td mat-cell *matCellDef="let transaction">{{ transaction.invoicenumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef> DATE </th>
+          <td mat-cell *matCellDef="let transaction">{{ transaction.invoicedate }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef> TOTAL </th>
+          <td mat-cell *matCellDef="let transaction">{{ transaction.total }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="balance">
+          <th mat-header-cell *matHeaderCellDef> BALANCE </th>
+          <td mat-cell *matCellDef="let transaction">{{ transaction.balance }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef> STATUS </th>
+          <td mat-cell *matCellDef="let transaction">{{ transaction.paymentstatus }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['type', 'number', 'date', 'total', 'balance', 'status']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['type', 'number', 'date', 'total', 'balance', 'status']"></tr>
+      </table>
+    </div>
+  </div>
 </ng-container>
 
 <ng-container *ngIf="dataService.partyHomePageSelectedTab === 'group'">
-<div class="grid-container">
+  <div class="grid-container">
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <div class="row">
-            <div class="col">
-              <input type="text" [(ngModel)]="searchGroup" class="form-control" placeholder="Search here..">
-            </div>
-            <div class="col-auto">
-              <button class="btn btn-warning add_party_btn" (click)="openAddPartyGroupModal('')">+ ADD PARTY GROUP</button>
-            </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Search here..</mat-label>
+            <input matInput [(ngModel)]="searchGroup">
+          </mat-form-field>
         </div>
+        <div class="col-auto">
+          <button mat-raised-button color="warn" (click)="openAddPartyGroupModal('')">+ ADD PARTY GROUP</button>
+        </div>
+      </div>
 
-        <table class="table table-hover party_list" *ngIf = "ispartygrouplistresponse">
-            <thead class="thead-dark">
-              <tr>
-                <th class="table-column">GROUP</th>
-                <th class="table-column">PARTY</th>
-              </tr>
-            </thead>
-            <tbody *ngIf = "dataService.partyGroupListResponse?.length > 0">
-              <!-- Loop to generate rows -->
-              <tr *ngFor="let party of dataService.partyGroupListResponse" (click)="groupHandleClick($event, party.partygroup)" [ngClass]="{ 'selectedParty-row-tr': isSelectedGroup(party.partygroup ) }">                
-                <td class="table-row" [ngClass]="{ 'selectedParty-row-td': isSelectedGroup(party.partygroup ) }">{{ party.partygroup }}</td>
-                <td class="table-row" [ngClass]="{ 'selectedParty-row-td': isSelectedGroup(party.partygroup ) }">{{ party.partygroupcount }}</td>
-              </tr>
-            </tbody>
-          </table>
+      <table mat-table *ngIf="ispartygrouplistresponse" [dataSource]="dataService.partyGroupListResponse" class="mat-elevation-z8">
+        <ng-container matColumnDef="group">
+          <th mat-header-cell *matHeaderCellDef> GROUP </th>
+          <td mat-cell *matCellDef="let party" (click)="groupHandleClick($event, party.partygroup)" [ngClass]="{ 'selectedParty-row-tr': isSelectedGroup(party.partygroup) }">
+            <span [ngClass]="{ 'selectedParty-row-td': isSelectedGroup(party.partygroup) }">{{ party.partygroup }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="partyCount">
+          <th mat-header-cell *matHeaderCellDef> PARTY </th>
+          <td mat-cell *matCellDef="let party">{{ party.partygroupcount }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['group', 'partyCount']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['group', 'partyCount']"></tr>
+      </table>
     </div>
 
     <!-- TOP CONTENT -->
-    <div class="top-content" *ngIf = "ispartygrouplistresponse">
-        <h2>{{groupname}}</h2>
-        <div class="top-content-row">
+    <div class="top-content" *ngIf="ispartygrouplistresponse">
+      <h2>{{ groupname }}</h2>
+      <div class="top-content-row">
             <div class="phone">Parties ({{this.totalPartyGroups}}) <span>({{this.totalPartyGroupCount}})</span> </div>
-        </div>
+      </div>
     </div>
 
     <!-- BOTTOM CONTENT -->
-    <div class="bottom-content" *ngIf = "ispartygrouplistresponse">
-        <h2>PARTIES</h2>
-        <table class="table table-hover transaction-list">
-            <thead class="thead-dark">
-              <tr>
-                <th class="table-column">PARTY</th>
-                <th class="table-column">AMOUNT</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Loop to generate rows -->
-              <tr *ngFor="let party of this.dataService.partyByGroupResponse" >
-                <td class="table-row">{{ party.partyname }}</td>
-                <td class="table-row">{{ party.toreceivefromparty - party.topayparty }}</td>
-              </tr>
-            </tbody>
-          </table>
-          
-    </div>
+    <div class="bottom-content" *ngIf="ispartygrouplistresponse">
+      <h2>PARTIES</h2>
+      <table mat-table [dataSource]="dataService.partyByGroupResponse" class="mat-elevation-z8">
+        <ng-container matColumnDef="party">
+          <th mat-header-cell *matHeaderCellDef> PARTY </th>
+          <td mat-cell *matCellDef="let party">{{ party.partyname }}</td>
+        </ng-container>
 
-</div>
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef> AMOUNT </th>
+          <td mat-cell *matCellDef="let party">{{ party.toreceivefromparty - party.topayparty }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['party', 'amount']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['party', 'amount']"></tr>
+      </table>
+    </div>
+  </div>
 </ng-container>

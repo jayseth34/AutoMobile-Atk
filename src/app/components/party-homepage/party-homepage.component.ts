@@ -74,6 +74,7 @@ export class PartyHomepageComponent {
   ];
 
   values = ['value1', 'value2', 'apple', 'mango'];
+  selectedTabIndex: number = 0;
 
   @ViewChild('app-add-party') addPartyModal: AddPartyComponent;
 
@@ -90,6 +91,7 @@ export class PartyHomepageComponent {
 
   ngOnInit() {
     // Listen to click events on the document
+    this.selectedTabIndex = this.dataService.partyHomePageSelectedTab === 'group' ? 1 : 0;
     this.registeredMobileNumber = parseInt(
       JSON.parse(localStorage.getItem('phonenumber') as string)
     );
@@ -107,7 +109,7 @@ export class PartyHomepageComponent {
         }
       });
 
-    this.selectTab('party');
+    this.selectTab(0);
 
     // this.getPartyListData();
     // if (this.partyList.length > 0) {
@@ -152,9 +154,10 @@ export class PartyHomepageComponent {
       });
   }
 
-  selectTab(tab: string) {
+  selectTab(index: number) {
     // this.partyHomePageSelectedTab = tab;
-    this.dataService.partyHomePageSelectedTab = tab;
+    this.selectedTabIndex = index;
+    this.dataService.partyHomePageSelectedTab = index === 1 ? 'group' : 'party';
     if (this.dataService.partyHomePageSelectedTab === 'party') {
       this.getPartyListData();
     } else if (this.dataService.partyHomePageSelectedTab === 'group') {
@@ -193,7 +196,7 @@ export class PartyHomepageComponent {
             });
   
             dialogRef.afterClosed().subscribe(result => {
-              this.selectTab('party');
+              this.selectTab(0);
             });
           } else {
             this.dataService.isPartyUpdate = false;
@@ -216,7 +219,7 @@ export class PartyHomepageComponent {
       });
   
       dialogRef.afterClosed().subscribe(result => {
-        this.selectTab('party');
+        this.selectTab(0);
       });
     }
   }
@@ -237,7 +240,7 @@ export class PartyHomepageComponent {
                 data: { groupDetails: groupname }, // Pass the data here
               });
               dialogRef.afterClosed().subscribe((result) => {
-                this.selectTab('group');
+                this.selectTab(1);
               });
             } else {
               this.dataService.isGroupUpdate = false;
@@ -255,7 +258,7 @@ export class PartyHomepageComponent {
         height: '35%',
       });
       dialogRef.afterClosed().subscribe((result) => {
-        this.selectTab('group');
+        this.selectTab(1);
       });
     }
   }
