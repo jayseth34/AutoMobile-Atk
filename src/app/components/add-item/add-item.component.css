@@ -1,6 +1,20 @@
 .main {
+    height: 100%; /* Ensure the div has height */
+    overflow: hidden; /* Hides the scrollbar */
     padding: 5%;
 }
+
+.scrollable-div {
+  height: 550px; /* or max-height */
+  overflow-y: scroll; /* Ensures scrolling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.scrollable-div::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
 
 /* 6 cols */
 .form-row {

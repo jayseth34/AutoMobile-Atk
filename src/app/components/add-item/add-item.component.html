@@ -10,6 +10,8 @@
 
     <div style="border-bottom: 1px solid gray; margin-bottom: 10px;"></div>
     
+    <div class="scrollable-div">
+
     <!-- item details -->
     <div class="item-details">
         <!-- FIRST ROW -->
@@ -75,6 +77,7 @@
         </li>
     </ul>
 
+    <div style="margin-left: 2%;">
     <!-- TAB1: Pricing -->
     <div class="pricing" id="pricing" *ngIf="selectedTab === 'pricing'">
         <!-- row0: mrp -->
@@ -250,6 +253,9 @@
             <div class="col"></div> <!-- Empty column -->
         </div>
     </div>
+    
+    </div>
+    </div>
 
 
     <div *ngIf="!dataService.isItemUpdate" class="">
@@ -257,6 +263,6 @@
         <input type="submit" class="btn btn-warning" style="margin-top: 2%; width: 150px;" value="SAVE" (click)="submit(false)">
     </div>
     <div *ngIf="dataService.isItemUpdate" class="">
-        <input type="submit" class="btn btn-warning add_party_btn" value="UPDATE" (click)="submit(false)">
+        <input type="submit" class="btn btn-warning" value="UPDATE" (click)="submit(false)">
     </div>
 </form>
