@@ -74,6 +74,19 @@ export class AddItemComponent {
     }
   }
 
+  assignCode(){
+    let body = {
+      registeredphonenumber: this.registeredPhoneNmber
+    }
+    this.api.assignCode(body).subscribe((response:any) =>{
+      if(response.status=='SUCCESS'){
+        if(!this.cs.isUndefineOrNull(response.assignedcode)){
+          this.addItemForm.get('itemCodeControl')?.setValue(response.assignedcode); // Replace 'New Value' with whatever you need
+        }
+      }
+    })
+  }
+
   categorygroup(){
     this.api.GetCategory(this.registeredPhoneNmber).subscribe((response:any) => {
       if(response.status == "SUCCESS") {
@@ -111,7 +124,8 @@ export class AddItemComponent {
       _locationControl: new FormControl(this.data.itemDetails?._location || ''),
       baseunit: new FormControl(this.data.itemDetails?.baseunit || ''),
       secondaryunit: new FormControl(this.data.itemDetails?.secondaryunit || ''),
-      conversionrates: new FormControl(this.data.itemDetails?.conversionrates || 0)
+      conversionrates: new FormControl(this.data.itemDetails?.conversionrates || 0),
+      mrpControl: new FormControl(this.data.itemDetails?.mrp || 0),
     });
   }
 
@@ -141,7 +155,8 @@ export class AddItemComponent {
         remainingQuantityControl: itemDetails.remainingQuantity,
         baseunit: itemDetails.baseunit,
         secondaryunit: itemDetails.secondaryunit,
-        conversionrates: itemDetails.conversionrates
+        conversionrates: itemDetails.conversionrates,
+        mrp: itemDetails.mrp
       });
       
   }
@@ -210,7 +225,7 @@ export class AddItemComponent {
         secondaryunit: this.addItemForm.value.secondaryunit,
         conversionrates: this.addItemForm.value.conversionrates,
         category: this.addItemForm.value.categoryControl,
-        itemCode: this.addItemForm.value.itemCodeControl,
+        itemCode: String(this.addItemForm.value.itemCodeControl),
         salePrice: this.addItemForm.value.salePriceControl,
         saleWithOrWithoutTax: this.addItemForm.value.saleWithOrWithoutTaxControl,
         discountOnSalePrice: this.addItemForm.value.discountOnSalePriceControl,
@@ -229,7 +244,8 @@ export class AddItemComponent {
         _location: this.addItemForm.value._locationControl,
         remainingquantity: this.addItemForm.value.openingQuantityControl,
         isitemupdate: this.dataService.isItemUpdate,
-        olditemname: this.addItemForm.value.itemNameControl
+        olditemname: this.addItemForm.value.itemNameControl,
+        mrp: this.addItemForm.value.mrpControl
       }
       if(this.dataService.isItemUpdate){
         body.olditemname = this.dataService.oldItemName
@@ -287,4 +303,5 @@ export class AddItemComponent {
   get asOfDateControl() { return this.addItemForm.get('asOfDateControl')}
   get minimumStockToMaintainControl() { return this.addItemForm.get('minimumStockToMaintainControl')}
   get _locationControl() { return this.addItemForm.get('_locationControl')}
+  get mrpControl() { return this.addItemForm.get('mrpControl')}
 }

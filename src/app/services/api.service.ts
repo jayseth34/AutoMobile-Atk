@@ -129,6 +129,10 @@ export class ApiService {
 
   ///////////////////////// ITEMSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 
+  assignCode(body: any) {
+    return this.cs.Post("Item/AssignCode", body);
+  }
+
   AddItemDetails(body: any) {
     return this.cs.Post("Item/SaveOrUpdateItem", body);
   }

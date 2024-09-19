@@ -18,6 +18,8 @@ import { CommonService } from 'src/app/services/common.service';
 })
 
 export class PartyHomepageComponent {
+  totalPartyGroups: any;
+  totalPartyGroupCount: any;
   selectedGroup: any = '';
   selectedParty: any = ''; 
   searchParty: string = '';
@@ -160,6 +162,10 @@ export class PartyHomepageComponent {
       this.api
         .GetPartyGroup(this.registeredMobileNumber).subscribe((response: any) => {
           if (response.status == 'SUCCESS' && response.getPartyGroupList.length > 0) {
+            this.totalPartyGroups = response.getPartyGroupList.length;
+            this.totalPartyGroupCount = response.getPartyGroupList.reduce((sum: number, group: { partygroup: string, partygroupcount: number }) => {
+              return sum + group.partygroupcount;
+          }, 0);          
             this.selectedGroup = response.getPartyGroupList[0].partygroup
             this.dataService.partyGroupListResponse = response.getPartyGroupList;
             this.GetPartyByGroupData(response.getPartyGroupList[0].partygroup)

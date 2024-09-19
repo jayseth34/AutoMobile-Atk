@@ -37,6 +37,7 @@ export class PlansComponent implements OnInit {
       this.api.createOrder(0, 'INR', this.planType, this.registeredphonenumber).subscribe((response: any) => {
         if(response.status == "SUCCESS"){
           localStorage.setItem("planType", JSON.stringify(this.planType))
+          localStorage.setItem("expiryDate", JSON.stringify(response.expiryDate));
           this.activePlan = JSON.parse(localStorage.getItem("planType") as string);
           alert('Free trial activated');
           location.reload(); 

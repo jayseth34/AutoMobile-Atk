@@ -29,3 +29,22 @@ form {
   width: 20%;
   height: 100%;
 }
+
+.image-box {
+  border: 1px solid #ccc; /* Light gray border */
+  padding: 10px;          /* Padding around the image */
+  border-radius: 5px;     /* Rounded corners */
+  display: inline-block;   /* Center the box */
+  margin-top: 10px;       /* Space between heading and image */
+  margin-left: 15%;
+}
+
+.img-fluid {
+  max-width: 80%; /* Responsive image */
+  /* margin-left: 25%; */
+  height: auto;    /* Maintain aspect ratio */
+}
+
+.text-center {
+  text-align: center; /* Center text */
+}

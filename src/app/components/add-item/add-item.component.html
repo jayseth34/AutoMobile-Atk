@@ -37,43 +37,32 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Second Row -->
-        <div class="row second-row">
-            <!-- Category Dropdown Column -->
+
+        <div class="form-row three-columns">
+            <!-- First Column -->
             <div class="col">
-              <div class="form-row party-group">
                 <div class="form-floating">
-                  <mat-form-field class="partyGroupDropDown">
-                    <mat-label>Category</mat-label>
-                    <input type="text" matInput [matAutocomplete]="auto" formControlName="categoryControl" oninput="this.value = this.value.toUpperCase()">
-                    <mat-autocomplete #auto="matAutocomplete">
-                      <mat-option (click)="openAddItemCategoryModal()">+ ADD CATEGORY</mat-option>
-                      <mat-option *ngFor="let category of categoryList" [value]="category.category">{{ category.category }}</mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                </div>
-              </div>
+                    <mat-form-field style="width: 100%;">
+                      <mat-label>Category</mat-label>
+                      <input type="text" matInput [matAutocomplete]="auto" formControlName="categoryControl" oninput="this.value = this.value.toUpperCase()">
+                      <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option (click)="openAddItemCategoryModal()">+ ADD CATEGORY</mat-option>
+                        <mat-option *ngFor="let category of categoryList" [value]="category.category">{{ category.category }}</mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
             </div>
-            <!-- Item Code Input Field Column -->
+        
+            <!-- Second Column -->
             <div class="col">
-                <div class="form-floating">
+                <div class="form-floating" style="position: relative;">
                     <input type="text" class="form-control item-code" placeholder="Item Code" id="item-code" name="item-code" formControlName="itemCodeControl">
+                    <button style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);" class="btn btn-secondary" name="addcode" id="addcode" (click)="assignCode()">ADD CODE</button>
                     <label for="item-code">Item Code</label>
                 </div>
             </div>
-            
-            <!-- Add Item Image Column -->
-            <!-- <div class="col">
-                <label for="itemImage" style="color: blue;">Add Item Image</label>
-                <input type="file" id="itemImage" class="form-control-file">
-            </div> -->
-            <div class="col select-unit-btn">
-                <div class="form-floating d-flex justify-content-center align-items-center">
-                    <input type="button" style="margin-right:50%; margin-top: 5%;" class="btn btn-secondary" name="assign-code" id="assign-code" value="ASSIGN CODE">
-                </div>
-            </div>
         </div>
+
     </div>
 
     <!-- two tabs -->
@@ -88,6 +77,22 @@
 
     <!-- TAB1: Pricing -->
     <div class="pricing" id="pricing" *ngIf="selectedTab === 'pricing'">
+        <!-- row0: mrp -->
+        <div class="sale-price">
+            <h2>MRP</h2>
+        </div>
+        <div class="container">
+            <div class="row">
+              <div class="col p-0 h-300">
+                    <div class="form-floating">
+                        <input type="number" class="form-control sale-price-input" placeholder="MRP" id="mrp" name="mrp" formControlName="mrpControl">
+                        <label for="sale-price">MRP(&#8377;)</label>
+                    </div>
+              </div>
+            </div>
+
+        </div>
+
         <div class="sale-price">
             <h2>Sale Price</h2>
         </div>
@@ -247,11 +252,11 @@
     </div>
 
 
-    <div *ngIf="!dataService.isItemUpdate" class="position-fixed bottom-0 submit-btns">
+    <div *ngIf="!dataService.isItemUpdate" class="">
         <!-- <input type="submit" style="margin-right: 20px;" class="btn btn-warning add_party_btn" value="SAVE & NEW" (click)="submit(true)"> -->
-        <input type="submit" class="btn btn-warning add_party_btn" value="SAVE" (click)="submit(false)">
+        <input type="submit" class="btn btn-warning" style="margin-top: 2%; width: 150px;" value="SAVE" (click)="submit(false)">
     </div>
-    <div *ngIf="dataService.isItemUpdate" class="position-fixed bottom-0 submit-btns">
+    <div *ngIf="dataService.isItemUpdate" class="">
         <input type="submit" class="btn btn-warning add_party_btn" value="UPDATE" (click)="submit(false)">
     </div>
 </form>
