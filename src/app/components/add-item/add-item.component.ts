@@ -51,6 +51,8 @@ export class AddItemComponent {
 
   categoryList: any;
   registeredPhoneNmber:any;
+  remainingquant: number;
+  initialopeningquant: number;
 
   constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, private api: ApiService, public cs: CommonService, public dialogRef: MatDialogRef<AddItemComponent>, public cdr: ChangeDetectorRef) {}
 
@@ -130,6 +132,8 @@ export class AddItemComponent {
   }
 
   populateForm(itemDetails: any) {
+    debugger
+    this.remainingquant = itemDetails.remainingquantity;
       this.addItemForm.patchValue({
         itemNameControl: this.data.itemName,
         itemHsnControl: itemDetails.itemhsn,
@@ -152,12 +156,13 @@ export class AddItemComponent {
         minimumStockToMaintainControl: itemDetails.minimumstocktomaintain,
         _locationControl: itemDetails._location,
         typeOfPayControl: itemDetails.typeOfPay,
-        remainingQuantityControl: itemDetails.remainingQuantity,
+        remainingQuantityControl: itemDetails.remainingquantity,
         baseunit: itemDetails.baseunit,
         secondaryunit: itemDetails.secondaryunit,
         conversionrates: itemDetails.conversionrates,
         mrp: itemDetails.mrp
       });
+      this.initialopeningquant = itemDetails.openingquantity;
       
   }
 
@@ -218,6 +223,10 @@ export class AddItemComponent {
 
   AddItemData(body: any): Promise<void> {
     console.log("BEFore return");
+    if(this.dataService.isItemUpdate){
+      var val = this.initialopeningquant - this.addItemForm.value.openingQuantityControl
+      this.remainingquant = this.remainingquant - val
+    }
     return new Promise((resolve) => {
       console.log("after return");
       let body = {
@@ -241,12 +250,12 @@ export class AddItemComponent {
         purchaseWithOrWithoutTax: this.addItemForm.value.purchaseWithOrWithoutTaxControl,
         taxRate: this.addItemForm.value.taxRateControl,
         openingQuantity: this.addItemForm.value.openingQuantityControl,
-        remainingQuantity: this.addItemForm.value.remainingQuantityControl,
+        remainingQuantity: this.dataService.isItemUpdate? this.remainingquant : this.addItemForm.value.remainingQuantityControl,
         atPrice: this.addItemForm.value.atPriceControl,
         asOfDate: this.addItemForm.value.asOfDateControl,
         minimumStockToMaintain: this.addItemForm.value.minimumStockToMaintainControl,
         _location: this.addItemForm.value._locationControl,
-        remainingquantity: this.addItemForm.value.openingQuantityControl,
+        remainingquantity: this.dataService.isItemUpdate? this.remainingquant : this.addItemForm.value.openingQuantityControl,
         isitemupdate: this.dataService.isItemUpdate,
         olditemname: this.addItemForm.value.itemNameControl,
         mrp: this.addItemForm.value.mrpControl
