@@ -47,7 +47,7 @@ export class AddPartyComponent implements OnInit {
   additionalFieldName2: any = '';
   additionalFieldName3: any = '';
   additionalFieldName4: any = '';  
-  //For additional column's vale
+  //For additional column's value
   additionalFieldName1Value:any = '';
   additionalFieldName2Value: any = '';
   additionalFieldName3Value: any = '';
@@ -56,10 +56,12 @@ export class AddPartyComponent implements OnInit {
   labelText: string = 'No Limit';
   showPrint: string= 'Dont show in print';
   selectedOption:string ='';
+    //For additional column's checkbox
   additionalField1Checked: boolean = false;
   additionalField2Checked: boolean = false;
   additionalField3Checked: boolean = false;
   additionalField4Checked: boolean = false;
+    //For additional column's flag
   isAdditionalField1Checked: boolean = false;
   isAdditionalField2Checked: boolean = false;
   isAdditionalField3Checked: boolean = false;
@@ -108,6 +110,7 @@ export class AddPartyComponent implements OnInit {
     }
     if(this.data.status='SUCCESS'){
       this.populateForm(this.data.partyDetails) 
+      this.reverseMapping(this.data.partyDetails)
       if (!this.cs.isUndefineOrNull(this.data.partyDetails.topayorreceive)) {
         this.toPayOrReceive = this.data.partyDetails.topayorreceive.toUpperCase();
       }
@@ -389,144 +392,63 @@ export class AddPartyComponent implements OnInit {
       this.toreceivefromparty = this.addPartyForm.value.openingBalanceControl;
     }
   }
-
+  
   toggleAdditionalField(event: any, field: string) {
     const isChecked = event.target.checked;
+    let nameControl: AbstractControl | null = null;
+    let valueControl: AbstractControl | null = null;
+  
     switch (field) {
-        case 'additionalField1':
-            this.isAdditionalField1Checked = isChecked;
-            const nameControl1 = this.addPartyForm.get('additionalFieldName1Control');
-            const valueControl1 = this.addPartyForm.get('additionalField1ValueControl');
-            
-            if (this.isAdditionalField1Checked) {
-                if (nameControl1) {
-                    nameControl1.setValidators([Validators.required]);
-                    if (!nameControl1.value) {
-                        nameControl1.setValue('');
-                    }
-                }
-                if (valueControl1) {
-                    valueControl1.setValidators([Validators.required]);
-                    if (!valueControl1.value) {
-                        valueControl1.setValue('');
-                    }
-                }
-            } else {
-                if (nameControl1) {
-                    nameControl1.clearValidators();
-                    nameControl1.setValue('');
-                }
-                if (valueControl1) {
-                    valueControl1.clearValidators();
-                    valueControl1.setValue('');
-                }
-            }
-            break;
-
-        case 'additionalField2':
-            this.isAdditionalField2Checked = isChecked;
-            const nameControl2 = this.addPartyForm.get('additionalFieldName2Control');
-            const valueControl2 = this.addPartyForm.get('additionalField2ValueControl');
-            
-            if (this.isAdditionalField2Checked) {
-                if (nameControl2) {
-                    nameControl2.setValidators([Validators.required]);
-                    if (!nameControl2.value) {
-                        nameControl2.setValue('');
-                    }
-                }
-                if (valueControl2) {
-                    valueControl2.setValidators([Validators.required]);
-                    if (!valueControl2.value) {
-                        valueControl2.setValue('');
-                    }
-                }
-            } else {
-                if (nameControl2) {
-                    nameControl2.clearValidators();
-                    nameControl2.setValue('');
-                }
-                if (valueControl2) {
-                    valueControl2.clearValidators();
-                    valueControl2.setValue('');
-                }
-            }
-            break;
-
-        case 'additionalField3':
-            this.isAdditionalField3Checked = isChecked;
-            const nameControl3 = this.addPartyForm.get('additionalFieldName3Control');
-            const valueControl3 = this.addPartyForm.get('additionalField3ValueControl');
-            
-            if (this.isAdditionalField3Checked) {
-                if (nameControl3) {
-                    nameControl3.setValidators([Validators.required]);
-                    if (!nameControl3.value) {
-                        nameControl3.setValue('');
-                    }
-                }
-                if (valueControl3) {
-                    valueControl3.setValidators([Validators.required]);
-                    if (!valueControl3.value) {
-                        valueControl3.setValue('');
-                    }
-                }
-            } else {
-                if (nameControl3) {
-                    nameControl3.clearValidators();
-                    nameControl3.setValue('');
-                }
-                if (valueControl3) {
-                    valueControl3.clearValidators();
-                    valueControl3.setValue('');
-                }
-            }
-            break;
-
-        case 'additionalField4':
-            this.isAdditionalField4Checked = isChecked;
-            const nameControl4 = this.addPartyForm.get('additionalFieldName4Control');
-            const valueControl4 = this.addPartyForm.get('additionalField4ValueControl');
-            
-            if (this.isAdditionalField4Checked) {
-                if (nameControl4) {
-                    nameControl4.setValidators([Validators.required]);
-                    if (!nameControl4.value) {
-                        nameControl4.setValue('');
-                    }
-                }
-                if (valueControl4) {
-                    valueControl4.setValidators([Validators.required]);
-                    if (!valueControl4.value) {
-                        valueControl4.setValue('');
-                    }
-                }
-            } else {
-                if (nameControl4) {
-                    nameControl4.clearValidators();
-                    nameControl4.setValue('');
-                }
-                if (valueControl4) {
-                    valueControl4.clearValidators();
-                    valueControl4.setValue('');
-                }
-            }
-            break;
-
-        default:
-            break;
+      case 'additionalField1':
+        this.isAdditionalField1Checked = isChecked;
+        nameControl = this.addPartyForm.get('additionalFieldName1Control');
+        valueControl = this.addPartyForm.get('additionalField1ValueControl');
+        break;
+  
+      case 'additionalField2':
+        this.isAdditionalField2Checked = isChecked;
+        nameControl = this.addPartyForm.get('additionalFieldName2Control');
+        valueControl = this.addPartyForm.get('additionalField2ValueControl');
+        break;
+  
+      case 'additionalField3':
+        this.isAdditionalField3Checked = isChecked;
+        nameControl = this.addPartyForm.get('additionalFieldName3Control');
+        valueControl = this.addPartyForm.get('additionalField3ValueControl');
+        break;
+  
+      case 'additionalField4':
+        this.isAdditionalField4Checked = isChecked;
+        nameControl = this.addPartyForm.get('additionalFieldName4Control');
+        valueControl = this.addPartyForm.get('additionalField4ValueControl');
+        break;
+  
+      default:
+        break;
     }
-
-    // Update the validation status
-    // this.addPartyForm.get('additionalFieldName1Control')?.updateValueAndValidity();
-    // this.addPartyForm.get('additionalField1ValueControl')?.updateValueAndValidity();
-    // this.addPartyForm.get('additionalFieldName2Control')?.updateValueAndValidity();
-    // this.addPartyForm.get('additionalField2ValueControl')?.updateValueAndValidity();
-    // this.addPartyForm.get('additionalFieldName3Control')?.updateValueAndValidity();
-    // this.addPartyForm.get('additionalField3ValueControl')?.updateValueAndValidity();
-    // this.addPartyForm.get('additionalFieldName4Control')?.updateValueAndValidity();
-    // this.addPartyForm.get('additionalField4ValueControl')?.updateValueAndValidity();
-}
+  
+    if (nameControl && valueControl) {
+      if (isChecked) {
+        // Enable and set validators when checkbox is checked
+        nameControl.setValidators([Validators.required]);
+        valueControl.setValidators([Validators.required]);
+        nameControl.enable();
+        valueControl.enable();
+      } else {
+        // Disable and clear validators when checkbox is unchecked
+        nameControl.clearValidators();
+        valueControl.clearValidators();
+        nameControl.setValue('');
+        valueControl.setValue('');
+        nameControl.disable();
+        valueControl.disable();
+      }
+      // Update form validity
+      nameControl.updateValueAndValidity();
+      valueControl.updateValueAndValidity();
+    }
+  }
+  
 
   updateValue(ev: any) {
     this.toPayOrReceive = ev.target.value;
@@ -546,6 +468,34 @@ export class AddPartyComponent implements OnInit {
     });
   }
 
+  reverseMapping(response: any): void {
+    const fields = [
+      { name: 'additionalfieldname1', value: 'additionalfieldname1value', flag: 'isAdditionalField1Checked', nameControl: 'additionalFieldName1Control', valueControl: 'additionalField1ValueControl' },
+      { name: 'additionalfieldname2', value: 'additionalfieldname2value', flag: 'isAdditionalField2Checked', nameControl: 'additionalFieldName2Control', valueControl: 'additionalField2ValueControl' },
+      { name: 'additionalfieldname3', value: 'additionalfieldname3value', flag: 'isAdditionalField3Checked', nameControl: 'additionalFieldName3Control', valueControl: 'additionalField3ValueControl' },
+      { name: 'additionalfieldname4', value: 'additionalfieldname4value', flag: 'isAdditionalField4Checked', nameControl: 'additionalFieldName4Control', valueControl: 'additionalField4ValueControl' }
+    ];
+  
+    fields.forEach(field => {
+      const nameValue = response[field.name];
+      const fieldValue = response[field.value];
+  
+      const isFieldValid = !this.cs.isUndefineOrNull(nameValue) && !this.cs.isUndefineOrNull(fieldValue);
+  
+      (this as any)[field.flag] = isFieldValid;
+  
+      if (isFieldValid) {
+        this.addPartyForm.get(field.nameControl)?.setValue(nameValue);
+        this.addPartyForm.get(field.valueControl)?.setValue(fieldValue);
+      } else {
+        this.addPartyForm.get(field.nameControl)?.setValue('');
+        this.addPartyForm.get(field.valueControl)?.setValue('');
+      }
+    });
+  }
+  
+  
+
   get partyNameControl() { return this.addPartyForm.get('partyNameControl')}
   get gstControl() { return this.addPartyForm.get('gstControl')}
   get phoneNumberControl() { return this.addPartyForm.get('phoneNumberControl')}
@@ -563,10 +513,10 @@ export class AddPartyComponent implements OnInit {
   get additionalFieldName2Control() { return this.addPartyForm.get('additionalFieldName2Control')}
   get additionalFieldName3Control() { return this.addPartyForm.get('additionalFieldName3Control')}
   get additionalFieldName4Control() { return this.addPartyForm.get('additionalFieldName4Control')}
-  get additionalFieldName1ValueControl() { return this.addPartyForm.get('additionalFieldName1ValueControl')}
-  get additionalFieldName2ValueControl() { return this.addPartyForm.get('additionalFieldName2ValueControl')}
-  get additionalFieldName3ValueControl() { return this.addPartyForm.get('additionalFieldName3ValueControl')}
-  get additionalFieldName4ValueControl() { return this.addPartyForm.get('additionalFieldName4ValueControl')}
+  get additionalField1ValueControl() { return this.addPartyForm.get('additionalField1ValueControl')}
+  get additionalField2ValueControl() { return this.addPartyForm.get('additionalField2ValueControl')}
+  get additionalField3ValueControl() { return this.addPartyForm.get('additionalField3ValueControl')}
+  get additionalField4ValueControl() { return this.addPartyForm.get('additionalField4ValueControl')}
   get additionalField1CheckedControl() { return this.addPartyForm.get('additionalField1CheckedControl')}
   get additionalField2CheckedControl() { return this.addPartyForm.get('additionalField2CheckedControl')}
   get additionalField3CheckedControl() { return this.addPartyForm.get('additionalField3CheckedControl')}
