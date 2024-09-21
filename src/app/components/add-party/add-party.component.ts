@@ -211,6 +211,34 @@ export class AddPartyComponent implements OnInit {
     this.selectedTab = tab;
   }
 
+  getSelectedIndex(): number {
+    switch (this.selectedTab) {
+      case 'gstAndAddress':
+        return 0;
+      case 'creditAndBalance':
+        return 1;
+      case 'additionalFields':
+        return 2;
+      default:
+        return 0;
+    }
+  }
+
+  onTabChange(index: number): void {
+    // This updates the `selectedTab` when the tab is changed
+    switch (index) {
+      case 0:
+        this.selectedTab = 'gstAndAddress';
+        break;
+      case 1:
+        this.selectedTab = 'creditAndBalance';
+        break;
+      case 2:
+        this.selectedTab = 'additionalFields';
+        break;
+    }
+  }
+
   toggleShippingAddress() {
     this.isShippingAddressEnabled = !this.isShippingAddressEnabled;
     if(!this.isShippingAddressEnabled) {

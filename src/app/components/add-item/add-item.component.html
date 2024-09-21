@@ -17,7 +17,7 @@
         <!-- FIRST ROW -->
         <div class="form-row three-columns">
             <!-- First Column -->
-            <div class="col">
+            <div class="col-5">
                 <div class="form-floating">
                     <input type="text" class="form-control item-name" placeholder="Item Name*" id="itemName" name="itemName" formControlName="itemNameControl" 
                     [class.is-invalid]="itemNameControl?.errors?.['required'] && (itemNameControl?.touched )" oninput="this.value = this.value.toUpperCase()">
@@ -26,7 +26,7 @@
             </div>
         
             <!-- Second Column -->
-            <div class="col">
+            <div class="col-5">
                 <div class="form-floating">
                     <input type="text" class="form-control item-hsn" placeholder="Item HSN" id="item-hsn" name="item-hsn" formControlName="itemHsnControl" oninput="this.value = this.value.toUpperCase()">
                     <label for="item-hsn">Item HSN</label>
@@ -34,16 +34,16 @@
             </div>
 
             <!-- Third Column -->
-            <div class="col select-unit-btn">
+            <div class="col-auto select-unit-btn">
                 <div class="form-floating d-flex justify-content-center align-items-center">
-                    <input type="button" style="margin-right:50%; margin-top: 5%;" class="btn btn-secondary" name="selectunit" id="selectunit" value="SELECT UNIT" (click)="openSelectUnitModal()">
+                    <input type="button" style="height: 50px; margin-top: 3px;" class="btn btn-secondary" name="selectunit" id="selectunit" value="SELECT UNIT" (click)="openSelectUnitModal()">
                 </div>
             </div>
         </div>
 
-        <div class="form-row three-columns">
+        <div class="form-row g-0 three-columns">
             <!-- First Column -->
-            <div class="col">
+            <div class="col-5">
                 <div class="form-floating">
                     <mat-form-field style="width: 100%;">
                       <mat-label>Category</mat-label>
@@ -57,7 +57,7 @@
             </div>
         
             <!-- Second Column -->
-            <div class="col">
+            <div class="col-5" style="margin-right: 16.5% ;">
                 <div class="form-floating" style="position: relative;">
                     <input type="text" class="form-control item-code" placeholder="Item Code" id="item-code" name="item-code" formControlName="itemCodeControl">
                     <button style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);" class="btn btn-secondary" name="addcode" id="addcode" (click)="assignCode()">ADD CODE</button>
@@ -69,21 +69,17 @@
     </div>
 
     <!-- two tabs -->
-    <ul class="nav nav-tabs tabs">
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="selectedTab === 'pricing'" (click)="selectTab('pricing')">Pricing</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="selectedTab === 'stock'" (click)="selectTab('stock')">Stock</a>
-        </li>
-    </ul>
+    <mat-tab-group [selectedIndex]="selectedTab === 'pricing' ? 0 : 1" (selectedIndexChange)="selectTabIndex($event)">
+        <mat-tab label="PRICING"></mat-tab>
+        <mat-tab label="STOCK"></mat-tab>
+      </mat-tab-group>
 
     <div style="margin-left: 2%;">
     <!-- TAB1: Pricing -->
     <div class="pricing scroll" id="pricing" *ngIf="selectedTab === 'pricing'">
         <!-- row0: mrp -->
         <div class="sale-price">
-            <h2>MRP</h2>
+          <h2>MRP</h2>
         </div>
         <div class="container">
             <div class="row">
@@ -93,16 +89,16 @@
                         <label for="sale-price">MRP(&#8377;)</label>
                     </div>
               </div>
-            </div>
+          </div>
 
         </div>
-
+      
         <div class="sale-price">
-            <h2>Sale Price</h2>
+          <h2>Sale Price</h2>
         </div>
         <!-- row1: sale price -->
         <div class="container">
-            <div class="row">
+          <div class="row">
               <div class="col p-0 h-300">
                     <div class="form-floating">
                         <input type="text" class="form-control sale-price-input" placeholder="Sale Price" id="sale-price" name="sale-price" formControlName="salePriceControl">
@@ -122,17 +118,17 @@
                     <div class="form-floating">
                         <input type="text" class="form-control disc-sale-price" placeholder="Disc. on Sale Price" id="disc-sale-price" name="disc-sale-price" formControlName="discountOnSalePriceControl">
                         <label for="sale-price">Discount on Sale Price</label>
-                    </div>
-                </div>
+            </div>
+          </div>
                 <div class="col-auto p-0">
                   <select class="form-select" formControlName="percentageOrAmountControl">
                     <option selected>Percentage</option>
                     <option>Amount</option>
                   </select>
-                </div>
             </div>
+          </div>
         </div>
-        
+      
         <!-- row2: Wholesale Price -->
         <div>
             <a style="text-decoration:none ;" type="button" (click)="toggleWholesalePrice()" class="wholesaletitle">
@@ -167,7 +163,7 @@
         </div>
 
         <!-- row3:Purchase Price -->
-        <div class="container">
+          <div class="container">
             <div class="row">
                 <h2 style="padding-left: 0%;">Purchase Price</h2>
               <div class="col p-0">
@@ -183,7 +179,7 @@
                 </select>
               </div>
             </div>
-
+      
             <div class="row" style="margin-left: 5%;">
                 <h2 class="text-end">Taxes</h2>
                 <div class="col p-0">
@@ -205,55 +201,55 @@
                         <option>GST@28%</option>
                         <option>Exempt</option>
                     </select>
-                </div>
             </div>
+          </div>
         </div>
-    </div>
-
-    <!-- TAB2: STOCK -->
-    <div class="stock" id="stock" *ngIf="selectedTab === 'stock'">
+      </div>
+      
+      <!-- TAB2: STOCK -->
+      <div class="stock" id="stock" *ngIf="selectedTab === 'stock'">
         <div class="form-row three-columns">
-            <div class="col">
+          <div class="col">
                 <div class="form-floating">
                     <input type="text" class="form-control openingquantity" placeholder="Opening Quantity" id="openingquantity" name="openingquantity" formControlName="openingQuantityControl">
                     <label for="openingquantity">Opening Quantity</label>
                 </div>
-            </div>
-        
-            <div class="col">
+          </div>
+      
+          <div class="col">
                 <div class="form-floating">
                     <input type="text" class="form-control at-price" placeholder="At Price" id="atprice" name="atprice" formControlName="atPriceControl">
                     <label for="atprice">At Price(&#8377;)</label>
                 </div>
-            </div>
-        
-            <div class="col">
+          </div>
+      
+          <div class="col">
                 <div class="form-floating">
                     <input type="date" class="form-control asofdate" placeholder="As Of Date" id="asofdate" name="asofdate" formControlName="asOfDateControl">
                     <label for="asofdate">As of Date</label>
                 </div>
-            </div>
+          </div>
         </div>
-
+      
         <div class="form-row two-columns">
-            <div class="col">
+          <div class="col">
                 <div class="form-floating">
                     <input type="text" class="form-control minstock" placeholder="Min Stock to Maintain" id="minstock" name="minstock" formControlName="minimumStockToMaintainControl">
                     <label for="minstock">Min Stock to Maintain</label>
                 </div>
-            </div>
-        
-            <div class="col">
+          </div>
+      
+          <div class="col">
                 <div class="form-floating">
                     <input type="text" class="form-control location" placeholder="Location" id="location" name="location" formControlName="_locationControl" 
                     oninput="this.value = this.value.toUpperCase()">
                     <label for="location">Location</label>
                 </div>
-            </div>
+          </div>
         
             <div class="col"></div> <!-- Empty column -->
         </div>
-    </div>
+      </div>
     
     </div>
     </div>

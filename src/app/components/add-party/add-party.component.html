@@ -9,27 +9,31 @@
   <!-- First row with three input columns -->
       <!-- Party Name Field --> 
     <div class="form-row three-columns">
-      <div class="form-floating">
-        <input type="text" class="form-control party-name" placeholder="Party Name*" id="partyName" name="partyName" formControlName="partyNameControl"
-        [class.is-invalid]="partyNameControl?.errors?.['required'] && (partyNameControl?.touched || ifFormSubmitted)" oninput="this.value = this.value.toUpperCase()">
-        <label for="partyName">Party Name*</label>
-        <!-- <div>
-          <div *ngIf="addPartyForm.get('partyNameControl')?.errors?.['required']">This is required field.</div>
-        </div> -->
+      <div class="col-4">
+        <div class="form-floating">
+          <input type="text" class="form-control" placeholder="Party Name*" id="partyName" name="partyName" formControlName="partyNameControl"
+          [class.is-invalid]="partyNameControl?.errors?.['required'] && (partyNameControl?.touched || ifFormSubmitted)" oninput="this.value = this.value.toUpperCase()">
+          <label for="partyName">Party Name*</label>
+          <!-- <div>
+            <div *ngIf="addPartyForm.get('partyNameControl')?.errors?.['required']">This is required field.</div>
+          </div> -->
+        </div>
       </div>
-
       <!-- <div *ngIf="partyNameControl?.errors?.['required'] && (partyNameControl?.dirty || partyNameControl?.touched)">
         Party Name cannot be blank
       </div> -->
 
       <!-- GSTIN Field -->
+      <div class="col-4 "> 
       <div class="form-floating">
         <input type="text" class="form-control gst-in" placeholder="GSTIN" id="floatingPassword" name="gstin" formControlName="gstControl" 
         oninput="this.value = this.value.toUpperCase()">
         <label for="floatingPassword">GSTIN</label>
       </div>
+    </div>
       
       <!-- Phone no. Field -->
+      <div class="col-4">
       <div class="form-floating">
         <input type="text" class="form-control phone-num" placeholder="Phone Number" id="phoneNo" name="phoneNo" formControlName="phoneNumberControl" 
         [class.is-invalid]="phoneNumberControl?.errors">
@@ -39,10 +43,12 @@
         </div>
       </div>
     </div>
+    </div>
 
-    <div class="form-row party-group">
+    <div class="form-row three-columns">
+      <div class="col-4">
       <div class="form-floating">
-        <mat-form-field class="partyGroupDropDown">
+        <mat-form-field style="width: 100%;">
           <mat-label>Party Group</mat-label>
           <input type="text" matInput [matAutocomplete]="auto" formControlName="partyGroupControl" oninput="this.value = this.value.toUpperCase()">
           <mat-autocomplete #auto="matAutocomplete">
@@ -51,20 +57,19 @@
           </mat-autocomplete>
         </mat-form-field>
       </div>
+    </div> 
     </div>
   
     <!-- three tabs -->
-    <ul class="nav nav-tabs tabs">
-      <li class="nav-item">
-        <a class="nav-link" [class.active]="selectedTab === 'gstAndAddress'" (click)="selectTab('gstAndAddress')">GST & Address</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [class.active]="selectedTab === 'creditAndBalance'" (click)="selectTab('creditAndBalance')">Credit & Balance</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [class.active]="selectedTab === 'additionalFields'" (click)="selectTab('additionalFields')">Additional Fields</a>
-      </li>
-    </ul>
+    <mat-tab-group [selectedIndex]="getSelectedIndex()" (selectedIndexChange)="onTabChange($event)">
+      <mat-tab label="GST & ADDRESS">
+      </mat-tab>
+      <mat-tab label="CREDIT & BALANCE">
+      </mat-tab>
+      <mat-tab label="ADDITIONAL FIELDS">
+      </mat-tab>
+    </mat-tab-group>
+     
     
     <!-- TAB1: GST -->
     <div class="gstAndAddressForm" id="gstAndAddress" *ngIf="selectedTab === 'gstAndAddress'">

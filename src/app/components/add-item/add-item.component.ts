@@ -161,8 +161,12 @@ export class AddItemComponent {
       
   }
 
-  selectTab(tab: string) {
-    this.selectedTab = tab;
+  selectTabIndex(index: number) {
+    if (index === 0) {
+      this.selectedTab = 'pricing';
+    } else if (index === 1) {
+      this.selectedTab = 'stock';
+    }
   }
 
   // showSelectUnitModal() {

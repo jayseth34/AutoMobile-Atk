@@ -34,20 +34,6 @@
   margin-bottom: 1%;
 }
 
-.party-name, .phone-num{
-  /* padding: 2%; */
-  width: 210px;
-}
-
-.party-group-input{
-  width: 210px;
-}
- 
-.party-group{
-  padding: 2%;
-  width: 210px;
-}
-
   /* tabs */
 li a {
   color: black;
