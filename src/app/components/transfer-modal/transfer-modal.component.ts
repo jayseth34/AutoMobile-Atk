@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/api.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-transfer-modal',
@@ -16,7 +17,8 @@ export class TransferModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
     public api: ApiService,
-    private dialogRef: MatDialogRef<TransferModalComponent>
+    private dialogRef: MatDialogRef<TransferModalComponent>,
+    public dataservice: DataService
   ) {
     // Initialize the form with default values
     this.transferForm = this.fb.group({
