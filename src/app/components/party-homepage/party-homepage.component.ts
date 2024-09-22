@@ -24,12 +24,10 @@ export class PartyHomepageComponent {
   selectedParty: any = ''; 
   searchParty: string = '';
   searchGroup: string = '';
-  // partyHomePageSelectedTab: string = 'party'; // Initially select the 'address' tab
   partyName: any = '';
   amount: any = '';
   groupname: any = '';
   registeredMobileNumber: any = '';
-  // searchTerm: string = '';
   clickSubscription: Subscription;
   clicks: any[] = [];
   partyList: Party[] = [];
@@ -39,54 +37,13 @@ export class PartyHomepageComponent {
   emailid:any = '';
   gst:any = '';
   creditlimit:any = 0;
-
-  // filteredParties = [];
-  filteredValues: string[];
-  rows = [
-    {
-      column1: 'Row 2, Column 1',
-      column2: 'Row 2, Column 2',
-      column3: 'Row 2, Column 3',
-      column4: 'Row 2, Column 4',
-      column5: 'Row 2, Column 5',
-    },
-    {
-      column1: 'Row 1, Column 1',
-      column2: 'Row 1, Column 2',
-      column3: 'Row 1, Column 3',
-      column4: 'Row 1, Column 4',
-      column5: 'Row 1, Column 5',
-    },
-    {
-      column1: 'Row 2, Column 1',
-      column2: 'Row 2, Column 2',
-      column3: 'Row 2, Column 3',
-      column4: 'Row 2, Column 4',
-      column5: 'Row 2, Column 5',
-    },
-    {
-      column1: 'Row 1, Column 1',
-      column2: 'Row 1, Column 2',
-      column3: 'Row 1, Column 3',
-      column4: 'Row 1, Column 4',
-      column5: 'Row 1, Column 5',
-    },
-  ];
-
-  values = ['value1', 'value2', 'apple', 'mango'];
   selectedTabIndex: number = 0;
 
   @ViewChild('app-add-party') addPartyModal: AddPartyComponent;
 
   constructor(
-    private dialog: MatDialog,
-    public dataService: DataService,
-    private api: ApiService,
-    public cs: CommonService,
-    private cdr: ChangeDetectorRef
-  ) {
-    // this.filteredParties = this.rows.map(row => row.column1);
-    this.filteredValues = this.values; // Initially show all values
+    private dialog: MatDialog, public dataService: DataService, private api: ApiService, public cs: CommonService, private cdr: ChangeDetectorRef) {
+
   }
 
   ngOnInit() {
@@ -110,11 +67,6 @@ export class PartyHomepageComponent {
       });
 
     this.selectTab(0);
-
-    // this.getPartyListData();
-    // if (this.partyList.length > 0) {
-    //   this.selectedParty = this.partyList[0].partyname; // Set the first party as selected
-    // }
   }
 
   ngAfterViewInit(): void {
@@ -123,11 +75,6 @@ export class PartyHomepageComponent {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
 
-  // searchPartyName() {
-  // this.filteredParties = this.rows.filter(row => {
-  //   return row.column1.toLowerCase().includes(this.searchParty.toLowerCase());
-  // });
-  // }
   getPartyListData() {
     this.api
       .getPartyList(this.registeredMobileNumber).subscribe((res: any) => {
@@ -155,7 +102,6 @@ export class PartyHomepageComponent {
   }
 
   selectTab(index: number) {
-    // this.partyHomePageSelectedTab = tab;
     this.selectedTabIndex = index;
     this.dataService.partyHomePageSelectedTab = index === 1 ? 'group' : 'party';
     if (this.dataService.partyHomePageSelectedTab === 'party') {
@@ -338,14 +284,7 @@ export class PartyHomepageComponent {
   isSelectedGroup(groupName: any): boolean {
     return this.selectedGroup === groupName;
   }
-  
-  // filteredData: { column1: string, column2: string }[] = [];
 
-  // onSearch() {
-  //   this.filteredData = this.rows.filter(item =>
-  //     item.column1.toLowerCase().includes(this.searchTerm.toLowerCase())
-  //   );
-  // }
   ngOnDestroy() {
     // Unsubscribe to prevent memory leaks
     this.clickSubscription.unsubscribe();

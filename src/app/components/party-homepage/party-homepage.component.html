@@ -81,12 +81,12 @@
 
         <ng-container matColumnDef="total">
           <th mat-header-cell *matHeaderCellDef> TOTAL </th>
-          <td mat-cell *matCellDef="let transaction">{{ transaction.total }}</td>
+          <td mat-cell *matCellDef="let transaction" [ngStyle]="{ 'color': dataService.getColor(transaction.total, 0) }">{{ transaction.total }}</td>
         </ng-container>
 
         <ng-container matColumnDef="balance">
           <th mat-header-cell *matHeaderCellDef> BALANCE </th>
-          <td mat-cell *matCellDef="let transaction">{{ transaction.balance }}</td>
+          <td mat-cell *matCellDef="let transaction" [ngStyle]="{ 'color': dataService.getColor(transaction.balance, 0) }">{{ transaction.balance }}</td>
         </ng-container>
 
         <ng-container matColumnDef="status">
@@ -156,7 +156,7 @@
 
         <ng-container matColumnDef="amount">
           <th mat-header-cell *matHeaderCellDef> AMOUNT </th>
-          <td mat-cell *matCellDef="let party">{{ party.toreceivefromparty - party.topayparty }}</td>
+          <td mat-cell *matCellDef="let party" [ngStyle]="{ 'color': dataService.getColor(party.toreceivefromparty, party.topayparty) }">{{ party.toreceivefromparty - party.topayparty }}</td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="['party', 'amount']"></tr>

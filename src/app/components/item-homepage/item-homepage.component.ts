@@ -53,14 +53,6 @@ export class ItemHomepageComponent {
       });
       this.selectTab('product',0);
     }
-
-
-  // rows = [
-  //   { column1: 'Row 2, Column 1', column2: 'Row 2, Column 2', column3: 'Row 2, Column 3', column4: 'Row 2, Column 4', column5: 'Row 2, Column 5', column6: 'Row 2, Column 6', column7: 'Row 2, Column 7' },{ column1: 'Row 1, Column 1', column2: 'Row 1, Column 2', column3: 'Row 1, Column 3', column4: 'Row 1, Column 4', column5: 'Row 1, Column 5', column6: 'Row 1, Column 6', column7: 'Row 1, Column 7'},
-  //   { column1: 'Row 2, Column 1', column2: 'Row 2, Column 2', column3: 'Row 2, Column 3', column4: 'Row 2, Column 4', column5: 'Row 2, Column 5', column6: 'Row 2, Column 6', column7: 'Row 2, Column 7' },{ column1: 'Row 1, Column 1', column2: 'Row 1, Column 2', column3: 'Row 1, Column 3', column4: 'Row 1, Column 4', column5: 'Row 1, Column 5', column6: 'Row 1, Column 6', column7: 'Row 1, Column 7'},
-  //   { column1: 'Row 2, Column 1', column2: 'Row 2, Column 2', column3: 'Row 2, Column 3', column4: 'Row 2, Column 4', column5: 'Row 2, Column 5', column6: 'Row 2, Column 6', column7: 'Row 2, Column 7' },{ column1: 'Row 1, Column 1', column2: 'Row 1, Column 2', column3: 'Row 1, Column 3', column4: 'Row 1, Column 4', column5: 'Row 1, Column 5', column6: 'Row 1, Column 6', column7: 'Row 1, Column 7'},
-  //   { column1: 'Row 2, Column 1', column2: 'Row 2, Column 2', column3: 'Row 2, Column 3', column4: 'Row 2, Column 4', column5: 'Row 2, Column 5', column6: 'Row 2, Column 6', column7: 'Row 2, Column 7' },{ column1: 'Row 1, Column 1', column2: 'Row 1, Column 2', column3: 'Row 1, Column 3', column4: 'Row 1, Column 4', column5: 'Row 1, Column 5', column6: 'Row 1, Column 6', column7: 'Row 1, Column 7'},
-  // ];
   
   destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -201,20 +193,6 @@ export class ItemHomepageComponent {
           this.selectedCategory = category
           this.dataService.isCategoryUpdate = true
           this.dataService.GetItemByCategoryResponse = res.getItemList;
-          // this.api.GetItemByCategory(registeredMobileNumber,category).subscribe({
-          //   next:(response) => {
-          //     if(res.status == "SUCCESS"){
-          //       this.dataService.getItemByCategoryData =  response.getItemList
-          //       console.log("ITEMS DATA SUCCESS")
-          //     }
-          //     else{
-          //       console.log("ITEMS DATA FAILED")
-          //     }
-          //   },
-          //   error:() => {
-          //     console.log("ITEMS DATA ERROR")
-          //   },
-          // })
         }
         else {
           this.dataService.isCategoryUpdate = false

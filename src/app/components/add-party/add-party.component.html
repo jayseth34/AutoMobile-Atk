@@ -14,14 +14,8 @@
           <input type="text" class="form-control" placeholder="Party Name*" id="partyName" name="partyName" formControlName="partyNameControl"
           [class.is-invalid]="partyNameControl?.errors?.['required'] && (partyNameControl?.touched || ifFormSubmitted)" oninput="this.value = this.value.toUpperCase()">
           <label for="partyName">Party Name*</label>
-          <!-- <div>
-            <div *ngIf="addPartyForm.get('partyNameControl')?.errors?.['required']">This is required field.</div>
-          </div> -->
         </div>
       </div>
-      <!-- <div *ngIf="partyNameControl?.errors?.['required'] && (partyNameControl?.dirty || partyNameControl?.touched)">
-        Party Name cannot be blank
-      </div> -->
 
       <!-- GSTIN Field -->
       <div class="col-4 "> 
@@ -45,6 +39,7 @@
     </div>
     </div>
 
+  <!-- Second row -->
     <div class="form-row three-columns">
       <div class="col-4">
       <div class="form-floating">
@@ -60,7 +55,7 @@
     </div> 
     </div>
   
-    <!-- three tabs -->
+    <!-- THREE TABS -->
     <mat-tab-group [selectedIndex]="getSelectedIndex()" (selectedIndexChange)="onTabChange($event)">
       <mat-tab label="GST & ADDRESS">
       </mat-tab>
@@ -150,8 +145,6 @@
           </label>
         </div>
  
-
-        <!-- improvement required -->
         <div class="form-check form-switch">
           <input class="form-check-input" style="height: 25px; width:45px;" type="checkbox" role="switch" id="customNoLimit" [checked]="isCustomLimit" (change)="updateLabel($event)">
           <label class="form-check-label" style="margin-left: 5%; margin-top: 2%;" for="customNoLimit">{{ labelText }}</label>
@@ -167,8 +160,6 @@
           </div>
         </div>
         
-        <!-- -------------------- -->
-
       </div>
       <div class="col-md-6">
         <div class="form-floating">
@@ -199,7 +190,7 @@
               <input type="text" class="form-control" name="additionalFieldName1Value" placeholder="Additional Field 1 Value" formControlName="additionalField1ValueControl" 
               [class.is-invalid]="additionalField1ValueControl?.errors?.['required'] && (additionalField1ValueControl?.touched || ifFormSubmitted)"
               oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalFieldName1Value">Enter value for additionalFieldName1</label>
+              <label for="additionalFieldName1Value">Enter value for Field 1</label>
             </div>
           </div>
           <!-- <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField1Checked">
@@ -225,7 +216,7 @@
               <input type="text" class="form-control" name="additionalFieldName2Value" placeholder="Additional Field 2 Value" formControlName="additionalField2ValueControl" 
               [class.is-invalid]="additionalField2ValueControl?.errors?.['required'] && (additionalField2ValueControl?.touched || ifFormSubmitted)"
               oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalFieldName2Value">Enter value for additionalFieldName2</label>
+              <label for="additionalFieldName2Value">Enter value for Field 2</label>
             </div>
           </div>
           <!-- <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField2Checked">
@@ -251,7 +242,7 @@
               <input type="text" class="form-control" name="additionalFieldName3Value" placeholder="Additional Field 3 Value" formControlName="additionalField3ValueControl" 
               [class.is-invalid]="additionalField3ValueControl?.errors?.['required'] && (additionalField3ValueControl?.touched || ifFormSubmitted)"
               oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalFieldName3Value">Enter value for additionalFieldName3</label>
+              <label for="additionalFieldName3Value">Enter value for Field 3</label>
             </div>
           </div>
           <!-- <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField3Checked">
@@ -277,7 +268,7 @@
               <input type="date" class="form-control" name="additionalFieldName4Value" placeholder="Additional Field 4 Value" formControlName="additionalField4ValueControl"
               [class.is-invalid]="additionalField4ValueControl?.errors?.['required'] && (additionalField4ValueControl?.touched || ifFormSubmitted)"
               oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalFieldName4Value">Enter value for additionalFieldName4</label>
+              <label for="additionalFieldName4Value">Enter value for Field 4</label>
             </div>
           </div>
           <!-- <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField4Checked">
@@ -285,82 +276,6 @@
             <label class="form-check-label" for="flexSwitchCheckDefault4">Show in Print</label>
           </div> -->
         </div>
-
-        <!-- <div class="row addtional-fields">
-          <div class="col-md-1">
-            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField2Checked" name="additionalField2Checked" [(ngModel)]="additionalField2Checked" (change)="toggleAdditionalField($event, 'additionalField2')">
-          </div>
-          <div class="col-md-5">
-            <div class="form-floating">
-              <input type="text" class="form-control" name="additionalField2" placeholder="Additional Field 2" formControlName="additionalField2Control" 
-              [(ngModel)]="additionalFieldName2" [class.is-invalid]="additionalFieldName2Control?.errors?.['required'] && ifFormSubmitted" oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalField2">Additional Field 2</label>
-            </div>
-          </div>
-          <div class="col-md-5"  *ngIf="isAdditionalField2Checked">
-            <div class="form-floating">
-              <input type="text" class="form-control" name="additionalFieldName2Value" placeholder="Additional Field 2 Value" formControlName="additionalFieldName2ValueControl" 
-              [(ngModel)]="additionalFieldName2Value" [class.is-invalid]="additionalFieldName2ValueControl?.errors?.['required'] && (additionalFieldName2ValueControl?.touched || ifFormSubmitted)"
-              oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalFieldName2Value">Enter value for additionalFieldName2</label>
-            </div>
-          </div>
-          <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField2Checked">
-            <input class="form-check-input" style="height: 15px; width:25px;" type="checkbox" role="switch" id="flexSwitchCheckDefault2" formControlName="additionalField2Checked" (change)="showInPrint($event, 'additionalField2Checked')">
-            <label class="form-check-label" for="flexSwitchCheckDefault2">Show in Print</label>
-          </div>
-        </div>
-
-        <div class="row addtional-fields">
-          <div class="col-md-1">
-            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField3Checked" name="additionalField3Checked" 
-            [(ngModel)]="additionalField3Checked" (change)="toggleAdditionalField($event, 'additionalField3')" oninput="this.value = this.value.toUpperCase()">
-          </div>
-          <div class="col-md-5">
-            <div class="form-floating">
-              <input type="text" class="form-control" name="additionalField3" placeholder="Additional Field 3" formControlName="additionalField3Control" 
-              [class.is-invalid]="additionalFieldName3Control?.errors?.['required'] && ifFormSubmitted" [(ngModel)]="additionalFieldName3" oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalField3">Additional Field 3</label>
-            </div>
-          </div>
-          <div class="col-md-5" *ngIf="isAdditionalField3Checked">
-            <div class="form-floating">
-              <input type="text" class="form-control" name="additionalFieldName3Value" placeholder="Additional Field 3 Value" formControlName="additionalFieldName3ValueControl" 
-              [(ngModel)]="additionalFieldName3Value" [class.is-invalid]="additionalFieldName3ValueControl?.errors?.['required'] && (additionalFieldName3ValueControl?.touched || ifFormSubmitted)" 
-              oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalFieldName3Value">Enter value for additionalFieldName3</label>
-            </div>
-          </div>
-          <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField3Checked">
-            <input class="form-check-input" style="height: 15px; width:25px;" type="checkbox" role="switch" id="flexSwitchCheckDefault3" formControlName="additionalField3Checked" (change)="showInPrint($event, 'additionalField3Checked')">
-            <label class="form-check-label" for="flexSwitchCheckDefault3">Show in Print</label>
-          </div>
-        </div>
-
-        <div class="row addtional-fields">
-          <div class="col-md-1">
-            <input type="checkbox" class="form-check-input additionalFieldcheckBox" id="additionalField4Checked" name="additionalField4Checked" [(ngModel)]="additionalField4Checked" (change)="toggleAdditionalField($event, 'additionalField4')">
-          </div>
-          <div class="col-md-5">
-            <div class="form-floating">
-              <input type="text" class="form-control" name="additionalField4" placeholder="Additional Field 4" formControlName="additionalField4Control" 
-              [(ngModel)]="additionalFieldName4" [class.is-invalid]="additionalFieldName4Control?.errors?.['required'] && ifFormSubmitted" oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalField4">Additional Field 4</label>
-            </div>
-          </div>
-          <div class="col-md-5"  *ngIf="isAdditionalField4Checked">
-            <div class="form-floating">
-              <input type="date" class="form-control" name="additionalFieldName4Value" placeholder="Additional Field 4 Value" formControlName="additionalFieldName4ValueControl" 
-              [(ngModel)]="additionalFieldName4Value" [class.is-invalid]="additionalFieldName4ValueControl?.errors?.['required'] && (additionalFieldName4ValueControl?.touched || ifFormSubmitted)" 
-              oninput="this.value = this.value.toUpperCase()">
-              <label for="additionalFieldName4Value">Enter value for additionalFieldName4</label>
-            </div>
-          </div>
-          <div class="form-check form-switch addFieldToggle" *ngIf="isAdditionalField4Checked">
-            <input class="form-check-input" style="height: 15px; width:25px;" type="checkbox" role="switch" id="flexSwitchCheckDefault4" formControlName="additionalField4Checked" (change)="showInPrint($event, 'additionalField4Checked')">
-            <label class="form-check-label" for="flexSwitchCheckDefault4">Show in Print</label>
-          </div>
-        </div> -->
       </div>
       </div>
     </div>
@@ -373,34 +288,3 @@
     <input type="submit" class="btn save_update"  style="color: white; background-color: #3076f0; width: 150px;" value="UPDATE" (click)="submit(false)">
   </div>
 </form>
-
-
-    <!-- <div id="openingbalance" *ngIf="selectedTab === 'openingbalance'">
-      <form class="openingbalanceForm">
-        <label for="openingbalanceAmt">Opening Balance</label>
-        <input class="openingbalanceFields" type="text" id="openingbalanceFields" name="openingbalanceAmt" placeholder="Enter Opening Balance">
-
-        <label for="asofdate">As of date</label>
-        <input class="openingbalanceFields" type="date" id="openingbalanceFields" name="asofdate">
-
-        <div>
-          <label>
-            <input type="checkbox"> Show Text Field
-          </label>
-        </div>
-        
-        <div *ngIf="isTextFieldVisible">
-          <input type="text" placeholder="Enter text">
-        </div>
-
-        <br>
-        <label>
-          <input type="radio" name="openingbalance" value="pay"> To Pay
-        </label>
-
-        <label>
-          <input type="radio" name="openingbalance" value="recieve"> To Recieve
-        </label>
- 
-      </form>
-    </div> -->

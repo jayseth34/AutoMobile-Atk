@@ -84,53 +84,6 @@ li a {
     padding: 3%;
   }
   
-
-/* .form-group {
-    margin-bottom: 1rem;
-    display: flex; Ensures items inside form-group are flex items 
-  }
-   */
-/* .form-group.double {
-    margin-bottom: 0;
-  } */
-  
-/* .form-group.double input {
-    margin-right: 1rem;
-  } */
-
-
-
-/* ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-}
-
-li {
-  float: left;
-  border-right:1px solid #bbb;
-}
-
-li:last-child {
-  border-right: none;
-}
-
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-li a:hover:not(.active) {
-  background-color: #111;
-}
-*/
-
-
 .addressForm {
   padding: 20px;
   margin-left: 0%;
@@ -146,11 +99,6 @@ li a:hover:not(.active) {
   resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
 }
 
-/* .openingbalanceForm {
-  margin-left: 0%;
-  padding: 10px;
-} */
-
 .creditAndBalanceFields {
   width: 100%;
   padding: 12px; /* Some padding */ 
@@ -164,17 +112,6 @@ li a:hover:not(.active) {
 .submit-btns {
   margin-bottom: 3%;
 }
-
-/* input[type=submit] {
-  background-color: #04AA6D;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 10px;
-} */
-
 
 /* Dropdown select options */
 .dropdown-options {

@@ -64,10 +64,7 @@ export class AddItemComponent {
     this.cdr.detectChanges();
     this.categorygroup()
     console.log("ITEM: ", this.categoryList)
-    // if (!this.dataService.isItemUpdate){
-    //   this.category = 'GENERAL'
-    // }
-    
+
     if(this.data.status='SUCCESS'){
       this.populateForm(this.data.itemDetails)
       if(this.data.itemDetails.wholesaleprice > 0 || this.data.itemDetails.minimumwholesalequantity > 0){
@@ -83,7 +80,7 @@ export class AddItemComponent {
     this.api.assignCode(body).subscribe((response:any) =>{
       if(response.status=='SUCCESS'){
         if(!this.cs.isUndefineOrNull(response.assignedcode)){
-          this.addItemForm.get('itemCodeControl')?.setValue(response.assignedcode); // Replace 'New Value' with whatever you need
+          this.addItemForm.get('itemCodeControl')?.setValue(response.assignedcode); 
         }
       }
     })
@@ -173,10 +170,6 @@ export class AddItemComponent {
       this.selectedTab = 'stock';
     }
   }
-
-  // showSelectUnitModal() {
-  //   this.showSelectUnit = !this.showSelectUnit;
-  // }
 
   toggleWholesalePrice() {
     this.isWholesalePriceEnabled = !this.isWholesalePriceEnabled;

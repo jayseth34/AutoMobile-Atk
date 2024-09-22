@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Inject, Input, OnInit, SimpleChanges } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, AbstractControl, Validators, FormsModule, FormGroup, FormControl } from '@angular/forms';
-import { takeUntil, Subject } from 'rxjs';
+import { UntypedFormGroup, AbstractControl, Validators, FormGroup, FormControl } from '@angular/forms';
+import { Subject } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
 import * as moment from 'moment';
@@ -19,7 +19,7 @@ import { CommonService } from 'src/app/services/common.service';
 })
 
 export class AddPartyComponent implements OnInit {
-  selectedTab: string = 'gstAndAddress'; // Initially select the 'address' tab
+  selectedTab: string = 'gstAndAddress'; 
   isOpeningBalance: boolean = false;
   isShippingAddressEnabled: boolean = true;
   isCustomLimit: boolean = false;
@@ -40,7 +40,6 @@ export class AddPartyComponent implements OnInit {
   creditLimit: any = 0;
   topayparty: any = 0;
   toreceivefromparty: any = 0; 
-  // isPartyUpdate: boolean = true;
   oldPartyName: any = '';
   //For additional column names
   additionalFieldName1:any = '';
@@ -87,7 +86,6 @@ export class AddPartyComponent implements OnInit {
   @Input() partyDetails: any;
 
   constructor(private dialog: MatDialog,private api: ApiService, public dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any, public cdr: ChangeDetectorRef, public cs: CommonService, public dialogRef: MatDialogRef<AddPartyComponent>) {
-    // this.partyDetails = data.partyDetails; // Access the injected data
   }
 
   ngOnInit(): void {
@@ -96,13 +94,8 @@ export class AddPartyComponent implements OnInit {
     );
     this.initializeForm()
     this.cdr.detectChanges();
-    
-    // this.asOfDate = moment().format('YYYY-MM-DDTHH:mm:ss');
-    // this.additionalFieldName4Value = moment().format('YYYY-MM-DDTHH:mm:ss');
-    // const today = moment().format('DD-MM-YYYY');
+
     // this.showPrint = 'Dont show in print';
-    // this.partyGroupList = this.dataService.partyGroupListResponse.map((group: { partygroup: any; }) => group.partygroup);
-    // ;
     this.partygroup()
 
     if (!this.dataService.isPartyUpdate){
@@ -260,7 +253,6 @@ export class AddPartyComponent implements OnInit {
     }
   }
 
-  /////////// improvement required
   updateLabel(event: any) {
     this.isCustomLimit = event.target.checked; 
     this.labelText = this.isCustomLimit ? 'Custom Limit' : 'No Limit';
@@ -336,10 +328,10 @@ export class AddPartyComponent implements OnInit {
         emailId: this.addPartyForm.value.emailIdControl,
         billingAddress: this.addPartyForm.value.billingAddressControl,
         shippingAddress: this.addPartyForm.value.shippingAddressControl,
-        openingBalance: this.addPartyForm.value.openingBalanceControl,
+        openingBalance: Number(this.addPartyForm.value.openingBalanceControl),
         toPayOrReceive: this.addPartyForm.value.toPayOrReceiveControl,
         asOfDate: this.addPartyForm.value.asOfDateControl,
-        creditLimit: this.addPartyForm.value.creditLimitControl,
+        creditLimit: Number(this.addPartyForm.value.creditLimitControl),
         additionalFieldName1: this.addPartyForm.value.additionalFieldName1Control,
         additionalFieldName2: this.addPartyForm.value.additionalFieldName2Control,
         additionalFieldName3: this.addPartyForm.value.additionalFieldName3Control,
@@ -363,7 +355,6 @@ export class AddPartyComponent implements OnInit {
             text: res.statusmessage,
             allowOutsideClick:false
           }).then(() => {
-            // Code to execute after the popup is closed
             this.dataService.isPartyUpdate = false;
             this.dialogRef.close();
           });
@@ -381,7 +372,6 @@ export class AddPartyComponent implements OnInit {
   }
 
   checkTypeOfPay() {
-    // Use optional chaining to safely access the control, and provide a default value ('') if it's null
     console.log(this.isOpeningBalance)
     const controlValue = this.addPartyForm.get('toPayOrReceiveControl')?.value;
     if (controlValue === 'PAY') {
@@ -429,17 +419,14 @@ export class AddPartyComponent implements OnInit {
   
     if (nameControl && valueControl) {
       if (isChecked) {
-        // Enable and set validators when checkbox is checked
         nameControl.setValidators([Validators.required]);
         valueControl.setValidators([Validators.required]);
       } else {
-        // Disable and clear validators when checkbox is unchecked
         nameControl.clearValidators();
         valueControl.clearValidators();
         nameControl.setValue('');
         valueControl.setValue('');
       }
-      // Update form validity
       nameControl.updateValueAndValidity();
       valueControl.updateValueAndValidity();
     }
