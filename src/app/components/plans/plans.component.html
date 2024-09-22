@@ -9,7 +9,7 @@
       <li>7 Days Access</li>
       <li>Desktop View</li>
     </ul>
-    <button (click)="buyPlan('free')" [disabled]="activePlan === 'silver' || activePlan === 'gold'">Start Free Trial</button>
+    <button (click)="buyPlan('free')" [disabled]="activePlan === 'silver' || activePlan === 'gold'" class="btn"  style="color: white; background-color: #3076f0;">Start Free Trial</button>
     <!-- <button (click)="buyPlan('free')">Start Free Trial</button> -->
   </div>
 
@@ -22,7 +22,7 @@
       <li>6 Months Access</li>
       <li>Desktop View</li>
     </ul>
-    <button (click)="buyPlan('silver')">Buy Now</button>
+    <button (click)="buyPlan('silver')" class="btn" style="color: white; background-color: #3076f0;">Buy Now</button>
   </div>
 
   <!-- Gold Plan -->
@@ -34,7 +34,7 @@
       <li>1 Year Access</li>
       <li>Desktop View</li>
     </ul>
-    <button (click)="buyPlan('gold')">Buy Now</button>
+    <button (click)="buyPlan('gold')" class="btn"  style="color: white; background-color: #3076f0;">Buy Now</button>
     <div class="most-popular">Most Popular</div>
   </div>
 </div>

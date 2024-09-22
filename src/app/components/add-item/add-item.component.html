@@ -36,7 +36,7 @@
             <!-- Third Column -->
             <div class="col-4 ">
                 <div class="form-floating ">
-                    <input type="button" class="btn btn-secondary select-unit-btn" name="selectunit" id="selectunit" value="SELECT UNIT" (click)="openSelectUnitModal()">
+                    <input type="button" class="btn select-unit-btn" style="color: white; background-color: #3076f0; width: 150px;" name="selectunit" id="selectunit" value="SELECT UNIT" (click)="openSelectUnitModal()">
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@
           <div class="col-4" style="margin-left: 0.5%;">
               <div class="form-floating position-relative">
                   <input type="text" class="form-control item-code" style="margin-top:-20px;" placeholder="Item Code" id="item-code" name="item-code" formControlName="itemCodeControl">
-                  <button class="btn btn-secondary position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%);" name="addcode" id="addcode" (click)="assignCode()">ADD CODE</button>
+                  <button class="btn position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); color: white; background-color: #3076f0; width: 120px;" name="addcode" id="addcode" (click)="assignCode()">ADD CODE</button>
                   <label for="item-code">Item Code</label>
               </div>
           </div>
@@ -258,9 +258,9 @@
 
     <div *ngIf="!dataService.isItemUpdate" class="">
         <!-- <input type="submit" style="margin-right: 20px;" class="btn btn-warning add_party_btn" value="SAVE & NEW" (click)="submit(true)"> -->
-        <input type="submit" class="btn btn-warning save_update"  value="SAVE" (click)="submit(false)">
+        <input type="submit" class="btn add_item_btn save_update" style="color: white; background-color: #3076f0; width: 150px;"  value="SAVE" (click)="submit(false)">
     </div>
     <div *ngIf="dataService.isItemUpdate" class="">
-        <input type="submit" class="btn btn-warning save_update" value="UPDATE" (click)="submit(false)">
+        <input type="submit" class="btn add_item_btn save_update" style="color: white; background-color: #3076f0; width: 150px;" value="UPDATE" (click)="submit(false)">
     </div>
 </form>

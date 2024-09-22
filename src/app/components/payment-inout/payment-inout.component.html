@@ -85,15 +85,15 @@
       </div>
 
       <div class="btn-container">
-        <button *ngIf="!isview" type="button" class="btn btn-success custom-btn" (click)="linkPayment()">LINK PAYMENT</button>
+        <button *ngIf="!isview" type="button" class="btn custom-btn"  style="color: white; background-color: #4caf50;" (click)="linkPayment()">LINK PAYMENT</button>
       </div>
 
       <div class="right-btn-container">
-        <button *ngIf="isadvance && !isview" type="button" class="btn btn-success custom-btn" (click)="saveadvanceinout()">SAVE</button>
+        <button *ngIf="isadvance && !isview" type="button" class="btn"  style="color: white; background-color: #3076f0; width: 100px;" (click)="saveadvanceinout()">SAVE</button>
       </div>
 
       <div class="right-btn-container">
-        <button *ngIf="isadvance && isview" type="button" class="btn btn-success custom-btn" (click)="saveadvanceinout()">UPDATE</button>
+        <button *ngIf="isadvance && isview" type="button" class="btn"  style="color: white; background-color: #3076f0; width: 100px;" (click)="saveadvanceinout()">UPDATE</button>
       </div>
 
       <div class="right-btn-container">

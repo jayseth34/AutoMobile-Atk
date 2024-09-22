@@ -7,6 +7,6 @@
     </div>
 
     <hr>
-    <button type="submit" class="btn btn-warning add_item_btn" *ngIf="!dataService.isCategoryUpdate" (click)="submit()">SAVE</button>
-    <button type="submit"class="btn btn-warning add_item_btn" *ngIf="dataService.isCategoryUpdate" (click)="submit()">UPDATE</button>
+    <button type="submit" class="btn add_item_btn" style="color: white; background-color: #3076f0; width: 100px;" *ngIf="!dataService.isCategoryUpdate" (click)="submit()">SAVE</button>
+    <button type="submit"class="btn add_item_btn" style="color: white; background-color: #3076f0; width: 100px;" *ngIf="dataService.isCategoryUpdate" (click)="submit()">UPDATE</button>
 </form>

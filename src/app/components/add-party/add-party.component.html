@@ -123,7 +123,7 @@
             <label for="shippingAddress">Shipping Address</label>
           </div>   
           <div class="text-end">
-          <button class="btn btn-secondary add-btn">Add</button>
+          <button class="btn add-btn"  style="color: white; background-color: #3076f0; width: 100px;">Add</button>
           </div>
         </div>
         </div>
@@ -367,10 +367,10 @@
      
   <div *ngIf="!dataService.isPartyUpdate" class="fixed-buttons d-flex justify-content-end position-fixed bottom-0 submit-btns">
     <!-- <input type="submit" style="margin-right: 20px;" class="btn btn-warning add_party_btn" value="SAVE & NEW" (click)="submit(true)"> -->
-    <input type="submit" class="btn btn-warning save_update" value="SAVE" (click)="submit(false)">
+    <input type="submit" class="btn save_update"  style="color: white; background-color: #3076f0; width: 150px;" value="SAVE" (click)="submit(false)">
   </div>
   <div *ngIf="dataService.isPartyUpdate" class="fixed-buttons d-flex justify-content-end position-fixed bottom-0 p-3 submit-btns">
-    <input type="submit" class="btn btn-warning save_update" value="UPDATE" (click)="submit(false)">
+    <input type="submit" class="btn save_update"  style="color: white; background-color: #3076f0; width: 150px;" value="UPDATE" (click)="submit(false)">
   </div>
 </form>
 
