@@ -80,6 +80,7 @@ export class DataService {
   invoicedate:any;
   amountdetails: any;
   isview:boolean = false;
+  hidebutton:boolean = false;
   // totalNoOfParties: any;
 
   // totalAmountOfParties: any;

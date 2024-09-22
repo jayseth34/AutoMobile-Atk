@@ -62,7 +62,7 @@
   </mat-form-field>
 
   <div mat-dialog-actions>
-    <button mat-button mat-dialog-close>Cancel</button>
-    <button mat-button [disabled]="!transferForm.valid" (click)="submit()">Submit</button>
+    <button mat-raised-button color="warn" mat-dialog-close>Cancel</button>
+    <button *ngIf = "!dataservice.hidebutton" mat-raised-button color="primary" [disabled]="!transferForm.valid" (click)="submit()">Submit</button>
   </div>
 </form>

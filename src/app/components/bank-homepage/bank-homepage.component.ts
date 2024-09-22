@@ -96,6 +96,7 @@ export class BankHomepageComponent implements OnInit {
 
   openModal(event: any) {
     const selectedValue = event.value;
+    this.dataService.hidebutton = false
     let data: any = {};
     const body = {
       registeredphonenumber: this.registeredPhoneNmber
@@ -203,30 +204,35 @@ export class BankHomepageComponent implements OnInit {
                     data.fromAccounts = accounts;
                     data.toAccount = 'CASH';
                     this.api.GetTransferDetailsValues(body1).subscribe(handleResponse);
+                    this.dataService.hidebutton = true
                     break;
                 case 'CASH DEPOSIT':
                     type = 'cashToBank';
                     data.fromAccount = 'CASH';
                     data.toAccounts = accounts;
                     this.api.GetTransferDetailsValues(body1).subscribe(handleResponse);
+                    this.dataService.hidebutton = true
                     break;
                 case 'BANK TO BANK':
                     type = 'bankToBank';
                     data.fromAccounts = accounts;
                     data.toAccounts = accounts;
                     this.api.GetTransferDetailsValues(body1).subscribe(handleResponse);
+                    this.dataService.hidebutton = true
                     break;
                 case 'BANK ADJ INCREASE':
                     type = 'adjustBalance';
                     increasedecrease = 'increase';
                     data.accountNames = accounts;
                     this.api.GetTransferDetailsValues(body1).subscribe(handleResponse);
+                    this.dataService.hidebutton = true
                     break;
                 case 'BANK ADJ DECREASE':
                     type = 'adjustBalance';
                     increasedecrease = 'decrease';
                     data.accountNames = accounts;
                     this.api.GetTransferDetailsValues(body1).subscribe(handleResponse);
+                    this.dataService.hidebutton = true
                     break;
                 default:
                     console.error('Unknown transaction type:', type);
