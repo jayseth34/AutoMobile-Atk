@@ -17,7 +17,7 @@
         <!-- FIRST ROW -->
         <div class="form-row three-columns">
             <!-- First Column -->
-            <div class="col-5">
+            <div class="col-4">
                 <div class="form-floating">
                     <input type="text" class="form-control item-name" placeholder="Item Name*" id="itemName" name="itemName" formControlName="itemNameControl" 
                     [class.is-invalid]="itemNameControl?.errors?.['required'] && (itemNameControl?.touched )" oninput="this.value = this.value.toUpperCase()">
@@ -26,7 +26,7 @@
             </div>
         
             <!-- Second Column -->
-            <div class="col-5">
+            <div class="col-4">
                 <div class="form-floating">
                     <input type="text" class="form-control item-hsn" placeholder="Item HSN" id="item-hsn" name="item-hsn" formControlName="itemHsnControl" oninput="this.value = this.value.toUpperCase()">
                     <label for="item-hsn">Item HSN</label>
@@ -34,37 +34,38 @@
             </div>
 
             <!-- Third Column -->
-            <div class="col-auto select-unit-btn">
-                <div class="form-floating d-flex justify-content-center align-items-center">
-                    <input type="button" style="height: 50px; margin-top: 3px;" class="btn btn-secondary" name="selectunit" id="selectunit" value="SELECT UNIT" (click)="openSelectUnitModal()">
+            <div class="col-4 ">
+                <div class="form-floating ">
+                    <input type="button" class="btn btn-secondary select-unit-btn" name="selectunit" id="selectunit" value="SELECT UNIT" (click)="openSelectUnitModal()">
                 </div>
             </div>
         </div>
 
-        <div class="form-row g-0 three-columns">
-            <!-- First Column -->
-            <div class="col-5">
-                <div class="form-floating">
-                    <mat-form-field style="width: 100%;">
+        <div class="row d-flex align-items-center g-0 three-columns"> <!-- row with flexbox for better alignment -->
+          <!-- First Column -->
+          <div class="col-4">
+              <div class="form-floating">
+                  <mat-form-field style="width: 100%;">
                       <mat-label>Category</mat-label>
                       <input type="text" matInput [matAutocomplete]="auto" formControlName="categoryControl" oninput="this.value = this.value.toUpperCase()">
                       <mat-autocomplete #auto="matAutocomplete">
-                        <mat-option (click)="openAddItemCategoryModal()">+ ADD CATEGORY</mat-option>
-                        <mat-option *ngFor="let category of categoryList" [value]="category.category">{{ category.category }}</mat-option>
+                          <mat-option (click)="openAddItemCategoryModal()">+ ADD CATEGORY</mat-option>
+                          <mat-option *ngFor="let category of categoryList" [value]="category.category">{{ category.category }}</mat-option>
                       </mat-autocomplete>
-                    </mat-form-field>
-                  </div>
-            </div>
-        
-            <!-- Second Column -->
-            <div class="col-5" style="margin-right: 16.5% ;">
-                <div class="form-floating" style="position: relative;">
-                    <input type="text" class="form-control item-code" placeholder="Item Code" id="item-code" name="item-code" formControlName="itemCodeControl">
-                    <button style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);" class="btn btn-secondary" name="addcode" id="addcode" (click)="assignCode()">ADD CODE</button>
-                    <label for="item-code">Item Code</label>
-                </div>
-            </div>
-        </div>
+                  </mat-form-field>
+              </div>
+          </div>
+      
+          <!-- Second Column -->
+          <div class="col-4" style="margin-left: 0.5%;">
+              <div class="form-floating position-relative">
+                  <input type="text" class="form-control item-code" style="margin-top:-20px;" placeholder="Item Code" id="item-code" name="item-code" formControlName="itemCodeControl">
+                  <button class="btn btn-secondary position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%);" name="addcode" id="addcode" (click)="assignCode()">ADD CODE</button>
+                  <label for="item-code">Item Code</label>
+              </div>
+          </div>
+      </div>
+      
 
     </div>
 

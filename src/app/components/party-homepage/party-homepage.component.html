@@ -127,7 +127,8 @@
         <ng-container matColumnDef="partyCount">
           <th mat-header-cell *matHeaderCellDef> PARTY </th>
           <td mat-cell *matCellDef="let party"
-          [ngClass]="{ 'selectedParty-row-td': isSelectedGroup(party.partygroup) }">{{ party.partygroupcount }}</td>
+          [ngClass]="{ 'selectedParty-row-td': isSelectedGroup(party.partygroup) }"
+           [ngStyle]="{ 'color': dataService.getColor(party.partygroupcount, 0) }">{{ party.partygroupcount }}</td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="['group', 'partyCount']"></tr>

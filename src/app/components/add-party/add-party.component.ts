@@ -432,16 +432,12 @@ export class AddPartyComponent implements OnInit {
         // Enable and set validators when checkbox is checked
         nameControl.setValidators([Validators.required]);
         valueControl.setValidators([Validators.required]);
-        nameControl.enable();
-        valueControl.enable();
       } else {
         // Disable and clear validators when checkbox is unchecked
         nameControl.clearValidators();
         valueControl.clearValidators();
         nameControl.setValue('');
         valueControl.setValue('');
-        nameControl.disable();
-        valueControl.disable();
       }
       // Update form validity
       nameControl.updateValueAndValidity();
