@@ -17,6 +17,8 @@ export class BankHomepageComponent implements OnInit {
   bankslist: Bank[] = [];
   transactions: any[] = [];
   isbanksupdateflag: boolean = false;
+  filteredBankList: any[] = []
+  searchTerm: any;
   private clickTimeout: any;
   private singleClickFlag = false;
   
@@ -42,7 +44,7 @@ export class BankHomepageComponent implements OnInit {
           accountdisplayname: bank.accountdisplayname,
           amount: bank.amount
         }));
-        
+        this.filteredBankList = this.bankslist
         if (this.bankslist.length > 0) {
           this.getTransactions(this.bankslist[0].accountdisplayname);
         }
@@ -172,7 +174,7 @@ export class BankHomepageComponent implements OnInit {
                 name: bank.accountdisplayname,
                 amount: bank.amount
             }));
-
+            
             // Handle the asynchronous nature of the GetTransferDetailsValues calls
             const handleResponse = (response: any) => {
                 if (response.status === "SUCCESS") {
@@ -268,6 +270,12 @@ openAddBanksModal(bank?: Bank): void {
 
   isSelectedBank(bankName: any): boolean {
     return this.selectedBank === bankName;
+  }
+
+  onSearch(){
+      this.bankslist = this.filteredBankList.filter(bank => 
+        bank.accountdisplayname.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
   }
 
 }

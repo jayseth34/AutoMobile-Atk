@@ -11,7 +11,7 @@
       <div class="row">
         <mat-form-field class="col">
           <mat-label>Search here..</mat-label>
-          <input matInput>
+          <input matInput [(ngModel)]="searchTerm" (input)="onSearch()">
         </mat-form-field>
         <div class="col-auto">
           <button mat-raised-button color="primary" (click)="openAddItemModal('')" style="height: 60%; margin-top: 2.5%; background-color: #da9c0cf3; color: white;">+ ADD ITEM</button>
@@ -111,7 +111,7 @@
       <div class="row">
         <mat-form-field class="col">
           <mat-label>Search here..</mat-label>
-          <input matInput>
+          <input matInput [(ngModel)]="searchCategory" (input)="onSearch()">
         </mat-form-field>
         <div class="col-auto">
           <button mat-raised-button color="primary" (click)="openAddItemCategoryModal('')" style="height: 60%; margin-top: 2.5%; background-color: #da9c0cf3; color: white;">+ ADD CATEGORY</button>

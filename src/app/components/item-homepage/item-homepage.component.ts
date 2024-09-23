@@ -27,6 +27,10 @@ export class ItemHomepageComponent {
   minimumstocktomaintain:any;
   categoryName: any;
   itemHomePageSelectedTabIndex: number = 0;
+  filteredItemList: any[] = []
+  filteredCategoryList:any[] = []
+  searchTerm: any;
+  searchCategory: any;
 
   @ViewChild('app-add-item') addItemModal: AddItemComponent;
   categorycount: any;
@@ -122,7 +126,8 @@ export class ItemHomepageComponent {
             this.selectedCategory = response.getCateogoryList[0].category
             this.categorycount = response.getCateogoryList[0].categorycount
             this.dataService.categoryListResponse = response.getCateogoryList
-            this.GetItemByCategoryData(response.getCateogoryList[0].category)
+            this.filteredCategoryList = this.dataService.categoryListResponse
+            this.GetItemByCategoryData(response.getCategoryList[0].category)
           }
           else{
             console.log("CATEGORY FAILED")
@@ -193,6 +198,7 @@ export class ItemHomepageComponent {
           this.selectedCategory = category
           this.dataService.isCategoryUpdate = true
           this.dataService.GetItemByCategoryResponse = res.getItemList;
+          this.filteredCategoryList = this.dataService.partyGroupListResponse
         }
         else {
           this.dataService.isCategoryUpdate = false
@@ -251,6 +257,7 @@ export class ItemHomepageComponent {
             this.itemName = this.itemlist[0].itemname
             this.GetItemDetailsData(this.itemName)
           }
+          this.filteredItemList = this.itemlist
         }
         else {
           console.log("GETITEMLIST failed")
@@ -268,5 +275,17 @@ export class ItemHomepageComponent {
   
   isSelectedCategory(categoryName: any): boolean {
     return this.selectedCategory === categoryName;
+  }
+
+  onSearch(){
+    if (this.itemHomePageSelectedTabIndex === 0) {
+      this.itemlist = this.filteredItemList.filter(item => 
+        item.itemname.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.dataService.categoryListResponse = this.filteredCategoryList.filter(category => 
+        category.category.toLowerCase().includes(this.searchCategory.toLowerCase())
+      );
+    }
   }
 }
