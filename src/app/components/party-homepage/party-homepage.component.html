@@ -7,8 +7,6 @@
   </mat-tab-group>
 </div>
 
-
-
 <ng-container *ngIf="dataService.partyHomePageSelectedTab === 'party'">
   <div class="grid-container">
     <!-- SIDEBAR -->
@@ -16,7 +14,7 @@
       <div class="row">
         <mat-form-field class="col">
           <mat-label>Search here..</mat-label>
-          <input matInput>
+          <input matInput [(ngModel)]="searchTerm" (input)="onSearch()">
         </mat-form-field>
         <div class="col-auto">
           <button mat-raised-button (click)="openAddPartyModal('')" style="height: 60%; margin-top: 2.5%; background-color: #da9c0cf3; color: white;">+ ADD PARTY</button>
@@ -108,7 +106,7 @@
       <div class="row">
         <mat-form-field class="col">
           <mat-label>Search here..</mat-label>
-          <input matInput>
+          <input matInput [(ngModel)]="searchGroup" (input)="onSearch()">
         </mat-form-field>
         <div class="col-auto">
           <button mat-raised-button color="primary" (click)="openAddPartyGroupModal('')" style="height: 60%; margin-top: 2.5%; background-color: #da9c0cf3; color: white;">+ ADD PARTY GROUP</button>

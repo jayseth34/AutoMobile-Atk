@@ -38,8 +38,11 @@ export class PartyHomepageComponent {
   gst:any = '';
   creditlimit:any = 0;
   selectedTabIndex: number = 0;
+  filteredPartyList: any[] = []
+  filteredGroupList:any[] = []
 
   @ViewChild('app-add-party') addPartyModal: AddPartyComponent;
+  searchTerm: any;
 
   constructor(
     private dialog: MatDialog, public dataService: DataService, private api: ApiService, public cs: CommonService, private cdr: ChangeDetectorRef) {
@@ -92,6 +95,7 @@ export class PartyHomepageComponent {
               toreceivefromparty: item.toreceivefromparty,
             }));
           }
+          this.filteredPartyList = this.partyList
           if(this.partyList.length > 0){
             this.partyName = this.partyList[0].partyname
             this.GetPartyDetailsData(this.partyName);
@@ -117,6 +121,7 @@ export class PartyHomepageComponent {
           }, 0);          
             this.selectedGroup = response.getPartyGroupList[0].partygroup
             this.dataService.partyGroupListResponse = response.getPartyGroupList;
+            this.filteredGroupList = this.dataService.partyGroupListResponse
             this.GetPartyByGroupData(response.getPartyGroupList[0].partygroup)
           } else {
             console.log('PARTYGROUP FAILED');
@@ -236,6 +241,7 @@ export class PartyHomepageComponent {
           console.log('GETPARTYGROUPLIST API: ', res);
           if (res.status == "SUCCESS") {
             this.dataService.partyByGroupResponse = res.getPartyList;
+            this.filteredGroupList = this.dataService.partyGroupListResponse
             this.selectedGroup = groupname
             console.log('successs');
           } else {
@@ -283,6 +289,18 @@ export class PartyHomepageComponent {
   
   isSelectedGroup(groupName: any): boolean {
     return this.selectedGroup === groupName;
+  }
+
+  onSearch(){
+    if (this.selectedTabIndex === 0) {
+      this.partyList = this.filteredPartyList.filter(party => 
+        party.partyname.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.dataService.partyGroupListResponse = this.filteredGroupList.filter(group => 
+        group.partygroup.toLowerCase().includes(this.searchGroup.toLowerCase())
+      );
+    }
   }
 
   ngOnDestroy() {
