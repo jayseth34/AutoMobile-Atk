@@ -1,254 +1,303 @@
 <div>
-  <!-- To include sidbar and the page -->
+    <!-- To include sidbar and the page -->
 
-  <!-- Navbar -->
-  <section>
-    <nav class="navbar navbar-expand-lg bg-body-secondary">
-      <div class="container-fluid justify-content-around">
-        <form class="d-flex col-8 justify-content-around" role="search">
-          <div class="col-9">
-            <input
-              class="form-control col-8"
-              type="search"
-              placeholder="/Search Transaction"
-              aria-label="Search"
-            />
-          </div>
-          <button class="col-2 btn btn-outline-primary">Search</button>
+    <!-- Navbar -->
+    <section>
+        <nav class="navbar navbar-expand-lg bg-body-secondary">
+            <div class="container-fluid justify-content-end">
+                <ul class="navbar-nav nav-tabs col-3">
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            aria-current="page"
+                            routerLink="/Sale/add"
+                        >
+                            Add Sale
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/Purchase/add">
+                            Add Purchase
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> More </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </section>
+
+    <!-- Filters -->
+    <section class="bg-body-secondary" *ngIf="this.showFilterSection">
+        <form [formGroup]="filterForm">
+            <div class="row p-2 mt-1 mb-2">
+                <div class="col-3">
+                    <mat-form-field>
+                        <!-- <mat-label>Transaction Type</mat-label> -->
+                        <mat-select
+                            class=""
+                            id="filter"
+                            formControlName="range"
+                            (selectionChange)="handleRangeChange()"
+                        >
+                            <mat-option
+                                *ngFor="let filter of filters; index as i"
+                                [value]="i"
+                            >
+                                {{ filter }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-5 pt-1">
+                    <div class="input-group">
+                        <span class="input-group-text">Between</span>
+                        <input
+                            type="date"
+                            aria-label="start-date"
+                            class="form-control"
+                            formControlName="startDate"
+                            id="startDate"
+                            (change)="filterData($event)"
+                        />
+                        <input
+                            type="date"
+                            aria-label="end-date"
+                            class="form-control"
+                            id="endDate"
+                            formControlName="endDate"
+                            (change)="filterData($event)"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <ul class="d-flex col-5 justify-content-around">
+                    <div class="card col-3">
+                        <div class="card-body">
+                            <h4 class="card-title">Paid</h4>
+                            <p class="card-text">{{ paidVal }}</p>
+                        </div>
+                    </div>
+                    <div class="col-1 align-content-center">
+                        <mat-icon>add</mat-icon>
+                    </div>
+                    <div class="card col-3">
+                        <div class="card-body">
+                            <h4 class="card-title">Unpaid</h4>
+                            <p class="card-text">{{ unpaidVal }}</p>
+                        </div>
+                    </div>
+                    <div class="col-1 align-content-center">
+                        <span class="material-symbols-outlined"> equal </span>
+                    </div>
+                    <div class="card col-3">
+                        <div class="card-body">
+                            <h4 class="card-title">Total</h4>
+                            <p class="card-text">{{ totalVal }}</p>
+                        </div>
+                    </div>
+                </ul>
+            </div>
         </form>
-        <ul class="navbar-nav nav-tabs col-3">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Add Sale</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Add Purchase</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">More</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </section>
+    </section>
 
-  <!-- Filters -->
-  <section class="bg-body-secondary" *ngIf="this.showFilterSection">
-    <form [formGroup]="filterForm">
-      <div class="row p-2 mt-1 mb-2">
-        <div class="col-3">
-          <mat-form-field>
-            <!-- <mat-label>Transaction Type</mat-label> -->
-            <mat-select
-              class=""
-              id="filter"
-              formControlName="range"
-              (selectionChange)="handleRangeChange()"
-            >
-              <mat-option
-                *ngFor="let filter of filters; index as i"
-                [value]="i"
-              >
-                {{ filter }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+    <!-- Table Contents -->
+    <section
+        class="bg-body-secondary p-2"
+        [class.mt-2]="!this.showFilterSection"
+    >
+        <h3 class="ms-3 pt-2">Transactions</h3>
+
+        <div class="container-fluid">
+            <div class="row justify-content-between">
+                <!-- Filtering row input -->
+                <mat-form-field class="col-6">
+                    <mat-label>Filter</mat-label>
+                    <input
+                        matInput
+                        (keyup)="applyFilter($event)"
+                        type="text"
+                        placeholder="Ex. 1267"
+                        #tableFilterInp
+                    />
+                </mat-form-field>
+
+                <!-- Add Sale Button -->
+                <button
+                    mat-fab
+                    extended
+                    class="col-2 me-3"
+                    (click)="getRouterLink()"
+                    style="color: white; background-color: #3076f0"
+                >
+                    <mat-icon>add</mat-icon>
+                    Add {{ this.transactionTypeString | removeHyphen }}
+                </button>
+            </div>
         </div>
-        <div class="col-5 pt-1">
-          <div class="input-group">
-            <span class="input-group-text">Between</span>
-            <input
-              type="date"
-              aria-label="start-date"
-              class="form-control"
-              formControlName="startDate"
-              id="startDate"
-              (change)="filterData($event)"
-            />
-            <input
-              type="date"
-              aria-label="end-date"
-              class="form-control"
-              id="endDate"
-              formControlName="endDate"
-              (change)="filterData($event)"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <ul class="d-flex col-5 justify-content-around">
-          <div class="card col-3">
-            <div class="card-body">
-              <h4 class="card-title">Paid</h4>
-              <p class="card-text">{{ paidVal }}</p>
-            </div>
-          </div>
-          <div class="card col-3">
-            <div class="card-body">
-              <h4 class="card-title">Unpaid</h4>
-              <p class="card-text">{{ unpaidVal }}</p>
-            </div>
-          </div>
-          <div class="card col-3">
-            <div class="card-body">
-              <h4 class="card-title">Total</h4>
-              <p class="card-text">{{ totalVal }}</p>
-            </div>
-          </div>
-        </ul>
-      </div>
-    </form>
-  </section>
 
-  <!-- Table Contents -->
-  <section class="bg-body-secondary p-2" [class.mt-2]="!this.showFilterSection">
-    <h3 class="ms-3 pt-2">Transactions</h3>
-
-    <div class="container-fluid">
-      <div class="row justify-content-between">
-        <!-- Filtering row input -->
-        <mat-form-field class="col-6">
-          <mat-label>Filter</mat-label>
-          <input
-            matInput
-            (keyup)="applyFilter($event)"
-            type="text"
-            placeholder="Ex. 1267"
-            #tableFilterInp
-          />
-        </mat-form-field>
-
-        <!-- Add Sale Button -->
-        <button
-          mat-fab
-          extended
-          class="col-2 me-3"
-          (click)="getRouterLink()"  style="color: white; background-color: #3076f0;"
-        >
-          <mat-icon>add</mat-icon>
-          Add {{ this.transactionTypeString | removeHyphen }}
-        </button>
-      </div>
-    </div>
-
-    <table mat-table matSort [dataSource]="transactonData">
-      <!--- Note that these columns can be defined in any order.
+        <table mat-table matSort [dataSource]="transactonData">
+            <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
 
-      <!-- Position Column -->
-      <ng-container matColumnDef="invoicedate">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.invoicedate | date }}
-        </td>
-      </ng-container>
+            <!-- Position Column -->
+            <ng-container matColumnDef="invoicedate">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.invoicedate | date }}
+                </td>
+            </ng-container>
 
-      <!-- Name Column -->
-      <ng-container matColumnDef="invoicenumber">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice No</th>
-        <td mat-cell *matCellDef="let element">{{ element.invoicenumber }}</td>
-      </ng-container>
+            <!-- Name Column -->
+            <ng-container matColumnDef="invoicenumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Invoice No
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.invoicenumber }}
+                </td>
+            </ng-container>
 
-      <!-- Weight Column -->
-      <ng-container matColumnDef="customername">
-        <th mat-header-cell *matHeaderCellDef>Party Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.customername }}</td>
-      </ng-container>
+            <!-- Weight Column -->
+            <ng-container matColumnDef="customername">
+                <th mat-header-cell *matHeaderCellDef>Party Name</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.customername }}
+                </td>
+            </ng-container>
 
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="typeofpay">
-        <th mat-header-cell *matHeaderCellDef>Transaction Type</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.typeofpay }}
-        </td>
-      </ng-container>
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="typeofpay">
+                <th mat-header-cell *matHeaderCellDef>Transaction Type</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.typeofpay }}
+                </td>
+            </ng-container>
 
-      <!-- Weight Column -->
-      <ng-container matColumnDef="paymenttype">
-        <th mat-header-cell *matHeaderCellDef>Payment Type</th>
-        <td mat-cell *matCellDef="let element">{{ element.paymenttype }}</td>
-      </ng-container>
+            <!-- Weight Column -->
+            <ng-container matColumnDef="paymenttype">
+                <th mat-header-cell *matHeaderCellDef>Payment Type</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.paymenttype }}
+                </td>
+            </ng-container>
 
-      <!-- Amount Column -->
-      <ng-container matColumnDef="total">
-        <th mat-header-cell *matHeaderCellDef>Amount</th>
-        <td mat-cell *matCellDef="let element">{{ element.total }}</td>
-      </ng-container>
+            <!-- Amount Column -->
+            <ng-container matColumnDef="total">
+                <th mat-header-cell *matHeaderCellDef>Amount</th>
+                <td mat-cell *matCellDef="let element">{{ element.total }}</td>
+            </ng-container>
 
-      <!-- Balance Column -->
-      <ng-container matColumnDef="balance">
-        <th mat-header-cell *matHeaderCellDef>Balance</th>
-        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
-      </ng-container>
+            <!-- Balance Column -->
+            <ng-container matColumnDef="balance">
+                <th mat-header-cell *matHeaderCellDef>Balance</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.balance }}
+                </td>
+            </ng-container>
 
-      <!-- Icons Column -->
-      <ng-container matColumnDef="icons">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element">
-          <div *ngIf="transactionType == 4 || transactionType == 6">
-            <button mat-menu-item [routerLink]="['/' + transactionTypeString + '/convert', element.invoicenumber]" > Convert to Sale </button>
-          </div>
-          <div *ngIf="transactionType == 5">
-            <button mat-menu-item [routerLink]="['/' + transactionTypeString + '/convert', element.invoicenumber]" > Convert to Purchase </button>
-          </div>
-          <div *ngIf="transactionType != 4 && transactionType != 5 && transactionType != 6">
-            <mat-icon class="ms-2" (click)="handlePrintClick(element.invoiceNo)">
-              print
-            </mat-icon>
-            <mat-icon class="ms-2" (click)="handleShareClick(element.invoiceNo)">
-              share
-            </mat-icon>
-          </div>
-        </td>
-      </ng-container>
+            <!-- Icons Column -->
+            <ng-container matColumnDef="icons">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                    <div *ngIf="transactionType == 4 || transactionType == 6">
+                        <button
+                            mat-menu-item
+                            [routerLink]="[
+                                '/' + transactionTypeString + '/convert',
+                                element.invoicenumber,
+                            ]"
+                        >
+                            Convert to Sale
+                        </button>
+                    </div>
+                    <div *ngIf="transactionType == 5">
+                        <button
+                            mat-menu-item
+                            [routerLink]="[
+                                '/' + transactionTypeString + '/convert',
+                                element.invoicenumber,
+                            ]"
+                        >
+                            Convert to Purchase
+                        </button>
+                    </div>
+                    <div
+                        *ngIf="
+                            transactionType != 4 &&
+                            transactionType != 5 &&
+                            transactionType != 6
+                        "
+                    >
+                        <mat-icon
+                            class="ms-2"
+                            (click)="handlePrintClick(element.invoiceNo)"
+                        >
+                            print
+                        </mat-icon>
+                        <mat-icon
+                            class="ms-2"
+                            (click)="handleShareClick(element.invoiceNo)"
+                        >
+                            share
+                        </mat-icon>
+                    </div>
+                </td>
+            </ng-container>
 
-      <ng-container matColumnDef="option">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button [matMenuTriggerFor]="appMenu" aria-label="">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #appMenu="matMenu">
-            <button
-              mat-menu-item
-              (click)="getEditLink(element.invoicenumber)"
-            >
-              Edit
-            </button>
-            <button mat-menu-item>Delete</button>
-            <button
-              mat-menu-item
-              [routerLink]="[
-                '/' + transactionTypeString + '/convert',
-                element.invoicenumber
-              ]"
-              *ngIf="transactionType == 8"
-            >
-              Convert to Sale
-            </button>
-            <button
-              mat-menu-item
-              [routerLink]="[
-                '/' + transactionTypeString + '/convertOrder',
-                element.invoicenumber
-              ]"
-              *ngIf="transactionType == 8"
-            >
-              Convert to Sale Order
-            </button>
-          </mat-menu>
-        </td>
-      </ng-container>
+            <ng-container matColumnDef="option">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                    <button
+                        mat-icon-button
+                        [matMenuTriggerFor]="appMenu"
+                        aria-label=""
+                    >
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #appMenu="matMenu">
+                        <button
+                            mat-menu-item
+                            (click)="getEditLink(element.invoicenumber)"
+                        >
+                            Edit
+                        </button>
+                        <button mat-menu-item>Delete</button>
+                        <button
+                            mat-menu-item
+                            [routerLink]="[
+                                '/' + transactionTypeString + '/convert',
+                                element.invoicenumber,
+                            ]"
+                            *ngIf="transactionType == 8"
+                        >
+                            Convert to Sale
+                        </button>
+                        <button
+                            mat-menu-item
+                            [routerLink]="[
+                                '/' + transactionTypeString + '/convertOrder',
+                                element.invoicenumber,
+                            ]"
+                            *ngIf="transactionType == 8"
+                        >
+                            Convert to Sale Order
+                        </button>
+                    </mat-menu>
+                </td>
+            </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-      <!-- Row shown when there is no matching data. -->
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">
-          No data matching the filter "{{ tableFilterInp.value }}"
-        </td>
-      </tr>
-    </table>
-  </section>
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">
+                    No data matching the filter "{{ tableFilterInp.value }}"
+                </td>
+            </tr>
+        </table>
+    </section>
 </div>
