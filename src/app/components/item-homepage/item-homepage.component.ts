@@ -315,38 +315,39 @@ export class ItemHomepageComponent {
     }
   }
 
-  handleItemDoubleClick(row: any) {
-    console.log("Clicked: ", row);
-    let typeOfPay = "";
-    switch (row.typeofpay) {
-      case "SALE":
-        typeOfPay = "Sale";
-        break;
-      case "SALE ORDER":
-        typeOfPay = "Sale-Order";
-        break;
-      case "ESTIMATE QUATATION":
-        typeOfPay = "Estimate-Quatation";
-        break;
-      case "SALE RETURN":
-        typeOfPay = "Sale-Return";
-        break;
-      case "DELIVERY CHALLAN":
-        typeOfPay = "Delivery-Challan";
-        break;
-      case "PURCHASE":
-        typeOfPay = "Purchase";
-        break;
-      case "PURCHASE ORDER":
-        typeOfPay = "Purchase-Order";
-        break;
-      case "PURCHASE RETURN":
-        typeOfPay = "Purchase-Return";
-        break;
-      default:
-        alert("Wrong Transaction Type");
-        return;
-    }
-    this.router.navigate([`/${typeOfPay}/edit`, row.invoicenumber]);
+    handleItemDoubleClick(row: any) {
+      console.log("Clicked: ", row);
+
+      const transactionMap: any = {
+          'SALE': 'Sale',
+          'SALE ORDER': 'Sale-Order',
+          'ESTIMATE QUOTATION': 'Estimate-Quotation',
+          'SALE RETURN': 'Sale-Return',
+          'DELIVERY CHALLAN': 'Delivery-Challan',
+          'PURCHASE': 'Purchase',
+          'PURCHASE ORDER': 'Purchase-Order',
+          'PURCHASE RETURN': 'Purchase-Return',
+          'PAYMENT IN': 'PAYMENT IN',
+          'PAYMENT OUT': 'PAYMENT OUT',
+          'ADVANCE IN': 'ADVANCE IN',
+          'ADVANCE OUT': 'ADVANCE OUT'
+      };
+
+      const typeOfPay = transactionMap[row.typeofpay];
+
+      if (!typeOfPay) {
+          alert("Wrong Transaction Type");
+          return;
+      }
+
+      if (['PAYMENT IN', 'PAYMENT OUT', 'ADVANCE IN', 'ADVANCE OUT'].includes(row.typeofpay)) {
+          // Set data for Payment or Advance
+          this.dataService.invoicenumber = row.invoicenumber;
+          this.dataService.isview = true;
+          this.dataService.typeofpay = row.typeofpay;
+          return this.router.navigateByUrl('/pin');
+      }
+
+      return this.router.navigate([`/${typeOfPay}/edit`, row.invoicenumber]);
   }
 }

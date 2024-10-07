@@ -5,6 +5,7 @@ import { TransferModalComponent } from '../transfer-modal/transfer-modal.compone
 import { ApiService } from 'src/app/services/api.service';
 import { Bank } from 'src/app/models';
 import { DataService } from 'src/app/services/data.service';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-bank-homepage',
@@ -22,7 +23,7 @@ export class BankHomepageComponent implements OnInit {
   private clickTimeout: any;
   private singleClickFlag = false;
   
-  constructor(public dialog: MatDialog, public api: ApiService, public dataService: DataService) {
+  constructor(public dialog: MatDialog, public api: ApiService, public dataService: DataService, public router: Router) {
     this.registeredPhoneNmber = parseInt(
       JSON.parse(localStorage.getItem('phonenumber') as string)
     );
@@ -68,7 +69,8 @@ export class BankHomepageComponent implements OnInit {
           name: transaction.customername,
           date: new Date(transaction.invoicedate).toLocaleDateString(), // Format date as needed
           amount: transaction.amount,
-          transactionid: transaction.transactionid
+          transactionid: transaction.transactionid,
+          invoicenumber:transaction.invoicenumber
         }));
       } else {
         console.error('Failed to fetch transactions:', response.statusmessage);
@@ -244,6 +246,54 @@ export class BankHomepageComponent implements OnInit {
         }
     });
 }
+
+handleTransaction(row: any) {
+  const transactionType = row.type || row.typeofpay;
+  const modalTransactionTypes = ['CASH WITHDRAW', 'CASH DEPOSIT', 'BANK TO BANK', 'BANK ADJ INCREASE', 'BANK ADJ DECREASE'];
+  if (modalTransactionTypes.includes(transactionType)) {
+      this.openModalOnTransaction(row);
+  } else {
+      this.handleItemDoubleClick(row);
+  }
+}
+
+handleItemDoubleClick(row: any) {
+  console.log("Clicked: ", row);
+
+  const transactionMap: any = {
+      'SALE': 'Sale',
+      'SALE ORDER': 'Sale-Order',
+      'ESTIMATE QUOTATION': 'Estimate-Quotation',
+      'SALE RETURN': 'Sale-Return',
+      'DELIVERY CHALLAN': 'Delivery-Challan',
+      'PURCHASE': 'Purchase',
+      'PURCHASE ORDER': 'Purchase-Order',
+      'PURCHASE RETURN': 'Purchase-Return',
+      'PAYMENT IN': 'PAYMENT IN',
+      'PAYMENT OUT': 'PAYMENT OUT',
+      'ADVANCE IN': 'ADVANCE IN',
+      'ADVANCE OUT': 'ADVANCE OUT',
+      'OPENING BALANCE':'OPENING BALANCE'
+  };
+
+  const typeOfPay = transactionMap[row.type];
+  if (['OPENING BALANCE'].includes(row.type)){
+      return;
+  } else if (!typeOfPay) {
+      alert("Wrong Transaction Type");
+      return;
+  }
+
+  if (['PAYMENT IN', 'PAYMENT OUT', 'ADVANCE IN', 'ADVANCE OUT'].includes(row.typeofpay)) {
+      this.dataService.invoicenumber = row.invoicenumber;
+      this.dataService.isview = true;
+      this.dataService.typeofpay = row.typeofpay;
+      return this.router.navigateByUrl('/pin');
+  }
+
+  return this.router.navigate([`/${typeOfPay}/edit`, row.invoicenumber]);
+}
+
 
 openAddBanksModal(bank?: Bank): void {
   if (!bank) {

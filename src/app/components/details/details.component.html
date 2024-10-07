@@ -3,30 +3,34 @@
 
     <!-- Navbar -->
     <section>
-        <nav class="navbar navbar-expand-lg bg-body-secondary">
-            <div class="container-fluid justify-content-end">
-                <ul class="navbar-nav nav-tabs col-3">
-                    <li class="nav-item">
-                        <a
-                            class="nav-link"
-                            aria-current="page"
-                            routerLink="/Sale/add"
-                        >
-                            Add Sale
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" routerLink="/Purchase/add">
-                            Add Purchase
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"> More </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </section>
+      <nav class="navbar navbar-expand-lg bg-body-secondary">
+          <div class="container-fluid justify-content-end">
+              <ul class="navbar-nav nav-tabs col-3">
+                  <li class="nav-item">
+                      <button
+                          mat-button
+                          class="nav-link"
+                          aria-current="page"
+                          routerLink="/Sale/add"
+                          style="background-color: blue; color: white; margin-right: 10px; border-radius: 5px;"
+                      >
+                          Add Sale
+                      </button>
+                  </li>
+                  <li class="nav-item">
+                      <button
+                          mat-button
+                          class="nav-link"
+                          routerLink="/Purchase/add"
+                          style="background-color: rgb(211, 18, 18); color: white; border-radius: 5px;"
+                      >
+                          Add Purchase
+                      </button>
+                  </li>
+              </ul>
+          </div>
+      </nav>
+  </section>
 
     <!-- Filters -->
     <section class="bg-body-secondary" *ngIf="this.showFilterSection">
