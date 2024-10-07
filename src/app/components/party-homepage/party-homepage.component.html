@@ -1,165 +1,349 @@
 <div>
-  <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="selectTab($event.index)">
-    <mat-tab label="PARTY">
-    </mat-tab>
-    <mat-tab label="GROUP">
-    </mat-tab>
-  </mat-tab-group>
+    <mat-tab-group
+        [(selectedIndex)]="selectedTabIndex"
+        (selectedTabChange)="selectTab($event.index)"
+    >
+        <mat-tab label="PARTY"> </mat-tab>
+        <mat-tab label="GROUP"> </mat-tab>
+    </mat-tab-group>
 </div>
 
 <ng-container *ngIf="dataService.partyHomePageSelectedTab === 'party'">
-  <div class="grid-container">
-    <!-- SIDEBAR -->
-    <div class="sidebar scroll">
-      <div class="row">
-        <mat-form-field class="col">
-          <mat-label>Search here..</mat-label>
-          <input matInput [(ngModel)]="searchTerm" (input)="onSearch()">
-        </mat-form-field>
-        <div class="col-auto">
-          <button mat-raised-button (click)="openAddPartyModal('')" style="height: 60%; margin-top: 2.5%; background-color: #da9c0cf3; color: white;">+ ADD PARTY</button>
+    <div class="grid-container">
+        <!-- SIDEBAR -->
+        <div class="sidebar scroll">
+            <div class="row">
+                <mat-form-field class="col">
+                    <mat-label>Search here..</mat-label>
+                    <input
+                        matInput
+                        [(ngModel)]="searchTerm"
+                        (input)="onSearch()"
+                    />
+                </mat-form-field>
+                <div class="col-auto">
+                    <button
+                        mat-raised-button
+                        (click)="openAddPartyModal('')"
+                        style="
+                            height: 60%;
+                            margin-top: 2.5%;
+                            background-color: #da9c0cf3;
+                            color: white;
+                        "
+                    >
+                        + ADD PARTY
+                    </button>
+                </div>
+            </div>
+
+            <div class="scrollable-div">
+                <table
+                    mat-table
+                    [dataSource]="partyList"
+                    class="mat-elevation-z8"
+                >
+                    <ng-container matColumnDef="party">
+                        <th mat-header-cell *matHeaderCellDef>PARTY</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let partydetail"
+                            (click)="
+                                partyHandleClick($event, partydetail.partyname)
+                            "
+                            [ngClass]="{
+                                'selectedParty-row-td': isSelectedParty(
+                                    partydetail.partyname
+                                ),
+                            }"
+                        >
+                            {{ partydetail.partyname }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="amount">
+                        <th mat-header-cell *matHeaderCellDef>AMOUNT</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let partydetail"
+                            [ngStyle]="{
+                                color: dataService.getColor(
+                                    partydetail.toreceivefromparty,
+                                    partydetail.topayparty
+                                ),
+                            }"
+                            [ngClass]="{
+                                'selectedParty-row-td': isSelectedParty(
+                                    partydetail.partyname
+                                ),
+                            }"
+                        >
+                            {{
+                                partydetail.toreceivefromparty -
+                                    partydetail.topayparty
+                            }}
+                        </td>
+                    </ng-container>
+
+                    <tr
+                        mat-header-row
+                        *matHeaderRowDef="['party', 'amount']"
+                    ></tr>
+                    <tr
+                        mat-row
+                        *matRowDef="let row; columns: ['party', 'amount']"
+                    ></tr>
+                </table>
+            </div>
         </div>
-      </div>
 
-      
-      <div class="scrollable-div">
-      <table mat-table [dataSource]="partyList" class="mat-elevation-z8">
-        <ng-container matColumnDef="party">
-          <th mat-header-cell *matHeaderCellDef> PARTY </th>
-          <td mat-cell *matCellDef="let partydetail" (click)="partyHandleClick($event, partydetail.partyname)" [ngClass]="{ 'selectedParty-row-td': isSelectedParty(partydetail.partyname) }">
-          {{ partydetail.partyname }}
-          </td>
-        </ng-container>
+        <!-- TOP CONTENT -->
+        <div class="top-content">
+            <h2>{{ partyName }}</h2>
+            <div class="top-content-row">
+                <div class="phone">PHONE: {{ phonenumber }}</div>
+                <div class="address">ADDRESS: {{ billingaddress }}</div>
+            </div>
+            <div class="top-content-row">
+                <div class="phone">EMAIL: {{ emailid }}</div>
+                <div class="address">GSTIN: {{ gst }}</div>
+            </div>
+        </div>
 
-        <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef>AMOUNT</th>
-          <td mat-cell *matCellDef="let partydetail" [ngStyle]="{ 'color': dataService.getColor(partydetail.toreceivefromparty, partydetail.topayparty) }"
-              [ngClass]="{ 'selectedParty-row-td': isSelectedParty(partydetail.partyname) }">
-              {{ partydetail.toreceivefromparty - partydetail.topayparty }}
-            </td>
-        </ng-container>
+        <!-- BOTTOM CONTENT -->
+        <div class="bottom-content scrollable-div">
+            <h2>TRANSACTIONS</h2>
+            <table
+                mat-table
+                [dataSource]="dataService.transactionDetailsResponse"
+                class="mat-elevation-z8"
+            >
+                <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef>TYPE</th>
+                    <td mat-cell *matCellDef="let transaction">
+                        {{ transaction.typeofpay }}
+                    </td>
+                </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="['party', 'amount']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['party', 'amount']"></tr>
-      </table>
+                <ng-container matColumnDef="number">
+                    <th mat-header-cell *matHeaderCellDef>NUMBER</th>
+                    <td mat-cell *matCellDef="let transaction">
+                        {{ transaction.invoicenumber }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>DATE</th>
+                    <td mat-cell *matCellDef="let transaction">
+                        {{ transaction.invoicedate }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef>TOTAL</th>
+                    <td
+                        mat-cell
+                        *matCellDef="let transaction"
+                        [ngStyle]="{
+                            color: dataService.getColor(transaction.total, 0),
+                        }"
+                    >
+                        {{ transaction.total }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="balance">
+                    <th mat-header-cell *matHeaderCellDef>BALANCE</th>
+                    <td
+                        mat-cell
+                        *matCellDef="let transaction"
+                        [ngStyle]="{
+                            color: dataService.getColor(transaction.balance, 0),
+                        }"
+                    >
+                        {{ transaction.balance }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>STATUS</th>
+                    <td mat-cell *matCellDef="let transaction">
+                        {{ transaction.paymentstatus }}
+                    </td>
+                </ng-container>
+
+                <tr
+                    mat-header-row
+                    *matHeaderRowDef="[
+                        'type',
+                        'number',
+                        'date',
+                        'total',
+                        'balance',
+                        'status',
+                    ]"
+                ></tr>
+                <tr
+                    mat-row
+                    *matRowDef="
+                        let row;
+                        columns: [
+                            'type',
+                            'number',
+                            'date',
+                            'total',
+                            'balance',
+                            'status',
+                        ]
+                    "
+                    (click)="handleDoublePartyItemClick(row)"
+                ></tr>
+            </table>
+        </div>
     </div>
-    </div>
-
-    <!-- TOP CONTENT -->
-    <div class="top-content">
-      <h2>{{ partyName }}</h2>
-      <div class="top-content-row">
-        <div class="phone">PHONE: {{ phonenumber }}</div>
-        <div class="address">ADDRESS: {{ billingaddress }}</div>
-      </div>
-      <div class="top-content-row">
-        <div class="phone">EMAIL: {{ emailid }}</div>
-        <div class="address">GSTIN: {{ gst }}</div>
-      </div>
-    </div>
-
-    <!-- BOTTOM CONTENT -->
-    <div class="bottom-content scrollable-div">
-      <h2>TRANSACTIONS</h2>
-      <table mat-table [dataSource]="dataService.transactionDetailsResponse" class="mat-elevation-z8">
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef> TYPE </th>
-          <td mat-cell *matCellDef="let transaction">{{ transaction.typeofpay }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="number">
-          <th mat-header-cell *matHeaderCellDef> NUMBER </th>
-          <td mat-cell *matCellDef="let transaction">{{ transaction.invoicenumber }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef> DATE </th>
-          <td mat-cell *matCellDef="let transaction">{{ transaction.invoicedate }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="total">
-          <th mat-header-cell *matHeaderCellDef> TOTAL </th>
-          <td mat-cell *matCellDef="let transaction" [ngStyle]="{ 'color': dataService.getColor(transaction.total, 0) }">{{ transaction.total }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="balance">
-          <th mat-header-cell *matHeaderCellDef> BALANCE </th>
-          <td mat-cell *matCellDef="let transaction" [ngStyle]="{ 'color': dataService.getColor(transaction.balance, 0) }">{{ transaction.balance }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef> STATUS </th>
-          <td mat-cell *matCellDef="let transaction">{{ transaction.paymentstatus }}</td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="['type', 'number', 'date', 'total', 'balance', 'status']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['type', 'number', 'date', 'total', 'balance', 'status']"></tr>
-      </table>
-    </div>
-  </div>
 </ng-container>
 
 <ng-container *ngIf="dataService.partyHomePageSelectedTab === 'group'">
-  <div class="grid-container">
-    <!-- SIDEBAR -->
-    <div class="sidebar scroll">
-      <div class="row">
-        <mat-form-field class="col">
-          <mat-label>Search here..</mat-label>
-          <input matInput [(ngModel)]="searchGroup" (input)="onSearch()">
-        </mat-form-field>
-        <div class="col-auto">
-          <button mat-raised-button color="primary" (click)="openAddPartyGroupModal('')" style="height: 60%; margin-top: 2.5%; background-color: #da9c0cf3; color: white;">+ ADD PARTY GROUP</button>
+    <div class="grid-container">
+        <!-- SIDEBAR -->
+        <div class="sidebar scroll">
+            <div class="row">
+                <mat-form-field class="col">
+                    <mat-label>Search here..</mat-label>
+                    <input
+                        matInput
+                        [(ngModel)]="searchGroup"
+                        (input)="onSearch()"
+                    />
+                </mat-form-field>
+                <div class="col-auto">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="openAddPartyGroupModal('')"
+                        style="
+                            height: 60%;
+                            margin-top: 2.5%;
+                            background-color: #da9c0cf3;
+                            color: white;
+                        "
+                    >
+                        + ADD PARTY GROUP
+                    </button>
+                </div>
+            </div>
+
+            <div class="scrollable-div">
+                <table
+                    mat-table
+                    *ngIf="ispartygrouplistresponse"
+                    [dataSource]="dataService.partyGroupListResponse"
+                    class="mat-elevation-z8"
+                >
+                    <ng-container matColumnDef="group">
+                        <th mat-header-cell *matHeaderCellDef>GROUP</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let party"
+                            (click)="groupHandleClick($event, party.partygroup)"
+                            [ngClass]="{
+                                'selectedParty-row-td': isSelectedGroup(
+                                    party.partygroup
+                                ),
+                            }"
+                        >
+                            <span
+                                [ngClass]="{
+                                    'selectedParty-row-td': isSelectedGroup(
+                                        party.partygroup
+                                    ),
+                                }"
+                                >{{ party.partygroup }}</span
+                            >
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="partyCount">
+                        <th mat-header-cell *matHeaderCellDef>PARTY</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let party"
+                            [ngClass]="{
+                                'selectedParty-row-td': isSelectedGroup(
+                                    party.partygroup
+                                ),
+                            }"
+                            [ngStyle]="{
+                                color: dataService.getColor(
+                                    party.partygroupcount,
+                                    0
+                                ),
+                            }"
+                        >
+                            {{ party.partygroupcount }}
+                        </td>
+                    </ng-container>
+
+                    <tr
+                        mat-header-row
+                        *matHeaderRowDef="['group', 'partyCount']"
+                    ></tr>
+                    <tr
+                        mat-row
+                        *matRowDef="let row; columns: ['group', 'partyCount']"
+                    ></tr>
+                </table>
+            </div>
         </div>
-      </div>
 
-      <div class="scrollable-div">
-      <table mat-table *ngIf="ispartygrouplistresponse" [dataSource]="dataService.partyGroupListResponse" class="mat-elevation-z8">
-        <ng-container matColumnDef="group">
-          <th mat-header-cell *matHeaderCellDef> GROUP </th>
-          <td mat-cell *matCellDef="let party" (click)="groupHandleClick($event, party.partygroup)" [ngClass]="{ 'selectedParty-row-td': isSelectedGroup(party.partygroup) }">
-            <span [ngClass]="{ 'selectedParty-row-td': isSelectedGroup(party.partygroup) }">{{ party.partygroup }}</span>
-          </td>
-        </ng-container>
+        <!-- TOP CONTENT -->
+        <div class="top-content" *ngIf="ispartygrouplistresponse">
+            <h2>{{ groupname }}</h2>
+            <div class="top-content-row">
+                <div class="phone">
+                    Parties ({{ this.totalPartyGroups }})
+                    <span>({{ this.totalPartyGroupCount }})</span>
+                </div>
+            </div>
+        </div>
 
-        <ng-container matColumnDef="partyCount">
-          <th mat-header-cell *matHeaderCellDef> PARTY </th>
-          <td mat-cell *matCellDef="let party"
-          [ngClass]="{ 'selectedParty-row-td': isSelectedGroup(party.partygroup) }"
-           [ngStyle]="{ 'color': dataService.getColor(party.partygroupcount, 0) }">{{ party.partygroupcount }}</td>
-        </ng-container>
+        <!-- BOTTOM CONTENT -->
+        <div class="bottom-content" *ngIf="ispartygrouplistresponse">
+            <h2>PARTIES</h2>
+            <table
+                mat-table
+                [dataSource]="dataService.partyByGroupResponse"
+                class="mat-elevation-z8"
+            >
+                <ng-container matColumnDef="party">
+                    <th mat-header-cell *matHeaderCellDef>PARTY</th>
+                    <td mat-cell *matCellDef="let party">
+                        {{ party.partyname }}
+                    </td>
+                </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="['group', 'partyCount']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['group', 'partyCount']"></tr>
-      </table>
+                <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef>AMOUNT</th>
+                    <td
+                        mat-cell
+                        *matCellDef="let party"
+                        [ngStyle]="{
+                            color: dataService.getColor(
+                                party.toreceivefromparty,
+                                party.topayparty
+                            ),
+                        }"
+                    >
+                        {{ party.toreceivefromparty - party.topayparty }}
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="['party', 'amount']"></tr>
+                <tr
+                    mat-row
+                    *matRowDef="let row; columns: ['party', 'amount']"
+                ></tr>
+            </table>
+        </div>
     </div>
-    </div>
-
-    <!-- TOP CONTENT -->
-    <div class="top-content" *ngIf="ispartygrouplistresponse">
-      <h2>{{ groupname }}</h2>
-      <div class="top-content-row">
-            <div class="phone">Parties ({{this.totalPartyGroups}}) <span>({{this.totalPartyGroupCount}})</span> </div>
-      </div>
-    </div>
-
-    <!-- BOTTOM CONTENT -->
-    <div class="bottom-content" *ngIf="ispartygrouplistresponse">
-      <h2>PARTIES</h2>
-      <table mat-table [dataSource]="dataService.partyByGroupResponse" class="mat-elevation-z8">
-        <ng-container matColumnDef="party">
-          <th mat-header-cell *matHeaderCellDef> PARTY </th>
-          <td mat-cell *matCellDef="let party">{{ party.partyname }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef> AMOUNT </th>
-          <td mat-cell *matCellDef="let party" [ngStyle]="{ 'color': dataService.getColor(party.toreceivefromparty, party.topayparty) }">{{ party.toreceivefromparty - party.topayparty }}</td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="['party', 'amount']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['party', 'amount']"></tr>
-      </table>
-    </div>
-  </div>
 </ng-container>
