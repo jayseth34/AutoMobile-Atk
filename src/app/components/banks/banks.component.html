@@ -3,7 +3,7 @@
   <div class="row">
     <mat-form-field class="half-width">
       <mat-label>Account Display Name</mat-label>
-      <input matInput formControlName="newaccountDisplayName" />
+      <input matInput formControlName="newaccountDisplayName" oninput="this.value = this.value.toUpperCase()" />
     </mat-form-field>
     <mat-form-field class="half-width">
       <mat-label>Opening Balance</mat-label>
