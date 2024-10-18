@@ -40,9 +40,12 @@ export class PartyHomepageComponent {
   selectedTabIndex: number = 0;
   filteredPartyList: any[] = [];
   filteredGroupList: any[] = [];
+  
 
   @ViewChild("app-add-party") addPartyModal: AddPartyComponent;
   searchTerm: any;
+  searchTermTransactions: any;
+  filteredTransactions: any;
 
   constructor(
     private dialog: MatDialog,
@@ -245,6 +248,7 @@ export class PartyHomepageComponent {
           this.selectedParty = partyName;
           this.dataService.transactionDetailsResponse =
             response.partyTransactionsList;
+            this.filteredTransactions = response.partyTransactionsList;
           this.gst = response.gst;
           this.emailid = response.emailid;
           this.phonenumber = response.phonenumber;
@@ -366,6 +370,21 @@ export class PartyHomepageComponent {
     }
 
     return this.router.navigate([`/${typeOfPay}/edit`, row.invoicenumber]);
+}
+
+handleEdit(transaction: any) {
+  console.log("Edit clicked for: ", transaction);
+  this.handleDoublePartyItemClick(transaction);
+}
+
+applyFilter() {
+  this.filteredTransactions = this.dataService.transactionDetailsResponse.filter((transaction:any) =>
+      transaction.typeofpay.toLowerCase().includes(this.searchTermTransactions.toLowerCase()) ||
+      transaction.invoicenumber.toString().includes(this.searchTermTransactions) ||
+      transaction.total.toString().includes(this.searchTermTransactions) ||
+      transaction.balance.toString().includes(this.searchTermTransactions) ||
+      transaction.paymentstatus.toLowerCase().includes(this.searchTermTransactions.toLowerCase())
+  );
 }
 
   ngOnDestroy() {

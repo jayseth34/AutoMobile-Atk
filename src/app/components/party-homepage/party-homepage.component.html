@@ -112,10 +112,22 @@
 
         <!-- BOTTOM CONTENT -->
         <div class="bottom-content scrollable-div">
-            <h2>TRANSACTIONS</h2>
+            
+            <div class="header-container">
+                <h2>TRANSACTIONS</h2>
+                <mat-form-field appearance="outline" class="search-field">
+                    <mat-label>Search</mat-label>
+                    <input
+                        matInput
+                        [(ngModel)]="searchTermTransactions"
+                        (input)="applyFilter()"
+                        placeholder="Type to search..."
+                    />
+                </mat-form-field>
+            </div>
             <table
                 mat-table
-                [dataSource]="dataService.transactionDetailsResponse"
+                [dataSource]="filteredTransactions"
                 class="mat-elevation-z8"
             >
                 <ng-container matColumnDef="type">
@@ -124,21 +136,21 @@
                         {{ transaction.typeofpay }}
                     </td>
                 </ng-container>
-
+        
                 <ng-container matColumnDef="number">
                     <th mat-header-cell *matHeaderCellDef>NUMBER</th>
                     <td mat-cell *matCellDef="let transaction">
                         {{ transaction.invoicenumber }}
                     </td>
                 </ng-container>
-
+        
                 <ng-container matColumnDef="date">
                     <th mat-header-cell *matHeaderCellDef>DATE</th>
                     <td mat-cell *matCellDef="let transaction">
                         {{ transaction.invoicedate }}
                     </td>
                 </ng-container>
-
+        
                 <ng-container matColumnDef="total">
                     <th mat-header-cell *matHeaderCellDef>TOTAL</th>
                     <td
@@ -151,7 +163,7 @@
                         {{ transaction.total }}
                     </td>
                 </ng-container>
-
+        
                 <ng-container matColumnDef="balance">
                     <th mat-header-cell *matHeaderCellDef>BALANCE</th>
                     <td
@@ -164,42 +176,38 @@
                         {{ transaction.balance }}
                     </td>
                 </ng-container>
-
+        
                 <ng-container matColumnDef="status">
                     <th mat-header-cell *matHeaderCellDef>STATUS</th>
                     <td mat-cell *matCellDef="let transaction">
                         {{ transaction.paymentstatus }}
                     </td>
                 </ng-container>
-
+        
+                <!-- New options column -->
+                <ng-container matColumnDef="options">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let transaction">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="handleEdit(transaction)">Edit</button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+        
                 <tr
                     mat-header-row
-                    *matHeaderRowDef="[
-                        'type',
-                        'number',
-                        'date',
-                        'total',
-                        'balance',
-                        'status',
-                    ]"
+                    *matHeaderRowDef="['type', 'number', 'date', 'total', 'balance', 'status', 'options']"
                 ></tr>
                 <tr
                     mat-row
-                    *matRowDef="
-                        let row;
-                        columns: [
-                            'type',
-                            'number',
-                            'date',
-                            'total',
-                            'balance',
-                            'status',
-                        ]
-                    "
-                    (click)="handleDoublePartyItemClick(row)"
+                    *matRowDef="let row; columns: ['type', 'number', 'date', 'total', 'balance', 'status', 'options']"
                 ></tr>
             </table>
         </div>
+        
     </div>
 </ng-container>
 
