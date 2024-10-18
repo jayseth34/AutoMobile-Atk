@@ -60,8 +60,19 @@
 
     <!-- BOTTOM CONTENT -->
     <div class="bottom-content">
-      <h2>TRANSACTIONS</h2>
-      <mat-table [dataSource]="transactions" class="mat-elevation-z8 transaction-list">
+      <div class="header-container">
+        <h2>TRANSACTIONS</h2>
+        <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search</mat-label>
+            <input
+                matInput
+                [(ngModel)]="searchTermTransactions"
+                (input)="applyFilter()"
+                placeholder="Type to search..."
+            />
+        </mat-form-field>
+    </div>
+      <mat-table [dataSource]="filteredTransactions" class="mat-elevation-z8 transaction-list">
         <ng-container matColumnDef="transactionid">
           <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
           <mat-cell *matCellDef="let transaction">{{ transaction.transactionid }}</mat-cell>
@@ -87,8 +98,17 @@
           <mat-cell *matCellDef="let transaction">{{ transaction.amount }}</mat-cell>
         </ng-container>
 
-        <mat-header-row *matHeaderRowDef="['transactionid', 'type', 'name', 'date', 'amount']"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: ['transactionid', 'type', 'name', 'date', 'amount'];" (click)="handleTransaction(row)"></mat-row>
+        <ng-container matColumnDef="options">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>OPTIONS</mat-header-cell>
+          <mat-cell *matCellDef="let transaction">
+              <button mat-icon-button (click)="handleTransaction(transaction)">
+                  <mat-icon>edit</mat-icon>
+              </button>
+          </mat-cell>
+      </ng-container>
+
+        <mat-header-row *matHeaderRowDef="['transactionid', 'type', 'name', 'date', 'amount', 'options']"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: ['transactionid', 'type', 'name', 'date', 'amount', 'options'];" (click)="handleTransaction(row)"></mat-row>
       </mat-table>
     </div>
   </div>

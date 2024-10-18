@@ -116,10 +116,21 @@
 
         <!-- BOTTOM CONTENT -->
         <mat-card class="bottom-content scrollable-div">
-            <mat-card-title>TRANSACTIONS</mat-card-title>
+            <div class="header-container">
+                <h2>TRANSACTIONS</h2>
+                <mat-form-field appearance="outline" class="search-field">
+                    <mat-label>Search</mat-label>
+                    <input
+                        matInput
+                        [(ngModel)]="searchTermTransactions"
+                        (input)="applyFilter()"
+                        placeholder="Type to search..."
+                    />
+                </mat-form-field>
+            </div>
             <table
                 mat-table
-                [dataSource]="dataService.GetItemTransactionsResponse"
+                [dataSource]="filteredTransactions"
                 class="table-list"
             >
                 <ng-container matColumnDef="typeofpay">
@@ -171,6 +182,15 @@
                     </td>
                 </ng-container>
 
+                <ng-container matColumnDef="options">
+                    <th mat-header-cell *matHeaderCellDef>OPTIONS</th>
+                    <td mat-cell *matCellDef="let transaction">
+                        <button mat-icon-button (click)="handleItemDoubleClick(transaction)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
                 <tr
                     mat-header-row
                     *matHeaderRowDef="[
@@ -181,6 +201,7 @@
                         'qty',
                         'priceperunit',
                         'paymentstatus',
+                        'options',
                     ]"
                 ></tr>
                 <tr
@@ -195,6 +216,7 @@
                             'qty',
                             'priceperunit',
                             'paymentstatus',
+                            'options',
                         ]
                     "
                     (click)="handleItemDoubleClick(row)"

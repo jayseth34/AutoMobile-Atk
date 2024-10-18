@@ -22,6 +22,8 @@ export class BankHomepageComponent implements OnInit {
   searchTerm: any;
   private clickTimeout: any;
   private singleClickFlag = false;
+  filteredTransactions: any;
+  searchTermTransactions: any;
   
   constructor(public dialog: MatDialog, public api: ApiService, public dataService: DataService, public router: Router) {
     this.registeredPhoneNmber = parseInt(
@@ -72,6 +74,7 @@ export class BankHomepageComponent implements OnInit {
           transactionid: transaction.transactionid,
           invoicenumber:transaction.invoicenumber
         }));
+        this.filteredTransactions = this.transactions;
       } else {
         console.error('Failed to fetch transactions:', response.statusmessage);
       }
@@ -326,6 +329,15 @@ openAddBanksModal(bank?: Bank): void {
       this.bankslist = this.filteredBankList.filter(bank => 
         bank.accountdisplayname.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
+  }
+
+  applyFilter() {
+    this.filteredTransactions = this.transactions.filter((transaction:any) =>
+        transaction.type.toLowerCase().includes(this.searchTermTransactions.toLowerCase()) ||
+        transaction.transactionid.toString().includes(this.searchTermTransactions) ||
+        transaction.name.toLowerCase().includes(this.searchTermTransactions) ||
+        transaction.amount.toString().includes(this.searchTermTransactions.toLowerCase())
+    );
   }
 
 }

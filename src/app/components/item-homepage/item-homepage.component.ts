@@ -41,6 +41,8 @@ export class ItemHomepageComponent {
 
   @ViewChild("app-add-item") addItemModal: AddItemComponent;
   categorycount: any;
+  filteredTransactions: any;
+  searchTermTransactions: any;
 
   constructor(
     private dialog: MatDialog,
@@ -202,6 +204,7 @@ export class ItemHomepageComponent {
           this.selectedItem = itemname;
           this.dataService.GetItemTransactionsResponse =
             response.itemTransactionsList;
+          this.filteredTransactions = response.itemTransactionsList;
           this.saleprice = response.saleprice;
           this.purchaseprice = response.purchaseprice;
           this.minimumstocktomaintain = 10;
@@ -349,5 +352,16 @@ export class ItemHomepageComponent {
       }
 
       return this.router.navigate([`/${typeOfPay}/edit`, row.invoicenumber]);
+  }
+
+  applyFilter() {
+    this.filteredTransactions = this.dataService.GetItemTransactionsResponse.filter((transaction:any) =>
+        transaction.typeofpay.toLowerCase().includes(this.searchTermTransactions.toLowerCase()) ||
+        transaction.invoicenumber.toString().includes(this.searchTermTransactions) ||
+        transaction.partyname.toLowerCase().includes(this.searchTermTransactions) ||
+        transaction.qty.toString().includes(this.searchTermTransactions.toLowerCase()) ||
+        transaction.priceperunit.toString().includes(this.searchTermTransactions.toLowerCase()) ||
+        transaction.paymentstatus.toLowerCase().includes(this.searchTermTransactions)
+    );
   }
 }
