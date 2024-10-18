@@ -93,24 +93,31 @@ export class DetailsComponent implements OnInit, AfterViewInit {
           break;
 
         case "Payment-In":
+          this.showFilterSection = false;
           this.transactionType = 3;
           break;
         case "Payment-Out":
+            this.showFilterSection = false;
             this.transactionType = 7;
             break;
         case "Estimate-Quotation":
+          this.showFilterSection = false;
           this.transactionType = 8;
           break;
         case "Sale-Return":
+          this.showFilterSection = false;
           this.transactionType = 9;
           break;
         case "Purchase-Return":
+          this.showFilterSection = false;
           this.transactionType = 10;
           break;
         case "Advance-In":
+          this.showFilterSection = false;
           this.transactionType = 11;
           break;
         case "Advance-Out":
+          this.showFilterSection = false;
           this.transactionType = 12;
           break;
       

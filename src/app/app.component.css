@@ -3,7 +3,43 @@
 }
 
 .root-container {
+  display: flex; /* Use flexbox for layout */
+  height: 100vh; /* Full height of the viewport */
   padding: 0;
   margin: 0;
   max-width: 100vw;
+}
+
+.sidebar-container {
+  width: 250px; /* Set a fixed width for the sidebar */
+  background-color: #f4f4f4; /* Example background color */
+  position: fixed; /* Fix the sidebar in place */
+  height: 100%; /* Full height */
+  overflow-y: auto; /* Allow scrolling if the content overflows */
+}
+
+.main-content {
+  margin-left: 250px; /* Offset the main content to the right of the sidebar */
+  flex-grow: 1; /* Allow main content to take available space */
+  transition: margin-left 0.3s ease; /* Smooth transition for margin adjustment */
+  padding: 20px; /* Optional: Add some padding for better content spacing */
+}
+
+.full-width {
+  margin-left: 0; /* Remove margin when sidebar is hidden */
+}
+
+.sidebar-hidden {
+  display: none; /* Hide the sidebar when user is logged in */
+}
+
+/* Optional Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .sidebar-container {
+    width: 200px; /* Adjust sidebar width for smaller screens */
+  }
+
+  .main-content {
+    margin-left: 200px; /* Adjust main content margin */
+  }
 }

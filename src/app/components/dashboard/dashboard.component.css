@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #fff;
     margin: 0;
     padding: 0;
 }
@@ -10,6 +10,7 @@ body {
     display: flex;
     height: 100vh;
     flex-direction: column;
+    background: #E9ECEF;
 }
 
 .main-grid {

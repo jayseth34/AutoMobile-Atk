@@ -30,34 +30,23 @@ export class SidebarComponent {
     {
       name: 'Home',
       link: '/dashboard',
-      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
-    },
-    {
-      name: 'Plans',
-      link: '/plans',
-      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
-    },
-    {
-      name: 'Business Information',
-      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
-      action: () => this.openBusinessInfoModal()
+      icon: 'https://img.icons8.com/ios-filled/50/000000/home.png', // Home icon
     },
     {
       name: 'Parties',
       link: '/party-homepage',
-      icon: 'https://toppng.com/uploads/preview/ost-navigation-people-icon-grey-11563250547z5nvtwig34.png',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/teamwork.png', // Users icon
       // action: () => this.getPartyListData()
     },
     {
       name: 'Items',
       link: '/item-homepage',
-      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/product.png', // Items/Products icon
       // action: () => this.getItemListData()
     },
     {
       name: 'Sale',
-      // link: '/Sale',
-      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/sale.png', // Sale icon
       subTabs: [
         { name: 'Sale Invoices', link: '/Sale-Invoice' },
         { name: 'Estimate/ Quotation', link: '/Estimate-Quotation' },
@@ -71,8 +60,7 @@ export class SidebarComponent {
     },
     {
       name: 'Purchase',
-      // link: '/purchase',
-      icon: 'https://png.pngtree.com/png-vector/20190129/ourmid/pngtree-vector-verified-cart-items-icon-png-image_423353.jpg',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/purchase-order.png', // Purchase icon
       subTabs: [
         { name: 'Purchase Bills', link: '/Purchase-Bills' },
         { name: 'Payment Out', link: '/Payment-Out' },
@@ -83,11 +71,45 @@ export class SidebarComponent {
       isOpen: false
     },
     {
+      name: 'Grow Your Business',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/business.png', // Growth icon
+    },
+    {
       name: 'Banks',
       link: '/banks-homepage',
-      icon: 'https://w7.pngwing.com/pngs/848/762/png-transparent-computer-icons-home-house-home-angle-building-rectangle-thumbnail.png',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/bank.png', // Bank icon
     },
-  ];
+    {
+      name: 'Reports',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/report-card.png', // Report icon
+    },
+    {
+      name: 'Sync, Share & Backups',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/synchronize.png', // Sync icon
+    },
+    {
+      name: 'Apply For Loan',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/money.png', // Loan icon
+    },
+    {
+      name: 'Other Products',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/product.png', // Product icon
+    },
+    {
+      name: 'Utilities',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/wrench.png', // Utilities icon
+    },
+    {
+      name: 'Business Info',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/business.png', // Business info icon
+      action: () => this.openBusinessInfoModal()
+    },
+    {
+      name: 'Plans',
+      link: '/plans',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/calendar.png', // Plans icon
+    }
+];
 
   toggleSubMenu(tab: any) {
     this.selectedTab = tab; 
