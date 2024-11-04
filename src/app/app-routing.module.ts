@@ -18,6 +18,7 @@ import { RegisterComponent } from "./components/register/register.component";
 import { BanksComponent } from "./components/banks/banks.component";
 import { BankHomepageComponent } from "./components/bank-homepage/bank-homepage.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
+import { LaunchingSoonComponent } from "./components/launching-soon/launching-soon.component";
 
 const routes: Routes = [
   { path: "", component: LoginComponent },
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: "banks-homepage", component: BankHomepageComponent },
   { path: "dashboard", component: DashboardComponent },
   { path: "inout", component: LinkPaymentComponent },
+  { path: "launching-soon", component: LaunchingSoonComponent },
 
   { path: "party-homepage", component: PartyHomepageComponent },
   { path: "item-homepage", component: ItemHomepageComponent },

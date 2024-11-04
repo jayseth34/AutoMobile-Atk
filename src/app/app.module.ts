@@ -51,6 +51,7 @@ import { BankHomepageComponent } from './components/bank-homepage/bank-homepage.
 import { TransferModalComponent } from './components/transfer-modal/transfer-modal.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { LaunchingSoonComponent } from './components/launching-soon/launching-soon.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     BankHomepageComponent,
     TransferModalComponent,
     DashboardComponent,
+    LaunchingSoonComponent,
   ],
   imports: [
     BrowserModule,
