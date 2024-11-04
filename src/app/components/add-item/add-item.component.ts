@@ -129,7 +129,6 @@ export class AddItemComponent {
   }
 
   populateForm(itemDetails: any) {
-    debugger
     this.remainingquant = itemDetails.remainingquantity;
       this.addItemForm.patchValue({
         itemNameControl: this.data.itemName,
