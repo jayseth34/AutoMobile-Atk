@@ -30,8 +30,8 @@
                 </ul>
             </div>
         </nav>
-      </section>
-      
+    </section>
+
 
     <!-- Filters -->
     <section class="bg-body-secondary" *ngIf="this.showFilterSection">
@@ -41,7 +41,6 @@
                     <mat-form-field>
                         <!-- <mat-label>Transaction Type</mat-label> -->
                         <mat-select
-                            class=""
                             id="filter"
                             formControlName="range"
                             (selectionChange)="handleRangeChange()"
@@ -60,7 +59,6 @@
                         <span class="input-group-text">Between</span>
                         <input
                             type="date"
-                            aria-label="start-date"
                             class="form-control"
                             formControlName="startDate"
                             id="startDate"
@@ -68,7 +66,6 @@
                         />
                         <input
                             type="date"
-                            aria-label="end-date"
                             class="form-control"
                             id="endDate"
                             formControlName="endDate"
@@ -109,10 +106,7 @@
     </section>
 
     <!-- Table Contents -->
-    <section
-        class="bg-body-secondary p-2"
-        [class.mt-2]="!this.showFilterSection"
-    >
+    <section class="bg-body-secondary p-2" [class.mt-2]="!this.showFilterSection">
         <h3 class="ms-3 pt-2">Transactions</h3>
 
         <div class="container-fluid">
@@ -143,166 +137,132 @@
             </div>
         </div>
 
-        <table mat-table matSort [dataSource]="transactonData">
-            <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
+        <!-- Scrollable Table -->
+        <div class="table-container">
+            <table mat-table matSort [dataSource]="transactonData">
+                <ng-container matColumnDef="invoicedate">
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.invoicedate | date }}
+                    </td>
+                </ng-container>
 
-            <!-- Position Column -->
-            <ng-container matColumnDef="invoicedate">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.invoicedate | date }}
-                </td>
-            </ng-container>
+                <ng-container matColumnDef="invoicenumber">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice No</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.invoicenumber }}
+                    </td>
+                </ng-container>
 
-            <!-- Name Column -->
-            <ng-container matColumnDef="invoicenumber">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Invoice No
-                </th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.invoicenumber }}
-                </td>
-            </ng-container>
+                <ng-container matColumnDef="customername">
+                    <th mat-header-cell *matHeaderCellDef>Party Name</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.customername }}
+                    </td>
+                </ng-container>
 
-            <!-- Weight Column -->
-            <ng-container matColumnDef="customername">
-                <th mat-header-cell *matHeaderCellDef>Party Name</th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.customername }}
-                </td>
-            </ng-container>
+                <ng-container matColumnDef="typeofpay">
+                    <th mat-header-cell *matHeaderCellDef>Transaction Type</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.typeofpay }}
+                    </td>
+                </ng-container>
 
-            <!-- Symbol Column -->
-            <ng-container matColumnDef="typeofpay">
-                <th mat-header-cell *matHeaderCellDef>Transaction Type</th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.typeofpay }}
-                </td>
-            </ng-container>
+                <ng-container matColumnDef="paymenttype">
+                    <th mat-header-cell *matHeaderCellDef>Payment Type</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.paymenttype }}
+                    </td>
+                </ng-container>
 
-            <!-- Weight Column -->
-            <ng-container matColumnDef="paymenttype">
-                <th mat-header-cell *matHeaderCellDef>Payment Type</th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.paymenttype }}
-                </td>
-            </ng-container>
+                <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef>Amount</th>
+                    <td mat-cell *matCellDef="let element">{{ element.total }}</td>
+                </ng-container>
 
-            <!-- Amount Column -->
-            <ng-container matColumnDef="total">
-                <th mat-header-cell *matHeaderCellDef>Amount</th>
-                <td mat-cell *matCellDef="let element">{{ element.total }}</td>
-            </ng-container>
+                <ng-container matColumnDef="balance">
+                    <th mat-header-cell *matHeaderCellDef>Balance</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.balance }}
+                    </td>
+                </ng-container>
 
-            <!-- Balance Column -->
-            <ng-container matColumnDef="balance">
-                <th mat-header-cell *matHeaderCellDef>Balance</th>
-                <td mat-cell *matCellDef="let element">
-                    {{ element.balance }}
-                </td>
-            </ng-container>
+                <ng-container matColumnDef="icons">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element">
+                        <div *ngIf="transactionType == 4 || transactionType == 6">
+                            <button
+                                mat-menu-item
+                                [routerLink]="['/' + transactionTypeString + '/convert', element.invoicenumber]"
+                            >
+                                Convert to Sale
+                            </button>
+                        </div>
+                        <div *ngIf="transactionType == 5">
+                            <button
+                                mat-menu-item
+                                [routerLink]="['/' + transactionTypeString + '/convert', element.invoicenumber]"
+                            >
+                                Convert to Purchase
+                            </button>
+                        </div>
+                        <div *ngIf="transactionType != 4 && transactionType != 5 && transactionType != 6">
+                            <mat-icon
+                                class="ms-2"
+                                (click)="handlePrintClick(element.invoiceNo)"
+                            >
+                                print
+                            </mat-icon>
+                        </div>
+                    </td>
+                </ng-container>
 
-            <!-- Icons Column -->
-            <ng-container matColumnDef="icons">
-                <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let element">
-                    <div *ngIf="transactionType == 4 || transactionType == 6">
+                <ng-container matColumnDef="option">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element">
                         <button
-                            mat-menu-item
-                            [routerLink]="[
-                                '/' + transactionTypeString + '/convert',
-                                element.invoicenumber,
-                            ]"
+                            mat-icon-button
+                            [matMenuTriggerFor]="appMenu"
+                            aria-label=""
                         >
-                            Convert to Sale
+                            <mat-icon>more_vert</mat-icon>
                         </button>
-                    </div>
-                    <div *ngIf="transactionType == 5">
-                        <button
-                            mat-menu-item
-                            [routerLink]="[
-                                '/' + transactionTypeString + '/convert',
-                                element.invoicenumber,
-                            ]"
-                        >
-                            Convert to Purchase
-                        </button>
-                    </div>
-                    <div
-                        *ngIf="
-                            transactionType != 4 &&
-                            transactionType != 5 &&
-                            transactionType != 6
-                        "
-                    >
-                        <mat-icon
-                            class="ms-2"
-                            (click)="handlePrintClick(element.invoiceNo)"
-                        >
-                            print
-                        </mat-icon>
-                        <mat-icon
-                            class="ms-2"
-                            (click)="handleShareClick(element.invoiceNo)"
-                        >
-                            share
-                        </mat-icon>
-                    </div>
-                </td>
-            </ng-container>
+                        <mat-menu #appMenu="matMenu">
+                            <button
+                                mat-menu-item
+                                (click)="getEditLink(element.invoicenumber)"
+                            >
+                                Edit
+                            </button>
+                            <button mat-menu-item>Delete</button>
+                            <button
+                                mat-menu-item
+                                [routerLink]="['/' + transactionTypeString + '/convert', element.invoicenumber]"
+                                *ngIf="transactionType == 8"
+                            >
+                                Convert to Sale
+                            </button>
+                            <button
+                                mat-menu-item
+                                [routerLink]="['/' + transactionTypeString + '/convertOrder', element.invoicenumber]"
+                                *ngIf="transactionType == 8"
+                            >
+                                Convert to Sale Order
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
 
-            <ng-container matColumnDef="option">
-                <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let element">
-                    <button
-                        mat-icon-button
-                        [matMenuTriggerFor]="appMenu"
-                        aria-label=""
-                    >
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
-                    <mat-menu #appMenu="matMenu">
-                        <button
-                            mat-menu-item
-                            (click)="getEditLink(element.invoicenumber)"
-                        >
-                            Edit
-                        </button>
-                        <button mat-menu-item>Delete</button>
-                        <button
-                            mat-menu-item
-                            [routerLink]="[
-                                '/' + transactionTypeString + '/convert',
-                                element.invoicenumber,
-                            ]"
-                            *ngIf="transactionType == 8"
-                        >
-                            Convert to Sale
-                        </button>
-                        <button
-                            mat-menu-item
-                            [routerLink]="[
-                                '/' + transactionTypeString + '/convertOrder',
-                                element.invoicenumber,
-                            ]"
-                            *ngIf="transactionType == 8"
-                        >
-                            Convert to Sale Order
-                        </button>
-                    </mat-menu>
-                </td>
-            </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-            <!-- Row shown when there is no matching data. -->
-            <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" colspan="4">
-                    No data matching the filter "{{ tableFilterInp.value }}"
-                </td>
-            </tr>
-        </table>
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">
+                        No data matching the filter "{{ tableFilterInp.value }}"
+                    </td>
+                </tr>
+            </table>
+        </div>
     </section>
 </div>

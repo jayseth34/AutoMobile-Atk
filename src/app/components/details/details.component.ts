@@ -255,6 +255,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
         this.dataService.typeofpay = 'PAYMENT OUT'
       return this._router.navigateByUrl('/pin');
     } else if (this.transactionTypeString === 'Advance-In' || this.transactionTypeString === 'Advance-Out') {
+        this.dataService.hidelinkpayment = true
         if(this.transactionTypeString === 'Advance-In')
           this.dataService.typeofpay = 'ADVANCE IN'
         else if (this.transactionTypeString === 'Advance-Out')
@@ -276,6 +277,7 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     } else  if (this.transactionTypeString === 'Advance-In' || this.transactionTypeString === 'Advance-Out') {
       this.dataService.invoicenumber = invoiceNumber
       this.dataService.isview = true
+      this.dataService.hidelinkpayment = true
       if(this.transactionTypeString === 'Advance-In')
         this.dataService.typeofpay = 'ADVANCE IN'
       else if (this.transactionTypeString === 'Advance-Out')

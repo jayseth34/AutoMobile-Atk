@@ -20,3 +20,16 @@
 section > h3 {
   font-weight: 400;
 }
+
+.table-container {
+  height: calc(100vh - 150px); /* Adjust '150px' based on the combined height of other fixed elements (e.g., header, padding) */
+  overflow-y: auto;
+}
+
+/* Sticky Header */
+.table-container table th {
+  position: sticky;
+  top: 0;
+  background-color: #f1f1f1; /* Ensure sticky header has background */
+  z-index: 1;
+}

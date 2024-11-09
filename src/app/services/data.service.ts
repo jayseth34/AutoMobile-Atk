@@ -81,6 +81,7 @@ export class DataService {
   amountdetails: any;
   isview:boolean = false;
   hidebutton:boolean = false;
+  hidelinkpayment: boolean = false;
   // totalNoOfParties: any;
 
   // totalAmountOfParties: any;

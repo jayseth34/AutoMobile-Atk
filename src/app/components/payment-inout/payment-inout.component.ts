@@ -29,7 +29,7 @@ export class PaymentInoutComponent implements OnInit {
   isadvance: boolean;
   isUpdatingValue: any;
 
-  constructor(private fb: FormBuilder, private api: ApiService, private dataService: DataService, private router: Router, private cs: CommonService) {
+  constructor(public fb: FormBuilder, public api: ApiService, public dataService: DataService, public router: Router, public cs: CommonService) {
     this.balance = 0;
   }
 
