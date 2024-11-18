@@ -265,27 +265,38 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     return this._router.navigateByUrl(`/${this.transactionTypeString}/add`);
   }
 
-  getEditLink(invoiceNumber: number) {
+  getEditLink(invoiceNumber: number, isPrint: boolean = false) {
     if (this.transactionTypeString === 'Payment-In' || this.transactionTypeString === 'Payment-Out') {
-      this.dataService.invoicenumber = invoiceNumber
-      this.dataService.isview = true
-      if(this.transactionTypeString === 'Payment-In')
-        this.dataService.typeofpay = 'PAYMENT IN'
-      else if (this.transactionTypeString === 'Payment-Out')
-        this.dataService.typeofpay = 'PAYMENT OUT'
-      return this._router.navigateByUrl('/pin');
-    } else  if (this.transactionTypeString === 'Advance-In' || this.transactionTypeString === 'Advance-Out') {
-      this.dataService.invoicenumber = invoiceNumber
-      this.dataService.isview = true
-      this.dataService.hidelinkpayment = true
-      if(this.transactionTypeString === 'Advance-In')
-        this.dataService.typeofpay = 'ADVANCE IN'
-      else if (this.transactionTypeString === 'Advance-Out')
-        this.dataService.typeofpay = 'ADVANCE OUT'
-      return this._router.navigateByUrl('/pin');
+      this.dataService.invoicenumber = invoiceNumber;
+      this.dataService.isview = true;
+      this.dataService.typeofpay =
+        this.transactionTypeString === 'Payment-In' ? 'PAYMENT IN' : 'PAYMENT OUT';
+  
+      this.navigateToPageAndPrint('/pin', isPrint);
+      return;
+    } else if (this.transactionTypeString === 'Advance-In' || this.transactionTypeString === 'Advance-Out') {
+      this.dataService.invoicenumber = invoiceNumber;
+      this.dataService.isview = true;
+      this.dataService.hidelinkpayment = true;
+      this.dataService.typeofpay =
+        this.transactionTypeString === 'Advance-In' ? 'ADVANCE IN' : 'ADVANCE OUT';
+  
+      this.navigateToPageAndPrint('/pin', isPrint);
+      return;
     }
-    this.dataService.isview = false
-    return this._router.navigateByUrl(`/${this.transactionTypeString}/edit/${invoiceNumber}`);
+  
+    this.dataService.isview = false;
+    this.navigateToPageAndPrint(`/${this.transactionTypeString}/edit/${invoiceNumber}`, isPrint);
+  }
+  
+  private navigateToPageAndPrint(route: string, isPrint:boolean) {
+    this._router.navigateByUrl(route).then(() => {
+      setTimeout(() => {
+        if(isPrint){
+          window.print();
+        }
+      }, 1000);
+    });
   }
 
 }

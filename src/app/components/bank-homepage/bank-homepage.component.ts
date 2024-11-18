@@ -287,10 +287,10 @@ handleItemDoubleClick(row: any) {
       return;
   }
 
-  if (['PAYMENT IN', 'PAYMENT OUT', 'ADVANCE IN', 'ADVANCE OUT'].includes(row.typeofpay)) {
+  if (['PAYMENT IN', 'PAYMENT OUT', 'ADVANCE IN', 'ADVANCE OUT'].includes(row.type)) {
       this.dataService.invoicenumber = row.invoicenumber;
       this.dataService.isview = true;
-      this.dataService.typeofpay = row.typeofpay;
+      this.dataService.typeofpay = row.type;
       return this.router.navigateByUrl('/pin');
   }
 

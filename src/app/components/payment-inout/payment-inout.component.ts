@@ -38,6 +38,7 @@ export class PaymentInoutComponent implements OnInit {
     this.receiptno = parseInt(localStorage.getItem("curInvCount") ?? "");
     this.typeofpay = this.dataService.typeofpay
     this.isview = this.dataService.isview
+    this.dataService.hidelinkpayment = false
     const defaultDate = new Date(); 
     if(this.typeofpay == "ADVANCE IN" || this.typeofpay == "ADVANCE OUT"){
       this.isadvance = true
@@ -157,9 +158,9 @@ export class PaymentInoutComponent implements OnInit {
     this.api.getPartyList(this.registeredphonenumber).subscribe(data => {
       if (data.status === 'SUCCESS') {
         if (this.typeofpay === "PAYMENT IN") {
-          this.partyList = data.getPartyList.filter((party: any) => party.toreceivefromparty > 0);
+          this.partyList = data.getPartyList.filter((party: any) => party.toreceivefromparty >= 0);
         } else if (this.typeofpay === "PAYMENT OUT") {
-          this.partyList = data.getPartyList.filter((party: any) => party.topayparty > 0);
+          this.partyList = data.getPartyList.filter((party: any) => party.topayparty >= 0);
         } else if (this.isadvance){
           this.partyList = data.getPartyList
         }
