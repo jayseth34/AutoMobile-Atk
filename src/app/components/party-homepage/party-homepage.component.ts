@@ -11,6 +11,7 @@ import { buffer, debounceTime, filter, map } from "rxjs/operators";
 import { Party } from "src/app/models";
 import { CommonService } from "src/app/services/common.service";
 import { Router } from "@angular/router";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-party-homepage",
@@ -357,7 +358,7 @@ export class PartyHomepageComponent {
     const typeOfPay = transactionMap[row.typeofpay];
 
     if (!typeOfPay) {
-        alert("Wrong Transaction Type");
+        Swal.fire({text: "Cannot edit this transaction type"})
         return;
     }
 

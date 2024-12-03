@@ -6,6 +6,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { Bank } from 'src/app/models';
 import { DataService } from 'src/app/services/data.service';
 import { Route, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-bank-homepage',
@@ -283,7 +284,7 @@ handleItemDoubleClick(row: any) {
   if (['OPENING BALANCE'].includes(row.type)){
       return;
   } else if (!typeOfPay) {
-      alert("Wrong Transaction Type");
+      Swal.fire({text: "Cannot edit this transaction type"})
       return;
   }
 

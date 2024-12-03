@@ -1,9 +1,8 @@
-<div class="popup-container">
     <div class="header">
       <h2>Link Payment to Txns</h2>
-      <button mat-icon-button class="close-button">
+      <!-- <button mat-icon-button class="close-button">
         <mat-icon>close</mat-icon>
-      </button>
+      </button> -->
     </div>
     <div class="input-row">
       <div class="input-group">
@@ -19,19 +18,19 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="filters">
+    <!-- <div class="filters">
       <mat-form-field appearance="fill">
         <mat-label>Filter Transactions</mat-label>
         <mat-select>
           <mat-option value="all">All transactions</mat-option>
-          <!-- Other options here -->
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Search</mat-label>
         <input matInput placeholder="Search">
       </mat-form-field>
-    </div>
+    </div> 
+-->
     <div class="table-container">
       <table mat-table [dataSource]="transactions" class="mat-elevation-z8">
         <ng-container matColumnDef="disable">
@@ -83,5 +82,3 @@
       <button class="autolink-button" (click)="autoLinkTransactions()"  style="color: white; background-color: #3076f0; width: 100px;">Auto-Link</button>
       <button mat-raised-button color="primary" class="done-button" (click)="saveChanges()"  style="color: white; background-color: #3076f0; width: 100px;">DONE</button>
     </div>
-  </div>
-  

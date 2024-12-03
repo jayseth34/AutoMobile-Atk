@@ -14,6 +14,7 @@ import { buffer, debounceTime, filter, map } from "rxjs/operators";
 import { AddItemCategoryComponent } from "../add-item-category/add-item-category.component";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { Router } from "@angular/router";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-item-homepage",
@@ -339,7 +340,7 @@ export class ItemHomepageComponent {
       const typeOfPay = transactionMap[row.typeofpay];
 
       if (!typeOfPay) {
-          alert("Wrong Transaction Type");
+        Swal.fire({text: "Cannot edit this transaction type"})
           return;
       }
 
