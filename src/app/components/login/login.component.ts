@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoginRequest } from 'src/app/models';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -57,8 +58,8 @@ export class LoginComponent implements OnInit {
       const formValue = this.loginForm.getRawValue() as LoginRequest;
       const phoneNumber = String(formValue.phonenumber);
       this.api.GetOtp(phoneNumber).subscribe((res:any) => {
-        if(res.Status == "Success"){
-          this.details = res.Details
+        if(res.status == 5){
+          this.details = JSON.parse(res.result)
           console.log(this.details)
         }
       })
@@ -70,7 +71,7 @@ export class LoginComponent implements OnInit {
       const formValue = this.loginForm.getRawValue() as LoginRequest;
       const phonenumber = String(formValue.phonenumber);
       let body = {
-        SessionId: this.details,
+        SessionId: this.details.Details,
         Otp: formValue.otp,
         registeredphonenumber: phonenumber
       }
@@ -86,6 +87,8 @@ export class LoginComponent implements OnInit {
           localStorage.setItem("planType", JSON.stringify(res.plantype))
           localStorage.setItem("expiryDate", JSON.stringify(res.expiryDate));
           this.router.navigateByUrl("/dashboard");
+        } else {
+          Swal.fire({text: "OTP did not match!"})
         }
       });
     }
