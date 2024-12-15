@@ -254,8 +254,11 @@ export class BankHomepageComponent implements OnInit {
 handleTransaction(row: any) {
   const transactionType = row.type || row.typeofpay;
   const modalTransactionTypes = ['CASH WITHDRAW', 'CASH DEPOSIT', 'BANK TO BANK', 'BANK ADJ INCREASE', 'BANK ADJ DECREASE'];
+  const modalnottransactiontypes = ['OPENING BALANCE']
   if (modalTransactionTypes.includes(transactionType)) {
       this.openModalOnTransaction(row);
+  }else if (modalnottransactiontypes.includes(transactionType)){
+    Swal.fire({text:"Cannot view the following transaction type"})
   } else {
       this.handleItemDoubleClick(row);
   }

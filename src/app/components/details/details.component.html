@@ -73,6 +73,12 @@
                         />
                     </div>
                 </div>
+                <div class="col-2">
+                    <button class="form-control" (click)="generateExcel()">
+                      <mat-icon>file_download</mat-icon>
+                    </button>
+                    REPORT
+                  </div>
             </div>
             <div class="row">
                 <ul class="d-flex col-5 justify-content-around">
@@ -234,7 +240,6 @@
                             >
                                 Edit
                             </button>
-                            <button mat-menu-item>Delete</button>
                             <button
                                 mat-menu-item
                                 [routerLink]="['/' + transactionTypeString + '/convert', element.invoicenumber]"

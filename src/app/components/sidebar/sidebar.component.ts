@@ -31,6 +31,7 @@ export class SidebarComponent {
       name: 'Home',
       link: '/dashboard',
       icon: 'https://img.icons8.com/ios-filled/50/000000/home.png', // Home icon
+      class: 'icon-white'
     },
     {
       name: 'Parties',

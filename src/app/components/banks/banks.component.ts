@@ -24,7 +24,7 @@ export class BanksComponent implements OnInit {
     this.bankForm = this.fb.group({
       newaccountDisplayName: ['', Validators.required],
       newopeningBalance: ['', Validators.required],
-      asOfDate: ['', Validators.required],
+      asOfDate: [new Date().toISOString().split('T')[0], Validators.required], // Default date set to today
     });
 
     this.registeredPhoneNmber = parseInt(

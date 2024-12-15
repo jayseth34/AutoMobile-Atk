@@ -10,6 +10,8 @@ import { Transaction } from 'src/app/models';
 import { CommonService } from 'src/app/services/common.service';
 import { Location } from '@angular/common';
 import { DataService } from 'src/app/services/data.service';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 import { RemoveHyphenPipe } from 'src/app/remove-hyphen.pipe';
 
 @Component({
@@ -288,6 +290,30 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     this.dataService.isview = false;
     this.navigateToPageAndPrint(`/${this.transactionTypeString}/edit/${invoiceNumber}`, isPrint);
   }
+
+  generateExcel() {
+    const transactions = this.fullData;
+    
+    const excludedParams = ['isconverted'];
+  
+    const headers = Object.keys(transactions[0]).filter(
+      (key) => !excludedParams.includes(key)
+    );
+  
+    const rows = transactions.map((obj: any) => 
+      headers.map((header) => obj[header])
+    );
+  
+    const worksheetData = [headers, ...rows];
+  
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Transactions');
+  
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    saveAs(new Blob([excelBuffer]), 'transactions.xlsx');
+  }
+  
   
   private navigateToPageAndPrint(route: string, isPrint:boolean) {
     this._router.navigateByUrl(route).then(() => {

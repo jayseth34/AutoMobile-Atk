@@ -33,3 +33,52 @@ section > h3 {
   background-color: #f1f1f1; /* Ensure sticky header has background */
   z-index: 1;
 }
+
+button.form-control {
+  height: 35px;
+  width: 50px;
+}
+
+button.form-control mat-icon {
+  font-size: 22px;
+}
+
+@media print {
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .content-container {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  /* Hide non-essential elements */
+  .no-print, header, footer, .sidebar, .buttons-container {
+    display: none !important;
+  }
+
+  /* Force tables or block content to stretch */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  table th, table td {
+    padding: 8px;
+    border: 1px solid #000;
+  }
+
+  /* Remove page breaks unless needed */
+  .page-break {
+    page-break-before: avoid;
+    page-break-after: avoid;
+  }
+}
+ 

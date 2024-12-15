@@ -97,3 +97,6 @@
   border-left: 4px solid #bf1336;
 }
 
+.icon-white {
+  filter: invert(100%) brightness(50%);
+}

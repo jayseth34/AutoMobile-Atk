@@ -61,6 +61,8 @@ export class LoginComponent implements OnInit {
         if(res.status == 5){
           this.details = JSON.parse(res.result)
           console.log(this.details)
+        } else {
+          Swal.fire({text: "OTP could not be sent kindly try again!"})
         }
       })
     }

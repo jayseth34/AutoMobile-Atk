@@ -4,7 +4,8 @@
         [ngClass]="{ 'has-sub-menu': tab.subTabs, 'selected': tab === selectedTab }">
       <a [routerLink]="tab.link" (click)="tab.action ? tab.action() : null" (click)="toggleSubMenu(tab)">
         <div class="tab-content">
-          <img [src]="tab.icon" [alt]="tab.name + ' Icon'" class="icon" />
+          <!-- Apply the class dynamically -->
+          <img [src]="tab.icon" [alt]="tab.name + ' Icon'" class="icon icon-white" />
           {{ tab.name }}
           <span *ngIf="tab.subTabs" class="dropdown-icon">
             <img style="width: 25px; height: 25px;"

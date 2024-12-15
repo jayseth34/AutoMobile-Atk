@@ -25,7 +25,7 @@ export class TransferModalComponent {
       fromAccount: [data.type === 'cashToBank' ? 'CASH' : ''],
       toAccount: [''],
       amount: [''],
-      adjustmentDate: [''],
+      adjustmentDate: [new Date().toISOString().split('T')[0]],
       description: [''],
       adjustmentType: [''],
       accountName: [''] // Add accountName here
