@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { CommonService } from 'src/app/services/common.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-launching-soon',
@@ -6,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./launching-soon.component.css']
 })
 export class LaunchingSoonComponent {
+  constructor(public cs:CommonService){
 
+  }
 }

@@ -77,8 +77,8 @@
                 <h3>Stock Value</h3>
                 <p class="stock-value">₹ {{stockvalue}}<span style="font-size: 20px; color: #888;">.00</span></p>
             </div>
+            <h2>Low Stocks</h2>
             <div class="low-stocks">
-                <h3>Low Stocks</h3>
                 <ul *ngFor="let lowstock of lowstocks" >
                     <li>
                         <span style="color: #888;">{{ lowstock.item }}</span> <span [ngStyle]="{ 'color': dataService.getColor(lowstock.qty, 0), 'float': 'right' }"> {{ lowstock.qty }}</span>

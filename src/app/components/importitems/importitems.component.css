@@ -1,0 +1,99 @@
+.excel-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: auto;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 10%;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .header h2 {
+    color: #333;
+  }
+  
+  .header p {
+    color: #666;
+  }
+  
+  .upload-section {
+    margin: 20px 0;
+    text-align: center;
+  }
+  
+  .custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    background-color: #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    position: relative;
+  }
+  
+  .custom-file-upload input {
+    display: none;
+  }
+  
+  .custom-file-upload i {
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  
+  .download-section {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .download-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .download-btn i {
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  
+  .download-btn:hover {
+    background-color: #218838;
+  }
+  
+  .data-preview {
+    margin-top: 30px;
+  }
+  
+  .data-preview table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .data-preview th,
+  .data-preview td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  .data-preview th {
+    background-color: #f2f2f2;
+  }
+  
+  .data-preview tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  

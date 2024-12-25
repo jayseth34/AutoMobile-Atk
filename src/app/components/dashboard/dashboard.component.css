@@ -164,3 +164,17 @@ body {
 .custom-form-field-graphs .mat-form-field-infix {
     height: 28px; /* Adjust the height as needed */
 }
+
+.low-stocks {
+    max-height: 200px; /* Adjust the height as needed */
+    overflow-y: auto;  /* Enable vertical scrolling */
+    scrollbar-width: none;
+}
+
+.cash-bank .bank-accounts {
+    max-height: 200px; /* Adjust the height as needed */
+    overflow-y: auto;  /* Enable vertical scrolling */
+    scrollbar-width: none;
+}
+
+

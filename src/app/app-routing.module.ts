@@ -19,6 +19,11 @@ import { BanksComponent } from "./components/banks/banks.component";
 import { BankHomepageComponent } from "./components/bank-homepage/bank-homepage.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { LaunchingSoonComponent } from "./components/launching-soon/launching-soon.component";
+import { ImportitemsComponent } from "./components/importitems/importitems.component";
+import { GrowbusinessComponent } from "./components/growbusiness/growbusiness.component";
+import { SyncshareComponent } from "./components/syncshare/syncshare.component";
+import { ApplyloanComponent } from "./components/applyloan/applyloan.component";
+import { ReportsComponent } from "./components/reports/reports.component";
 
 const routes: Routes = [
   { path: "", component: LoginComponent },
@@ -32,8 +37,12 @@ const routes: Routes = [
   { path: "banks-homepage", component: BankHomepageComponent },
   { path: "dashboard", component: DashboardComponent },
   { path: "inout", component: LinkPaymentComponent },
-  { path: "launching-soon", component: LaunchingSoonComponent },
-
+  { path: "otherproducts", component: LaunchingSoonComponent },
+  { path: "growyourbusiness", component: GrowbusinessComponent },
+  { path: "syncshare", component: SyncshareComponent },
+  { path: "applyloan", component: ApplyloanComponent },
+  { path: "reports", component: ReportsComponent },
+  { path: 'import-items', component: ImportitemsComponent },
   { path: "party-homepage", component: PartyHomepageComponent },
   { path: "item-homepage", component: ItemHomepageComponent },
   { path: "pin", component: PaymentInoutComponent },
@@ -48,6 +57,7 @@ const routes: Routes = [
   { path: ":type", component: DetailsComponent },
   { path: ":type/:fnType", component: EditDetailComponent },
   { path: ":type/:fnType/:invoiceNo", component: EditDetailComponent },
+
 ];
 
 @NgModule({

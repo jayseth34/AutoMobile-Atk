@@ -1,0 +1,49 @@
+<div class="excel-page">
+    <div class="header">
+      <h2>Import Bulk Items</h2>
+      <p class="step" style="color: red;">STEP 1:</p>
+        <p>Create an Excel file with the following format.</p>
+        <p class="step" style="color: red;">STEP 2:</p>
+        <p>Upload the file (xlsx or xls) by clicking on the Upload File button below.</p>
+        <p class="step" style="color: red;">STEP 3:</p>
+        <p>Verify the items from the file & complete the import.</p>
+    </div>
+  
+    <div class="upload-section">
+      <label for="uploadExcel" class="custom-file-upload">
+        <input
+          type="file"
+          id="uploadExcel"
+          (change)="onFileChange($event)"
+          accept=".xlsx, .xls"
+        />
+        <i class="material-icons">cloud_upload</i>
+        <span>Upload Excel</span>
+      </label>
+      <p *ngIf="uploadedFileName">Uploaded File: {{ uploadedFileName }}</p>
+    </div>
+  
+    <div class="download-section">
+      <button class="download-btn" (click)="downloadTemplate()">
+        <i class="material-icons">file_download</i>
+        Download Excel Sample
+      </button>
+    </div>
+  
+    <div *ngIf="fileData.length > 0" class="data-preview">
+      <h3>Preview Uploaded Data</h3>
+      <table>
+        <thead>
+          <tr>
+            <th *ngFor="let header of fileData[0]">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of fileData.slice(1)">
+            <td *ngFor="let cell of row">{{ cell }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

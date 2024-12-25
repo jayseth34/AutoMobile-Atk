@@ -73,7 +73,7 @@ export class SidebarComponent {
     },
     {
       name: 'Grow Your Business',
-      link:'/launching-soon',
+      link:'/growyourbusiness',
       icon: 'https://img.icons8.com/ios-filled/50/000000/business.png', // Growth icon
     },
     {
@@ -83,28 +83,31 @@ export class SidebarComponent {
     },
     {
       name: 'Reports',
-      link:'/launching-soon',
+      link:'/reports',
       icon: 'https://img.icons8.com/ios-filled/50/000000/report-card.png', // Report icon
     },
     {
       name: 'Sync, Share & Backups',
-      link:'/launching-soon',
+      link:'/syncshare',
       icon: 'https://img.icons8.com/ios-filled/50/000000/synchronize.png', // Sync icon
     },
     {
       name: 'Apply For Loan',
-      link:'/launching-soon',
+      link:'/applyloan',
       icon: 'https://img.icons8.com/ios-filled/50/000000/money.png', // Loan icon
     },
     {
       name: 'Other Products',
-      link:'/launching-soon',
+      link:'/otherproducts',
       icon: 'https://img.icons8.com/ios-filled/50/000000/product.png', // Product icon
     },
     {
       name: 'Utilities',
-      link:'/launching-soon',
       icon: 'https://img.icons8.com/ios-filled/50/000000/wrench.png', // Utilities icon
+      subTabs: [
+        { name: 'Import Items', link: '/import-items' }
+      ],
+      isOpen: false
     },
     {
       name: 'Business Info',

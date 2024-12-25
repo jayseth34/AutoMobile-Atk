@@ -52,6 +52,11 @@ import { TransferModalComponent } from './components/transfer-modal/transfer-mod
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LaunchingSoonComponent } from './components/launching-soon/launching-soon.component';
+import { ImportitemsComponent } from './components/importitems/importitems.component';
+import { GrowbusinessComponent } from './components/growbusiness/growbusiness.component';
+import { SyncshareComponent } from './components/syncshare/syncshare.component';
+import { ApplyloanComponent } from './components/applyloan/applyloan.component';
+import { ReportsComponent } from './components/reports/reports.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +86,11 @@ import { LaunchingSoonComponent } from './components/launching-soon/launching-so
     TransferModalComponent,
     DashboardComponent,
     LaunchingSoonComponent,
+    ImportitemsComponent,
+    GrowbusinessComponent,
+    SyncshareComponent,
+    ApplyloanComponent,
+    ReportsComponent,
   ],
   imports: [
     BrowserModule,

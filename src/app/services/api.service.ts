@@ -254,5 +254,12 @@ export class ApiService {
   GetTransferDetailsValues(body:any):Observable<any>{
     return this.cs.Post("Sale/GetTransferDetailsValues", body)
   }
+  uploadItems(file: File, registeredPhoneNumber: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('registeredPhoneNumber', registeredPhoneNumber.toString());
+
+    return this.http.post('https://localhost:7002/api/Item/upload', formData);
+  }
 
 }

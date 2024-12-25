@@ -93,4 +93,8 @@ export class CommonService {
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
   }
+
+  launch(){
+    Swal.fire({text:"Launching Soon!"})
+  }
 }
