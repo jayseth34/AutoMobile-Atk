@@ -203,26 +203,49 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     if (ev) {
       // console.log(ev.target.id);
     }
-
-    let startTimestamp = Date.parse(this.filterForm.get('startDate')?.value as string);
+  
+    let startDateValue = this.filterForm.get('startDate')?.value;
+    let endDateValue = this.filterForm.get('endDate')?.value;
+  
+    // Check if custom filter is selected and no date range is provided
+    if (!startDateValue && !endDateValue && this.filterForm.get('range')?.value === TimeFilterEnum.Custom) {
+      this.totalVal = 0;
+      this.unpaidVal = 0;
+      this.paidVal = 0;
+  
+      // Display all data
+      this.transactonData.data = [...this.fullData];
+  
+      // Update payment values
+      this.fullData.forEach((item: any) => {
+        this.updatePayment(item.paymentstatus, item.balance, item.total);
+      });
+  
+      return;
+    }
+  
+    let startTimestamp = Date.parse(startDateValue as string);
     let start = new Date(startTimestamp);
     start.setHours(0, 0, 0, 0);
-    let endTimestamp = Date.parse(this.filterForm.get('endDate')?.value as string);
+    let endTimestamp = Date.parse(endDateValue as string);
     let end = new Date(endTimestamp);
     end.setHours(0, 0, 0, 0);
-
+  
     // Resetting the initial values
     this.totalVal = 0;
     this.unpaidVal = 0;
     this.paidVal = 0;
-
-    // Api Call if required
+  
+    // Filter data based on date range and transaction type
     this.transactonData.data = this.fullData.filter((item: any) => {
       let itemDate = new Date(item.invoicedate);
-      this.updatePayment(item.paymentstatus, item.balance, item.total)
-      return (itemDate >= start && itemDate <= end && item.typeofpay == TransactionTypeEnum[this.transactionType].toUpperCase().replace('-', ' '));
+      this.updatePayment(item.paymentstatus, item.balance, item.total);
+      return (
+        itemDate >= start &&
+        itemDate <= end &&
+        item.typeofpay == TransactionTypeEnum[this.transactionType].toUpperCase().replace('-', ' ')
+      );
     });
-    // console.log(this.transactonData);
   }
 
   applyFilter(ev: Event) {

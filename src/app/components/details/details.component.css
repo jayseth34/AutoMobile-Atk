@@ -22,15 +22,17 @@ section > h3 {
 }
 
 .table-container {
-  height: calc(100vh - 150px); /* Adjust '150px' based on the combined height of other fixed elements (e.g., header, padding) */
+  height: calc(100vh - 200px); /* Adjust height based on header/footer */
   overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
 }
 
-/* Sticky Header */
 .table-container table th {
   position: sticky;
   top: 0;
-  background-color: #f1f1f1; /* Ensure sticky header has background */
+  background-color: #f9f9f9;
   z-index: 1;
 }
 
