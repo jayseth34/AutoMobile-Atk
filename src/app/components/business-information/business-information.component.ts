@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/api.service';
 import { CommonService } from 'src/app/services/common.service';
 import Swal from 'sweetalert2';
@@ -22,7 +23,7 @@ export class BusinessInformationComponent {
     'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
   ];
 
-  constructor(public api: ApiService, public cs: CommonService){ }
+  constructor(public api: ApiService, public cs: CommonService, public dialogRef: MatDialogRef<BusinessInformationComponent>){ }
 
   ngOnInit(){
     this.registeredphonenumber = parseInt(
@@ -92,7 +93,9 @@ export class BusinessInformationComponent {
           Swal.fire({
             text: res.statusmsg,
             confirmButtonText: 'OK',
-          })
+          }).then(() => {
+            this.dialogRef.close();
+          });
         }
         else{
            Swal.fire({

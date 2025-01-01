@@ -1,29 +1,29 @@
 /* Container for the entire form */
 form {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two columns layout */
-    gap: 16px; /* Space between form fields */
-    padding: 16px; /* Space around the edges of the form */
-    box-sizing: border-box; /* Ensure padding is included in the total width */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns layout */
+  gap: 16px; /* Space between form fields */
+  padding: 16px; /* Space around the edges of the form */
+  box-sizing: border-box; /* Ensure padding is included in the total width */
+}
+
+/* Ensure each form field fits within its column */
+.mat-form-field {
+  width: 100%; /* Full width of the column */
+  box-sizing: border-box; /* Include padding and border in the width */
+}
+
+/* Responsive design: Stacking form fields on smaller screens */
+@media (max-width: 600px) {
+  form {
+    grid-template-columns: 1fr; /* Single column layout on smaller screens */
   }
-  
-  /* Ensure each form field fits within its column */
-  mat-form-field {
-    width: 100%; /* Full width of the column */
-    box-sizing: border-box; /* Include padding and border in the width */
-  }
-  
-  /* Responsive design: Stacking form fields on smaller screens */
-  @media (max-width: 600px) {
-    form {
-      grid-template-columns: 1fr; /* Single column layout on smaller screens */
-    }
-  }
-  
-  /* Optional: Style for the dialog actions to align buttons properly */
-  div[mat-dialog-actions] {
-    display: flex;
-    justify-content: flex-end; /* Align buttons to the right */
-    gap: 16px; /* Space between buttons */
-  }
-  
+  /* Optional: Adjust form field styles for smaller screens here */
+}
+
+/* Style for the dialog actions to align buttons properly */
+.mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 16px; /* Space between buttons */
+}

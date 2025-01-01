@@ -13,41 +13,22 @@ import { BanksComponent } from '../banks/banks.component';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent {
-  // totalGroupCount: any;
-  // totalGroupCountSum: any;
-  registeredPhoneNumber:any;
-  selectedTab: any = null; 
-
-  constructor(public dialog: MatDialog, private api: ApiService, public dataService: DataService) { }
- 
-  ngOnInit(){
-    this.registeredPhoneNumber = parseInt(
-      JSON.parse(localStorage.getItem('phonenumber') as string)
-    );
-  }
+  registeredPhoneNumber: any;
+  selectedTab: any = null;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   tabs = [
     {
-      name: 'Home',
-      link: '/dashboard',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/home.png', // Home icon
-      class: 'icon-white'
+      name: 'Business Info',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/business.png',
+      action: () => this.openBusinessInfoModal()
     },
-    {
-      name: 'Parties',
-      link: '/party-homepage',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/teamwork.png', // Users icon
-      // action: () => this.getPartyListData()
-    },
-    {
-      name: 'Items',
-      link: '/item-homepage',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/product.png', // Items/Products icon
-      // action: () => this.getItemListData()
-    },
+    { name: 'Home', link: '/dashboard', icon: 'https://img.icons8.com/ios-filled/50/000000/home.png', class: 'icon-white' },
+    { name: 'Parties', link: '/party-homepage', icon: 'https://img.icons8.com/ios-filled/50/000000/teamwork.png' },
+    { name: 'Items', link: '/item-homepage', icon: 'https://img.icons8.com/ios-filled/50/000000/product.png' },
     {
       name: 'Sale',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/sale.png', // Sale icon
+      icon: 'https://img.icons8.com/ios-filled/50/000000/sale.png',
       subTabs: [
         { name: 'Sale Invoices', link: '/Sale-Invoice' },
         { name: 'Estimate/ Quotation', link: '/Estimate-Quotation' },
@@ -61,84 +42,53 @@ export class SidebarComponent {
     },
     {
       name: 'Purchase',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/purchase-order.png', // Purchase icon
+      icon: 'https://img.icons8.com/ios-filled/50/000000/purchase-order.png',
       subTabs: [
         { name: 'Purchase Bills', link: '/Purchase-Bills' },
         { name: 'Payment Out', link: '/Payment-Out' },
         { name: 'Advance Out', link: '/Advance-Out' },
         { name: 'Purchase Order', link: '/Purchase-Order' },
-        { name: 'Purchase Return/ Dr. Note', link: '/Purchase-Return' },
+        { name: 'Purchase Return/Dr. Note', link: '/Purchase-Return' }
       ],
       isOpen: false
     },
-    {
-      name: 'Grow Your Business',
-      link:'/growyourbusiness',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/business.png', // Growth icon
-    },
-    {
-      name: 'Banks',
-      link: '/banks-homepage',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/bank.png', // Bank icon
-    },
-    {
-      name: 'Reports',
-      link:'/reports',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/report-card.png', // Report icon
-    },
-    {
-      name: 'Sync, Share & Backups',
-      link:'/syncshare',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/synchronize.png', // Sync icon
-    },
-    {
-      name: 'Apply For Loan',
-      link:'/applyloan',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/money.png', // Loan icon
-    },
-    {
-      name: 'Other Products',
-      link:'/otherproducts',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/product.png', // Product icon
-    },
+    { name: 'Grow Your Business', link: '/growyourbusiness', icon: 'https://img.icons8.com/ios-filled/50/000000/business.png' },
+    { name: 'Banks', link: '/banks-homepage', icon: 'https://img.icons8.com/ios-filled/50/000000/bank.png' },
+    { name: 'Reports', link: '/reports', icon: 'https://img.icons8.com/ios-filled/50/000000/report-card.png' },
+    { name: 'Sync, Share & Backups', link: '/syncshare', icon: 'https://img.icons8.com/ios-filled/50/000000/synchronize.png' },
+    { name: 'Apply For Loan', link: '/applyloan', icon: 'https://img.icons8.com/ios-filled/50/000000/money.png' },
+    { name: 'Other Products', link: '/otherproducts', icon: 'https://img.icons8.com/ios-filled/50/000000/product.png' },
     {
       name: 'Utilities',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/wrench.png', // Utilities icon
-      subTabs: [
-        { name: 'Import Items', link: '/import-items' }
-      ],
+      icon: 'https://img.icons8.com/ios-filled/50/000000/wrench.png',
+      subTabs: [{ name: 'Import Items', link: '/import-items' }],
       isOpen: false
     },
-    {
-      name: 'Business Info',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/business.png', // Business info icon
-      action: () => this.openBusinessInfoModal()
-    },
-    {
-      name: 'Plans',
-      link: '/plans',
-      icon: 'https://img.icons8.com/ios-filled/50/000000/calendar.png', // Plans icon
-    }
-];
+    { name: 'Plans', link: '/plans', icon: 'https://img.icons8.com/ios-filled/50/000000/calendar.png' }
+  ];
+
+  constructor(public dialog: MatDialog, private api: ApiService, public dataService: DataService) { }
+
+  ngOnInit() {
+    this.registeredPhoneNumber = parseInt(JSON.parse(localStorage.getItem('phonenumber') as string));
+  }
+
 
   toggleSubMenu(tab: any) {
-    this.selectedTab = tab; 
-    this.dataService.checkPlanExpiry()
+    this.selectedTab = tab;
+    this.dataService.checkPlanExpiry();
     tab.isOpen = !tab.isOpen;
   }
 
   selectSubTab(subTab: any) {
-    this.selectedTab = subTab; 
-    this.dataService.checkPlanExpiry()
+    this.selectedTab = subTab;
+    this.dataService.checkPlanExpiry();
   }
 
   getPartyListData() {
     this.dataService.partyHomePageSelectedTab = 'party';
-    this.api.getPartyList(this.registeredPhoneNumber).subscribe((res:any) => {
-      console.log("GETPARTYLIST API: ",res);
-      if(res.status == "SUCCESS") {
-        console.log("partynames:",this.dataService.partyList)
-        let amount: any;
+    this.api.getPartyList(this.registeredPhoneNumber).subscribe((res: any) => {
+      if (res.status === "SUCCESS") {
         this.dataService.partyList = res.getPartyList.map((item: any) => ({
           partyname: item.partyname,
           phonenumber: item.phonenumber,
@@ -147,99 +97,66 @@ export class SidebarComponent {
           creditlimit: item.creditlimit,
           topayparty: item.topayparty,
           toreceivefromparty: item.toreceivefromparty,
-        }))
-        console.log("successs")
+        }));
       }
-      else {
-        console.log("failed")
-      }
-  })
+    });
+
     this.api.GetPartyGroup(this.registeredPhoneNumber).subscribe({
-      next:(response) => {
-        if(response.status == "SUCCESS") {
-          this.dataService.partyGroupListResponse = response.getPartyGroupList
-          // this.calculateSummary(response.getPartyGroupList);
-          console.log("GET PARTY GROUP SUCCESS", response)
-        }
-        else{
-          console.log("PARTYGROUP FAILED")
+      next: (response) => {
+        if (response.status === "SUCCESS") {
+          this.dataService.partyGroupListResponse = response.getPartyGroupList;
         }
       },
-      error:() => {
-        console.log("PARTY GROUP ERROR")
-      }
-    })
+      error: () => console.log("PARTY GROUP ERROR")
+    });
   }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AddPartyComponent, {
       width: '1000px',
-      maxHeight: '1000px' 
+      maxHeight: '1000px'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
-  }
-
-  destroy$: Subject<boolean> = new Subject<boolean>();
-
-
-  gotopartypage(){
-    window.location.href = 'http://localhost:4200/party-homepage';
+    dialogRef.afterClosed().subscribe(() => console.log('The dialog was closed'));
   }
 
   openBusinessInfoModal() {
     const dialogRef = this.dialog.open(BusinessInformationComponent, {
       width: '50%',
-      height: '70%', 
+      height: '70%',
     });
-    dialogRef.afterClosed().subscribe(result => {
-    });
+
+    dialogRef.afterClosed().subscribe(() => { });
   }
 
   getItemListData() {
     this.dataService.itemHomePageSelectedTab = 'product';
     this.api.GetItemList(this.registeredPhoneNumber).subscribe({
-      next:(res) => {
-        console.log("GETITEMLIST API: ",res);
-        if(res.status == "SUCCESS") {
-          this.dataService.itemListResponse = res.getItemList
-        }
-        else {
-          console.log("GETITEMLIST failed")
+      next: (res) => {
+        if (res.status === "SUCCESS") {
+          this.dataService.itemListResponse = res.getItemList;
         }
       },
-      error:() => {
-        console.log("GETITEMLIST errorrrr")
-      }
-    })
+      error: () => console.log("GETITEMLIST error")
+    });
+
     this.api.GetCategory(this.registeredPhoneNumber).subscribe({
-      next:(response) => {
-        if(response.status == "SUCCESS") {
-          this.dataService.categoryListResponse = response.getCateogoryList
-          console.log("GET CATEGORY SUCCESS", response)
-        }
-        else{
-          console.log("CATEGORY FAILED")
+      next: (response) => {
+        if (response.status === "SUCCESS") {
+          this.dataService.categoryListResponse = response.getCateogoryList;
         }
       },
-      error:() => {
-        console.log("CATEGORY ERROR")
-      }
-    })
+      error: () => console.log("CATEGORY ERROR")
+    });
   }
 
-  redirecttobanks(){
-    //  window.location.href = 'http://localhost:4201/party-homepage'
+  redirecttobanks() {
     const dialogRef = this.dialog.open(BanksComponent, {
       width: '900px',
       height: '700px',
-      data: { }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    dialogRef.afterClosed().subscribe(() => console.log('The dialog was closed'));
   }
+
 }
