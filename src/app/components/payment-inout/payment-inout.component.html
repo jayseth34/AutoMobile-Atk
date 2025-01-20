@@ -85,7 +85,7 @@
       </div>
 
       <div class="btn-container">
-        <button *ngIf="!isview && !this.dataService.hidelinkpayment" type="button" class="btn custom-btn"  style="color: white; background-color: #4caf50;" (click)="linkPayment()">LINK PAYMENT</button>
+        <button *ngIf="!isview && !isadvance && !this.dataService.hidelinkpayment" type="button" class="btn custom-btn"  style="color: white; background-color: #4caf50;" (click)="linkPayment()">LINK PAYMENT</button>
       </div>
 
       <div class="right-btn-container">

@@ -111,6 +111,10 @@ export class AddPartyComponent implements OnInit {
         this.labelText = 'Custom Limit'
         this.isCustomLimit = true
       }
+      if(!this.cs.isUndefineOrNull(this.data.partyDetails.topayorreceive) 
+        && (this.data.partyDetails.topayorreceive=='PAY' || this.data.partyDetails.topayorreceive == 'RECEIVE')){
+          this.addPartyForm.get('toPayOrReceiveControl')?.disable(); 
+        }
     }
   }
 
