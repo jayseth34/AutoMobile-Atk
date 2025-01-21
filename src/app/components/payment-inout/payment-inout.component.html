@@ -6,12 +6,15 @@
           <mat-form-field>
             <mat-label>Party</mat-label>
             <mat-select id="party" formControlName="party" (selectionChange)="onPartyChange($event)">
-              <mat-option value="" [disabled]="true">Select Party</mat-option>
-              <mat-option *ngFor="let party of partyList" [value]="party.partyname">
-                {{ party.partyname }} 
-                <!-- <span class="balance">{{ calculateBalance(party) }}</span> -->
-              </mat-option>
-            </mat-select>
+            <mat-select-trigger>
+              {{ paymentInForm.get('party')?.value || 'Select Party' }}
+            </mat-select-trigger>
+            <mat-option value="" [disabled]="true">Select Party</mat-option>
+            <mat-option *ngFor="let party of partyList" [value]="party.partyname">
+              {{ party.partyname }}
+              <span class="balance">{{ calculateBalance(party) }}</span>
+            </mat-option>
+          </mat-select>
           </mat-form-field>        
 
           <p *ngIf="!isview && !isadvance" style="font-size: 14px; margin-left: 20px;" class="form-text text-muted">BAL: <b><span [ngClass]="{'negative-balance': balance < 0, 'positive-balance': balance >= 0}">{{ balance }}</span></b></p>
