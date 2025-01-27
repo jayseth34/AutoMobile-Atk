@@ -234,6 +234,11 @@ export class PaymentInoutComponent implements OnInit {
     if (this.isUpdatingValue) return; 
     this.isUpdatingValue = true; 
   
+    if (value === '' || isNaN(value)) {
+      this.paymentInForm.get('received')?.setValue(0); // Set to null or default value
+      this.isUpdatingValue = false;
+      return;
+    }
     this.receivedValue = parseFloat(value);
   
     if (this.isadvance) {
