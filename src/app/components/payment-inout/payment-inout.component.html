@@ -11,9 +11,9 @@
             </mat-select-trigger>
             <mat-option value="" [disabled]="true">Select Party</mat-option>
             <mat-option *ngFor="let party of partyList" [value]="party.partyname">
-              {{ party.partyname }}
+              <span class="party-name">{{ party.partyname }}</span>
               <span class="balance">{{ calculateBalance(party) }}</span>
-            </mat-option>
+            </mat-option>            
           </mat-select>
           </mat-form-field>        
 
