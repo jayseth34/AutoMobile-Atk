@@ -310,3 +310,4 @@ export class AddItemComponent {
   get _locationControl() { return this.addItemForm.get('_locationControl')}
   get mrpControl() { return this.addItemForm.get('mrpControl')}
 }
+
