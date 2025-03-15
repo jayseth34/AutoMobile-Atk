@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from 'src/app/services/api.service';
+import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 
 
@@ -42,14 +43,24 @@ export class ImportitemsComponent {
       return;
     }
     this.api.uploadItems(this.fileToUpload, this.registeredPhoneNumber)
-      .subscribe(
-        (response) => {
-          console.log('File uploaded successfully', response);
-        },
-        (error) => {
-          console.error('Error uploading file', error);
-        }
-      );
+    .subscribe(
+      (response) => {
+        Swal.fire({
+          text: response.statusmessage,
+          icon: 'error',
+        }).then(() => {
+          this.fileToUpload = null;
+          window.location.reload();
+        });
+      },
+      (error) => {
+        console.error('Error uploading file', error);
+        Swal.fire({
+          text: 'An error occurred during file upload. Please try again.',
+          icon: 'error',
+        });
+      }
+    );
   }
 
   // Download Excel template

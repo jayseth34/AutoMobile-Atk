@@ -43,14 +43,12 @@ export class ApiService {
     return this.cs.Post("Login/SaveOrUpdateParty", body);
   }
 
-  //https://localhost:7002/api/Login/GetPartyList?registeredphonenumber=9920279905 - WORKING
   getPartyList(registeredphonenumber: number) {       //sidebar
     return this.cs.get(
       "Login/GetPartyList?registeredphonenumber=" + registeredphonenumber
     );
   }
 
-  //https://localhost:7002/api/Login/GetPartyDetails?registeredphonenumber=9594645455&partyname=SHREYA- WORKING
   getPartyDetails(registeredphonenumber: number, partyname: any) {      //mini sidebar
     return this.cs.get(
       "Login/GetPartyDetails?registeredphonenumber=" + registeredphonenumber + "&partyname=" + partyname
@@ -115,18 +113,13 @@ export class ApiService {
     );
   }
 
-  //https://localhost:7002/api/Login/GetPartyByGroup?registeredPhoneNumber=9594645455&groupname=SK - WORKING
   GetPartyByGroup(registeredPhoneNumber: any, groupname: any) {
     return this.cs.get(
       "Login/GetPartyByGroup?registeredPhoneNumber=" + registeredPhoneNumber + "&groupname=" + groupname
     );
   }
 
-  // AddPartyDetails(body: any){
-  //   return this.http.post("http://localhost:4200/party-homepage",body);
-  // }
-
-
+  
   ///////////////////////// ITEMSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 
   assignCode(body: any) {

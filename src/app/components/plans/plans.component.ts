@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { CommonService } from 'src/app/services/common.service';
 import { DataService } from 'src/app/services/data.service';
+import Swal from 'sweetalert2';
 declare var Razorpay: any;
 
 @Component({
@@ -34,16 +35,25 @@ export class PlansComponent implements OnInit {
     } else if (plan === 'gold') {
       amount = 3999;
     } else if (plan === 'free') {
-      this.api.createOrder(0, 'INR', this.planType, this.registeredphonenumber).subscribe((response: any) => {
-        if(response.status == "SUCCESS"){
-          localStorage.setItem("planType", JSON.stringify(this.planType))
-          localStorage.setItem("expiryDate", JSON.stringify(response.expiryDate));
-          this.activePlan = JSON.parse(localStorage.getItem("planType") as string);
-          alert('Free trial activated');
-          location.reload(); 
+        var ptype = JSON.parse(localStorage.getItem("planType") as string)
+        if (this.cs.isUndefineOrNull(ptype)){
+          this.api.createOrder(0, 'INR', this.planType, this.registeredphonenumber).subscribe((response: any) => {
+            if(response.status == "SUCCESS"){
+              localStorage.setItem("planType", JSON.stringify(this.planType))
+              localStorage.setItem("expiryDate", JSON.stringify(response.expiryDate));
+              this.activePlan = JSON.parse(localStorage.getItem("planType") as string);
+              Swal.fire({text:"Free Trial Activated"}).then(() => {
+                location.reload(); 
+              })
+            }
+          });
+          return;
+        } else {
+          Swal.fire({text:"Plan Already active"}).then(() => {
+            return
+          })
         }
-      });
-      return;
+        return;
     }
     this.api.createOrder(amount, 'INR', this.planType,  this.registeredphonenumber).subscribe((response: any) => {
       const options = {

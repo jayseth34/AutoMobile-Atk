@@ -96,7 +96,6 @@ export class AddPartyGroupComponent {
   submit() {
     if(this.addPartyGroup.valid) {
       this.AddGroupData(this.addPartyGroup.value);
-      // window.location.href = 'http://localhost:4200/party-homepage';
     } 
     else{
     }
