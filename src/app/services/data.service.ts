@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -98,7 +99,7 @@ export class DataService {
   conversionRate$ = this.conversionRateSubject.asObservable();
 
   
-  constructor() { }
+  constructor(private router: Router) { }
   setSelectedOption1(value: any) {
     this.selectedOption1Subject.next(value);
   }
@@ -140,7 +141,8 @@ export class DataService {
         allowOutsideClick: true, 
       }).then((result) => {
         if (result.isConfirmed || result.isDismissed) {
-          window.location.href = 'http://localhost:4200/plans';
+          // window.location.href = 'http://autotekk.in/plans';
+          this.router.navigateByUrl("plans");
         }
       });
     }
