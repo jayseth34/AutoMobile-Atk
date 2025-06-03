@@ -252,7 +252,7 @@ export class ApiService {
     formData.append('file', file);
     formData.append('registeredPhoneNumber', registeredPhoneNumber.toString());
 
-    return this.http.post('http://autotekk.in/api/Item/upload', formData);
+    return this.http.post('https://automobill.in/api/Item/upload', formData);
   }
 
 }

@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
   providedIn: 'root'
 })
 export class CommonService {
-  baseURL = "https://autotekk.in/api/";
+  baseURL = "https://automobill.in/api/";
   authToken: any;
   httpOptions = {
     headers: new HttpHeaders({
