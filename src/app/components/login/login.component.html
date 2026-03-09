@@ -1,89 +1,101 @@
-<div class="login-container">
-  <div class="background-image"></div>
-  <form class="login-form centerAlignment" [formGroup]="loginForm">
-    <h2><b>LOGIN</b></h2>
+<div class="auth-page">
+  <div class="bg-orb orb-one"></div>
+  <div class="bg-orb orb-two"></div>
 
-    <div class="form-group">
-      <input
-        type="text"
-        id="mobileno"
-        name="mobileno"
-        placeholder="Enter Mobile no."
-        formControlName="phonenumber"
-      />
-      <div
-        *ngIf="loginForm.get('phonenumber')?.invalid && loginForm.get('phonenumber')?.touched"
-        class="error"
-      >
-        Please enter a valid mobile number.
+  <div class="auth-shell">
+    <section class="brand-panel">
+      <p class="brand-kicker">Welcome Back</p>
+      <h1>AutoTekk</h1>
+      <p class="brand-copy">Manage billing, parties, inventory, and payments from one place.</p>
+    </section>
+
+    <form class="auth-card" [formGroup]="loginForm">
+      <h2>Sign In</h2>
+      <p class="sub-title">Continue with OTP or password</p>
+
+      <div class="form-group">
+        <label for="mobileno">Mobile Number</label>
+        <input
+          type="text"
+          id="mobileno"
+          name="mobileno"
+          placeholder="Enter mobile no."
+          formControlName="phonenumber"
+        />
+        <div
+          *ngIf="loginForm.get('phonenumber')?.invalid && loginForm.get('phonenumber')?.touched"
+          class="error"
+        >
+          Please enter a valid mobile number.
+        </div>
       </div>
-    </div>
 
-    <input
-      class="centerAlignment"
-      *ngIf="!showOtpInput"
-      type="submit"
-      value="GET OTP"
-      (click)="GetOtp()"
-      [disabled]="loginForm.get('phonenumber')?.invalid"
-    />
-
-    <div class="form-group centerAlignment">
       <input
         *ngIf="!showOtpInput"
-        type="text"
-        id="otp"
-        name="otp"
-        placeholder="Enter OTP"
-        formControlName="otp"
+        class="auth-btn ghost-btn"
+        type="submit"
+        value="Get OTP"
+        (click)="GetOtp()"
+        [disabled]="loginForm.get('phonenumber')?.invalid"
       />
-      <div
-        *ngIf="loginForm.get('otp')?.invalid && loginForm.get('otp')?.touched"
-        class="error"
-      >
-        OTP is required.
-      </div>
-    </div>
 
-    <div class="form-group centerAlignment">
+      <div class="form-group">
+        <label *ngIf="!showOtpInput" for="otp">OTP</label>
+        <input
+          *ngIf="!showOtpInput"
+          type="text"
+          id="otp"
+          name="otp"
+          placeholder="Enter OTP"
+          formControlName="otp"
+        />
+        <div
+          *ngIf="loginForm.get('otp')?.invalid && loginForm.get('otp')?.touched"
+          class="error"
+        >
+          OTP is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label *ngIf="showOtpInput" for="password">Password</label>
+        <input
+          *ngIf="showOtpInput"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter password"
+          formControlName="password"
+        />
+        <div
+          *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          class="error"
+        >
+          Password is required.
+        </div>
+      </div>
+
+      <p *ngIf="isvalid" class="form-invalid-error">Invalid user credentials</p>
+
       <input
-        *ngIf="showOtpInput"
-        type="password"
-        id="password"
-        name="password"
-        placeholder="Enter password"
-        formControlName="password"
+        class="auth-btn"
+        type="submit"
+        (click)="showOtpInput ? handleLoginFormSubmit() : handleOtpFormSubmit()"
+        [value]="showOtpInput ? 'Sign In' : 'Verify OTP'"
+        [disabled]="showOtpInput ? loginForm.invalid : !loginForm.get('phonenumber')?.valid"
       />
-      <div
-        *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-        class="error"
-      >
-        Password is required.
-      </div>
-    </div>
 
-    <p *ngIf="isvalid" class="form-invalid-error">
-      Invalid User Credentials
-    </p>
+      <button *ngIf="!showOtpInput" type="button" (click)="setflagvalue('password')" class="switch-auth-btn">
+        Login using Password
+      </button>
+      <button *ngIf="showOtpInput" type="button" (click)="setflagvalue('otp')" class="switch-auth-btn">
+        Login using OTP
+      </button>
 
-    <input
-      class="centerAlignment"
-      type="submit"
-      (click)="showOtpInput ? handleLoginFormSubmit() : handleOtpFormSubmit()"
-      [value]="showOtpInput ? 'SUBMIT' : 'VERIFY OTP'"
-      [disabled]="showOtpInput ? loginForm.invalid : !loginForm.get('phonenumber')?.valid"
-    />
-
-    <p *ngIf="!showOtpInput" (click)="setflagvalue('password')" class="show">
-      Login using Password
-    </p>
-    <p *ngIf="showOtpInput" (click)="setflagvalue('otp')" class="show">
-      Login using OTP
-    </p>
-
-    <p class="centerAlignment">
-      Don't have an account?
-      <a routerLink="/Register" class="register-link"> Register here</a>
-    </p>
-  </form>
+      <p class="auth-link-row">
+        Don't have an account?
+        <a routerLink="/Register" class="auth-link">Register here</a>
+      </p>
+    </form>
+  </div>
 </div>
