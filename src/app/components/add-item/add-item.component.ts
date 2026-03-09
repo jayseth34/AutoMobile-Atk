@@ -56,6 +56,18 @@ export class AddItemComponent {
 
   constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, private api: ApiService, public cs: CommonService, public dialogRef: MatDialogRef<AddItemComponent>, public cdr: ChangeDetectorRef) {}
 
+  private getDialogConfig(width: string, height?: string, data?: any) {
+    const isMobile = window.innerWidth <= 767.98;
+    return {
+      width: isMobile ? '96vw' : width,
+      height: isMobile ? 'auto' : height,
+      maxWidth: isMobile ? '96vw' : '95vw',
+      maxHeight: isMobile ? '92vh' : '95vh',
+      panelClass: isMobile ? 'mobile-app-dialog' : '',
+      data
+    };
+  }
+
   ngOnInit() {
     this.registeredPhoneNmber = parseInt(
       JSON.parse(localStorage.getItem('phonenumber') as string)
@@ -175,12 +187,15 @@ export class AddItemComponent {
   }
 
   openSelectUnitModal() {
-    const dialogRef = this.dialog.open(SelectUnitComponent, {
-      width: '40%',
-      data : {baseunit : this.addItemForm.get('baseunit')?.value, secondaryunit : this.addItemForm.get('secondaryunit')?.value,
-        conversionrates : this.addItemForm.get('conversionrates')?.value, status: "SUCCESS"
-      }
-    });
+    const dialogRef = this.dialog.open(
+      SelectUnitComponent,
+      this.getDialogConfig('40%', undefined, {
+        baseunit: this.addItemForm.get('baseunit')?.value,
+        secondaryunit: this.addItemForm.get('secondaryunit')?.value,
+        conversionrates: this.addItemForm.get('conversionrates')?.value,
+        status: 'SUCCESS'
+      })
+    );
   
     dialogRef.afterClosed().subscribe(result => {
       this.updateValues(result)
@@ -280,10 +295,7 @@ export class AddItemComponent {
 
   openAddItemCategoryModal() {
     this.dataService.isCategoryUpdate = false;
-    const dialogRef = this.dialog.open(AddItemCategoryComponent, {
-      width: '40%',
-      height: '35%', 
-    });
+    const dialogRef = this.dialog.open(AddItemCategoryComponent, this.getDialogConfig('40%', '35%'));
     dialogRef.afterClosed().subscribe(result => {
       this.categorygroup()
     });
@@ -310,4 +322,5 @@ export class AddItemComponent {
   get _locationControl() { return this.addItemForm.get('_locationControl')}
   get mrpControl() { return this.addItemForm.get('mrpControl')}
 }
+
 

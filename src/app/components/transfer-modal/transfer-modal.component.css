@@ -17,6 +17,20 @@ form {
 @media (max-width: 600px) {
   form {
     grid-template-columns: 1fr; /* Single column layout on smaller screens */
+    padding: 12px;
+    gap: 10px;
+  }
+
+  h2[mat-dialog-title] {
+    font-size: 18px;
+  }
+
+  .mat-dialog-actions {
+    justify-content: stretch;
+  }
+
+  .mat-dialog-actions button {
+    flex: 1 1 auto;
   }
   /* Optional: Adjust form field styles for smaller screens here */
 }

@@ -1,7 +1,16 @@
 <div class="container-fluid root-container">
+  <button
+    *ngIf="!dataService.isLogin && isMobileView"
+    type="button"
+    class="mobile-sidebar-toggle btn"
+    (click)="toggleMobileSidebar()"
+  >
+    ☰ Menu
+  </button>
+
   <!-- Conditionally Show Sidebar -->
-  <div *ngIf="!dataService.isLogin" class="sidebar-col p-0">
-    <app-sidebar></app-sidebar>
+  <div *ngIf="!dataService.isLogin" class="sidebar-col p-0" [ngClass]="{ 'mobile-open': isMobileSidebarOpen }">
+    <app-sidebar (itemSelected)="closeMobileSidebar()"></app-sidebar>
   </div>
 
   <!-- Adjust Main Content Width Based on Sidebar Visibility -->

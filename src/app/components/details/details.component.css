@@ -21,6 +21,95 @@ section > h3 {
   font-weight: 400;
 }
 
+.details-top-nav .container-fluid {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.top-actions {
+  display: flex;
+  gap: 0.6rem;
+  width: auto;
+}
+
+.quick-action-btn {
+  border-radius: 15px;
+  white-space: nowrap;
+}
+
+.sale-btn {
+  background-color: rgba(211, 18, 18, 0.1);
+  color: rgba(211, 18, 18, 1);
+}
+
+.purchase-btn {
+  background-color: rgba(0, 0, 255, 0.1);
+  color: rgba(0, 0, 255, 1);
+}
+
+.date-range-group .form-control {
+  min-width: 0;
+}
+
+.report-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.report-btn {
+  height: 35px;
+  width: 50px;
+}
+
+.report-text {
+  font-size: 0.95rem;
+}
+
+.summary-cards-list {
+  list-style: none;
+  padding: 0 0.5rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.summary-card {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.summary-card .card-body {
+  padding: 0.85rem 1rem;
+}
+
+.summary-card .card-title {
+  font-size: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.summary-card .card-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.summary-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+}
+
+.action-add-btn {
+  color: #fff;
+  background-color: #3076f0;
+  margin-left: auto;
+}
+
 .table-container {
   height: calc(100vh - 200px); /* Adjust height based on header/footer */
   overflow-y: auto;
@@ -36,13 +125,92 @@ section > h3 {
   z-index: 1;
 }
 
-button.form-control {
-  height: 35px;
-  width: 50px;
-}
-
 button.form-control mat-icon {
   font-size: 22px;
+}
+
+@media (max-width: 991.98px) {
+  .top-actions {
+    width: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .details-filter-row .mat-mdc-form-field {
+    width: 100%;
+  }
+
+  .summary-cards-list {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .details-top-nav .container-fluid {
+    justify-content: center !important;
+  }
+
+  .top-actions {
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
+  .quick-action-btn {
+    min-width: 130px;
+    font-size: 0.95rem;
+  }
+
+  .date-range-group {
+    flex-wrap: wrap;
+  }
+
+  .date-range-group .input-group-text {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .date-range-group .form-control {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .report-section {
+    justify-content: flex-start;
+  }
+
+  .summary-cards-list {
+    gap: 0.45rem;
+    padding: 0 0.3rem;
+  }
+
+  .summary-card {
+    flex: 1 1 calc(50% - 0.45rem);
+  }
+
+  .summary-symbol {
+    display: none;
+  }
+
+  .action-add-btn {
+    width: 100%;
+    margin: 0.25rem 0 0;
+    justify-content: center;
+  }
+
+  .table-container {
+    height: calc(100vh - 270px);
+  }
+}
+
+@media (max-width: 420px) {
+  .quick-action-btn {
+    min-width: 120px;
+    font-size: 0.9rem;
+  }
+
+  .summary-card {
+    flex: 1 1 100%;
+  }
 }
 
 @media print {

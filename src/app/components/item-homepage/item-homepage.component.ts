@@ -53,6 +53,18 @@ export class ItemHomepageComponent {
     private router: Router,
   ) {}
 
+  private getDialogConfig(width: string, height?: string, data?: any) {
+    const isMobile = window.innerWidth <= 767.98;
+    return {
+      width: isMobile ? '96vw' : width,
+      height: isMobile ? 'auto' : height,
+      maxWidth: isMobile ? '96vw' : '95vw',
+      maxHeight: isMobile ? '92vh' : '95vh',
+      panelClass: isMobile ? 'mobile-app-dialog' : '',
+      data
+    };
+  }
+
   ngOnInit() {
     this.registeredMobileNumber = parseInt(
       JSON.parse(localStorage.getItem("phonenumber") as string),
@@ -89,15 +101,14 @@ export class ItemHomepageComponent {
             this.dataService.isItemUpdate = true;
             this.dataService.oldItemName = itemName;
             this.cdr.detectChanges(); // Manually trigger change detection
-            const dialogRef = this.dialog.open(AddItemComponent, {
-              width: "60%",
-              height: "99%",
-              data: {
+            const dialogRef = this.dialog.open(
+              AddItemComponent,
+              this.getDialogConfig("60%", "99%", {
                 itemDetails: res.itemList[0],
                 itemName,
                 status: "SUCCESS",
-              }, // Pass the data here
-            });
+              })
+            );
             dialogRef.afterClosed().subscribe((result) => {
               this.selectTab("product", 0);
             });
@@ -113,11 +124,10 @@ export class ItemHomepageComponent {
     } else {
       this.dataService.isItemUpdate = false;
       this.cdr.detectChanges(); // Manually trigger change detection
-      const dialogRef = this.dialog.open(AddItemComponent, {
-        width: "60%",
-        height: "99%",
-        data: { itemDetails: null, itemName: "" },
-      });
+      const dialogRef = this.dialog.open(
+        AddItemComponent,
+        this.getDialogConfig("60%", "99%", { itemDetails: null, itemName: "" })
+      );
       dialogRef.afterClosed().subscribe((result) => {
         this.selectTab("product", 0);
       });
@@ -168,11 +178,10 @@ export class ItemHomepageComponent {
               this.selectedCategory = categoryname;
               this.dataService.isCategoryUpdate = true;
               this.dataService.oldCategoryName = categoryname;
-              const dialogRef = this.dialog.open(AddItemCategoryComponent, {
-                width: "40%",
-                height: "35%",
-                data: { categorynameDetails: categoryname }, // Pass the data here
-              });
+              const dialogRef = this.dialog.open(
+                AddItemCategoryComponent,
+                this.getDialogConfig("40%", "35%", { categorynameDetails: categoryname })
+              );
               dialogRef.afterClosed().subscribe((result) => {
                 this.selectTab("category", 1);
               });
@@ -187,10 +196,10 @@ export class ItemHomepageComponent {
         });
     } else {
       this.dataService.isCategoryUpdate = false;
-      const dialogRef = this.dialog.open(AddItemCategoryComponent, {
-        width: "40%",
-        height: "35%",
-      });
+      const dialogRef = this.dialog.open(
+        AddItemCategoryComponent,
+        this.getDialogConfig("40%", "35%")
+      );
       dialogRef.afterClosed().subscribe((result) => {
         this.selectTab("category", 1);
       });
@@ -366,3 +375,4 @@ export class ItemHomepageComponent {
     );
   }
 }
+

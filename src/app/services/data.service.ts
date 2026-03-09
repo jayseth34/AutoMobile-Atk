@@ -123,6 +123,20 @@ export class DataService {
     }
   }
 
+  getPaymentStatusClass(status: any): string {
+    const normalizedStatus = (status ?? '').toString().trim().toLowerCase();
+
+    if (!normalizedStatus) {
+      return 'status-neutral';
+    }
+
+    if (normalizedStatus === 'paid') {
+      return 'status-paid';
+    }
+
+    return 'status-unpaid';
+  }
+
   checkPlanExpiry(){
     const expiryDate = moment(JSON.parse(localStorage.getItem("expiryDate") as string)).format('YYYY-MM-DD');
     const currentDate = moment().format('YYYY-MM-DD');

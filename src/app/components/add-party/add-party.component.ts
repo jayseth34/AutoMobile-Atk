@@ -88,6 +88,18 @@ export class AddPartyComponent implements OnInit {
   constructor(private dialog: MatDialog,private api: ApiService, public dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any, public cdr: ChangeDetectorRef, public cs: CommonService, public dialogRef: MatDialogRef<AddPartyComponent>) {
   }
 
+  private getDialogConfig(width: string, height?: string, data?: any) {
+    const isMobile = window.innerWidth <= 767.98;
+    return {
+      width: isMobile ? '96vw' : width,
+      height: isMobile ? 'auto' : height,
+      maxWidth: isMobile ? '96vw' : '95vw',
+      maxHeight: isMobile ? '92vh' : '95vh',
+      panelClass: isMobile ? 'mobile-app-dialog' : '',
+      data
+    };
+  }
+
   ngOnInit(): void {
     this.registeredPhoneNumber = parseInt(
       JSON.parse(localStorage.getItem('phonenumber') as string)
@@ -446,10 +458,7 @@ export class AddPartyComponent implements OnInit {
 
   openAddPartyGroupModal() {
     this.dataService.isGroupUpdate = false;
-    const dialogRef = this.dialog.open(AddPartyGroupComponent, {
-      width: '40%',
-      height: '35%', 
-    });
+    const dialogRef = this.dialog.open(AddPartyGroupComponent, this.getDialogConfig('40%', '35%'));
     dialogRef.afterClosed().subscribe(result => {
       this.partygroup()
     });
@@ -510,3 +519,4 @@ export class AddPartyComponent implements OnInit {
   get additionalField4CheckedControl() { return this.addPartyForm.get('additionalField4CheckedControl')}
 
 }
+

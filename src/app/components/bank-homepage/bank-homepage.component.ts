@@ -32,6 +32,18 @@ export class BankHomepageComponent implements OnInit {
     );
   }
 
+  private getDialogConfig(width: string, height?: string, data?: any) {
+    const isMobile = window.innerWidth <= 767.98;
+    return {
+      width: isMobile ? '96vw' : width,
+      height: isMobile ? 'auto' : height,
+      maxWidth: isMobile ? '96vw' : '95vw',
+      maxHeight: isMobile ? '92vh' : '95vh',
+      panelClass: isMobile ? 'mobile-app-dialog' : '',
+      data
+    };
+  }
+
   ngOnInit(): void {
     this.loadBanks();
   }
@@ -136,11 +148,10 @@ export class BankHomepageComponent implements OnInit {
             break;
         }
   
-        const dialogRef = this.dialog.open(TransferModalComponent, {
-          width:'70%',
-          height:'70%',
-          data: { type: selectedValue, ...data }
-        });
+        const dialogRef = this.dialog.open(
+          TransferModalComponent,
+          this.getDialogConfig('70%', '70%', { type: selectedValue, ...data })
+        );
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
             this.loadBanks();
@@ -190,11 +201,20 @@ export class BankHomepageComponent implements OnInit {
                     amount = response.amount;
                     date = new Date(response.adjustmentDate);
 
-                    const dialogRef = this.dialog.open(TransferModalComponent, {
-                        width: '50%',
-                        height: '70%',
-                        data: { type: type, increasedecrease: increasedecrease, from: from, to: to, amount: amount, date: date, ...data, isupdate: true, banktobank:banktobank }
-                    });
+                    const dialogRef = this.dialog.open(
+                      TransferModalComponent,
+                      this.getDialogConfig('50%', '70%', {
+                        type: type,
+                        increasedecrease: increasedecrease,
+                        from: from,
+                        to: to,
+                        amount: amount,
+                        date: date,
+                        ...data,
+                        isupdate: true,
+                        banktobank: banktobank
+                      })
+                    );
 
                     dialogRef.afterClosed().subscribe(result => {
                         if (result) {
@@ -311,11 +331,7 @@ openAddBanksModal(bank?: Bank): void {
     ? { ...bank, isbanksupdateflag: this.isbanksupdateflag } 
     : { isbanksupdateflag: this.isbanksupdateflag };
 
-  const dialogRef = this.dialog.open(BanksComponent, {
-    width: '60%',
-    height: '60%',
-    data: data
-  });
+  const dialogRef = this.dialog.open(BanksComponent, this.getDialogConfig('60%', '60%', data));
 
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
@@ -345,3 +361,4 @@ openAddBanksModal(bank?: Bank): void {
   }
 
 }
+

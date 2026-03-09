@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPartyComponent } from '../add-party/add-party.component';
 import { ApiService } from 'src/app/services/api.service';
@@ -16,6 +16,8 @@ export class SidebarComponent {
   registeredPhoneNumber: any;
   selectedTab: any = null;
   destroy$: Subject<boolean> = new Subject<boolean>();
+  private readonly defaultBusinessTabName = 'Business Info';
+  @Output() itemSelected = new EventEmitter<void>();
 
   tabs = [
     {
@@ -69,20 +71,45 @@ export class SidebarComponent {
 
   constructor(public dialog: MatDialog, private api: ApiService, public dataService: DataService) { }
 
+  private getDialogConfig(width: string, height?: string, data?: any) {
+    const isMobile = window.innerWidth <= 767.98;
+    return {
+      width: isMobile ? '96vw' : width,
+      height: isMobile ? 'auto' : height,
+      maxWidth: isMobile ? '96vw' : '95vw',
+      maxHeight: isMobile ? '92vh' : '95vh',
+      panelClass: isMobile ? 'mobile-app-dialog' : '',
+      data
+    };
+  }
+
   ngOnInit() {
     this.registeredPhoneNumber = parseInt(JSON.parse(localStorage.getItem('phonenumber') as string));
+    this.loadBusinessTabName();
   }
 
 
-  toggleSubMenu(tab: any) {
+  onTabClick(tab: any, event: Event) {
     this.selectedTab = tab;
     this.dataService.checkPlanExpiry();
-    tab.isOpen = !tab.isOpen;
+
+    if (tab.subTabs) {
+      event.preventDefault();
+      tab.isOpen = !tab.isOpen;
+      return;
+    }
+
+    if (tab.action) {
+      tab.action();
+    }
+
+    this.itemSelected.emit();
   }
 
-  selectSubTab(subTab: any) {
+  onSubTabClick(subTab: any) {
     this.selectedTab = subTab;
     this.dataService.checkPlanExpiry();
+    this.itemSelected.emit();
   }
 
   getPartyListData() {
@@ -112,21 +139,17 @@ export class SidebarComponent {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(AddPartyComponent, {
-      width: '1000px',
-      maxHeight: '1000px'
-    });
+    const dialogRef = this.dialog.open(AddPartyComponent, this.getDialogConfig('1000px', '1000px'));
 
     dialogRef.afterClosed().subscribe(() => console.log('The dialog was closed'));
   }
 
   openBusinessInfoModal() {
-    const dialogRef = this.dialog.open(BusinessInformationComponent, {
-      width: '50%',
-      height: '70%',
-    });
+    const dialogRef = this.dialog.open(BusinessInformationComponent, this.getDialogConfig('50%', '70%'));
 
-    dialogRef.afterClosed().subscribe(() => { });
+    dialogRef.afterClosed().subscribe(() => {
+      this.loadBusinessTabName();
+    });
   }
 
   getItemListData() {
@@ -151,12 +174,34 @@ export class SidebarComponent {
   }
 
   redirecttobanks() {
-    const dialogRef = this.dialog.open(BanksComponent, {
-      width: '900px',
-      height: '700px',
-    });
+    const dialogRef = this.dialog.open(BanksComponent, this.getDialogConfig('900px', '700px'));
 
     dialogRef.afterClosed().subscribe(() => console.log('The dialog was closed'));
   }
 
+  private loadBusinessTabName(): void {
+    if (!this.registeredPhoneNumber) {
+      this.setBusinessTabName(this.defaultBusinessTabName);
+      return;
+    }
+
+    this.api.getBusinessInfo(this.registeredPhoneNumber).subscribe({
+      next: (res: any) => {
+        const businessName = res?.businessInfo?.businessName?.trim();
+        this.setBusinessTabName(businessName || this.defaultBusinessTabName);
+      },
+      error: () => {
+        this.setBusinessTabName(this.defaultBusinessTabName);
+      }
+    });
+  }
+
+  private setBusinessTabName(name: string): void {
+    const businessTab = this.tabs.find((tab: any) => tab.action);
+    if (businessTab) {
+      businessTab.name = name;
+    }
+  }
+
 }
+

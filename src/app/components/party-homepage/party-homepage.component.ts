@@ -57,6 +57,18 @@ export class PartyHomepageComponent {
     private router: Router,
   ) {}
 
+  private getDialogConfig(width: string, height?: string, data?: any) {
+    const isMobile = window.innerWidth <= 767.98;
+    return {
+      width: isMobile ? '96vw' : width,
+      height: isMobile ? 'auto' : height,
+      maxWidth: isMobile ? '96vw' : '95vw',
+      maxHeight: isMobile ? '92vh' : '95vh',
+      panelClass: isMobile ? 'mobile-app-dialog' : '',
+      data
+    };
+  }
+
   ngOnInit() {
     // Listen to click events on the document
     this.selectedTabIndex =
@@ -161,15 +173,14 @@ export class PartyHomepageComponent {
               this.dataService.oldPartyName = partyName;
               console.log("Party Details:", res.partyList[0]);
               this.cdr.detectChanges(); // Manually trigger change detection
-              const dialogRef = this.dialog.open(AddPartyComponent, {
-                width: "60%",
-                height: "99%",
-                data: {
+              const dialogRef = this.dialog.open(
+                AddPartyComponent,
+                this.getDialogConfig("60%", "99%", {
                   partyDetails: res.partyList[0],
                   partyName,
                   status: "SUCCESS",
-                },
-              });
+                })
+              );
 
               dialogRef.afterClosed().subscribe((result) => {
                 this.selectTab(0);
@@ -188,11 +199,10 @@ export class PartyHomepageComponent {
       this.dataService.isPartyUpdate = false;
       this.cdr.detectChanges(); // Manually trigger change detection
       console.log("Opening dialog with empty data");
-      const dialogRef = this.dialog.open(AddPartyComponent, {
-        width: "60%",
-        height: "99%",
-        data: { partyDetails: null, partyName: "" },
-      });
+      const dialogRef = this.dialog.open(
+        AddPartyComponent,
+        this.getDialogConfig("60%", "99%", { partyDetails: null, partyName: "" })
+      );
 
       dialogRef.afterClosed().subscribe((result) => {
         this.selectTab(0);
@@ -210,11 +220,10 @@ export class PartyHomepageComponent {
               this.selectedGroup = groupname;
               this.dataService.isGroupUpdate = true;
               this.dataService.oldPartyGroupName = groupname;
-              const dialogRef = this.dialog.open(AddPartyGroupComponent, {
-                width: "40%",
-                height: "35%",
-                data: { groupDetails: groupname }, // Pass the data here
-              });
+              const dialogRef = this.dialog.open(
+                AddPartyGroupComponent,
+                this.getDialogConfig("40%", "35%", { groupDetails: groupname })
+              );
               dialogRef.afterClosed().subscribe((result) => {
                 this.selectTab(1);
               });
@@ -229,10 +238,10 @@ export class PartyHomepageComponent {
         });
     } else {
       this.dataService.isGroupUpdate = false;
-      const dialogRef = this.dialog.open(AddPartyGroupComponent, {
-        width: "40%",
-        height: "35%",
-      });
+      const dialogRef = this.dialog.open(
+        AddPartyGroupComponent,
+        this.getDialogConfig("40%", "35%")
+      );
       dialogRef.afterClosed().subscribe((result) => {
         this.selectTab(1);
       });
@@ -393,3 +402,4 @@ applyFilter() {
     this.clickSubscription.unsubscribe();
   }
 }
+

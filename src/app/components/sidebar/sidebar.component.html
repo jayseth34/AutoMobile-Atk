@@ -2,7 +2,7 @@
   <ul class="menu">
     <li class="tabs" *ngFor="let tab of tabs" 
         [ngClass]="{ 'has-sub-menu': tab.subTabs, 'selected': tab === selectedTab }">
-      <a [routerLink]="tab.link" (click)="tab.action ? tab.action() : null" (click)="toggleSubMenu(tab)">
+      <a [routerLink]="tab.link" (click)="onTabClick(tab, $event)">
         <div class="tab-content">
           <!-- Apply the class dynamically -->
           <img [src]="tab.icon" [alt]="tab.name + ' Icon'" class="icon icon-white" />
@@ -17,7 +17,7 @@
       <ul class="sub-menu" *ngIf="tab.subTabs && tab.isOpen">
         <li class="sub-tabs" *ngFor="let subTab of tab.subTabs"
         [ngClass]="{ 'selected': subTab === selectedTab }">
-          <a [routerLink]="subTab.link" (click)="selectSubTab(subTab)">{{ subTab.name }}</a>
+          <a [routerLink]="subTab.link" (click)="onSubTabClick(subTab)">{{ subTab.name }}</a>
         </li>
       </ul>
     </li>

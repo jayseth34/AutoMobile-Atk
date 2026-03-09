@@ -3,16 +3,15 @@
 
     <!-- Navbar -->
     <section>
-        <nav class="navbar navbar-expand-lg bg-body-secondary">
+        <nav class="navbar navbar-expand-lg bg-body-secondary details-top-nav">
             <div class="container-fluid justify-content-end">
-                <ul class="navbar-nav nav-tabs col-3">
+                <ul class="navbar-nav nav-tabs top-actions">
                     <li class="nav-item">
                         <button
                             mat-button
-                            class="nav-link"
+                            class="nav-link quick-action-btn sale-btn"
                             aria-current="page"
                             routerLink="/Sale/add"
-                            style="background-color: rgba(211, 18, 18, 0.1); color: rgba(211, 18, 18, 1); border-radius: 15px; margin-right: 10px;"
                         >
                             Add Sale
                         </button>
@@ -20,9 +19,8 @@
                     <li class="nav-item">
                         <button
                             mat-button
-                            class="nav-link"
+                            class="nav-link quick-action-btn purchase-btn"
                             routerLink="/Purchase/add"
-                            style="background-color: rgba(0, 0, 255, 0.1); color: rgba(0, 0, 255, 1); border-radius: 15px;"
                         >
                             Add Purchase
                         </button>
@@ -36,8 +34,8 @@
     <!-- Filters -->
     <section class="bg-body-secondary" *ngIf="this.showFilterSection">
         <form [formGroup]="filterForm">
-            <div class="row p-2 mt-1 mb-2">
-                <div class="col-3">
+            <div class="row p-2 mt-1 mb-2 g-2 align-items-start details-filter-row">
+                <div class="col-12 col-md-3">
                     <mat-form-field>
                         <!-- <mat-label>Transaction Type</mat-label> -->
                         <mat-select
@@ -54,8 +52,8 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-5 pt-1">
-                    <div class="input-group">
+                <div class="col-12 col-md-6 pt-1">
+                    <div class="input-group date-range-group">
                         <span class="input-group-text">Between</span>
                         <input
                             type="date"
@@ -73,40 +71,40 @@
                         />
                     </div>
                 </div>
-                <div class="col-2">
-                    <button class="form-control" (click)="generateExcel()">
+                <div class="col-12 col-md-3 report-section">
+                    <button class="form-control report-btn" (click)="generateExcel()">
                       <mat-icon>file_download</mat-icon>
                     </button>
-                    REPORT
+                    <span class="report-text">REPORT</span>
                   </div>
             </div>
             <div class="row">
-                <ul class="d-flex col-5 justify-content-around">
-                    <div class="card col-3">
+                <div class="summary-cards-list">
+                    <div class="card summary-card">
                         <div class="card-body">
                             <h4 class="card-title">Paid</h4>
                             <p class="card-text">{{ paidVal }}</p>
                         </div>
                     </div>
-                    <div class="col-1 align-content-center">
+                    <div class="summary-symbol align-content-center">
                         <mat-icon>add</mat-icon>
                     </div>
-                    <div class="card col-3">
+                    <div class="card summary-card">
                         <div class="card-body">
                             <h4 class="card-title">Unpaid</h4>
                             <p class="card-text">{{ unpaidVal }}</p>
                         </div>
                     </div>
-                    <div class="col-1 align-content-center">
+                    <div class="summary-symbol align-content-center">
                         <span class="material-symbols-outlined"> equal </span>
                     </div>
-                    <div class="card col-3">
+                    <div class="card summary-card">
                         <div class="card-body">
                             <h4 class="card-title">Total</h4>
                             <p class="card-text">{{ totalVal }}</p>
                         </div>
                     </div>
-                </ul>
+                </div>
             </div>
         </form>
     </section>
@@ -116,9 +114,9 @@
         <h3 class="ms-3 pt-2">Transactions</h3>
 
         <div class="container-fluid">
-            <div class="row justify-content-between">
+            <div class="row justify-content-between align-items-center g-2">
                 <!-- Filtering row input -->
-                <mat-form-field class="col-6">
+                <mat-form-field class="col-12 col-md-6">
                     <mat-label>Filter</mat-label>
                     <input
                         matInput
@@ -133,9 +131,8 @@
                 <button
                     mat-fab
                     extended
-                    class="col-2 me-3"
+                    class="action-add-btn"
                     (click)="getRouterLink()"
-                    style="color: white; background-color: #3076f0"
                 >
                     <mat-icon>add</mat-icon>
                     Add {{ this.transactionTypeString | removeHyphen }}

@@ -283,25 +283,17 @@ export class EditDetailComponent implements OnInit {
     // If Total changed, then update received accordingly
     this.modifyDetail.get("total")?.valueChanges.subscribe((val) => {
       if (this.fullpayment) this.modifyDetail.get("received")?.setValue(val);
-      else {
-        let rec = this.modifyDetail.get("received")?.value;
-        this.modifyDetail
-          .get("balance")
-          ?.setValue(val - rec, { emitEvent: false });
-      }
+      this.updateBalanceFromCurrentValues();
     });
 
     // If Received value changed, then update the balance accordingly
-    this.modifyDetail.get("received")?.valueChanges.subscribe((val) => {
-      let total = this.modifyDetail.get("total")?.value;
-      this.modifyDetail
-        .get("balance")
-        ?.setValue(total - val, { emitEvent: false });
+    this.modifyDetail.get("received")?.valueChanges.subscribe(() => {
+      this.updateBalanceFromCurrentValues();
 
       // Update the payment amount when only 1 payment type available
       let paymentArr = this.modifyDetail.get("amountdetailslist") as FormArray;
       if (paymentArr.length == 1) {
-        paymentArr.at(0).get("amount")?.setValue(val, { emitEvent: false });
+        paymentArr.at(0).get("amount")?.setValue(this.itemReceivedAmt, { emitEvent: false });
       }
     });
 
@@ -456,7 +448,8 @@ export class EditDetailComponent implements OnInit {
       finalAmount = data?.priceperunit * data.qty + 0 - data?.discountamount;
       this.totalAmount += finalAmount;
       this.totalQuantity += data.qty;
-      totalElementControl?.setValue(this.totalAmount, { emitevent: false });
+      totalElementControl?.setValue(this.totalAmount, { emitEvent: false });
+      this.syncAfterTotalUpdate();
     }
 
     if (this.transactionId == 0 && data != null)
@@ -500,7 +493,7 @@ export class EditDetailComponent implements OnInit {
         this.handleItemChange(prev, next, element),
       );
     const valueChanges$ = element.valueChanges.pipe(
-      map((item: any) => this.getChangesNew(element)),
+      map(() => this.getChangesNew(element)),
     );
     valueChanges$.subscribe((changeObj: any) => {
       if (!element.value.queryoperationtype) {
@@ -513,94 +506,7 @@ export class EditDetailComponent implements OnInit {
       }
 
       Object.keys(changeObj).forEach((key: string) => {
-        const pricePerUnit = element.get("priceperunit")?.value as number;
-        const discountPer = element.get("discountpercent")?.value as number;
-        const discountAmt = element.get("discountamount")?.value as number;
-        const taxPer = element.get("taxrate")?.value as number;
-        const itemQty = element.get("qty")?.value as number;
-        const taxAmt = element.get("taxrateamount")?.value as number;
-        // const remainingquantity = element.get("remainingquantity")?.value as number;
-        // const initialCount = element.get("initialCount")?.value as number;
-        switch (key) {
-          case "qty":
-            // console.log(discountPer, pricePerUnit);
-            const iscountAmtQty =
-              ((discountPer * pricePerUnit) / 100) * changeObj[key];
-            // console.log(iscountAmtQty);
-            const newTaxAmtQty =
-              ((taxPer * pricePerUnit) / 100) * changeObj[key];
-            element.patchValue(
-              {
-                discountamount: iscountAmtQty,
-                taxrateamount: newTaxAmtQty,
-                totalAmount:
-                  pricePerUnit * changeObj[key] - iscountAmtQty + taxAmt,
-                // "remainingquantity": remainingquantity - (changeObj[key] - initialCount)
-              },
-              { emitEvent: false },
-            );
-            break;
-
-          case "priceperunit":
-            const newDiscountAmtPnP =
-              ((discountPer * changeObj[key]) / 100) * itemQty;
-            const newTaxAmtPnP = ((taxPer * changeObj[key]) / 100) * itemQty;
-            element.patchValue(
-              {
-                discountamount: newDiscountAmtPnP,
-                taxrateamount: newTaxAmtPnP,
-                totalAmount: changeObj[key] * itemQty - discountAmt + taxAmt,
-              },
-              { emitEvent: false },
-            );
-            break;
-
-          case "discountamount":
-            const newPricePerUnitDisc = changeObj[key] / itemQty;
-            element.patchValue(
-              {
-                discountpercent: (newPricePerUnitDisc / pricePerUnit) * 100,
-                totalAmount: pricePerUnit * itemQty - changeObj[key] + taxAmt,
-              },
-              { emitEvent: false },
-            );
-            break;
-
-          case "discountpercent":
-            const newDiscountAmt =
-              (changeObj[key] / 100) * itemQty * pricePerUnit;
-            element.patchValue(
-              {
-                discountamount: newDiscountAmt,
-                totalAmount: pricePerUnit * itemQty - newDiscountAmt + taxAmt,
-              },
-              { emitEvent: false },
-            );
-            break;
-
-          case "taxrateamount":
-            const newPricePerUnitTax = changeObj[key] / itemQty;
-            element.patchValue(
-              {
-                taxrate: (newPricePerUnitTax / pricePerUnit) * 100,
-                totalAmount:
-                  pricePerUnit * itemQty + changeObj[key] - discountAmt,
-              },
-              { emitEvent: false },
-            );
-            break;
-
-          case "taxrate":
-            const newTaxAmt = (changeObj[key] / 100) * itemQty * pricePerUnit;
-            element.patchValue(
-              {
-                taxrateamount: newTaxAmt,
-                totalAmount: pricePerUnit * itemQty - discountAmt + newTaxAmt,
-              },
-              { emitEvent: false },
-            );
-            break;
-        }
+        this.applyRowCalculationByChange(element, key, changeObj[key]);
         this.calcTotalVal();
       });
     });
@@ -610,7 +516,7 @@ export class EditDetailComponent implements OnInit {
 
   createNewPaymentRow(data?: Bank) {
     let control = this.modifyDetail.get("amountdetailslist") as FormArray;
-    let defaltValue = this.bankNameList()[0];
+    const defaultValue = this.bankNameList()[0];
 
     // console.log(this.banks());
 
@@ -620,7 +526,7 @@ export class EditDetailComponent implements OnInit {
       // console.log('New Bank List: ', this.banks());
     }
 
-    if (this.banks.length <= 1 && !this.paymentInfoInitialized) {
+    if (this.banks().length <= 1 && !this.paymentInfoInitialized) {
       // console.log("Getting Bank names");
       this.handlePaymentInputClick();
     }
@@ -630,7 +536,7 @@ export class EditDetailComponent implements OnInit {
     let nfg = new FormGroup(
       {
         type: new FormControl<string>(
-          data?.accountdisplayname ?? data?.type ?? defaltValue,
+          data?.accountdisplayname ?? data?.type ?? defaultValue,
         ),
         amount: new FormControl<number>(data?.amount ?? 0),
         refno: new FormControl<string>(data?.refno ?? ""),
@@ -649,7 +555,7 @@ export class EditDetailComponent implements OnInit {
 
     let $typeSubs = nfg
       .get("type")
-      ?.valueChanges.pipe(startWith(defaltValue), pairwise())
+      ?.valueChanges.pipe(startWith(defaultValue), pairwise())
       .subscribe((type) => {
         // console.log('Change Type: ', type)
         this.banks.update((items) => {
@@ -691,6 +597,127 @@ export class EditDetailComponent implements OnInit {
     control.push(row);
   }
 
+  private safeDivide(numerator: number, denominator: number): number {
+    if (!denominator) return 0;
+    return numerator / denominator;
+  }
+
+  private toNumber(value: unknown): number {
+    const num = Number(value);
+    return Number.isFinite(num) ? num : 0;
+  }
+
+  private updateBalanceFromCurrentValues(): void {
+    const total = this.toNumber(this.modifyDetail.get("total")?.value);
+    const received = this.toNumber(this.modifyDetail.get("received")?.value);
+    this.modifyDetail.get("balance")?.setValue(total - received, { emitEvent: false });
+  }
+
+  private syncAfterTotalUpdate(): void {
+    const total = this.toNumber(this.modifyDetail.get("total")?.value);
+    if (this.fullpayment) {
+      this.modifyDetail.get("received")?.setValue(total, { emitEvent: false });
+      const paymentArr = this.modifyDetail.get("amountdetailslist") as FormArray;
+      if (paymentArr.length === 1) {
+        paymentArr.at(0).get("amount")?.setValue(total, { emitEvent: false });
+      }
+    }
+    this.updateBalanceFromCurrentValues();
+  }
+
+  private applyRowCalculationByChange(
+    element: FormGroup,
+    key: string,
+    changedValue: number,
+  ): void {
+    const pricePerUnit = (element.get("priceperunit")?.value as number) ?? 0;
+    const discountPer = (element.get("discountpercent")?.value as number) ?? 0;
+    const discountAmt = (element.get("discountamount")?.value as number) ?? 0;
+    const taxPer = (element.get("taxrate")?.value as number) ?? 0;
+    const itemQty = (element.get("qty")?.value as number) ?? 0;
+    const taxAmt = (element.get("taxrateamount")?.value as number) ?? 0;
+
+    switch (key) {
+      case "qty": {
+        const calcDiscountAmt =
+          ((discountPer * pricePerUnit) / 100) * changedValue;
+        const calcTaxAmt = ((taxPer * pricePerUnit) / 100) * changedValue;
+        element.patchValue(
+          {
+            discountamount: calcDiscountAmt,
+            taxrateamount: calcTaxAmt,
+            totalAmount: pricePerUnit * changedValue - calcDiscountAmt + taxAmt,
+          },
+          { emitEvent: false },
+        );
+        break;
+      }
+
+      case "priceperunit": {
+        const calcDiscountAmt = ((discountPer * changedValue) / 100) * itemQty;
+        const calcTaxAmt = ((taxPer * changedValue) / 100) * itemQty;
+        element.patchValue(
+          {
+            discountamount: calcDiscountAmt,
+            taxrateamount: calcTaxAmt,
+            totalAmount: changedValue * itemQty - discountAmt + taxAmt,
+          },
+          { emitEvent: false },
+        );
+        break;
+      }
+
+      case "discountamount": {
+        const newPricePerUnitDisc = this.safeDivide(changedValue, itemQty);
+        element.patchValue(
+          {
+            discountpercent:
+              this.safeDivide(newPricePerUnitDisc, pricePerUnit) * 100,
+            totalAmount: pricePerUnit * itemQty - changedValue + taxAmt,
+          },
+          { emitEvent: false },
+        );
+        break;
+      }
+
+      case "discountpercent": {
+        const calcDiscountAmt = (changedValue / 100) * itemQty * pricePerUnit;
+        element.patchValue(
+          {
+            discountamount: calcDiscountAmt,
+            totalAmount: pricePerUnit * itemQty - calcDiscountAmt + taxAmt,
+          },
+          { emitEvent: false },
+        );
+        break;
+      }
+
+      case "taxrateamount": {
+        const newPricePerUnitTax = this.safeDivide(changedValue, itemQty);
+        element.patchValue(
+          {
+            taxrate: this.safeDivide(newPricePerUnitTax, pricePerUnit) * 100,
+            totalAmount: pricePerUnit * itemQty + changedValue - discountAmt,
+          },
+          { emitEvent: false },
+        );
+        break;
+      }
+
+      case "taxrate": {
+        const calcTaxAmt = (changedValue / 100) * itemQty * pricePerUnit;
+        element.patchValue(
+          {
+            taxrateamount: calcTaxAmt,
+            totalAmount: pricePerUnit * itemQty - discountAmt + calcTaxAmt,
+          },
+          { emitEvent: false },
+        );
+        break;
+      }
+    }
+  }
+
   calcTotalVal() {
     let tempTotalValObj = {
       qty: 0,
@@ -715,7 +742,8 @@ export class EditDetailComponent implements OnInit {
 
     this.modifyDetail
       .get("total")
-      ?.setValue(this.totalAmount, { emitevent: false });
+      ?.setValue(this.totalAmount, { emitEvent: false });
+    this.syncAfterTotalUpdate();
   }
 
   updatePayAmount() {
@@ -1023,7 +1051,8 @@ export class EditDetailComponent implements OnInit {
       this.totalQuantity += 1;
       this.modifyDetail
         .get("total")
-        ?.setValue(this.totalAmount, { emitevent: false });
+        ?.setValue(this.totalAmount, { emitEvent: false });
+      this.syncAfterTotalUpdate();
       element.patchValue(
         {
           qty: 1,
@@ -1043,91 +1072,82 @@ export class EditDetailComponent implements OnInit {
     }
   }
 
-  submitDetails() {
-    console.log(this.modifyDetail);
-    if (!this.modifyDetail.valid) {
-      console.log("Form not valid");
-      console.log(this.modifyDetail.errors);
-      Swal.fire("Enter Valid Detials", "", "info");
-      return;
-    }
+  private getPaymentStatus(received: number, total: number): string {
+    if (received === total) return "PAID";
+    if (received === 0) return "UNPAID";
+    return "PARTIAL";
+  }
 
-    let body: SaveUpdateTransactionRq = this.modifyDetail.getRawValue();
-    if (body.received === this.totalAmount) {
-      body.paymentstatus = "PAID";
-    }
-
-    // console.log(body.toreceivefromparty);
-    // Updating Party Balance
+  private applyPartyBalanceAdjustment(body: SaveUpdateTransactionRq): void {
     switch (this.transactionType) {
       case "Sale":
-        body.toreceivefromparty += body.balance;
-        if (this.isEdit) body.toreceivefromparty -= this.ogBalance;
-        break;
-      case "Purchase":
-        //body.itemdetailslist.forEach(item => item.qty = -item.qty);
-        body.topayparty += body.balance;
-        if (this.isEdit) body.topayparty -= this.ogBalance;
-        break;
-      case "Sale-Order":
-        body.convertinvoicenumber = this.convertInvoiceNumber;
-        if (this.isSaleConvert) {
-          body.toreceivefromparty += body.balance;
-          // Not testing for isEdit.. bcause the functionality is same as AddSale..
-          // When creating sale-order, cannot increase receive amount so it will always be 0
-          // Hence, no need to subtract ogBalance when converting because it will always be equal to full amt.
-        }
-        break;
-      case "Purchase-Order":
-        body.convertinvoicenumber = this.convertInvoiceNumber;
-        if (this.isPurchaseConvert) {
-          // body.itemdetailslist.forEach(item => item.qty = -item.qty);
-          body.topayparty += body.balance;
-        }
-        break;
-      case "Delivery-Challan":
-        body.convertinvoicenumber = this.convertInvoiceNumber;
-        if (this.isSaleConvert) {
-          body.toreceivefromparty += body.balance;
-        }
-        break;
-      case "Estimate-Quotation":
-        body.convertinvoicenumber = this.convertInvoiceNumber;
-        if (this.isSaleConvert) body.toreceivefromparty += body.balance;
-        break;
-      case "Sale-Return":
-        body.topayparty += body.balance;
-        if (this.isEdit) body.topayparty -= this.ogBalance;
-        break;
       case "Purchase-Return":
         body.toreceivefromparty += body.balance;
         if (this.isEdit) body.toreceivefromparty -= this.ogBalance;
         break;
+
+      case "Purchase":
+      case "Sale-Return":
+        body.topayparty += body.balance;
+        if (this.isEdit) body.topayparty -= this.ogBalance;
+        break;
+
+      case "Sale-Order":
+      case "Delivery-Challan":
+      case "Estimate-Quotation":
+        body.convertinvoicenumber = this.convertInvoiceNumber;
+        if (this.isSaleConvert) body.toreceivefromparty += body.balance;
+        break;
+
+      case "Purchase-Order":
+        body.convertinvoicenumber = this.convertInvoiceNumber;
+        if (this.isPurchaseConvert) body.topayparty += body.balance;
+        break;
+
       default:
         console.log(`Invalid Transaction Type: ${this.transactionType}`);
         break;
     }
+  }
 
-    // Updating the payment status
-    if (body.received == body.total) body.paymentstatus = "PAID";
-    else if (body.received == 0) body.paymentstatus = "UNPAID";
-    else body.paymentstatus = "PARTIAL";
+  private buildSavePayload(): SaveUpdateTransactionRq {
+    const body: SaveUpdateTransactionRq = this.modifyDetail.getRawValue();
 
+    this.applyPartyBalanceAdjustment(body);
+
+    body.paymentstatus = this.getPaymentStatus(body.received, body.total);
     body.issaleconvert = this.isSaleConvert;
     body.issaleorderconvert = this.isSaleOrderConvert;
     body.ispurchaseconvert = this.isPurchaseConvert;
     body.isupdate = this.isEdit;
-
-    // Updating the payment type
-    let paymentTypes = body.amountdetailslist.map((pi: PaymentInfo) => pi.type);
-    body.paymenttype = paymentTypes.join(",");
-
+    body.paymenttype = body.amountdetailslist
+      .map((pi: PaymentInfo) => pi.type)
+      .join(",");
     body.typeofpay = this.transactionType.replace("-", " ").toUpperCase();
-    body.itemdetailslist = body.itemdetailslist.filter(
-      (val) => val.item.length > 0,
-    );
+    body.itemdetailslist = body.itemdetailslist.filter((val) => val.item.length > 0);
     body.registeredphonenumber = this.registeredPhoneNumber;
-    console.log(body);
+
+    return body;
+  }
+
+  private saveTransaction(body: SaveUpdateTransactionRq): void {
+    this.api.PostUpdateSaleDetails(body, this.isEdit).subscribe((res: any) => {
+      if (res.status == "SUCCESS") {
+        Swal.fire("Saved!", "", "success").then((_) => {
+          this.router.navigateByUrl(`${this.transactionType}`);
+          this.dataservice.isLogin = false;
+        });
+      } else Swal.fire("Changes are not saved", "", "error");
+    });
+  }
+
+  submitDetails() {
+    if (!this.modifyDetail.valid) {
+      Swal.fire("Enter Valid Detials", "", "info");
+      return;
+    }
+
+    const body = this.buildSavePayload();
 
     Swal.fire({
       title: "Do you want to save the changes?",
@@ -1136,19 +1156,7 @@ export class EditDetailComponent implements OnInit {
       confirmButtonText: "Save",
       denyButtonText: `Don't save`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {
-        this.api
-          .PostUpdateSaleDetails(body, this.isEdit)
-          .subscribe((res: any) => {
-            if (res.status == "SUCCESS") {
-              Swal.fire("Saved!", "", "success").then((_) => {
-                this.router.navigateByUrl(`${this.transactionType}`);
-                this.dataservice.isLogin = false;
-              });
-            } else Swal.fire("Changes are not saved", "", "error");
-          });
-      }
+      if (result.isConfirmed) this.saveTransaction(body);
     });
   }
 }

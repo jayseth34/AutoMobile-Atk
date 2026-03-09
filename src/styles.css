@@ -119,6 +119,20 @@ button[mat-mini-fab],
   color: var(--color-success) !important;
 }
 
+.status-paid {
+  color: var(--color-success) !important;
+  font-weight: 600;
+}
+
+.status-unpaid {
+  color: var(--color-danger) !important;
+  font-weight: 600;
+}
+
+.status-neutral {
+  color: var(--color-text) !important;
+}
+
 .form-control,
 .form-select,
 .mat-mdc-text-field-wrapper {
@@ -151,6 +165,40 @@ table {
 }
 
 @media (max-width: 767.98px) {
+  .cdk-overlay-pane.mat-mdc-dialog-panel {
+    max-height: 92vh !important;
+  }
+
+  .cdk-overlay-pane.mobile-app-dialog {
+    width: 96vw !important;
+    max-width: 96vw !important;
+    min-width: 96vw !important;
+    max-height: 92vh !important;
+  }
+
+  .cdk-overlay-pane.mobile-app-dialog .mat-mdc-dialog-container,
+  .cdk-overlay-pane.mobile-app-dialog .mat-dialog-container {
+    padding: 0 !important;
+    max-height: 92vh !important;
+    overflow-y: auto !important;
+  }
+
+  .cdk-overlay-pane.mat-mdc-dialog-panel .mdc-dialog__surface,
+  .cdk-overlay-pane.mat-mdc-dialog-panel .mat-mdc-dialog-container,
+  .cdk-overlay-pane.mat-mdc-dialog-panel .mat-dialog-container,
+  .cdk-overlay-pane.mobile-app-dialog .mdc-dialog__surface,
+  .cdk-overlay-pane.mobile-app-dialog .mat-dialog-container {
+    max-height: 92vh !important;
+    border-radius: 12px !important;
+    overflow-y: auto !important;
+  }
+
+  .cdk-overlay-pane.mobile-app-dialog .mat-mdc-dialog-content,
+  .cdk-overlay-pane.mobile-app-dialog .mat-dialog-content {
+    max-height: calc(92vh - 130px) !important;
+    overflow: auto !important;
+  }
+
   .save_update,
   .add_item_btn,
   .add_party_btn,
@@ -159,7 +207,9 @@ table {
   .done-button,
   .reset-button,
   .autolink-button,
-  .close-btn {
+  .close-btn,
+  .cdk-overlay-pane.mobile-app-dialog .btn,
+  .cdk-overlay-pane.mobile-app-dialog button {
     width: 100% !important;
   }
 
