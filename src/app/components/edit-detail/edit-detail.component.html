@@ -6,7 +6,7 @@
           <mat-icon >arrow_back_ios_new</mat-icon>
         </button>
       </div>
-      <div class="col-5 align-self-center">
+      <div class="col-12 col-lg-5 align-self-center">
         <h1 class="m-0" *ngIf="!(isSaleConvert || isPurchaseConvert || isSaleOrderConvert)"> {{ transactionType | removeHyphen}} </h1>
         <h1 class="m-0" *ngIf="isSaleConvert"> Sale </h1>
         <h1 class="m-0" *ngIf="isSaleOrderConvert"> Sale Order </h1>
@@ -20,10 +20,10 @@
   <div class="container-fluid">
     <div class="row justify-content-between">
       <!-- Party Details -->
-      <div class="container-fluid col-8 ms-2 me-2">
+      <div class="container-fluid col-12 col-lg-8 ms-0 ms-lg-2 me-0 me-lg-2">
         <form [formGroup]="modifyDetail" class="row">
           <!-- Party Name -->
-          <div class="col-5 mb-1">
+          <div class="col-12 col-lg-5 mb-1">
             <app-auto-complete
               [controlName]="'customername'"
               [dataList]="autoCompletePartyData"
@@ -39,7 +39,7 @@
           </div>
 
           <!-- Phone Number -->
-          <div class="col-5 mb-1">
+          <div class="col-12 col-lg-5 mb-1">
             <input
               id="phoneNumberInput"
               placeholder="Phone Number"
@@ -49,7 +49,7 @@
           </div>
 
           <!-- Billing Address -->
-          <div class="col-5 mb-1">
+          <div class="col-12 col-lg-5 mb-1">
             <textarea
               class="form-control"
               id="billingAddress"
@@ -60,7 +60,7 @@
           </div>
 
           <!-- Shipping Address -->
-          <div class="col-5 mb-1">
+          <div class="col-12 col-lg-5 mb-1">
             <textarea
               class="form-control"
               id="shippingAddress"
@@ -73,10 +73,10 @@
       </div>
 
       <!-- Invoice Details -->
-      <div class="container-fluid col-3 ms-2 me-2">
+      <div class="container-fluid col-12 col-lg-3 ms-0 ms-lg-2 me-0 me-lg-2 mt-2 mt-lg-0">
         <form [formGroup]="modifyDetail" class="row">
           <!-- Invoice Number -->
-          <div class="col-11 input-group mb-1">
+          <div class="col-12 input-group mb-1">
             <span class="input-group-text transparent"> Invoice No. </span>
             <input
               id="invNumber"
@@ -88,7 +88,7 @@
           </div>
 
           <!-- Invoice Date -->
-          <div class="col-11 input-group mb-1">
+          <div class="col-12 input-group mb-1">
             <span class="input-group-text transparent"> Invoice Date </span>
             <input
               id="invDate"
@@ -100,7 +100,7 @@
           </div>
 
           <!-- State Of Supply -->
-          <div class="col-11 mb-3">
+          <div class="col-12 mb-3">
             <app-auto-complete
               [controlName]="'stateofsupply'"
               [dataList]="stateList"
@@ -119,6 +119,7 @@
 
 <section class="mt-2 bg-body-secondary p-2">
   <form [formGroup]="modifyDetail" disabled>
+    <div class="table-scroll">
     <table
       mat-table
       matSort
@@ -454,15 +455,16 @@
         </td>
       </tr> -->
     </table>
+    </div>
   </form>
 
   <div class="container-fluid">
     <form [formGroup]="modifyDetail" class="mt-4 row" [ngClass]="!showAmtDetails ? 'justify-content-end' : 'justify-content-between'">
-      <div class="col-5" *ngIf="showAmtDetails">
+      <div class="col-12 col-xl-5" *ngIf="showAmtDetails">
         <div class="container-fluid">
           <div [ngClass]="i == 0 ? 'mt-1' : 'mt-3'" *ngFor="let control of paymentInfoValue.controls; let i = index" formArrayName="amountdetailslist">
             <div [formGroup]="control" class="row">
-              <div class="col-5">
+              <div class="col-12 col-md-5">
                 <!-- TODO: Updated payment type api call and dynamic list -->
                   <app-auto-complete
                     [controlName]="'type'"
@@ -476,20 +478,20 @@
                   </app-auto-complete>
               </div>
               
-              <div class="col-5">
+              <div class="col-12 col-md-5">
                 <div class="form-floating">
                   <input type="number" name="checkAmt_{{i}}" id="checkAmt_{{i}}" class="form-control form-control-sm" formControlName="amount">
                   <label for="checkAmt_{{i}}"> Amount </label>
                 </div>
               </div>
 
-              <div class="col-1">
+              <div class="col-12 col-md-1">
                 <button mat-mini-fab aria-label="Example icon button with a menu icon" class="mt-2" (click)="handleDeletePaymentInfoClick(i)" [disabled]="deletePayDisabled" >
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
   
-              <div class="col-5 mt-1" *ngIf="control.get('type')?.value != 'CASH'">
+              <div class="col-12 col-md-5 mt-1" *ngIf="control.get('type')?.value != 'CASH'">
                 <div class="form-floating">
                   <input type="string" name="refno_{{i}}" id="refno_{{i}}" class="form-control form-control-sm" formControlName="refno">
                   <label for="refno_{{i}}"> Ref No </label>
@@ -508,7 +510,7 @@
         </div>
       </div>
 
-      <div class="col-6 row justify-content-end fit-content">
+      <div class="col-12 col-xl-6 row justify-content-end fit-content mt-3 mt-xl-0">
         <!-- Round Off Checkbox -->
         <div class="form-check col-3 mb-1">
           <input
@@ -609,8 +611,8 @@
 
 <section class="mt-2 bg-body-secondary p-2 container-fluid">
   <form class="row" [formGroup]="modifyDetail">
-    <div class="col-3">
-      <button mat-raised-button  style="color: white; background-color: #3076f0; width: 100px;" (click)="submitDetails()">
+    <div class="col-12 col-md-3">
+      <button mat-raised-button class="submit-btn-mobile"  style="color: white; background-color: #3076f0; width: 100px;" (click)="submitDetails()">
         Submit
       </button>
     </div>

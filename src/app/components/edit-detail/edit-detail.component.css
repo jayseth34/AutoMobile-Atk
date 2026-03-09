@@ -168,3 +168,35 @@ td.mat-cell {
   width: 60%;
   font-size: 16px;
 }
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 991.98px) {
+  .example-button-container {
+    width: auto;
+    justify-content: flex-start;
+  }
+
+  .add-payment-type,
+  .payment-type-total {
+    width: 100%;
+    text-align: left;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .w-50px {
+    width: 100% !important;
+  }
+
+  .submit-btn-mobile {
+    width: 100% !important;
+  }
+
+  table.mat-mdc-table {
+    min-width: 1000px;
+  }
+}

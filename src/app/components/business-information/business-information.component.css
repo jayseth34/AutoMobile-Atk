@@ -48,3 +48,47 @@ form {
 .text-center {
   text-align: center; /* Center text */
 }
+
+.business-detail-title {
+  text-align: center;
+}
+
+@media (max-width: 991.98px) {
+  form {
+    padding: 16px;
+  }
+
+  .addLogo {
+    margin: 16px auto;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    padding: 16px;
+  }
+
+  .fields,
+  .businessAddress,
+  .state,
+  .businessType {
+    margin-bottom: 16px;
+  }
+
+  .business-details {
+    width: 100%;
+    margin: 0 0 12px 0;
+  }
+
+  .image-box {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .img-fluid {
+    max-width: 100%;
+  }
+
+  .business-save-btn {
+    width: 100% !important;
+  }
+}

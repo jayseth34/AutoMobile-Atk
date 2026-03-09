@@ -1,5 +1,5 @@
 .scrollable-div {
-  height: 550px; /* or max-height */
+  height: calc(100vh - 80px);
   overflow-y: scroll; /* Ensures scrolling */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
@@ -10,10 +10,11 @@
 }
 
 .sidebar {
-  width: 250px;
-  background-color: #333; /* Darker background */
-  color: #eee;
-  border-right: 1px solid #dee2e6;
+  width: 100%;
+  max-width: 250px;
+  background-color: #0f172a;
+  color: #dbe7ff;
+  border-right: 1px solid #1f2b43;
   height: 100%;
   
   .menu {
@@ -39,13 +40,13 @@
         align-items: center;
         padding: 10px;
         text-decoration: none;
-        color: #dedcdc;
+        color: #dbe7ff;
 
         &:hover{
-          background-color: #363636;
+          background-color: #1e293b;
           color: white;
           font-size: medium;
-          border-left: 4px solid #bf1336; /* Add a red line on the left */
+          border-left: 4px solid var(--color-accent);
         }
       }
 
@@ -54,21 +55,21 @@
         padding: 0;
         margin: 0;
         padding-left: 20px; /* Indentation for sub-tabs */
-        background-color: #474746;
+        background-color: #111b31;
 
         .sub-tabs {
           a {
             display: block;
             padding: 10px;
             text-decoration: none;
-            color: #dedcdc;
+            color: #dbe7ff;
 
             &:hover .tabs.selected .tab-content{
-              background-color: #363636;
+              background-color: #1e293b;
               color: white;
               padding-left: 0px; /* Indentation for sub-tabs */
               font-size: medium;
-              border-left: 4px solid #bf1336; /* Add a red line on the left */
+              border-left: 4px solid var(--color-accent);
             }
           }
         }
@@ -92,12 +93,24 @@
 
 .tabs.selected > a,
 .sub-tabs.selected > a {
-  background-color: #363636;
+  background-color: #1e293b;
   color: white;
   font-size: medium;
-  border-left: 4px solid #bf1336;
+  border-left: 4px solid var(--color-accent);
 }
 
 .icon-white {
   filter: invert(100%) brightness(50%);
+}
+
+@media (max-width: 991.98px) {
+  .sidebar {
+    max-width: 100%;
+    min-height: auto;
+  }
+
+  .scrollable-div {
+    height: auto;
+    max-height: 45vh;
+  }
 }

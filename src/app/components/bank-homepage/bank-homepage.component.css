@@ -3,17 +3,17 @@
     /* margin-left: 20%; */
     text-align: center;
     width: 100%; 
-    background-color:#474746;
+    background-color:#1e293b;
   }
   
   .nav-link.active {
     font-size: large;
     font-weight: 500;
-    background-color:#363636;
+    background-color:#0f172a;
   }
   
   .nav-link.tabTitle {
-    color: white;
+    color: #e2e8f0;
   }
   
   .grid-container {
@@ -27,7 +27,7 @@
     /****** SIDEBAR CONTENT ******/
     .sidebar {
       grid-row: 1 / span 2;
-      background-color: #E9ECEF;
+      background-color: var(--color-surface-muted);
       color: white;
       padding: 20px;
       margin-right: 5px;
@@ -47,7 +47,7 @@
     
     /****** TOP CONTENT ******/
     .top-content {
-      background-color: #E9ECEF;
+      background-color: var(--color-surface-muted);
       padding: 10px;
       margin-bottom: 5px;
       overflow-y: hidden; 
@@ -72,7 +72,7 @@
     }
   
     .bottom-content {
-      background-color: #E9ECEF;
+      background-color: var(--color-surface-muted);
       padding: 10px;
       overflow-y: auto; 
       scrollbar-width: thin; 
@@ -91,11 +91,11 @@
     }
   
     .selectedBank-row-tr {
-      border: 2px solid #a8a3a4; 
+      border: 2px solid var(--color-border); 
     }
   
     .selectedBank-row-td {
-      background-color: #c0c4c1;
+      background-color: #dfe8f5;
     }
 
     .dropdown-container {
@@ -108,7 +108,7 @@
       padding: 5px;
       font-size: 1rem;
       border-radius: 4px;
-      border: 1px solid #ccc;
+      border: 1px solid var(--color-border);
     }
 
     .header-container {
@@ -137,3 +137,33 @@
     .mat-form-field .mat-label {
       font-size: 14px;
     }
+
+@media (max-width: 991.98px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    gap: 8px;
+  }
+
+  .sidebar {
+    grid-row: auto;
+    margin-right: 0;
+  }
+
+  .top-content-row,
+  .header-container {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: space-between;
+    margin-right: 0;
+  }
+
+  .dropdown-container {
+    width: 100%;
+  }
+
+  .tabMain {
+    width: 100%;
+  }
+}

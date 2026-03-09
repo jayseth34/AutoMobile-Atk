@@ -1,6 +1,6 @@
 .main {
-  height: 100%; /* Ensure the div has height */
-  overflow: hidden; /* Hides the scrollbar */
+  min-height: 100%;
+  overflow: hidden;
   padding: 5%;
 }
 
@@ -12,7 +12,8 @@
 }
 
 .scrollable-div {
-  height: 600px; /* or max-height */
+  height: calc(100vh - 220px);
+  max-height: 72vh;
   overflow-y: scroll; /* Ensures scrolling */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
@@ -142,4 +143,45 @@ li a {
 .save_update{
   margin-top: 2%; 
   width: 150px;
+}
+
+@media (max-width: 991.98px) {
+  .main {
+    padding: 16px;
+    overflow: visible;
+  }
+
+  .scrollable-div {
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .form-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .three-columns .col-4,
+  .three-columns .col-md-4,
+  .creditAndBalanceForm .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .additionalFieldcheckBox {
+    margin-top: 8px;
+    margin-left: 0;
+  }
+
+  .fixed-buttons {
+    position: static !important;
+    justify-content: flex-start !important;
+    padding: 0 !important;
+    margin-top: 16px;
+  }
+
+  .save_update {
+    width: 100%;
+  }
 }

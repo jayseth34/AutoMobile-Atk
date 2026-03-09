@@ -1,35 +1,132 @@
 @import "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css";
 
 :root {
-  --hover-color: #565656;
-  --font-color: ##3a3a3a;
+  --color-bg: #f3f6fb;
+  --color-surface: #ffffff;
+  --color-surface-muted: #eef3fa;
+  --color-border: #d8e1ef;
+  --color-text: #1f2a3d;
+  --color-text-muted: #667085;
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-accent: #0ea5a4;
+  --color-success: #16a34a;
+  --color-danger: #dc2626;
+  --color-warning: #d97706;
+  --shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --radius-md: 10px;
 }
 
 html, body {
   height: 100%;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  overflow: hidden; /* Prevents page scrolling */
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
-* {
-  color: var(--font-color);
+a,
+p,
+span,
+label,
+li,
+td,
+th,
+input,
+textarea,
+select {
+  color: var(--color-text);
 }
 
-.container {
-  display: flex;
-  height: 100vh;
+.text-muted {
+  color: var(--color-text-muted) !important;
 }
 
-.app-sidebar {
-  width: 250px;
-  background-color: #333;
+.card,
+.box,
+.popup-container,
+.payment-in-container,
+.modal-content {
+  background-color: var(--color-surface) !important;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
 }
 
-.main-content {
-  flex: 10;
-  padding: 20px;
-  margin-left: 10%;
+.btn,
+button.btn,
+button[mat-raised-button],
+button[mat-mini-fab],
+.mat-mdc-raised-button {
+  border-radius: 10px !important;
+}
+
+.btn-primary,
+.add_item_btn,
+.add_party_btn,
+.add_banks_btn,
+.save-button,
+.done-button,
+.autolink-button,
+.close-btn,
+.submit-btn-mobile,
+.business-save-btn,
+.custom-btn,
+.save_update {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: #fff !important;
+}
+
+.btn-primary:hover,
+.add_item_btn:hover,
+.add_party_btn:hover,
+.add_banks_btn:hover,
+.save-button:hover,
+.done-button:hover,
+.autolink-button:hover,
+.close-btn:hover,
+.submit-btn-mobile:hover,
+.business-save-btn:hover,
+.custom-btn:hover,
+.save_update:hover {
+  background-color: var(--color-primary-hover) !important;
+  border-color: var(--color-primary-hover) !important;
+  color: #fff !important;
+}
+
+.reset-button {
+  background-color: var(--color-surface-muted) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+.add-action-btn {
+  height: 60%;
+  margin-top: 2.5%;
+  border-radius: 15px !important;
+  background-color: var(--color-accent) !important;
+  color: #fff !important;
+}
+
+.negative-balance {
+  color: var(--color-danger) !important;
+}
+
+.positive-balance {
+  color: var(--color-success) !important;
+}
+
+.form-control,
+.form-select,
+.mat-mdc-text-field-wrapper {
+  border-color: var(--color-border) !important;
+}
+
+.mat-mdc-form-field-focus-overlay {
+  background-color: rgba(37, 99, 235, 0.04);
 }
 
 ::ng-deep .mat-datepicker-content .mat-calendar {
@@ -37,6 +134,36 @@ html, body {
 }
 
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-  background-color: white;
+  background-color: var(--color-surface);
   border-radius: 5px;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  width: 100%;
+}
+
+@media (max-width: 767.98px) {
+  .save_update,
+  .add_item_btn,
+  .add_party_btn,
+  .add_banks_btn,
+  .save-button,
+  .done-button,
+  .reset-button,
+  .autolink-button,
+  .close-btn {
+    width: 100% !important;
+  }
+
+  .btn + .btn {
+    margin-top: 8px;
+  }
 }

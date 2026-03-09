@@ -12,8 +12,9 @@
     -ms-overflow-style: none; /* Internet Explorer 10+ */
   }
   
-  .scrollable-div {
-    height: 600px; /* or max-height */
+.scrollable-div {
+    height: calc(100vh - 170px);
+    max-height: 75vh;
     overflow-y: scroll; /* Ensures scrolling */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* Internet Explorer 10+ */
@@ -26,7 +27,7 @@
 /****** SIDEBAR CONTENT ******/
 .sidebar {
     grid-row: 1 / span 2;
-    background-color: #E9ECEF;
+    background-color: var(--color-surface-muted);
     color: white;
     padding: 20px;
     margin-right: 5px;
@@ -56,7 +57,8 @@
 
 .bulk-edit-btn {
     margin-bottom: 5%;
-    background-color: whitesmoke;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
 }
 
 .bulk-icon {
@@ -67,18 +69,18 @@
 }
 
 .bulk-edit-btn:hover {
-    background-color: whitesmoke;
-    box-shadow: 0px 0px 1px black;
+    background-color: var(--color-surface-muted);
+    box-shadow: 0px 0px 1px var(--color-text);
 }
 
 .bulk-text {
     margin-left: 5%;
-    color: black;
+    color: var(--color-text);
 }
 
 /****** TOP CONTENT ******/
 .top-content {
-    background-color: #E9ECEF;
+    background-color: var(--color-surface-muted);
     padding: 10px;
     margin-bottom: 5px;
     overflow-y: auto; 
@@ -92,7 +94,7 @@
   }
 /****** BOTTOM CONTENT ******/
 .bottom-content {
-    background-color: #E9ECEF;
+    background-color: var(--color-surface-muted);
     padding: 10px;
     overflow-y: auto; 
     scrollbar-width: thin; 
@@ -111,25 +113,25 @@
   /* margin-left: 20%; */
   text-align: center;
   width: 50%; 
-  background-color:#474746;
+  background-color:#1e293b;
 }
 
 .nav-link.active {
   font-size: large;
   font-weight: 500;
-  background-color:#363636;
+  background-color:#0f172a;
 }
 
 .nav-link.tabTitle {
-  color: white;
+  color: #e2e8f0;
 }
 
 .selectedParty-row-tr {
-  border: 2px solid #a8a3a4; /* Red line on the left */
+  border: 2px solid var(--color-border);
 }
 
 .selectedParty-row-td {
-  background-color: #c0c4c1;
+  background-color: #dfe8f5;
 }
 
 .header-container {
@@ -168,4 +170,33 @@
 .scrollable-div {
     overflow-y: auto;
     max-height: 100vh; /* Adjust based on viewport */
+}
+
+@media (max-width: 991.98px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    gap: 8px;
+  }
+
+  .sidebar {
+    grid-row: auto;
+    margin-right: 0;
+  }
+
+  .top-content-row,
+  .header-container {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tabMain {
+    width: 100%;
+  }
+
+  .scrollable-div {
+    height: auto;
+    max-height: none;
+  }
 }

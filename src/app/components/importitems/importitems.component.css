@@ -3,7 +3,7 @@
     font-family: Arial, sans-serif;
     max-width: 800px;
     margin: auto;
-    background: #f9f9f9;
+    background: var(--color-surface);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -16,11 +16,11 @@
   }
   
   .header h2 {
-    color: #333;
+    color: var(--color-text);
   }
   
   .header p {
-    color: #666;
+    color: var(--color-text-muted);
   }
   
   .upload-section {
@@ -32,7 +32,7 @@
     display: inline-block;
     padding: 10px 20px;
     color: white;
-    background-color: #007bff;
+    background-color: var(--color-primary);
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
@@ -54,7 +54,7 @@
   }
   
   .download-btn {
-    background-color: #28a745;
+    background-color: var(--color-success);
     color: white;
     padding: 10px 20px;
     border: none;
@@ -69,7 +69,7 @@
   }
   
   .download-btn:hover {
-    background-color: #218838;
+    background-color: #15803d;
   }
   
   .data-preview {

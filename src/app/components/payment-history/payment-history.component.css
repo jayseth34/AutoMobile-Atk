@@ -80,5 +80,25 @@ tfoot td:last-child {
 }
 
 .close-btn:hover {
-    background-color: #0056b3;
+    background-color: var(--color-primary-hover);
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+@media (max-width: 767.98px) {
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
+        padding: 14px;
+    }
+
+    table {
+        min-width: 560px;
+    }
+
+    .close-btn-mobile {
+        width: 100% !important;
+    }
 }

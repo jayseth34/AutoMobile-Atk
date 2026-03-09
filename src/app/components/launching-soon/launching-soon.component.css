@@ -5,7 +5,7 @@
     justify-content: center;
     text-align: center;
     height: 100vh;
-    background-color: #f4f4f9;
+    background-color: var(--color-bg);
     font-family: Arial, sans-serif;
   }
   
@@ -17,12 +17,12 @@
   
   h1 {
     font-size: 2.5em;
-    color: #333;
+    color: var(--color-text);
     margin-bottom: 10px;
   }
   
   p {
     font-size: 1.2em;
-    color: #555;
+    color: var(--color-text-muted);
   }
   

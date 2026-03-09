@@ -13,20 +13,21 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  width: 100%;
+  padding: 24px 16px;
   position: relative;
-  background-color: #f9f9f9; /* Fallback background color */
+  background-color: var(--color-bg);
 }
 
 /* Background image */
 .background-image {
   position: absolute;
   top: 50%;
-  left: 23%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  width: 900px; /* Adjust the width of the image */
-  height: 600px; /* Adjust the height of the image */
+  width: min(900px, 92vw);
+  height: min(600px, 75vh);
   background-image: url('/assets/atotekk.jpeg'); /* Add your image path */
   background-size: cover;
   background-position: center;
@@ -37,10 +38,10 @@ html {
 
 /* Login form styling */
 .login-form {
-  width: 300px;
+  width: min(360px, 100%);
   padding: 20px;
   border: none;
-  box-shadow: 3px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-soft);
   background: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
   border-radius: 8px;
   position: relative;
@@ -62,7 +63,7 @@ html {
   width: 100%;
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   color: black;
 }
@@ -75,7 +76,7 @@ html {
 }
 
 input[type='submit'] {
-  background-color: #007bff;
+  background-color: var(--color-primary);
   color: white;
   padding: 12px 20px;
   border: none;
@@ -87,11 +88,11 @@ input[type='submit'] {
 }
 
 input[type='submit']:hover {
-  background-color: #0056b3;
+  background-color: var(--color-primary-hover);
 }
 
 input[type='submit'][disabled] {
-  background-color: #d3d3d3;
+  background-color: #c8d3e5;
   cursor: not-allowed;
 }
 
@@ -102,7 +103,7 @@ input[type='submit'][disabled] {
 
 /* Toggle options styling */
 .show {
-  color: #007bff;
+  color: var(--color-primary);
   text-align: center;
   cursor: pointer;
   margin-top: 10px;
@@ -115,7 +116,7 @@ input[type='submit'][disabled] {
 
 /* Register link */
 .register-link {
-  color: #007bff;
+  color: var(--color-primary);
   text-decoration: underline;
   cursor: pointer;
 }
@@ -132,5 +133,10 @@ input[type='submit'][disabled] {
 @media (max-width: 768px) {
   .login-form {
     width: 90%;
+  }
+
+  .background-image {
+    opacity: 0.35;
+    height: min(520px, 65vh);
   }
 }
