@@ -1,49 +1,93 @@
-<div class="excel-page">
-    <div class="header">
+<div class="import-page">
+  <header class="import-hero">
+    <div class="hero-left">
+      <p class="kicker">Import</p>
       <h2>Import Bulk Items</h2>
-      <p class="step" style="color: red;">STEP 1:</p>
-        <p>Create an Excel file with the following format.</p>
-        <p class="step" style="color: red;">STEP 2:</p>
-        <p>Upload the file (xlsx or xls) by clicking on the Upload File button below.</p>
-        <p class="step" style="color: red;">STEP 3:</p>
-        <p>Verify the items from the file & complete the import.</p>
+      <p class="subtitle">
+        Upload an Excel file and we will add items in bulk. Use the sample template to avoid errors.
+      </p>
+
+      <ol class="steps">
+        <li><span class="step-dot">1</span> Download the sample Excel template</li>
+        <li><span class="step-dot">2</span> Fill item details in the same format</li>
+        <li><span class="step-dot">3</span> Upload and start import</li>
+      </ol>
     </div>
-  
-    <div class="upload-section">
-      <label for="uploadExcel" class="custom-file-upload">
+
+    <div class="hero-right">
+      <button class="btn-secondary" type="button" (click)="downloadTemplate()">
+        <i class="material-icons">file_download</i>
+        Download Excel Sample
+      </button>
+    </div>
+  </header>
+
+  <section class="import-card">
+    <div
+      class="dropzone"
+      [class.dragging]="isDragging"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    >
+      <div class="dz-icon">
+        <i class="material-icons">cloud_upload</i>
+      </div>
+      <div class="dz-text">
+        <div class="dz-title">Drop your Excel file here</div>
+        <div class="dz-sub">Only .xlsx / .xls are supported</div>
+      </div>
+
+      <label for="uploadExcel" class="btn-primary dz-btn">
         <input
           type="file"
           id="uploadExcel"
           (change)="onFileChange($event)"
           accept=".xlsx, .xls"
         />
-        <i class="material-icons">cloud_upload</i>
-        <span>Upload Excel</span>
+        Choose File
       </label>
-      <p *ngIf="uploadedFileName">Uploaded File: {{ uploadedFileName }}</p>
     </div>
-  
-    <div class="download-section">
-      <button class="download-btn" (click)="downloadTemplate()">
-        <i class="material-icons">file_download</i>
-        Download Excel Sample
-      </button>
+
+    <div *ngIf="uploadError" class="upload-error">{{ uploadError }}</div>
+
+    <div *ngIf="fileToUpload" class="file-row">
+      <div class="file-meta">
+        <div class="file-name">{{ uploadedFileName }}</div>
+        <div class="file-hint">Preview shows first 20 rows</div>
+      </div>
+      <div class="file-actions">
+        <button type="button" class="btn-ghost" (click)="clearFile()" [disabled]="isUploading">
+          Remove
+        </button>
+        <button type="button" class="btn-primary" (click)="onSubmit()" [disabled]="isUploading">
+          <span *ngIf="!isUploading">Import Items</span>
+          <span *ngIf="isUploading">Uploading...</span>
+        </button>
+      </div>
     </div>
-  
+
     <div *ngIf="fileData.length > 0" class="data-preview">
-      <h3>Preview Uploaded Data</h3>
-      <table>
-        <thead>
-          <tr>
-            <th *ngFor="let header of fileData[0]">{{ header }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of fileData.slice(1)">
-            <td *ngFor="let cell of row">{{ cell }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="preview-header">
+        <h3>Preview</h3>
+        <span class="preview-note">First sheet, first 20 rows</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th *ngFor="let header of fileData[0]">{{ header }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of fileData.slice(1)">
+              <td *ngFor="let cell of row">{{ cell }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  </section>
+</div>
   

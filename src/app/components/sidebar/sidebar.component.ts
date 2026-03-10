@@ -2,10 +2,12 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPartyComponent } from '../add-party/add-party.component';
 import { ApiService } from 'src/app/services/api.service';
-import { takeUntil, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { DataService } from 'src/app/services/data.service';
 import { BusinessInformationComponent } from '../business-information/business-information.component';
 import { BanksComponent } from '../banks/banks.component';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-sidebar',
@@ -66,10 +68,15 @@ export class SidebarComponent {
       subTabs: [{ name: 'Import Items', link: '/import-items' }],
       isOpen: false
     },
-    { name: 'Plans', link: '/plans', icon: 'https://img.icons8.com/ios-filled/50/000000/calendar.png' }
+    { name: 'Plans', link: '/plans', icon: 'https://img.icons8.com/ios-filled/50/000000/calendar.png' },
+    {
+      name: 'Logout',
+      icon: 'https://img.icons8.com/ios-filled/50/000000/logout-rounded-left.png',
+      action: () => this.logout()
+    }
   ];
 
-  constructor(public dialog: MatDialog, private api: ApiService, public dataService: DataService) { }
+  constructor(public dialog: MatDialog, private api: ApiService, public dataService: DataService, private router: Router) { }
 
   private getDialogConfig(width: string, height?: string, data?: any) {
     const isMobile = window.innerWidth <= 767.98;
@@ -100,6 +107,9 @@ export class SidebarComponent {
     }
 
     if (tab.action) {
+      if (!tab.link) {
+        event.preventDefault();
+      }
       tab.action();
     }
 
@@ -197,10 +207,45 @@ export class SidebarComponent {
   }
 
   private setBusinessTabName(name: string): void {
-    const businessTab = this.tabs.find((tab: any) => tab.action);
-    if (businessTab) {
-      businessTab.name = name;
+    // Business tab is always the first item in the sidebar.
+    if (this.tabs?.length) {
+      this.tabs[0].name = name;
     }
+  }
+
+  async logout(): Promise<void> {
+    const result = await Swal.fire({
+      title: 'Logout?',
+      text: 'This will end your session on this device.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Logout',
+      cancelButtonText: 'Cancel'
+    });
+
+    if (!result.isConfirmed) return;
+
+    this.dialog.closeAll();
+    this.releaseScrollLockIfAny();
+    localStorage.clear();
+    this.dataService.isLogin = true;
+
+    // Close sidebar on mobile after logout.
+    this.itemSelected.emit();
+
+    this.router.navigateByUrl('/login');
+  }
+
+  private releaseScrollLockIfAny(): void {
+    const body = document.body;
+    if (!body.classList.contains('cdk-global-scrollblock')) return;
+
+    body.classList.remove('cdk-global-scrollblock');
+    body.style.position = '';
+    body.style.top = '';
+    body.style.left = '';
+    body.style.width = '';
+    body.style.overflow = '';
   }
 
 }

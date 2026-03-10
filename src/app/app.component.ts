@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
   currentRouteEndPoint = "";
   isMobileView = window.innerWidth <= 991.98;
   isMobileSidebarOpen = false;
+  private readonly silverMobileAllowedRoutes = new Set(['', 'login', 'register', 'plans']);
 
   constructor(private router: Router, public dataService: DataService, private dialog: MatDialog) {
     this.currentRouteEndPoint = router.url.split('/')[1];
@@ -31,6 +32,11 @@ export class AppComponent implements OnInit {
     this.isMobileView = window.innerWidth <= 991.98;
     if (!this.isMobileView) {
       this.isMobileSidebarOpen = false;
+    }
+
+    // If user resizes/rotates into mobile on Silver plan, force them to Plans.
+    if (this.isSilverPlan() && this.isMobileView && !this.isSilverMobileAllowedRoute()) {
+      this.router.navigateByUrl('/plans');
     }
   }
 
@@ -55,5 +61,21 @@ export class AppComponent implements OnInit {
     body.style.left = '';
     body.style.width = '';
     body.style.overflow = '';
+  }
+
+  private isSilverPlan(): boolean {
+    try {
+      const planType = JSON.parse(localStorage.getItem('planType') as string);
+      return (planType ?? '').toString().toLowerCase() === 'silver';
+    } catch {
+      return false;
+    }
+  }
+
+  private isSilverMobileAllowedRoute(): boolean {
+    const url = this.router.url || '/';
+    const path = url.split('?')[0].split('#')[0];
+    const segment = path.replace(/^\/+/, '').split('/')[0].toLowerCase();
+    return this.silverMobileAllowedRoutes.has(segment);
   }
 }

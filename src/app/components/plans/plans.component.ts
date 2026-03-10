@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { CommonService } from 'src/app/services/common.service';
 import { DataService } from 'src/app/services/data.service';
@@ -18,11 +18,21 @@ export class PlansComponent implements OnInit {
   show:boolean = false;
   planType: any;
   activePlan: any;
+  isMobileView = window.innerWidth <= 991.98;
   constructor(private api: ApiService, public cs: CommonService, public dataService: DataService) {}
 
   ngOnInit(): void {
     this.planType = JSON.parse(localStorage.getItem("planType") as string);
     this.activePlan = JSON.parse(localStorage.getItem("planType") as string);
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.isMobileView = window.innerWidth <= 991.98;
+  }
+
+  get showSilverMobileHint(): boolean {
+    return this.isMobileView && (this.activePlan ?? '').toString().toLowerCase() === 'silver';
   }
 
   buyPlan(plan: string) {

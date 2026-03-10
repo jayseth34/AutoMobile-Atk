@@ -1,39 +1,102 @@
-<div class="plans-container">
-  <!-- Free Plan -->
-  <div class="plan free" [ngClass]="{'active-plan': activePlan === 'free', 'disabled': activePlan === 'silver' || activePlan === 'gold'}">
-    <!-- <div class="plan free" [ngClass]="{'active-plan': activePlan === 'free'}"> -->
-    <div *ngIf="activePlan === 'free'" class="active-label">ACTIVE PLAN</div>
-    <div class="plan-header">Free Trial</div>
-    <div class="plan-price">₹ 0</div>
-    <ul class="plan-features">
-      <li>7 Days Access</li>
-      <li>Desktop View</li>
-    </ul>
-    <button (click)="buyPlan('free')" [disabled]="activePlan === 'silver' || activePlan === 'gold'" class="btn"  style="color: white; background-color: #3076f0;">Start Free Trial</button>
-  </div>
+<div class="plans-page">
+  <header class="plans-hero">
+    <div class="hero-copy">
+      <p class="hero-kicker">Plans</p>
+      <h1 class="hero-title">Choose a plan that fits your workflow</h1>
+      <p class="hero-subtitle">
+        Upgrade anytime. Keep your data and continue where you left off.
+      </p>
 
-  <!-- Silver Plan -->
-  <div class="plan silver" [ngClass]="{'active-plan': activePlan === 'silver'}">
-    <div *ngIf="activePlan === 'silver'" class="active-label">ACTIVE PLAN</div>
-    <div class="plan-header">Silver Plan</div>
-    <div class="plan-price">₹ 3399 <span class="original-price">₹ 4999</span></div>
-    <ul class="plan-features">
-      <li>6 Months Access</li>
-      <li>Desktop View</li>
-    </ul>
-    <button (click)="buyPlan('silver')" class="btn" style="color: white; background-color: #3076f0;">Buy Now</button>
-  </div>
+      <div *ngIf="showSilverMobileHint" class="silver-mobile-banner">
+        <div class="banner-title">Mobile view is disabled on Silver plan</div>
+        <div class="banner-copy">Upgrade to Gold to use the app on mobile.</div>
+      </div>
+    </div>
 
-  <!-- Gold Plan -->
-  <div class="plan gold" [ngClass]="{'active-plan': activePlan === 'gold'}">
-    <div *ngIf="activePlan === 'gold'" class="active-label">ACTIVE PLAN</div>
-    <div class="plan-header">Gold Plan</div>
-    <div class="plan-price">₹ 3999 <span class="original-price">₹ 7799</span></div>
-    <ul class="plan-features">
-      <li>1 Year Access</li>
-      <li>Desktop/ Mobile View</li>
-    </ul>
-    <button (click)="buyPlan('gold')" class="btn"  style="color: white; background-color: #3076f0;">Buy Now</button>
-    <div class="most-popular">Most Popular</div>
-  </div>
+    <div class="hero-meta" *ngIf="activePlan">
+      <div class="meta-pill">
+        Active plan: <span class="meta-strong">{{ activePlan | titlecase }}</span>
+      </div>
+      <div class="meta-pill muted">
+        Tip: Gold includes mobile access
+      </div>
+    </div>
+  </header>
+
+  <section class="plans-grid">
+    <article
+      class="plan-card free"
+      [ngClass]="{
+        'active-plan': activePlan === 'free',
+        'disabled': activePlan === 'silver' || activePlan === 'gold'
+      }"
+    >
+      <div class="card-top">
+        <div class="plan-tag" *ngIf="activePlan === 'free'">Active</div>
+        <h2 class="plan-name">Free Trial</h2>
+        <div class="plan-price">
+          <span class="currency">&#8377;</span><span class="amount">0</span>
+        </div>
+        <p class="plan-desc">Try the essentials on desktop.</p>
+      </div>
+
+      <ul class="plan-features">
+        <li>7 days access</li>
+        <li>Desktop view</li>
+      </ul>
+
+      <button
+        type="button"
+        class="plan-btn"
+        (click)="buyPlan('free')"
+        [disabled]="activePlan === 'silver' || activePlan === 'gold'"
+      >
+        Start Free Trial
+      </button>
+    </article>
+
+    <article class="plan-card silver" [ngClass]="{ 'active-plan': activePlan === 'silver' }">
+      <div class="card-top">
+        <div class="plan-tag" *ngIf="activePlan === 'silver'">Active</div>
+        <h2 class="plan-name">Silver</h2>
+        <div class="plan-price">
+          <span class="currency">&#8377;</span><span class="amount">3399</span>
+          <span class="original-price"><span class="currency">&#8377;</span>4999</span>
+        </div>
+        <p class="plan-desc">For desktop-first businesses.</p>
+      </div>
+
+      <ul class="plan-features">
+        <li>6 months access</li>
+        <li>Desktop view</li>
+      </ul>
+
+      <button type="button" class="plan-btn" (click)="buyPlan('silver')">
+        Buy Silver
+      </button>
+    </article>
+
+    <article class="plan-card gold" [ngClass]="{ 'active-plan': activePlan === 'gold' }">
+      <div class="most-popular">Most Popular</div>
+
+      <div class="card-top">
+        <div class="plan-tag" *ngIf="activePlan === 'gold'">Active</div>
+        <h2 class="plan-name">Gold</h2>
+        <div class="plan-price">
+          <span class="currency">&#8377;</span><span class="amount">3999</span>
+          <span class="original-price"><span class="currency">&#8377;</span>7799</span>
+        </div>
+        <p class="plan-desc">Best value with mobile + desktop.</p>
+      </div>
+
+      <ul class="plan-features">
+        <li>1 year access</li>
+        <li>Desktop + mobile view</li>
+      </ul>
+
+      <button type="button" class="plan-btn primary" (click)="buyPlan('gold')">
+        Buy Gold
+      </button>
+    </article>
+  </section>
 </div>

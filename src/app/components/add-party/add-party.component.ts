@@ -333,31 +333,39 @@ export class AddPartyComponent implements OnInit {
     console.log("BEFore return");
     return new Promise((resolve) => {
       console.log("after return");
+      const rawValues = this.addPartyForm.getRawValue();
+      const toPayOrReceiveValue = (
+        rawValues.toPayOrReceiveControl ||
+        this.toPayOrReceive ||
+        this.data?.partyDetails?.topayorreceive ||
+        ''
+      ).toString().toUpperCase();
+
       let body = {
         registeredPhoneNumber: this.registeredPhoneNumber,
-        partyName: this.addPartyForm.value.partyNameControl,
-        gst: this.addPartyForm.value.gstControl,
-        phoneNumber: this.addPartyForm.value.phoneNumberControl,
-        partyGroup: this.addPartyForm.value.partyGroupControl,
-        gstType: this.addPartyForm.value.gstTypeControl,
-        _state: this.addPartyForm.value._stateControl,
-        emailId: this.addPartyForm.value.emailIdControl,
-        billingAddress: this.addPartyForm.value.billingAddressControl,
-        shippingAddress: this.addPartyForm.value.shippingAddressControl,
-        openingBalance: Number(this.addPartyForm.value.openingBalanceControl),
-        toPayOrReceive: this.addPartyForm.value.toPayOrReceiveControl,
-        asOfDate: this.addPartyForm.value.asOfDateControl,
-        creditLimit: Number(this.addPartyForm.value.creditLimitControl),
-        additionalFieldName1: this.addPartyForm.value.additionalFieldName1Control,
-        additionalFieldName2: this.addPartyForm.value.additionalFieldName2Control,
-        additionalFieldName3: this.addPartyForm.value.additionalFieldName3Control,
-        additionalFieldName4: this.addPartyForm.value.additionalFieldName4Control,
-        additionalfieldname1value: this.addPartyForm.value.additionalField1ValueControl,
-        additionalfieldname2value: this.addPartyForm.value.additionalField2ValueControl,
-        additionalfieldname3value: this.addPartyForm.value.additionalField3ValueControl,
-        additionalfieldname4value: this.addPartyForm.value.additionalField4ValueControl,
+        partyName: rawValues.partyNameControl,
+        gst: rawValues.gstControl,
+        phoneNumber: rawValues.phoneNumberControl,
+        partyGroup: rawValues.partyGroupControl,
+        gstType: rawValues.gstTypeControl,
+        _state: rawValues._stateControl,
+        emailId: rawValues.emailIdControl,
+        billingAddress: rawValues.billingAddressControl,
+        shippingAddress: rawValues.shippingAddressControl,
+        openingBalance: Number(rawValues.openingBalanceControl),
+        toPayOrReceive: toPayOrReceiveValue,
+        asOfDate: rawValues.asOfDateControl,
+        creditLimit: Number(rawValues.creditLimitControl),
+        additionalFieldName1: rawValues.additionalFieldName1Control,
+        additionalFieldName2: rawValues.additionalFieldName2Control,
+        additionalFieldName3: rawValues.additionalFieldName3Control,
+        additionalFieldName4: rawValues.additionalFieldName4Control,
+        additionalfieldname1value: rawValues.additionalField1ValueControl,
+        additionalfieldname2value: rawValues.additionalField2ValueControl,
+        additionalfieldname3value: rawValues.additionalField3ValueControl,
+        additionalfieldname4value: rawValues.additionalField4ValueControl,
         typeOfPay: this.typeOfPay,
-        oldPartyName: this.addPartyForm.value.partyNameControl,
+        oldPartyName: rawValues.partyNameControl,
         isPartyUpdate: this.dataService.isPartyUpdate,
         topayparty: this.topayparty,
         toreceivefromparty: this.toreceivefromparty
@@ -389,13 +397,14 @@ export class AddPartyComponent implements OnInit {
 
   checkTypeOfPay() {
     console.log(this.isOpeningBalance)
-    const controlValue = this.addPartyForm.get('toPayOrReceiveControl')?.value;
+    const rawValues = this.addPartyForm.getRawValue();
+    const controlValue = rawValues.toPayOrReceiveControl;
     if (controlValue === 'PAY') {
       this.typeOfPay = "PAYABLE OPENING BALANCE";
-      this.topayparty = this.addPartyForm.value.openingBalanceControl;
+      this.topayparty = rawValues.openingBalanceControl;
     } else if (controlValue === 'RECEIVE') {
       this.typeOfPay = "RECEIVABLE OPENING BALANCE";
-      this.toreceivefromparty = this.addPartyForm.value.openingBalanceControl;
+      this.toreceivefromparty = rawValues.openingBalanceControl;
     }
   }
   
