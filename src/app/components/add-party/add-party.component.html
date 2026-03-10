@@ -1,69 +1,69 @@
-<form class="main" [formGroup]="addPartyForm">
-  <div class="d-flex justify-content-between align-items-center">
-    <h2>{{ dataService.isPartyUpdate ? 'UPDATE' : 'ADD' }} PARTY</h2>
+<form class="main app-form-shell" [formGroup]="addPartyForm">
+  <div class="ap-hero app-form-header">
+    <div class="ap-hero-left">
+      <div class="ap-kicker">PARTIES</div>
+      <h2 class="app-form-title ap-title">{{ dataService.isPartyUpdate ? 'Update Party' : 'Add Party' }}</h2>
+      <div class="ap-sub text-muted">Manage GST, address, credit limits, and optional fields.</div>
+    </div>
   </div>
-  
-  <div style="border-bottom: 1px solid gray; margin-bottom: 10px;"></div>
 
-  <div class="scrollable-div">
-  <!-- First row with three input columns -->
-      <!-- Party Name Field --> 
-    <div class="form-row three-columns">
-      <div class="col-4">
-        <div class="form-floating">
-          <input type="text" class="form-control" placeholder="Party Name*" id="partyName" name="partyName" formControlName="partyNameControl"
-          [class.is-invalid]="partyNameControl?.errors?.['required'] && (partyNameControl?.touched || ifFormSubmitted)" oninput="this.value = this.value.toUpperCase()">
-          <label for="partyName">Party Name*</label>
+  <div class="app-form-divider"></div>
+
+  <div class="scrollable-div app-form-body">
+    <div class="ap-panel">
+      <div class="ap-section-title">Basics</div>
+      <!-- First row with three input columns -->
+      <div class="ap-grid ap-grid-3">
+        <div class="ap-col">
+          <div class="form-floating">
+            <input type="text" class="form-control" placeholder="Party Name*" id="partyName" name="partyName" formControlName="partyNameControl"
+            [class.is-invalid]="partyNameControl?.errors?.['required'] && (partyNameControl?.touched || ifFormSubmitted)" oninput="this.value = this.value.toUpperCase()">
+            <label for="partyName">Party Name*</label>
+          </div>
+        </div>
+
+        <div class="ap-col">
+          <div class="form-floating">
+            <input type="text" class="form-control gst-in" placeholder="GSTIN" id="floatingPassword" name="gstin" formControlName="gstControl"
+            oninput="this.value = this.value.toUpperCase()">
+            <label for="floatingPassword">GSTIN</label>
+          </div>
+        </div>
+
+        <div class="ap-col">
+          <div class="form-floating">
+            <input type="text" class="form-control phone-num" placeholder="Phone Number" id="phoneNo" name="phoneNo" formControlName="phoneNumberControl"
+            [class.is-invalid]="phoneNumberControl?.errors">
+            <label for="phoneNo">Phone Number</label>
+            <div>
+              <div *ngIf="addPartyForm.get('phoneNumberControl')?.errors?.['pattern']" class="text-danger">Please enter a valid number.</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- GSTIN Field -->
-      <div class="col-4 "> 
-      <div class="form-floating">
-        <input type="text" class="form-control gst-in" placeholder="GSTIN" id="floatingPassword" name="gstin" formControlName="gstControl" 
-        oninput="this.value = this.value.toUpperCase()">
-        <label for="floatingPassword">GSTIN</label>
-      </div>
-    </div>
-      
-      <!-- Phone no. Field -->
-      <div class="col-4">
-      <div class="form-floating">
-        <input type="text" class="form-control phone-num" placeholder="Phone Number" id="phoneNo" name="phoneNo" formControlName="phoneNumberControl" 
-        [class.is-invalid]="phoneNumberControl?.errors">
-        <label for="phoneNo">Phone Number</label>
-        <div>
-          <div *ngIf="addPartyForm.get('phoneNumberControl')?.errors?.['pattern']" style="color: red;">Please enter a valid number.</div>
+      <div class="ap-grid ap-grid-1">
+        <div class="ap-col">
+          <div class="form-floating">
+            <mat-form-field>
+              <mat-label>Party Group</mat-label>
+              <input type="text" matInput [matAutocomplete]="auto" formControlName="partyGroupControl" oninput="this.value = this.value.toUpperCase()">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option (click)="openAddPartyGroupModal()">+ ADD PARTY GROUP</mat-option>
+                <mat-option *ngFor="let party of dataService.partyGroupListResponse" [value]="party.partygroup">{{ party.partygroup }}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
         </div>
       </div>
-    </div>
-    </div>
-
-  <!-- Second row -->
-    <div class="form-row three-columns">
-      <div class="col-4">
-      <div class="form-floating">
-        <mat-form-field style="width: 100%;">
-          <mat-label>Party Group</mat-label>
-          <input type="text" matInput [matAutocomplete]="auto" formControlName="partyGroupControl" oninput="this.value = this.value.toUpperCase()">
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option (click)="openAddPartyGroupModal()">+ ADD PARTY GROUP</mat-option>
-            <mat-option *ngFor="let party of dataService.partyGroupListResponse" [value]="party.partygroup">{{ party.partygroup }}</mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-      </div>
-    </div> 
-    </div>
   
     <!-- THREE TABS -->
-    <mat-tab-group [selectedIndex]="getSelectedIndex()" (selectedIndexChange)="onTabChange($event)">
-      <mat-tab label="GST & ADDRESS">
-      </mat-tab>
-      <mat-tab label="CREDIT & BALANCE">
-      </mat-tab>
-      <mat-tab label="ADDITIONAL FIELDS">
-      </mat-tab>
-    </mat-tab-group>
+      <div class="ap-section-title">Details</div>
+      <mat-tab-group class="ap-tabs" [selectedIndex]="getSelectedIndex()" (selectedIndexChange)="onTabChange($event)">
+        <mat-tab label="GST & Address"></mat-tab>
+        <mat-tab label="Credit & Balance"></mat-tab>
+        <mat-tab label="Additional Fields"></mat-tab>
+      </mat-tab-group>
      
     
     <!-- TAB1: GST -->
@@ -100,8 +100,8 @@
         <!-- Second Column -->
         <div class="col-md-4">
           <div class="form-floating">
-            <textarea class="form-control gstFields" id="billingAddress" name="billingAddress" rows="5" placeholder="Enter Billing Address" formControlName="billingAddressControl" 
-             style="height: 200px;" oninput="this.value = this.value.toUpperCase()"></textarea>
+            <textarea class="form-control gstFields ap-textarea-lg" id="billingAddress" name="billingAddress" rows="5" placeholder="Enter Billing Address" formControlName="billingAddressControl" 
+             oninput="this.value = this.value.toUpperCase()"></textarea>
             <label for="billingAddress">Billing Address</label>
             <a type="button" (click)="toggleShippingAddress()">
               {{ isShippingAddressEnabled ? '- Disable Shipping Address' : '+ Enable Shipping Address' }}
@@ -113,8 +113,8 @@
         <div class="col-md-4">
           <div id="shippingAddressContainer" *ngIf="isShippingAddressEnabled">
           <div class="form-floating">
-            <textarea class="form-control gstFields" id="shippingAddress" name="shippingAddress" rows="5" placeholder="Enter Shipping Address" formControlName="shippingAddressControl" 
-             style="height: 200px;" oninput="this.value = this.value.toUpperCase()"></textarea>
+            <textarea class="form-control gstFields ap-textarea-lg" id="shippingAddress" name="shippingAddress" rows="5" placeholder="Enter Shipping Address" formControlName="shippingAddressControl" 
+             oninput="this.value = this.value.toUpperCase()"></textarea>
             <label for="shippingAddress">Shipping Address</label>
           </div>   
           <div class="text-end">
@@ -133,7 +133,7 @@
           <label for="openingbalanceAmt">Opening Balance</label>
         </div>
         <div>
-          <div *ngIf="addPartyForm.get('openingBalanceControl')?.errors?.['pattern']" style="color: red;">Please enter valid opening balance.</div>
+          <div *ngIf="addPartyForm.get('openingBalanceControl')?.errors?.['pattern']" class="text-danger">Please enter valid opening balance.</div>
         </div>
         <div *ngIf="openingBalance != null">
           <label class="pay-recieve">
@@ -146,8 +146,8 @@
         </div>
  
         <div class="form-check form-switch">
-          <input class="form-check-input" style="height: 25px; width:45px;" type="checkbox" role="switch" id="customNoLimit" [checked]="isCustomLimit" (change)="updateLabel($event)">
-          <label class="form-check-label" style="margin-left: 5%; margin-top: 2%;" for="customNoLimit">{{ labelText }}</label>
+          <input class="form-check-input ap-switch" type="checkbox" role="switch" id="customNoLimit" [checked]="isCustomLimit" (change)="updateLabel($event)">
+          <label class="form-check-label ap-switch-label" for="customNoLimit">{{ labelText }}</label>
         </div>
         
         <div [class.hidden]="!isCustomLimit">
@@ -156,7 +156,7 @@
             <label for="customLimit">Credit Limit</label>
           </div>
           <div>
-            <div *ngIf="addPartyForm.get('creditLimitControl')?.errors?.['pattern']" style="color: red;">Please enter valid credit limit.</div>
+            <div *ngIf="addPartyForm.get('creditLimitControl')?.errors?.['pattern']" class="text-danger">Please enter valid credit limit.</div>
           </div>
         </div>
         
@@ -279,12 +279,13 @@
       </div>
       </div>
     </div>
+    </div>
      
   <div *ngIf="!dataService.isPartyUpdate" class="fixed-buttons d-flex justify-content-end position-fixed bottom-0 submit-btns">
     <!-- <input type="submit" style="margin-right: 20px;" class="btn btn-warning add_party_btn" value="SAVE & NEW" (click)="submit(true)"> -->
-    <input type="submit" class="btn save_update"  style="color: white; background-color: #3076f0; width: 150px;" value="SAVE" (click)="submit(false)">
+    <input type="submit" class="btn btn-primary save_update" value="Save" (click)="submit(false)">
   </div>
   <div *ngIf="dataService.isPartyUpdate" class="fixed-buttons d-flex justify-content-end position-fixed bottom-0 p-3 submit-btns">
-    <input type="submit" class="btn save_update"  style="color: white; background-color: #3076f0; width: 150px;" value="UPDATE" (click)="submit(false)">
+    <input type="submit" class="btn btn-primary save_update" value="Update" (click)="submit(false)">
   </div>
 </form>

@@ -1,39 +1,4 @@
-.main {
-  min-height: 100%;
-  overflow: hidden;
-  padding: 5%;
-}
-
-.scroll{
-  max-height: 285px;
-  overflow-y: scroll; /* Ensures scrolling */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
-
-.scrollable-div {
-  height: calc(100vh - 220px);
-  max-height: 72vh;
-  overflow-y: scroll; /* Ensures scrolling */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
-
-.scrollable-div::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, and Opera */
-}
-
-/* phone, gstin, partyname */
-.form-row {
-    display: flex;
-    justify-content: space-between;
-  }
-
-.three-columns{
-  padding: 2%;
-  margin-top: 1%;
-  margin-bottom: 1%;
-}
+.main{width:min(1120px,100%);margin:18px auto;padding:18px 18px 112px;min-height:calc(100vh - 36px);background:linear-gradient(180deg,rgba(14,165,164,.10),rgba(255,255,255,1) 18%);border:1px solid var(--color-border);border-radius:var(--radius-md);box-shadow:var(--shadow-soft)}.ap-hero{padding:2px 2px 6px}.ap-kicker{font-size:12px;font-weight:950;letter-spacing:.14em;color:rgba(14,165,164,.9)}.ap-title{margin-top:2px}.ap-sub{max-width:72ch}.ap-panel{background:rgba(238,243,250,.55);border:1px solid var(--color-border);border-radius:16px;padding:14px}.ap-section-title{font-weight:950;letter-spacing:-.01em;margin:0 0 10px}.scrollable-div{max-height:none;overflow:visible;padding-right:0}.ap-grid{display:grid;gap:14px;margin:12px 0 14px;align-items:start}.ap-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.ap-grid-1{grid-template-columns:minmax(0,1fr)}.ap-col{min-width:0}
 
   /* tabs */
 li a {
@@ -48,19 +13,12 @@ li a {
 
   /* GST TAB */
   .gstAndAddressForm {
-    margin-top: 2%;
-    margin-bottom: 2%;
-    margin-left: 0%;
-    padding: 2%;
+    margin-top: 10px;
+    padding: 8px 2px;
   }
    
   .gstFields {
     width: 100%;
-    border: 1px solid #ccc; 
-    border-radius: 4px;
-    box-sizing: border-box; 
-    margin-top: 6px; 
-    margin-bottom: 16px; 
   } 
   
   #gstType {
@@ -86,33 +44,18 @@ li a {
   }
   
 .addressForm {
-  padding: 20px;
-  margin-left: 0%;
+  padding: 8px 2px;
 }
 .addressFields{
-  width: 100%; /* Full width */
-  padding: 12px; /* Some padding */ 
-  border: 1px solid #ccc; /* Gray border */
-  border-radius: 4px; /* Rounded borders */
-  box-sizing: border-box; /* Make sure that padding and width stays in place */
-  margin-top: 6px; /* Add a top margin */
-  margin-bottom: 16px; /* Bottom margin */
-  resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+  width: 100%;
+  resize: vertical;
 }
 
 .creditAndBalanceFields {
   width: 100%;
-  padding: 12px; /* Some padding */ 
-  border: 1px solid #ccc; /* Gray border */
-  border-radius: 4px; /* Rounded borders */
-  box-sizing: border-box; /* Make sure that padding and width stays in place */
-  margin-top: 5%; /* Add a top margin */
-  margin-bottom: 16px; /* Bottom margin */
 }
 
-.submit-btns {
-  margin-bottom: 3%;
-}
+.submit-btns{margin:0}
 
 /* Dropdown select options */
 .dropdown-options {
@@ -120,16 +63,8 @@ li a {
 }
 
 /* Additional fields */
-.addtional-fields {
-  margin: 3%;
-}
-
-.additionalFieldcheckBox {
-  margin-top: 30%;
-  margin-left: 15%;
-  height: 20px;
-  width: 20px;
-}
+.addtional-fields{margin:10px 0}.additionalFieldcheckBox{margin:0;height:18px;width:18px}
+.scroll{max-height:none;overflow:visible}
 
 .addFieldToggle {
   margin: 1%;
@@ -140,48 +75,22 @@ li a {
   border: 2px solid red;
 }
 
-.save_update{
-  margin-top: 2%; 
-  width: 150px;
-}
+.save_update{width:180px}
+
+.ap-textarea-lg{min-height:180px}
+.ap-switch{width:44px;height:24px}
+.ap-switch-label{margin-left:10px;line-height:24px}
+::ng-deep .ap-tabs .mat-mdc-tab-header{border-bottom:0!important}
+::ng-deep .ap-tabs .mdc-tab{min-height:40px!important;padding:0 14px!important;border-radius:999px!important;margin-right:8px;background:rgba(14,165,164,.07)}
+::ng-deep .ap-tabs .mdc-tab--active{background:rgba(14,165,164,.16)}
+::ng-deep .ap-tabs .mdc-tab__text-label{font-weight:950!important;letter-spacing:.04em;text-transform:uppercase;font-size:12px}
+::ng-deep .ap-tabs .mdc-tab-indicator{display:none!important}
+
+.fixed-buttons{position:sticky!important;bottom:0;left:0;right:0;z-index:60;background:linear-gradient(180deg,rgba(238,243,250,0),rgba(238,243,250,.94) 38%,rgba(238,243,250,.99) 100%);padding:14px 0 12px;margin-top:10px;border-top:1px solid rgba(216,225,239,.9);backdrop-filter:blur(6px)}
 
 @media (max-width: 991.98px) {
-  .main {
-    padding: 16px;
-    overflow: visible;
-  }
-
-  .scrollable-div {
-    height: auto;
-    max-height: none;
-    overflow-y: visible;
-  }
-
-  .form-row {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .three-columns .col-4,
-  .three-columns .col-md-4,
-  .creditAndBalanceForm .col-md-6 {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-
-  .additionalFieldcheckBox {
-    margin-top: 8px;
-    margin-left: 0;
-  }
-
-  .fixed-buttons {
-    position: static !important;
-    justify-content: flex-start !important;
-    padding: 0 !important;
-    margin-top: 16px;
-  }
-
-  .save_update {
-    width: 100%;
-  }
+  .main{margin:12px auto;padding:16px 16px 108px;min-height:auto}
+  .scrollable-div{max-height:none}
+  .ap-grid-3{grid-template-columns:1fr}
+  .save_update{width:100%}
 }

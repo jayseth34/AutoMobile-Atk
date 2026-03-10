@@ -1,8 +1,9 @@
+<div class="edit-detail-page">
 <section class="bg-body-secondary">
   <div class="container-fluid pt-2 pb-2">
     <div class="row align-content-center">
       <div class="example-button-container" (click)="goToSaleInvoice()">
-        <button mat-mini-fab aria-label="Back to sale invoice"  style="color: white; background-color: #3076f0;">
+        <button mat-mini-fab aria-label="Back to sale invoice" color="primary" class="back-fab">
           <mat-icon >arrow_back_ios_new</mat-icon>
         </button>
       </div>
@@ -512,18 +513,16 @@
 
       <div class="col-12 col-xl-6 row justify-content-end fit-content mt-3 mt-xl-0">
         <!-- Round Off Checkbox -->
-        <div class="form-check col-3 mb-1">
+        <div class="form-check col-3 mb-1 roundoff-check">
           <input
             class="form-check-input"
             type="checkbox"
             [value]="roundOff"
             id="roundOff"
-            style="top: 23%"
           />
           <label
             class="form-check-label"
             for="roundOff"
-            style="position: absolute; top: 20%"
           >
             Round Off
           </label>
@@ -555,12 +554,11 @@
         <!-- </div> -->
 
         <!-- Full Paymnt Checkbox -->
-        <div class="form-check col-1 mb-1" *ngIf="showAmtDetails">
+        <div class="form-check col-1 mb-1 align-check" *ngIf="showAmtDetails">
           <input
             class="form-check-input"
             type="checkbox"
             id="fullPayment"
-            style="top: 23%"
             (click)="updatePayAmount()"
             [checked]="fullpayment"
           />
@@ -612,9 +610,10 @@
 <section class="mt-2 bg-body-secondary p-2 container-fluid">
   <form class="row" [formGroup]="modifyDetail">
     <div class="col-12 col-md-3">
-      <button mat-raised-button class="submit-btn-mobile"  style="color: white; background-color: #3076f0; width: 100px;" (click)="submitDetails()">
+      <button mat-raised-button color="primary" class="submit-btn-mobile submit-primary" type="button" (click)="submitDetails()">
         Submit
       </button>
     </div>
   </form>
 </section>
+ </div>

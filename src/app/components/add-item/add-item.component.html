@@ -1,18 +1,24 @@
-<form class="main" [formGroup]="addItemForm">
-    <div class="d-flex justify-content-between align-items-center">
-        <h2>{{ dataService.isItemUpdate ? 'UPDATE' : 'ADD' }} ITEM</h2>
+<form class="main app-form-shell" [formGroup]="addItemForm">
+    <div class="ai-hero app-form-header">
+        <div class="ai-hero-left">
+            <div class="ai-kicker">ITEMS</div>
+            <h2 class="app-form-title ai-title">{{ dataService.isItemUpdate ? 'Update Item' : 'Add Item' }}</h2>
+            <div class="ai-sub text-muted">Set details, pricing, and stock in one place.</div>
+        </div>
     </div>
 
-    <div style="border-bottom: 1px solid gray; margin-bottom: 10px;"></div>
+    <div class="app-form-divider"></div>
     
-    <div class="scrollable-div">
+    <div class="scrollable-div app-form-body">
 
+    <div class="ai-panel">
     <!-- item details -->
-    <div class="item-details">
+    <div class="item-details ai-section">
+        <div class="ai-section-title">Basics</div>
         <!-- FIRST ROW -->
-        <div class="form-row three-columns">
+        <div class="ai-grid ai-grid-3">
             <!-- First Column -->
-            <div class="col-4">
+            <div class="ai-col">
                 <div class="form-floating">
                     <input type="text" class="form-control item-name" placeholder="Item Name*" id="itemName" name="itemName" formControlName="itemNameControl" 
                     [class.is-invalid]="itemNameControl?.errors?.['required'] && (itemNameControl?.touched )" oninput="this.value = this.value.toUpperCase()">
@@ -21,7 +27,7 @@
             </div>
         
             <!-- Second Column -->
-            <div class="col-4">
+            <div class="ai-col">
                 <div class="form-floating">
                     <input type="text" class="form-control item-hsn" placeholder="Item HSN" id="item-hsn" name="item-hsn" formControlName="itemHsnControl" oninput="this.value = this.value.toUpperCase()">
                     <label for="item-hsn">Item HSN</label>
@@ -29,52 +35,52 @@
             </div>
 
             <!-- Third Column -->
-            <div class="col-4 ">
-                <div class="form-floating ">
-                    <input type="button" class="btn select-unit-btn" style="color: white; background-color: #3076f0; width: 150px;" name="selectunit" id="selectunit" value="SELECT UNIT" (click)="openSelectUnitModal()">
+            <div class="ai-col">
+                <div class="form-floating">
+                    <input type="button" class="btn btn-primary select-unit-btn" name="selectunit" id="selectunit" value="SELECT UNIT" (click)="openSelectUnitModal()">
                 </div>
             </div>
         </div>
 
-        <div class="row d-flex align-items-center g-0 three-columns">
-          <!-- First Column -->
-          <div class="col-4">
-              <div class="form-floating">
-                  <mat-form-field style="width: 100%;">
-                      <mat-label>Category</mat-label>
-                      <input type="text" matInput [matAutocomplete]="auto" formControlName="categoryControl" oninput="this.value = this.value.toUpperCase()">
-                      <mat-autocomplete #auto="matAutocomplete">
-                          <mat-option (click)="openAddItemCategoryModal()">+ ADD CATEGORY</mat-option>
-                          <mat-option *ngFor="let category of categoryList" [value]="category.category">{{ category.category }}</mat-option>
-                      </mat-autocomplete>
-                  </mat-form-field>
-              </div>
+        <div class="ai-grid ai-grid-2">
+          <div class="ai-col">
+            <div class="form-floating">
+              <mat-form-field>
+                <mat-label>Category</mat-label>
+                <input type="text" matInput [matAutocomplete]="auto" formControlName="categoryControl" oninput="this.value = this.value.toUpperCase()">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option (click)="openAddItemCategoryModal()">+ ADD CATEGORY</mat-option>
+                  <mat-option *ngFor="let category of categoryList" [value]="category.category">{{ category.category }}</mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
           </div>
-      
-          <!-- Second Column -->
-          <div class="col-4" style="margin-left: 0.5%;">
-              <div class="form-floating position-relative">
-                  <input type="text" class="form-control item-code" style="margin-top:-20px;" placeholder="Item Code" id="item-code" name="item-code" formControlName="itemCodeControl">
-                  <button class="btn position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); color: white; background-color: #3076f0; width: 120px;" name="addcode" id="addcode" (click)="assignCode()">ADD CODE</button>
-                  <label for="item-code">Item Code</label>
-              </div>
+
+          <div class="ai-col">
+            <div class="form-floating code-wrap">
+              <input type="text" class="form-control item-code code-input" placeholder="Item Code" id="item-code" name="item-code" formControlName="itemCodeControl">
+              <button class="btn btn-primary add-code-btn" type="button" name="addcode" id="addcode" (click)="assignCode()">Add Code</button>
+              <label for="item-code">Item Code</label>
+            </div>
           </div>
-      </div>
+        </div>
       
 
     </div>
 
     <!-- two tabs -->
-    <mat-tab-group [selectedIndex]="selectedTab === 'pricing' ? 0 : 1" (selectedIndexChange)="selectTabIndex($event)">
-        <mat-tab label="PRICING"></mat-tab>
-        <mat-tab label="STOCK"></mat-tab>
-      </mat-tab-group>
+    <div class="ai-section ai-section-tabs">
+      <div class="ai-section-title">Details</div>
+      <mat-tab-group class="ai-tabs" [selectedIndex]="selectedTab === 'pricing' ? 0 : 1" (selectedIndexChange)="selectTabIndex($event)">
+          <mat-tab label="Pricing"></mat-tab>
+          <mat-tab label="Stock"></mat-tab>
+        </mat-tab-group>
 
-    <div style="margin-left: 2%;">
+      <div class="ai-tabs-body">
     <!-- TAB1: Pricing -->
     <div class="pricing scroll" id="pricing" *ngIf="selectedTab === 'pricing'">
         <!-- row0: mrp -->
-        <div class="sale-price">
+        <div class="sale-price ai-h2">
           <h2>MRP</h2>
         </div>
         <div class="container">
@@ -89,7 +95,7 @@
 
         </div>
       
-        <div class="sale-price">
+        <div class="sale-price ai-h2">
           <h2>Sale Price</h2>
         </div>
         <!-- row1: sale price -->
@@ -109,7 +115,7 @@
               </div>
             </div>
 
-            <div class="row" style="margin-left: 5%;">
+            <div class="row ai-indent">
                 <div class="col p-0">
                     <div class="form-floating">
                         <input type="text" class="form-control disc-sale-price" placeholder="Disc. on Sale Price" id="disc-sale-price" name="disc-sale-price" formControlName="discountOnSalePriceControl">
@@ -126,15 +132,15 @@
         </div>
       
         <!-- row2: Wholesale Price -->
-        <div>
-            <a style="text-decoration:none ;" type="button" (click)="toggleWholesalePrice()" class="wholesaletitle">
+        <div class="ai-wholesale-head">
+            <a class="ai-link-reset wholesaletitle" type="button" (click)="toggleWholesalePrice()">
                 <h2 *ngIf="isWholesalePriceEnabled" class="add-wholesale">+  Add Wholesale Price</h2>
-                <h2 *ngIf="!isWholesalePriceEnabled" class="remove-wholesale">Wholesale Price<a style="text-decoration: none; color: grey;"> (- Remove)</a></h2>
+                <h2 *ngIf="!isWholesalePriceEnabled" class="remove-wholesale">Wholesale Price<a class="ai-muted-link"> (- Remove)</a></h2>
             </a>            
         </div>
         <div *ngIf="!isWholesalePriceEnabled">
             <div class="container mb-2">
-                <div class="row" style="margin-bottom: 5%;">
+                <div class="row ai-mb">
                   <div class="col p-0">
                         <div class="form-floating">
                             <input type="text" class="form-control wholesale-price" placeholder="Wholesale Price" id="wholesale-price" name="eholesale-price" formControlName="wholeSalePriceControl" >
@@ -149,10 +155,10 @@
                   </div>
                 </div>
     
-                <div class="row" style="margin-left: 5%;">
+                <div class="row ai-indent">
                     <div class="form-floating">
                         <input type="text" class="form-control min-wholesale-qty" placeholder="Minimum Wholesale Quantity" id="min-wholesale-qty" name="min-wholesale-qty" formControlName="minimumWholeSaleQuantityControl">
-                        <label style="margin-left: 10px;" for="wholesale-price">Minimum Wholesale Quantity</label>
+                        <label class="ai-ml" for="wholesale-price">Minimum Wholesale Quantity</label>
                     </div>
                 </div>
             </div>
@@ -160,8 +166,10 @@
 
         <!-- row3:Purchase Price -->
           <div class="container">
+            <div class="ai-h2">
+              <h2>Purchase Price</h2>
+            </div>
             <div class="row">
-                <h2 style="padding-left: 0%;">Purchase Price</h2>
               <div class="col p-0">
                     <div class="form-floating">
                         <input type="text" class="form-control sale-price-input" placeholder="Sale Price" id="purchase-sale-price" name="purchase-sale-price" formControlName="purchasePriceControl">
@@ -176,29 +184,29 @@
               </div>
             </div>
       
-            <div class="row" style="margin-left: 5%;">
-                <h2 class="text-end">Taxes</h2>
-                <div class="col p-0">
-                    <select class="form-select" formControlName="taxRateControl">
-                        <option selected disabled>None</option>
-                        <option>IGST@.0%</option>
-                        <option>GST@0%</option>
-                        <option>IGST@0.25%</option>
-                        <option>GST@0.25%</option>
-                        <option>IGST@3%</option>
-                        <option>GST@3%</option>
-                        <option>IGST@5%</option>
-                        <option>GST@5%</option>
-                        <option>IGST@12%</option>
-                        <option>GST@12%</option>
-                        <option>IGST@18%</option>
-                        <option>GST@18%</option>
-                        <option>IGST@28%</option>
-                        <option>GST@28%</option>
-                        <option>Exempt</option>
-                    </select>
+            <div class="ai-h2">
+              <h2>Taxes</h2>
             </div>
-          </div>
+            <div class="ai-tax">
+              <select class="form-select" formControlName="taxRateControl">
+                <option selected disabled>None</option>
+                <option>IGST@.0%</option>
+                <option>GST@0%</option>
+                <option>IGST@0.25%</option>
+                <option>GST@0.25%</option>
+                <option>IGST@3%</option>
+                <option>GST@3%</option>
+                <option>IGST@5%</option>
+                <option>GST@5%</option>
+                <option>IGST@12%</option>
+                <option>GST@12%</option>
+                <option>IGST@18%</option>
+                <option>GST@18%</option>
+                <option>IGST@28%</option>
+                <option>GST@28%</option>
+                <option>Exempt</option>
+              </select>
+            </div>
         </div>
       </div>
       
@@ -249,13 +257,17 @@
     
     </div>
     </div>
+    </div>
 
 
+    <div class="ai-footer">
     <div *ngIf="!dataService.isItemUpdate" class="">
         <!-- <input type="submit" style="margin-right: 20px;" class="btn btn-warning add_party_btn" value="SAVE & NEW" (click)="submit(true)"> -->
-        <input type="submit" class="btn add_item_btn save_update" style="color: white; background-color: #3076f0; width: 150px;"  value="SAVE" (click)="submit(false)">
+        <input type="submit" class="btn btn-primary add_item_btn save_update" value="Save" (click)="submit(false)">
     </div>
     <div *ngIf="dataService.isItemUpdate" class="">
-        <input type="submit" class="btn add_item_btn save_update" style="color: white; background-color: #3076f0; width: 150px;" value="UPDATE" (click)="submit(false)">
+        <input type="submit" class="btn btn-primary add_item_btn save_update" value="Update" (click)="submit(false)">
+    </div>
+    </div>
     </div>
 </form>

@@ -15,6 +15,15 @@
   --color-warning: #d97706;
   --shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.08);
   --radius-md: 10px;
+  --scrollbar-track: rgba(216, 225, 239, 0.55);
+  --scrollbar-thumb: rgba(71, 85, 105, 0.28);
+  --scrollbar-thumb-hover: rgba(71, 85, 105, 0.42);
+  --field-radius: 12px;
+  --field-bg: rgba(238, 243, 250, 0.75);
+  --field-bg-hover: rgba(230, 237, 248, 0.9);
+  --field-focus: rgba(37, 99, 235, 0.14);
+  --field-height: 44px;
+  --float-field-height: 52px;
 }
 
 html, body {
@@ -25,6 +34,32 @@ html, body {
   overflow-y: auto;
   background: var(--color-bg);
   color: var(--color-text);
+}
+
+/* Softer scrollbars (keep visible, not dark) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+  border: 3px solid var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
 }
 
 a,
@@ -143,6 +178,110 @@ button[mat-mini-fab],
   background-color: rgba(37, 99, 235, 0.04);
 }
 
+/* Unified text fields (Angular Material + Bootstrap) */
+.mat-mdc-form-field { width: 100%; }
+.mat-mdc-form-field .mdc-text-field { border-radius: var(--field-radius) !important; }
+.mat-mdc-form-field .mat-mdc-form-field-subscript-wrapper { margin-top: 2px; }
+.mat-mdc-form-field .mat-mdc-input-element,
+.mat-mdc-form-field .mat-mdc-select-trigger { font-weight: 400; letter-spacing: 0; }
+.mat-mdc-form-field .mat-mdc-input-element::placeholder { color: rgba(102, 112, 133, 0.9); }
+
+/* Fix label/value overlap in MDC filled fields (common when global CSS affects line-height/padding) */
+.mat-mdc-form-field-appearance-fill .mdc-text-field--filled .mdc-text-field__input {
+  padding-top: 16px !important;
+  padding-bottom: 6px !important;
+  line-height: 1.25 !important;
+}
+.mat-mdc-form-field-appearance-fill .mdc-text-field--filled .mdc-floating-label {
+  top: 16px !important;
+}
+.mat-mdc-form-field-appearance-fill.mat-focused .mdc-text-field--filled .mdc-floating-label,
+.mat-mdc-form-field-appearance-fill.mat-mdc-form-field-should-float .mdc-text-field--filled .mdc-floating-label {
+  top: 18px !important;
+}
+
+.mat-mdc-form-field-appearance-fill .mdc-text-field--filled {
+  background: var(--field-bg) !important;
+  --mdc-filled-text-field-container-height: var(--field-height);
+}
+.mat-mdc-form-field-appearance-fill .mdc-text-field--filled:not(.mdc-text-field--disabled):hover {
+  background: var(--field-bg-hover) !important;
+}
+.mat-mdc-form-field-appearance-fill .mdc-line-ripple::before { border-bottom-color: var(--color-border) !important; }
+.mat-mdc-form-field-appearance-fill.mat-focused .mdc-line-ripple::after { border-bottom-color: var(--color-primary) !important; }
+
+.mat-mdc-form-field.mat-focused .mdc-text-field {
+  box-shadow: 0 0 0 3px var(--field-focus);
+}
+
+.mat-mdc-form-field-appearance-outline .mdc-notched-outline__leading,
+.mat-mdc-form-field-appearance-outline .mdc-notched-outline__notch,
+.mat-mdc-form-field-appearance-outline .mdc-notched-outline__trailing {
+  border-color: var(--color-border) !important;
+}
+.mat-mdc-form-field-appearance-outline.mat-focused .mdc-notched-outline__leading,
+.mat-mdc-form-field-appearance-outline.mat-focused .mdc-notched-outline__notch,
+.mat-mdc-form-field-appearance-outline.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--color-primary) !important;
+}
+
+.form-control,
+.form-select {
+  border-radius: var(--field-radius) !important;
+  border: 1px solid var(--color-border) !important;
+  background: var(--field-bg) !important;
+  padding: 0.5rem 0.75rem !important;
+  line-height: 1.25 !important;
+  min-height: var(--field-height);
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px var(--field-focus) !important;
+  background: var(--field-bg-hover) !important;
+}
+
+/* Bootstrap floating labels (compact, readable, no overlap) */
+.form-floating > .form-control,
+.form-floating > .form-select {
+  min-height: var(--float-field-height);
+  padding-top: 1.25rem !important;
+  padding-bottom: 0.45rem !important;
+}
+.form-floating > label {
+  display: block !important;
+  height: auto !important;
+  top: 0.28rem !important;
+  left: 0.6rem !important;
+  right: auto !important;
+  padding: 0 0.45rem !important;
+  color: rgba(102, 112, 133, 0.95);
+  font-size: 0.78rem;
+  line-height: 1.35 !important;
+  letter-spacing: 0.01em;
+  background: var(--field-bg);
+  border: 1px solid rgba(216, 225, 239, 0.95);
+  border-radius: 999px;
+  transform: none !important;
+  opacity: 1 !important;
+}
+/* Avoid showing placeholder and label at the same time */
+.form-floating > .form-control::placeholder {
+  color: transparent !important;
+}
+
+/* Tighter action buttons used as field companions */
+.select-unit-btn {
+  height: var(--float-field-height) !important;
+  padding: 0.5rem 0.75rem !important;
+}
+
+/* Give Bootstrap rows a bit of breathing room in our new panels */
+.ai-panel .row,
+.ap-panel .row {
+  row-gap: 12px;
+}
+
 ::ng-deep .mat-datepicker-content .mat-calendar {
   zoom: 0.85;
 }
@@ -162,6 +301,47 @@ svg {
 
 table {
   width: 100%;
+}
+
+/* Shared form shell (dialogs + pages) */
+.app-form-shell {
+  padding: 16px;
+}
+
+.app-form-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.app-form-title {
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+.app-form-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 10px 0 14px;
+}
+
+.app-form-body {
+  max-height: 72vh;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+@media (max-width: 991.98px) {
+  .app-form-shell {
+    padding: 16px;
+  }
+
+  .app-form-body {
+    max-height: none;
+    padding-right: 0;
+  }
 }
 
 /* SweetAlert2 theme (global) */

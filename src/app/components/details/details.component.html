@@ -1,8 +1,8 @@
-<div>
+<div class="details-page">
     <!-- To include sidbar and the page -->
 
     <!-- Navbar -->
-    <section>
+    <section class="details-card details-nav-card">
         <nav class="navbar navbar-expand-lg bg-body-secondary details-top-nav">
             <div class="container-fluid justify-content-end">
                 <ul class="navbar-nav nav-tabs top-actions">
@@ -32,7 +32,7 @@
 
 
     <!-- Filters -->
-    <section class="bg-body-secondary" *ngIf="this.showFilterSection">
+    <section class="bg-body-secondary details-card" *ngIf="this.showFilterSection">
         <form [formGroup]="filterForm">
             <div class="row p-2 mt-1 mb-2 g-2 align-items-start details-filter-row">
                 <div class="col-12 col-md-3">
@@ -110,7 +110,7 @@
     </section>
 
     <!-- Table Contents -->
-    <section class="bg-body-secondary p-2" [class.mt-2]="!this.showFilterSection">
+    <section class="bg-body-secondary p-2 details-card" [class.mt-2]="!this.showFilterSection">
         <h3 class="ms-3 pt-2">Transactions</h3>
 
         <div class="container-fluid">

@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 })
 export class PaymentInoutComponent implements OnInit {
   paymentInForm: FormGroup;
+  allPartyList: any[] = [];
   partyList: any[] = [];
   balance: number = 0;
   typeofpay: any;
@@ -157,12 +158,19 @@ export class PaymentInoutComponent implements OnInit {
   getPartyList() {
     this.api.getPartyList(this.registeredphonenumber).subscribe(data => {
       if (data.status === 'SUCCESS') {
-        if (this.typeofpay === "PAYMENT IN") {
-          this.partyList = data.getPartyList.filter((party: any) => party.toreceivefromparty >= 0);
+        this.allPartyList = data.getPartyList || [];
+
+        // View/update should not be restricted; otherwise old records can become unselectable.
+        if (this.isview || this.isadvance) {
+          this.partyList = this.allPartyList;
+        } else if (this.typeofpay === "PAYMENT IN") {
+          // Payment coming in: show only parties with pending receive > 0
+          this.partyList = this.allPartyList.filter((party: any) => Number(party.toreceivefromparty) > 0);
         } else if (this.typeofpay === "PAYMENT OUT") {
-          this.partyList = data.getPartyList.filter((party: any) => party.topayparty >= 0);
-        } else if (this.isadvance){
-          this.partyList = data.getPartyList
+          // Payment going out: show only parties with pending pay > 0
+          this.partyList = this.allPartyList.filter((party: any) => Number(party.topayparty) > 0);
+        } else {
+          this.partyList = this.allPartyList;
         }
         if (this.isview && this.typeofpay === "PAYMENT IN") {
           const selectedParty = this.partyList.find((party: any) => party.partyname === this.paymentInForm.get('party')?.value);

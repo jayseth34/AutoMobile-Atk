@@ -1,7 +1,9 @@
 <div id="myModal" class="modal" [ngClass]="{'show': showModal}">
     <div class="modal-content">
-        <span class="close" (click)="closeModal()">&times;</span>
-        <h2>Payment History</h2>
+        <div class="ph-head">
+            <h2 class="ph-title">Payment History</h2>
+            <button type="button" class="ph-x" (click)="closeModal()" aria-label="Close">&times;</button>
+        </div>
         <div class="table-wrap">
         <table>
             <thead>
@@ -28,6 +30,6 @@
             </tfoot>
         </table>
         </div>
-        <button class="close-btn close-btn-mobile"  style="color: white; background-color: #3076f0; width: 100px;" (click)="closeModal()">CLOSE</button>
+        <button type="button" class="btn close-btn close-btn-mobile" (click)="closeModal()">Close</button>
     </div>
 </div>

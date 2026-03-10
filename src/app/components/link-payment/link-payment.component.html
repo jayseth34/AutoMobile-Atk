@@ -1,20 +1,25 @@
-    <div class="header">
-      <h2>Link Payment to Txns</h2>
-      <!-- <button mat-icon-button class="close-button">
-        <mat-icon>close</mat-icon>
-      </button> -->
+<div class="payment-link-page">
+  <div class="popup-container app-form-shell">
+    <div class="app-form-header">
+      <h2 class="app-form-title">Link Payment</h2>
+      <div class="lp-meta text-muted">
+        {{ customername }}
+      </div>
     </div>
+
+    <div class="app-form-divider"></div>
+
     <div class="input-row">
       <div class="input-group">
         <mat-form-field appearance="fill">
           <mat-label>Party</mat-label>
-          <input matInput id="party" [value]="customername" readonly>
+          <input matInput id="party" [value]="customername" readonly />
         </mat-form-field>
       </div>
       <div class="input-group">
         <mat-form-field appearance="fill">
           <mat-label>Received</mat-label>
-          <input matInput id="received" [value]="received" readonly>
+          <input matInput id="received" [value]="received" readonly />
         </mat-form-field>
       </div>
     </div>
@@ -32,7 +37,7 @@
     </div> 
 -->
     <div class="table-container">
-      <table mat-table [dataSource]="transactions" class="mat-elevation-z8">
+      <table mat-table [dataSource]="transactions" class="mat-elevation-z8 lp-table">
         <ng-container matColumnDef="disable">
           <th mat-header-cell *matHeaderCellDef>Disable</th>
           <td mat-cell *matCellDef="let transaction">
@@ -68,7 +73,7 @@
         <ng-container matColumnDef="linkedAmount">
           <th mat-header-cell *matHeaderCellDef>Linked Amount</th>
           <td mat-cell *matCellDef="let transaction">
-            <input matInput type="text" [value]="transaction.linkedAmount" [disabled]="transaction.disabled">
+            <input matInput class="lp-linked-input" type="text" [value]="transaction.linkedAmount" [disabled]="transaction.disabled" />
           </td>
         </ng-container>
   
@@ -76,9 +81,14 @@
         <tr mat-row *matRowDef="let row; columns: ['disable', 'date', 'type', 'refInvNo', 'total', 'balance', 'linkedAmount'];"></tr>
       </table>
     </div>
+
     <div class="footer">
-      <p>Total Unused: {{ totalUnused }}</p>
-      <button mat-button class="reset-button" (click)="reset()"  style="color: white; background-color: #3076f0; width: 100px;">RESET</button>
-      <button class="autolink-button" (click)="autoLinkTransactions()"  style="color: white; background-color: #3076f0; width: 100px;">Auto-Link</button>
-      <button mat-raised-button color="primary" class="done-button" (click)="saveChanges()"  style="color: white; background-color: #3076f0; width: 100px;">DONE</button>
+      <div class="unused-pill">Unused: {{ totalUnused }}</div>
+      <div class="actions">
+        <button type="button" class="btn reset-button" (click)="reset()">Reset</button>
+        <button type="button" class="btn autolink-button" (click)="autoLinkTransactions()">Auto-Link</button>
+        <button type="button" class="btn done-button" (click)="saveChanges()">Done</button>
+      </div>
     </div>
+  </div>
+</div>
