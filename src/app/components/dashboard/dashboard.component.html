@@ -14,7 +14,7 @@
   <div class="dash-layout">
     <main class="dash-main">
       <section class="dash-kpis">
-        <div class="card kpi kpi-receivable">
+        <div class="card kpi kpi-receivable click-card" role="button" tabindex="0" (click)="goReceivables()">
           <div class="kpi-top">
             <div class="kpi-title">Total Receivable</div>
             <div class="kpi-badge kpi-badge-in">&#8595;</div>
@@ -23,7 +23,7 @@
           <div class="kpi-sub">From {{ receivablePartiesCount }} Parties</div>
         </div>
 
-        <div class="card kpi kpi-payable">
+        <div class="card kpi kpi-payable click-card" role="button" tabindex="0" (click)="goPayables()">
           <div class="kpi-top">
             <div class="kpi-title">Total Payable</div>
             <div class="kpi-badge kpi-badge-out">&#8593;</div>
@@ -32,7 +32,7 @@
           <div class="kpi-sub">From {{ payablePartiesCount }} Parties</div>
         </div>
 
-        <div class="card kpi kpi-expense">
+        <div class="card kpi kpi-expense click-card" role="button" tabindex="0" (click)="goPurchaseBills()">
           <div class="kpi-top">
             <div class="kpi-title">Purchases</div>
             <div class="kpi-subtag">This Month</div>
@@ -42,7 +42,7 @@
         </div>
       </section>
 
-      <section class="card dash-chart">
+      <section class="card dash-chart click-card" role="button" tabindex="0" (click)="goSalesInvoices()">
         <div class="chart-head">
           <div class="chart-left">
             <div class="chart-title">Total Sale</div>
@@ -68,7 +68,7 @@
       </section>
 
       <section class="dash-bottom">
-        <div class="card mini pay-card">
+        <div class="card mini pay-card click-card" role="button" tabindex="0" (click)="goPayables()">
           <div class="mini-title"><span class="dot dot-red"></span> You'll Pay</div>
           <div class="mini-metric">&#8377; {{ youllpay | number:'1.0-0' }}</div>
           <ul class="mini-list">
@@ -79,7 +79,7 @@
           </ul>
         </div>
 
-        <div class="card mini receive-card">
+        <div class="card mini receive-card click-card" role="button" tabindex="0" (click)="goReceivables()">
           <div class="mini-title"><span class="dot dot-green"></span> You'll Receive</div>
           <div class="mini-metric">&#8377; {{ youllreceive | number:'1.0-0' }}</div>
           <ul class="mini-list">
@@ -90,7 +90,7 @@
           </ul>
         </div>
 
-        <div class="card mini purchase-card">
+        <div class="card mini purchase-card click-card" role="button" tabindex="0" (click)="goPurchaseBills()">
           <div class="mini-title"><span class="dot dot-blue"></span> Purchases</div>
           <div class="mini-metric">&#8377; {{ totalpurchase | number:'1.0-0' }}</div>
           <ul class="mini-list">
@@ -106,7 +106,7 @@
     </main>
 
     <aside class="dash-aside">
-      <section class="card aside-card">
+      <section class="card aside-card click-card" role="button" tabindex="0" (click)="goBanks()">
         <div class="aside-title">Cash & Bank</div>
         <div class="aside-rows">
           <div class="aside-row">
@@ -124,7 +124,7 @@
         </div>
       </section>
 
-      <section class="card aside-card">
+      <section class="card aside-card click-card" role="button" tabindex="0" (click)="goItems()">
         <div class="aside-title">Low Stocks Items</div>
         <ul class="mini-list tall">
           <li *ngFor="let lowstock of lowstocks">
@@ -136,7 +136,7 @@
         </ul>
       </section>
 
-      <section class="card aside-card">
+      <section class="card aside-card click-card" role="button" tabindex="0" (click)="goBanks()">
         <div class="aside-title">Bank Accounts</div>
         <ul class="mini-list tall">
           <li *ngFor="let bankaccount of bankaccounts">

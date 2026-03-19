@@ -301,6 +301,33 @@ export class DashboardComponent implements OnInit{
       this.router.navigateByUrl('/Purchase-Bills/add');
     }
 
+    goSalesInvoices() {
+      this.router.navigateByUrl('/Sale-Invoice');
+    }
+
+    goPurchaseBills() {
+      this.router.navigateByUrl('/Purchase-Bills');
+    }
+
+    goReceivables() {
+      this.dataService.partyHomePageSelectedTab = 'party';
+      this.router.navigateByUrl('/party-homepage');
+    }
+
+    goPayables() {
+      this.dataService.partyHomePageSelectedTab = 'party';
+      this.router.navigateByUrl('/party-homepage');
+    }
+
+    goItems() {
+      this.dataService.itemHomePageSelectedTab = 'item';
+      this.router.navigateByUrl('/item-homepage');
+    }
+
+    goBanks() {
+      this.router.navigateByUrl('/banks-homepage');
+    }
+
     @HostListener('window:resize')
     onResize() {
       // redraw graph to fit the new size

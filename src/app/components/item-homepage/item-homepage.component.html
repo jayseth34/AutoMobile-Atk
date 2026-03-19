@@ -1,10 +1,19 @@
-<mat-tab-group
-    [(selectedIndex)]="itemHomePageSelectedTabIndex"
-    (selectedTabChange)="onTabChange($event)"
->
-    <mat-tab label="PRODUCT"></mat-tab>
-    <mat-tab label="CATEGORY"></mat-tab>
-</mat-tab-group>
+<div class="app-page">
+    <div class="app-topbar">
+        <div class="app-titleblock">
+            <p class="app-kicker">Inventory</p>
+            <h1 class="app-title">Items</h1>
+            <p class="app-subtitle">Manage products and categories, monitor stock, and view item transactions.</p>
+        </div>
+    </div>
+
+    <mat-tab-group
+        [(selectedIndex)]="itemHomePageSelectedTabIndex"
+        (selectedTabChange)="onTabChange($event)"
+    >
+        <mat-tab label="PRODUCT"></mat-tab>
+        <mat-tab label="CATEGORY"></mat-tab>
+    </mat-tab-group>
 
 <!-- PRODUCT Tab Content -->
 <div class="table-container">
@@ -12,16 +21,17 @@
         <div class="grid-container">
             <!-- SIDEBAR -->
             <div class="sidebar scroll">
-                <div class="row">
-                    <mat-form-field class="col">
-                        <mat-label>Search here..</mat-label>
+                <div class="list-toolbar">
+                    <div class="circle-search" (click)="itemSearch.focus()">
+                        <mat-icon>search</mat-icon>
                         <input
-                            matInput
+                            #itemSearch
                             [(ngModel)]="searchTerm"
                             (input)="onSearch()"
+                            placeholder="Search items"
                         />
-                    </mat-form-field>
-                    <div class="col-auto">
+                    </div>
+                    <div class="toolbar-action">
                         <button
                             mat-raised-button
                             color="primary"
@@ -229,23 +239,23 @@
             </mat-card>
         </div>
     </ng-container>
-</div>
 
 <!-- CATEGORY Tab Content -->
     <ng-container *ngIf="itemHomePageSelectedTabIndex === 1">
         <div class="grid-container">
             <!-- SIDEBAR -->
             <div class="sidebar scroll">
-                <div class="row">
-                    <mat-form-field class="col">
-                        <mat-label>Search here..</mat-label>
+                <div class="list-toolbar">
+                    <div class="circle-search" (click)="categorySearch.focus()">
+                        <mat-icon>search</mat-icon>
                         <input
-                            matInput
+                            #categorySearch
                             [(ngModel)]="searchCategory"
                             (input)="onSearch()"
+                            placeholder="Search categories"
                         />
-                    </mat-form-field>
-                    <div class="col-auto">
+                    </div>
+                    <div class="toolbar-action">
                         <button
                             mat-raised-button
                             color="primary"
@@ -398,3 +408,5 @@
             </mat-card>
         </div>
     </ng-container>
+</div>
+</div>

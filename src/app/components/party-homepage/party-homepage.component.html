@@ -1,4 +1,12 @@
-<div>
+<div class="app-page">
+    <div class="app-topbar">
+        <div class="app-titleblock">
+            <p class="app-kicker">Directory</p>
+            <h1 class="app-title">Parties</h1>
+            <p class="app-subtitle">Manage parties and groups, track balances, and view transactions.</p>
+        </div>
+    </div>
+
     <mat-tab-group
         [(selectedIndex)]="selectedTabIndex"
         (selectedTabChange)="selectTab($event.index)"
@@ -6,23 +14,23 @@
         <mat-tab label="PARTY"> </mat-tab>
         <mat-tab label="GROUP"> </mat-tab>
     </mat-tab-group>
-</div>
 
 <div class="table-container">
     <ng-container *ngIf="dataService.partyHomePageSelectedTab === 'party'">
         <div class="grid-container">
             <!-- SIDEBAR -->
             <div class="sidebar scroll">
-                <div class="row">
-                    <mat-form-field class="col">
-                        <mat-label>Search here..</mat-label>
+                <div class="list-toolbar">
+                    <div class="circle-search" (click)="partySearch.focus()">
+                        <mat-icon>search</mat-icon>
                         <input
-                            matInput
+                            #partySearch
                             [(ngModel)]="searchTerm"
                             (input)="onSearch()"
+                            placeholder="Search parties"
                         />
-                    </mat-form-field>
-                    <div class="col-auto">
+                    </div>
+                    <div class="toolbar-action">
                         <button
                             mat-raised-button
                             (click)="openAddPartyModal('')"
@@ -219,16 +227,17 @@
         <div class="grid-container">
             <!-- SIDEBAR -->
             <div class="sidebar scroll">
-                <div class="row">
-                    <mat-form-field class="col">
-                        <mat-label>Search here..</mat-label>
+                <div class="list-toolbar">
+                    <div class="circle-search" (click)="groupSearch.focus()">
+                        <mat-icon>search</mat-icon>
                         <input
-                            matInput
+                            #groupSearch
                             [(ngModel)]="searchGroup"
                             (input)="onSearch()"
+                            placeholder="Search groups"
                         />
-                    </mat-form-field>
-                    <div class="col-auto">
+                    </div>
+                    <div class="toolbar-action">
                         <button
                             mat-raised-button
                             color="primary"
@@ -354,5 +363,6 @@
             </div>
         </div>
     </ng-container>
+</div>
 </div>
 

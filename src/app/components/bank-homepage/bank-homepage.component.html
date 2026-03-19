@@ -1,21 +1,28 @@
-<div>
+<div class="app-page">
+  <div class="app-topbar">
+    <div class="app-titleblock">
+      <p class="app-kicker">Finance</p>
+      <h1 class="app-title">Cash & Bank</h1>
+      <p class="app-subtitle">Track bank accounts and transactions, and do quick transfers.</p>
+    </div>
+  </div>
+
   <mat-tab-group>
     <mat-tab label="BANKS">
       <!-- Content for BANKS tab -->
     </mat-tab>
   </mat-tab-group>
-</div>
 
 <ng-container>
   <div class="grid-container">
     <!-- SIDEBAR -->
     <div class="sidebar">
-      <div class="row">
-        <mat-form-field class="col">
-          <mat-label>Search here..</mat-label>
-          <input matInput  [(ngModel)]="searchTerm" (input)="onSearch()">
-        </mat-form-field>
-        <div class="col-auto">
+      <div class="list-toolbar">
+        <div class="circle-search" (click)="bankSearch.focus()">
+          <mat-icon>search</mat-icon>
+          <input #bankSearch [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search banks" />
+        </div>
+        <div class="toolbar-action">
           <button mat-raised-button color="warn" class="add_banks_btn add-action-btn" (click)="openAddBanksModal()">+ ADD BANKS</button>
         </div>
       </div>
@@ -113,3 +120,4 @@
     </div>
   </div>
 </ng-container>
+</div>
