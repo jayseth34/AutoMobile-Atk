@@ -1,29 +1,58 @@
-<div class="dashboard">
-  <header class="dash-hero">
-    <div class="hero-left">
-      <p class="kicker">Dashboard</p>
-      <h1 class="title">Overview</h1>
-      <p class="subtitle">Sales, payments, stock, and cash at a glance.</p>
-    </div>
-  </header>
+<div class="dash">
+  <div class="dash-topbar">
+    <mat-form-field class="dash-search" appearance="outline">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput placeholder="Search Transactions" />
+    </mat-form-field>
 
-  <div class="dash-grid">
+    <div class="dash-actions">
+      <button type="button" class="action-btn action-sale" (click)="goAddSale()">+ Add Sale</button>
+      <button type="button" class="action-btn action-purchase" (click)="goAddPurchase()">+ Add Purchase</button>
+    </div>
+  </div>
+
+  <div class="dash-layout">
     <main class="dash-main">
-      <section class="dash-row top-row">
-        <div class="card sale-card">
-          <div class="card-head">
-            <div>
-              <div class="card-title">Sales</div>
-              <div class="card-metric">
-                <span class="currency">&#8377;</span>
-                <span class="metric">{{ totalSales | number:'1.0-0' }}</span>
-              </div>
-              <div class="card-sub">Total sales (selected period)</div>
+      <section class="dash-kpis">
+        <div class="card kpi kpi-receivable">
+          <div class="kpi-top">
+            <div class="kpi-title">Total Receivable</div>
+            <div class="kpi-badge kpi-badge-in">&#8595;</div>
+          </div>
+          <div class="kpi-metric">&#8377; {{ youllreceive | number:'1.0-0' }}</div>
+          <div class="kpi-sub">From {{ receivablePartiesCount }} Parties</div>
+        </div>
+
+        <div class="card kpi kpi-payable">
+          <div class="kpi-top">
+            <div class="kpi-title">Total Payable</div>
+            <div class="kpi-badge kpi-badge-out">&#8593;</div>
+          </div>
+          <div class="kpi-metric">&#8377; {{ youllpay | number:'1.0-0' }}</div>
+          <div class="kpi-sub">From {{ payablePartiesCount }} Parties</div>
+        </div>
+
+        <div class="card kpi kpi-expense">
+          <div class="kpi-top">
+            <div class="kpi-title">Purchases</div>
+            <div class="kpi-subtag">This Month</div>
+          </div>
+          <div class="kpi-metric">&#8377; {{ totalpurchase | number:'1.0-0' }}</div>
+          <div class="kpi-sub">Bills and expenses (proxy)</div>
+        </div>
+      </section>
+
+      <section class="card dash-chart">
+        <div class="chart-head">
+          <div class="chart-left">
+            <div class="chart-title">Total Sale</div>
+            <div class="chart-metric">&#8377; {{ totalSales | number:'1.0-0' }}</div>
+            <div class="chart-delta" *ngIf="salesDeltaLabel" [class.down]="(salesDeltaPct ?? 0) < 0" [class.up]="(salesDeltaPct ?? 0) > 0">
+              {{ salesDeltaLabel }}
             </div>
           </div>
 
-          <mat-form-field class="period-field" appearance="fill">
-            <mat-label>Time Period</mat-label>
+          <mat-form-field class="period-field" appearance="outline">
             <mat-select [(value)]="selectedPeriod" (selectionChange)="onPeriodChange($event.value)">
               <mat-option value="This Month">This Month</mat-option>
               <mat-option value="Last Month">Last Month</mat-option>
@@ -33,24 +62,15 @@
           </mat-form-field>
         </div>
 
-        <div class="card graph-card">
-          <div class="graph-head">
-            <div class="graph-title">Sales trend</div>
-            <div class="graph-sub">Line chart</div>
-          </div>
-          <div class="graph-wrap">
-            <canvas id="salesGraph" width="600" height="300"></canvas>
-          </div>
+        <div class="chart-wrap">
+          <canvas id="salesGraph"></canvas>
         </div>
       </section>
 
-      <section class="dash-row mid-row">
-        <div class="card pay-card">
-          <div class="pill danger"><span class="arrow">&#8593;</span> You'll Pay</div>
-          <div class="card-metric big">
-            <span class="currency">&#8377;</span>
-            <span class="metric">{{ youllpay | number:'1.0-0' }}</span>
-          </div>
+      <section class="dash-bottom">
+        <div class="card mini pay-card">
+          <div class="mini-title"><span class="dot dot-red"></span> You'll Pay</div>
+          <div class="mini-metric">&#8377; {{ youllpay | number:'1.0-0' }}</div>
           <ul class="mini-list">
             <li *ngFor="let o of youllpayreceiveparty" [class.hidden]="!(o.partypay > 0)">
               <span class="name">{{ o.partyname }}</span>
@@ -59,12 +79,9 @@
           </ul>
         </div>
 
-        <div class="card receive-card">
-          <div class="pill success"><span class="arrow">&#8595;</span> You'll Receive</div>
-          <div class="card-metric big">
-            <span class="currency">&#8377;</span>
-            <span class="metric">{{ youllreceive | number:'1.0-0' }}</span>
-          </div>
+        <div class="card mini receive-card">
+          <div class="mini-title"><span class="dot dot-green"></span> You'll Receive</div>
+          <div class="mini-metric">&#8377; {{ youllreceive | number:'1.0-0' }}</div>
           <ul class="mini-list">
             <li *ngFor="let o of youllpayreceiveparty" [class.hidden]="!(o.partyreceive > 0)">
               <span class="name">{{ o.partyname }}</span>
@@ -73,19 +90,9 @@
           </ul>
         </div>
 
-        <div class="card purchase-card">
-          <div class="pill neutral">
-            <img
-              class="pill-icon"
-              src="https://static.vecteezy.com/system/resources/previews/024/657/968/original/shopping-cart-icon-with-colorful-design-isolated-on-white-background-simple-shopping-cart-illustration-free-vector.jpg"
-              alt="Purchases"
-            />
-            Purchases
-          </div>
-          <div class="card-metric big">
-            <span class="currency">&#8377;</span>
-            <span class="metric">{{ totalpurchase | number:'1.0-0' }}</span>
-          </div>
+        <div class="card mini purchase-card">
+          <div class="mini-title"><span class="dot dot-blue"></span> Purchases</div>
+          <div class="mini-metric">&#8377; {{ totalpurchase | number:'1.0-0' }}</div>
           <ul class="mini-list">
             <li *ngFor="let purchase of purchasedash" [class.hidden]="!(purchase.typeofpay=='PURCHASE' && purchase.total!=0)">
               <span class="name">{{ purchase.item }}</span>
@@ -99,17 +106,26 @@
     </main>
 
     <aside class="dash-aside">
-      <div class="card aside-card">
-        <div class="aside-title">Stock Inventory</div>
-        <div class="aside-metric">
-          <span class="currency">&#8377;</span>
-          <span class="metric">{{ stockvalue | number:'1.0-0' }}</span>
+      <section class="card aside-card">
+        <div class="aside-title">Cash & Bank</div>
+        <div class="aside-rows">
+          <div class="aside-row">
+            <span class="label">Cash In Hand</span>
+            <span class="val">&#8377; {{ cashinhand | number:'1.0-0' }}</span>
+          </div>
+          <div class="aside-row">
+            <span class="label">Total Bank Balance</span>
+            <span class="val">&#8377; {{ bankamount | number:'1.0-0' }}</span>
+          </div>
+          <div class="aside-row">
+            <span class="label">Stock Value</span>
+            <span class="val">&#8377; {{ stockvalue | number:'1.0-0' }}</span>
+          </div>
         </div>
-        <div class="aside-sub">Stock value</div>
-      </div>
+      </section>
 
-      <div class="card aside-card">
-        <div class="aside-title">Low Stocks</div>
+      <section class="card aside-card">
+        <div class="aside-title">Low Stocks Items</div>
         <ul class="mini-list tall">
           <li *ngFor="let lowstock of lowstocks">
             <span class="name">{{ lowstock.item }}</span>
@@ -118,11 +134,10 @@
             </span>
           </li>
         </ul>
-      </div>
+      </section>
 
-      <div class="card aside-card">
-        <div class="aside-title">Cash & Bank</div>
-        <div class="aside-sub">Bank accounts</div>
+      <section class="card aside-card">
+        <div class="aside-title">Bank Accounts</div>
         <ul class="mini-list tall">
           <li *ngFor="let bankaccount of bankaccounts">
             <span class="name">{{ bankaccount.bankname }}</span>
@@ -131,7 +146,7 @@
             </span>
           </li>
         </ul>
-      </div>
+      </section>
     </aside>
   </div>
 </div>
