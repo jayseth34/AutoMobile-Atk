@@ -1,6 +1,7 @@
 /*the container must be positioned relative:*/
 .autocomplete {
   position: relative;
+  z-index: 10;
 }
 
 input {
@@ -22,34 +23,41 @@ input.ng-touched.ng-invalid {
 }
 
 .autocomplete-items {
-  max-height: 200px;
-  overflow: scroll;
+  max-height: min(360px, 42vh);
+  overflow: auto;
+  overflow-x: auto;
   position: absolute;
-  border: 1px solid #d4d4d4;
-  /* border-bottom: none; */
-  border-top: none;
-  z-index: 99;
+  border: 1px solid var(--color-border);
+  z-index: 2000;
   /*position the autocomplete items to be the same width as the container:*/
-  top: 105%;
+  top: calc(100% + 6px);
   left: 0;
   right: 0;
-  border-radius: 5px;
-  color: #3a3a3a;
+  border-radius: 12px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  overscroll-behavior: contain;
+  min-width: 360px;
+  max-width: min(740px, 92vw);
 }
 
 .autocomplete-items > table {
   table-layout: auto;
   width: 100%;
+  min-width: max-content;
 }
 
 .autocomplete-items table td {
   color: #3a3a3a;
   font-weight: 400;
+  white-space: nowrap;
 }
 
 .autocomplete-items table th {
   color: #949494;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .autocomplete-items div div {
@@ -61,14 +69,20 @@ input.ng-touched.ng-invalid {
 
 /*when hovering an item:*/
 .autocomplete-items div:hover {
-  background-color: #e9e9e9;
+  background-color: rgba(37, 99, 235, 0.06);
 }
 
 /*when navigating through the items using the arrow keys:*/
 .autocomplete-items > table tr.autocomplete-active > td {
-  background-color: #e9e9e9 !important;
+  background-color: rgba(37, 99, 235, 0.10) !important;
 }
 
 .transparent {
   background-color: transparent;
+}
+
+@media (max-width: 480px) {
+  .autocomplete-items {
+    min-width: 280px;
+  }
 }

@@ -48,7 +48,12 @@
                       <mat-label>Payment Type</mat-label>
                       <mat-select formControlName="type" (selectionChange)="handlePaymentTypeChange(i)">
                         <mat-option value="" disabled>Select Type</mat-option>
-                        <mat-option *ngFor="let option of paymentOptions" [value]="option">{{ option }}</mat-option>
+                        <mat-optgroup label="Quick">
+                          <mat-option *ngFor="let option of quickPaymentOptions" [value]="option">{{ option }}</mat-option>
+                        </mat-optgroup>
+                        <mat-optgroup *ngIf="bankPaymentOptions.length" label="Banks">
+                          <mat-option *ngFor="let option of bankPaymentOptions" [value]="option">{{ option }}</mat-option>
+                        </mat-optgroup>
                       </mat-select>
                     </mat-form-field>
                   </div>

@@ -119,6 +119,7 @@ export class EditDetailComponent implements OnInit {
     return this.items().map((item) => {
       return {
         itemName: item.itemname,
+        itemCode: item.itemcode,
         salePrice: item.saleprice,
         purchasePrice: item.purchaseprice,
         stock: item.remainingquantity,
@@ -128,7 +129,16 @@ export class EditDetailComponent implements OnInit {
   });
 
   bankNameList = computed(() => {
-    return this.banks().map((bank) => bank.accountdisplayname ?? bank.type);
+    const names = this.banks()
+      .map((bank) => bank.accountdisplayname ?? bank.type)
+      .filter((v) => !!v);
+
+    // Keep CASH/CHEQUE easy to access without scrolling.
+    const quick = ["CASH", "CHEQUE"].filter((q) => names.includes(q));
+    const bankNames = names.filter((n) => n !== "CASH" && n !== "CHEQUE");
+
+    if (bankNames.length === 0) return quick;
+    return [...quick, "__SEP__", ...bankNames];
   });
 
   itemColumnInfo: ColumnInfo[] = [
@@ -136,6 +146,11 @@ export class EditDetailComponent implements OnInit {
       columnName: "Item Name",
       isColoured: false,
       identifier: "itemName",
+    },
+    {
+      columnName: "Item Code",
+      isColoured: false,
+      identifier: "itemCode",
     },
     {
       columnName: "Sale Price",
@@ -876,54 +891,52 @@ export class EditDetailComponent implements OnInit {
   }
 
   handlePaymentInputClick() {
-    let bankListString = localStorage.getItem("bankList");
+    if (this.paymentInfoInitialized) return;
+
+    const bankListString = localStorage.getItem("bankList");
     let bankList: Bank[] = [];
     const paymentInfoList = this.paymentInfoValue.value.map(
       (item) => item.type,
     );
 
-    if (!bankListString) {
-      let rq: GetBankRq = {
-        registeredphonenumber: this.registeredPhoneNumber,
-      };
-
-      this.api.getBankList(rq).subscribe((rs: GetBankRs) => {
-        if (rs.status === "SUCCESS") {
-          localStorage.setItem("bankList", JSON.stringify(rs.bankslist));
-          bankList = rs.bankslist;
-          bankList.map((bank) => {
-            let bankName = bank.accountdisplayname ?? bank.type ?? "";
-            if (
-              !paymentInfoList.includes(bankName) &&
-              this.bankNameList().indexOf(bankName) == -1
-            ) {
-              this.banks.update((banks) => [...banks, bank]);
-            }
-          });
-          this.paymentInfoInitialized = true;
-          // console.log('Bank list after fetching: ', this.banks());
-        } else {
-          Swal.fire(
-            `Could not get Bank list: ${rs.statusmessage}`,
-            "",
-            "error",
-          );
-        }
-      });
-    } else {
-      bankList = JSON.parse(bankListString);
-      bankList.map((bank) => {
-        let bankName = bank.accountdisplayname ?? bank.type ?? "";
+    const mergeBanks = (list: Bank[]) => {
+      list.forEach((bank) => {
+        const bankName = bank.accountdisplayname ?? bank.type ?? "";
         if (
+          bankName &&
           !paymentInfoList.includes(bankName) &&
-          this.bankNameList().indexOf(bankName) == -1
+          this.bankNameList().indexOf(bankName) === -1
         ) {
           this.banks.update((banks) => [...banks, bank]);
         }
-        this.paymentInfoInitialized = true;
       });
-      // console.log('Bank list after locastorage: ', this.banks());
-    }
+      this.paymentInfoInitialized = true;
+    };
+
+    const rq: GetBankRq = { registeredphonenumber: this.registeredPhoneNumber };
+
+    // Always call GetBanks once per page load so bank list stays fresh.
+    this.api.getBankList(rq).subscribe((rs: GetBankRs) => {
+      if (rs.status === "SUCCESS") {
+        localStorage.setItem("bankList", JSON.stringify(rs.bankslist ?? []));
+        mergeBanks(rs.bankslist ?? []);
+        return;
+      }
+
+      // Fallback to cached list if API fails.
+      if (bankListString) {
+        try {
+          bankList = JSON.parse(bankListString) ?? [];
+        } catch {
+          bankList = [];
+        }
+        mergeBanks(bankList);
+        return;
+      }
+
+      this.paymentInfoInitialized = true;
+      Swal.fire(`Could not get Bank list: ${rs.statusmessage}`, "", "error");
+    });
   }
 
   handlePartyChange = (partyName: string) => {

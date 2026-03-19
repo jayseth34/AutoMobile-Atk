@@ -53,9 +53,11 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
       }
     }
 
-    if (this.getFormControl.value){
-      // console.log('FormControl value present');
-      this.formSubscripton = this.getFormControl.valueChanges.subscribe((item: any) => this.filterList(item));
+    if (this.getFormControl.value) {
+      // Keep list in sync with external changes, but don't force-open the dropdown.
+      this.formSubscripton = this.getFormControl.valueChanges.subscribe((item: any) =>
+        this.filterList(item, false),
+      );
     }
   }
 
@@ -69,7 +71,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
       this.itemList = this.ogItemList;
       if (this.ogItemList && this.ogItemList.length > 0 && !this.design) {
         if (this.getFormControl?.value)
-          this.filterList(this.getFormControl.value);
+          this.filterList(this.getFormControl.value, false);
       }
 
     }
@@ -81,7 +83,11 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
 
   handleInputCLick() {
     this.showList = true;
-    this.itemList = this.ogItemList;
+    this.filterList(this.getFormControl?.value ?? "", true);
+  }
+
+  handleUserTyping(value: string) {
+    this.filterList(value ?? "", true);
   }
 
   handleKeyPress(event: KeyboardEvent) {
@@ -122,32 +128,30 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
     this.closeList();
   }
 
-  filterList(value: string) {
-    console.log('Filter list called');
-    value = value.toUpperCase();
-    this.showList = true;
+  private norm(v: any): string {
+    return (v ?? "").toString().trim().toUpperCase();
+  }
+
+  filterList(value: string, openList: boolean) {
+    const query = this.norm(value);
+    if (openList) this.showList = true;
     // if (value.length == 0)
     //   this.currentFocus = -1;
     // else
     //   this.currentFocus = 0;
-    this.itemList = this.ogItemList.filter((item: any) => {
-      let temp: string;
-      if (this.dataIsObject)
-        temp = item[this.columns[0].identifier];
-      else
-        temp = item;
 
-      temp = temp.toUpperCase();
-      if (temp.match(`^${value}`))
-        return true;
-      else
-        return false;
-    });
-    console.log('Filtered list:', this.itemList);
-
-    if (!this.calledFirst) {
-      this.calledFirst = true;
-      this.closeList();
+    if (!query) {
+      this.itemList = this.ogItemList;
+      return;
     }
+
+    this.itemList = (this.ogItemList ?? []).filter((item: any) => {
+      if (!this.dataIsObject) return this.norm(item).includes(query);
+
+      // Search across all visible columns (not just the first).
+      return (this.columns ?? []).some((col) =>
+        this.norm(item?.[col.identifier]).includes(query),
+      );
+    });
   }
 }

@@ -13,6 +13,7 @@
       [placeholder]="placeholder"
       [formControlName]="controlName"
       (click)="handleInputCLick()"
+      (input)="handleUserTyping(($any($event.target)).value)"
       (keydown)="handleKeyPress($event)"
       class="form-control"
     />
@@ -74,8 +75,11 @@
         aria-label="Payment Type Select"
         formControlName="type"
       >
-        <option value="{{value}}"> {{ value }} </option>
-        <option *ngFor="let item of itemList" value="{{item}}"> {{item}} </option>
+        <option *ngIf="value" [value]="value">{{ value }}</option>
+        <ng-container *ngFor="let item of itemList">
+          <option *ngIf="item === '__SEP__'" value="" disabled>────────</option>
+          <option *ngIf="item !== '__SEP__' && item !== value" [value]="item">{{ item }}</option>
+        </ng-container>
       </select>
       <label > Payment Type </label>
     </div>

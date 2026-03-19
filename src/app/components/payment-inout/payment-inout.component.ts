@@ -27,6 +27,8 @@ export class PaymentInoutComponent implements OnInit {
   amount1Value: number = 0;
   isview: boolean = false;
   paymentOptions: any[] = [];
+  bankPaymentOptions: string[] = [];
+  quickPaymentOptions: string[] = ['CASH', 'CHEQUE'];
   isadvance: boolean;
   isUpdatingValue: any;
 
@@ -362,11 +364,16 @@ export class PaymentInoutComponent implements OnInit {
     }
     this.api.getAccounts(body).subscribe((data:any) => {
       if (data.status === 'SUCCESS') {
-        const apiOptions = data.bankslist.map((bank: any) => bank.accountdisplayname);
-        this.paymentOptions = [...apiOptions, 'CASH', 'CHEQUE'];
+        const apiOptions = (data.bankslist ?? [])
+          .map((bank: any) => bank.accountdisplayname)
+          .filter((v: any) => !!v)
+          .filter((v: string) => v !== 'CASH' && v !== 'CHEQUE');
+        this.bankPaymentOptions = Array.from(new Set(apiOptions));
+        this.paymentOptions = [...this.quickPaymentOptions, ...this.bankPaymentOptions];
       } else {
         console.error('Failed to load payment options:', data.status);
-        this.paymentOptions = ['CASH', 'CHEQUE'];
+        this.bankPaymentOptions = [];
+        this.paymentOptions = [...this.quickPaymentOptions];
       }
     });
   }
