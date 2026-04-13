@@ -255,6 +255,8 @@ button[mat-mini-fab],
   left: 0.6rem !important;
   right: auto !important;
   padding: 0 0.45rem !important;
+  /* Bootstrap default: don't let the floating label block clicks/taps into the input */
+  pointer-events: none;
   color: rgba(102, 112, 133, 0.95);
   font-size: 0.78rem;
   line-height: 1.35 !important;

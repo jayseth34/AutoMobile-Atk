@@ -113,7 +113,7 @@ export class AddPartyComponent implements OnInit {
     if (!this.dataService.isPartyUpdate){
       this.partyGroup = 'GENERAL'
     }
-    if(this.data.status='SUCCESS'){
+    if(this.data.status === 'SUCCESS'){
       this.populateForm(this.data.partyDetails) 
       this.reverseMapping(this.data.partyDetails)
       if (!this.cs.isUndefineOrNull(this.data.partyDetails.topayorreceive)) {
@@ -123,10 +123,8 @@ export class AddPartyComponent implements OnInit {
         this.labelText = 'Custom Limit'
         this.isCustomLimit = true
       }
-      if(!this.cs.isUndefineOrNull(this.data.partyDetails.topayorreceive) 
-        && (this.data.partyDetails.topayorreceive=='PAY' || this.data.partyDetails.topayorreceive == 'RECEIVE')){
-          this.addPartyForm.get('toPayOrReceiveControl')?.disable(); 
-        }
+      // In edit mode, allow changing To Pay / To Receive (do not freeze the field).
+      this.addPartyForm.get('toPayOrReceiveControl')?.enable({ emitEvent: false });
     }
   }
 
