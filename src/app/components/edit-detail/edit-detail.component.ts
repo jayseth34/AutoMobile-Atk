@@ -80,6 +80,7 @@ export class EditDetailComponent implements OnInit {
   fullpayment: boolean = false;
   showAmtDetails: boolean = true;
   paymentInfoInitialized: boolean = false;
+  private lastBankFetchAt = 0;
   deletePayDisabled: boolean = true;
   ogBalance: number = 0;
   banks = signal<Bank[]>([
@@ -138,7 +139,7 @@ export class EditDetailComponent implements OnInit {
     const bankNames = names.filter((n) => n !== "CASH" && n !== "CHEQUE");
 
     if (bankNames.length === 0) return quick;
-    return [...quick, "__SEP__", ...bankNames];
+    return [...quick, ...bankNames];
   });
 
   itemColumnInfo: ColumnInfo[] = [
@@ -891,7 +892,10 @@ export class EditDetailComponent implements OnInit {
   }
 
   handlePaymentInputClick() {
-    if (this.paymentInfoInitialized) return;
+    // Allow refresh so newly created banks show up without reloading the page.
+    const now = Date.now();
+    if (now - this.lastBankFetchAt < 2000) return;
+    this.lastBankFetchAt = now;
 
     const bankListString = localStorage.getItem("bankList");
     let bankList: Bank[] = [];
@@ -899,7 +903,7 @@ export class EditDetailComponent implements OnInit {
       (item) => item.type,
     );
 
-    const mergeBanks = (list: Bank[]) => {
+      const mergeBanks = (list: Bank[]) => {
       list.forEach((bank) => {
         const bankName = bank.accountdisplayname ?? bank.type ?? "";
         if (
@@ -916,10 +920,13 @@ export class EditDetailComponent implements OnInit {
     const rq: GetBankRq = { registeredphonenumber: this.registeredPhoneNumber };
 
     // Always call GetBanks once per page load so bank list stays fresh.
-    this.api.getBankList(rq).subscribe((rs: GetBankRs) => {
-      if (rs.status === "SUCCESS") {
-        localStorage.setItem("bankList", JSON.stringify(rs.bankslist ?? []));
-        mergeBanks(rs.bankslist ?? []);
+    this.api.getBankList(rq).subscribe((rs: GetBankRs | any) => {
+      const status = (rs?.status ?? "").toString().trim().toUpperCase();
+      const list = (rs?.bankslist ?? rs?.banksList ?? rs?.getBankList ?? []) as Bank[];
+
+      if (status === "SUCCESS" || status === "SUCCESSFUL" || status === "OK") {
+        localStorage.setItem("bankList", JSON.stringify(list ?? []));
+        mergeBanks(list ?? []);
         return;
       }
 

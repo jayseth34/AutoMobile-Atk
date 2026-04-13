@@ -31,7 +31,7 @@
         <!-- ACCOUNT NAME Column -->
         <ng-container matColumnDef="accountdisplayname">
           <mat-header-cell *matHeaderCellDef> ACCOUNT NAME </mat-header-cell>
-          <mat-cell *matCellDef="let bank" (click)="handleClick(bank)" [ngClass]="{ 'selectedBank-row-td': isSelectedBank(bank.accountdisplayname) }">
+          <mat-cell *matCellDef="let bank" (click)="handleClick(bank)" (dblclick)="openAddBanksModal(bank)" [ngClass]="{ 'selectedBank-row-td': isSelectedBank(bank.accountdisplayname) }">
             {{ bank.accountdisplayname }}
           </mat-cell>
         </ng-container>
@@ -39,7 +39,7 @@
         <!-- AMOUNT Column -->
         <ng-container matColumnDef="amount">
           <mat-header-cell *matHeaderCellDef> AMOUNT </mat-header-cell>
-          <mat-cell *matCellDef="let bank" (click)="handleClick(bank)" [ngClass]="{ 'selectedBank-row-td': isSelectedBank(bank.accountdisplayname) }" 
+          <mat-cell *matCellDef="let bank" (click)="handleClick(bank)" (dblclick)="openAddBanksModal(bank)" [ngClass]="{ 'selectedBank-row-td': isSelectedBank(bank.accountdisplayname) }" 
                     [ngStyle]="{ 'color': dataService.getColor(bank.amount, 0) }">
             {{ bank.amount }}
           </mat-cell>
@@ -115,7 +115,7 @@
       </ng-container>
 
         <mat-header-row *matHeaderRowDef="['transactionid', 'type', 'name', 'date', 'amount', 'options']"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: ['transactionid', 'type', 'name', 'date', 'amount', 'options'];" (click)="handleTransaction(row)"></mat-row>
+        <mat-row *matRowDef="let row; columns: ['transactionid', 'type', 'name', 'date', 'amount', 'options'];" (dblclick)="handleTransaction(row)"></mat-row>
       </mat-table>
     </div>
   </div>

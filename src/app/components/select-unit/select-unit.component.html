@@ -4,7 +4,7 @@
       <div class="col-sm">
         <label for="base-unit">BASE UNIT</label>
         <select class="form-select" formControlName="selectedOption1" (ngModelChange)="unitConversion()" name="base-unit">
-          <option value="null" disabled>None</option>
+          <option [ngValue]="''">None</option>
           <option *ngFor="let option of options1" [ngValue]="option.value">
             {{ option.label }}
           </option>
@@ -13,7 +13,7 @@
       <div class="col-sm">
         <label for="secondary-unit">SECONDARY UNIT</label>
         <select class="form-select" formControlName="selectedOption2" (ngModelChange)="unitConversion()" name="secondary-unit">
-          <option value="null" disabled>None</option>
+          <option [ngValue]="''">None</option>
           <option *ngFor="let option of options2" [ngValue]="option.value">
             {{ option.label }}
           </option>

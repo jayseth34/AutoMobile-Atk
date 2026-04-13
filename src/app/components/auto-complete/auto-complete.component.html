@@ -77,8 +77,7 @@
       >
         <option *ngIf="value" [value]="value">{{ value }}</option>
         <ng-container *ngFor="let item of itemList">
-          <option *ngIf="item === '__SEP__'" value="" disabled>────────</option>
-          <option *ngIf="item !== '__SEP__' && item !== value" [value]="item">{{ item }}</option>
+          <option *ngIf="item !== value" [value]="item">{{ item }}</option>
         </ng-container>
       </select>
       <label > Payment Type </label>

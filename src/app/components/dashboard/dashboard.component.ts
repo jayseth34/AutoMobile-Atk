@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit, AfterViewInit{
   registeredPhoneNumber: number;
   youllreceive: number;
   youllpay: number;
@@ -81,6 +81,11 @@ export class DashboardComponent implements OnInit{
         });
       }
       this.drawGraph();
+    }
+
+    ngAfterViewInit(): void {
+      // Ensure canvas has the correct rendered size before first draw.
+      setTimeout(() => this.drawGraph());
     }
 
     fetchSalesData(period: string) {

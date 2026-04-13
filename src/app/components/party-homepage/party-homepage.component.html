@@ -55,6 +55,7 @@
                                 (click)="
                                     partyHandleClick($event, partydetail.partyname)
                                 "
+                                (dblclick)="openAddPartyModal(partydetail.partyname)"
                                 [ngClass]="{
                                     'selectedParty-row-td': isSelectedParty(
                                         partydetail.partyname
@@ -213,7 +214,7 @@
                     <tr
                         mat-row
                         *matRowDef="let row; columns: ['type', 'number', 'date', 'total', 'balance', 'status', 'options']"
-                        (click) = "handleEdit(row)"
+                        (dblclick)="handleEdit(row)"
                     ></tr>
                 </table>
             </div>
@@ -262,6 +263,7 @@
                                 mat-cell
                                 *matCellDef="let party"
                                 (click)="groupHandleClick($event, party.partygroup)"
+                                (dblclick)="openAddPartyGroupModal(party.partygroup)"
                                 [ngClass]="{
                                     'selectedParty-row-td': isSelectedGroup(
                                         party.partygroup

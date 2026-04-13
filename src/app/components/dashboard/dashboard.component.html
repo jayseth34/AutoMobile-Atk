@@ -52,8 +52,8 @@
             </div>
           </div>
 
-          <mat-form-field class="period-field" appearance="outline">
-            <mat-select [(value)]="selectedPeriod" (selectionChange)="onPeriodChange($event.value)">
+          <mat-form-field class="period-field" appearance="outline" (click)="$event.stopPropagation()">
+            <mat-select [(value)]="selectedPeriod" (selectionChange)="onPeriodChange($event.value)" (click)="$event.stopPropagation()">
               <mat-option value="This Month">This Month</mat-option>
               <mat-option value="Last Month">Last Month</mat-option>
               <mat-option value="This Quarter">This Quarter</mat-option>
@@ -106,18 +106,18 @@
     </main>
 
     <aside class="dash-aside">
-      <section class="card aside-card click-card" role="button" tabindex="0" (click)="goBanks()">
+      <section class="card aside-card">
         <div class="aside-title">Cash & Bank</div>
         <div class="aside-rows">
           <div class="aside-row">
             <span class="label">Cash In Hand</span>
             <span class="val">&#8377; {{ cashinhand | number:'1.0-0' }}</span>
           </div>
-          <div class="aside-row">
+          <div class="aside-row clickable" role="button" tabindex="0" (click)="goBanks()" (keydown.enter)="goBanks()">
             <span class="label">Total Bank Balance</span>
             <span class="val">&#8377; {{ bankamount | number:'1.0-0' }}</span>
           </div>
-          <div class="aside-row">
+          <div class="aside-row clickable" role="button" tabindex="0" (click)="goItems()" (keydown.enter)="goItems()">
             <span class="label">Stock Value</span>
             <span class="val">&#8377; {{ stockvalue | number:'1.0-0' }}</span>
           </div>

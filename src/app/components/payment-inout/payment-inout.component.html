@@ -46,7 +46,7 @@
                   <div class="pay-field">
                     <mat-form-field>
                       <mat-label>Payment Type</mat-label>
-                      <mat-select formControlName="type" (selectionChange)="handlePaymentTypeChange(i)">
+                      <mat-select formControlName="type" (selectionChange)="handlePaymentTypeChange(i)" (openedChange)="onPaymentTypeOpen($event)">
                         <mat-option value="" disabled>Select Type</mat-option>
                         <mat-optgroup label="Quick">
                           <mat-option *ngFor="let option of quickPaymentOptions" [value]="option">{{ option }}</mat-option>

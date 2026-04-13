@@ -53,7 +53,9 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
       }
     }
 
-    if (this.getFormControl.value) {
+    // In "design" mode we render a native <select>. Filtering the list based on the
+    // current selected value would hide other options (banks), so don't auto-filter.
+    if (this.getFormControl.value && !this.design) {
       // Keep list in sync with external changes, but don't force-open the dropdown.
       this.formSubscripton = this.getFormControl.valueChanges.subscribe((item: any) =>
         this.filterList(item, false),
@@ -82,6 +84,12 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
   }
 
   handleInputCLick() {
+    // For native <select> mode, always show the full list.
+    if (this.design) {
+      this.itemList = this.ogItemList;
+      return;
+    }
+
     this.showList = true;
     this.filterList(this.getFormControl?.value ?? "", true);
   }

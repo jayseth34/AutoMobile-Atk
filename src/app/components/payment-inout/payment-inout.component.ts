@@ -6,6 +6,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { CommonService } from 'src/app/services/common.service';
 import { DataService } from 'src/app/services/data.service';
 import Swal from 'sweetalert2';
+import { GetBankRq, GetBankRs, Bank } from 'src/app/models';
 
 @Component({
   selector: 'app-payment-inout',
@@ -31,6 +32,7 @@ export class PaymentInoutComponent implements OnInit {
   quickPaymentOptions: string[] = ['CASH', 'CHEQUE'];
   isadvance: boolean;
   isUpdatingValue: any;
+  private lastBankFetchAt = 0;
 
   constructor(public fb: FormBuilder, public api: ApiService, public dataService: DataService, public router: Router, public cs: CommonService) {
     this.balance = 0;
@@ -359,23 +361,66 @@ export class PaymentInoutComponent implements OnInit {
   }
 
   getPaymentOptions() {
-    let body = {
-      registeredphonenumber:this.registeredphonenumber
-    }
-    this.api.getAccounts(body).subscribe((data:any) => {
-      if (data.status === 'SUCCESS') {
-        const apiOptions = (data.bankslist ?? [])
-          .map((bank: any) => bank.accountdisplayname)
-          .filter((v: any) => !!v)
-          .filter((v: string) => v !== 'CASH' && v !== 'CHEQUE');
-        this.bankPaymentOptions = Array.from(new Set(apiOptions));
-        this.paymentOptions = [...this.quickPaymentOptions, ...this.bankPaymentOptions];
-      } else {
-        console.error('Failed to load payment options:', data.status);
-        this.bankPaymentOptions = [];
-        this.paymentOptions = [...this.quickPaymentOptions];
+    // Avoid hammering the API if multiple selects open quickly.
+    const now = Date.now();
+    if (now - this.lastBankFetchAt < 1500) return;
+    this.lastBankFetchAt = now;
+
+    const rq: GetBankRq = { registeredphonenumber: this.registeredphonenumber };
+
+    const setFromList = (list: Bank[]) => {
+      const names = (list ?? [])
+        .map((b: any) => (b?.accountdisplayname ?? b?.type ?? '').toString().trim())
+        .filter((v: string) => !!v);
+
+      const bankOnly = names.filter((v: string) => v !== 'CASH' && v !== 'CHEQUE');
+      this.bankPaymentOptions = Array.from(new Set(bankOnly));
+      this.paymentOptions = [...this.quickPaymentOptions, ...this.bankPaymentOptions];
+    };
+
+    // Keep a fallback cache so dropdown doesn't break if API temporarily fails.
+    const cached = localStorage.getItem('bankList');
+
+    this.api.getBankList(rq).subscribe({
+      next: (rs: GetBankRs | any) => {
+        const status = (rs?.status ?? '').toString().trim().toUpperCase();
+        const list = (rs?.bankslist ?? rs?.banksList ?? rs?.getBankList ?? []) as Bank[];
+
+        if (status === 'SUCCESS' || status === 'SUCCESSFUL' || status === 'OK') {
+          localStorage.setItem('bankList', JSON.stringify(list ?? []));
+          setFromList(list ?? []);
+          return;
+        }
+
+        if (cached) {
+          try {
+            setFromList(JSON.parse(cached) ?? []);
+            return;
+          } catch {
+            // ignore
+          }
+        }
+
+        console.error('Failed to load payment options:', rs?.status, rs?.statusmessage);
+        setFromList([]);
+      },
+      error: () => {
+        if (cached) {
+          try {
+            setFromList(JSON.parse(cached) ?? []);
+            return;
+          } catch {
+            // ignore
+          }
+        }
+        setFromList([]);
       }
     });
+  }
+
+  onPaymentTypeOpen(opened: boolean) {
+    if (!opened) return;
+    this.getPaymentOptions();
   }
 
   saveadvanceinout(){

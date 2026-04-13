@@ -16,15 +16,31 @@ export class SelectUnitComponent {
   selectUnitForm: FormGroup;
   @Input() selectunit: any;
   
-  options1 = [
+  // Keep existing short codes (KG/G) for backward compatibility, and add the full Vyapar-like unit set.
+  private readonly unitOptions = [
+    { label: 'None', value: '' },
+    { label: 'BAGS (Bag)', value: 'BAGS (Bag)' },
+    { label: 'BOTTLES (Btl)', value: 'BOTTLES (Btl)' },
+    { label: 'BOX (Box)', value: 'BOX (Box)' },
+    { label: 'BUNDLES (Bdl)', value: 'BUNDLES (Bdl)' },
+    { label: 'CANS (Can)', value: 'CANS (Can)' },
+    { label: 'CARTONS (Ctn)', value: 'CARTONS (Ctn)' },
+    { label: 'DOZENS (Dzn)', value: 'DOZENS (Dzn)' },
+    { label: 'GRAMS (g)', value: 'GRAMS (g)' },
+    { label: 'KILOGRAMS (Kg)', value: 'KILOGRAMS (Kg)' },
+    { label: 'LITRE (Ltr)', value: 'LITRE (Ltr)' },
+    { label: 'METER (mtr)', value: 'METER (mtr)' },
+    { label: 'MILLILITRE (Ml)', value: 'MILLILITRE (Ml)' },
+    { label: 'NUMBERS (Nos)', value: 'NUMBERS (Nos)' },
+    { label: 'PACKS (Pac)', value: 'PACKS (Pac)' },
+    { label: 'QUINTAL (Qtl)', value: 'QUINTAL (Qtl)' },
+    { label: 'PAIRS', value: 'PAIRS' },
     { label: 'KG', value: 'KG' },
-    { label: 'G', value: 'G' }
+    { label: 'G', value: 'G' },
   ];
 
-  options2 = [
-    { label: 'KG ', value: 'KG' },
-    { label: 'G', value: 'G' }
-  ];
+  options1 = this.unitOptions;
+  options2 = this.unitOptions;
 
   constructor(public dataService: DataService, @Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<SelectUnitComponent>) { }
 
@@ -38,7 +54,7 @@ export class SelectUnitComponent {
     this.selectUnitForm.get('selectedOption1')?.valueChanges.subscribe(() => this.unitConversion());
     this.selectUnitForm.get('selectedOption2')?.valueChanges.subscribe(() => this.unitConversion());
     console.log("SELECT UNIT", this.selectUnitForm)
-    if(this.data.status='SUCCESS'){
+    if(this.data.status === 'SUCCESS'){
       this.populateForm(this.data.baseunit, this.data.secondaryunit,this.data.conversionrates) 
     }
   }

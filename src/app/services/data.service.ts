@@ -9,7 +9,9 @@ import { Router } from '@angular/router';
 })
 export class DataService {
   isPlanActive: any;
-  isLogin: boolean = false;
+  // When true, we hide the main app shell (sidebar/top chrome) and show auth/plan pages.
+  // Default true to avoid ExpressionChanged errors during initial route bootstrap.
+  isLogin: boolean = true;
   partyName:any;
   addPartyData = {
     partyName: "",

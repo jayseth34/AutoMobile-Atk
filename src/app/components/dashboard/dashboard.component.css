@@ -23,7 +23,7 @@
 .chart-delta{margin-top:4px;font-size:13px;color:var(--color-text-muted)}
 .chart-delta.up{color:var(--color-success)}.chart-delta.down{color:var(--color-danger)}
 .period-field{min-width:160px}
-.chart-wrap{height:320px;border-radius:14px;border:1px solid rgba(216,225,239,.95);background:linear-gradient(180deg,rgba(37,99,235,.05),rgba(255,255,255,.75));padding:10px}
+.chart-wrap{height:400px;border-radius:14px;border:1px solid rgba(216,225,239,.95);background:linear-gradient(180deg,rgba(37,99,235,.05),rgba(255,255,255,.75));padding:10px}
 .chart-wrap canvas{width:100%;height:100%;display:block}
 .dash-bottom{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .mini{padding:14px}
@@ -43,7 +43,14 @@
 .aside-rows{display:flex;flex-direction:column;gap:10px}
 .aside-row{padding:10px 12px}
 .aside-row .label{color:var(--color-text-muted)}.aside-row .val{font-weight:900}
+.aside-row.clickable{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease,background-color .12s ease}
+.aside-row.clickable:hover{transform:translateY(-1px);border-color:rgba(37,99,235,.35);background:rgba(37,99,235,.04)}
+.aside-row.clickable:focus-visible{outline:0;box-shadow:0 0 0 3px rgba(37,99,235,.18)}
 .click-card{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease}
 .click-card:hover{transform:translateY(-1px);box-shadow:0 14px 32px rgba(15,23,42,.12);border-color:rgba(37,99,235,.35)}
 @media (max-width:1100px){.dash-layout{grid-template-columns:1fr}}
 @media (max-width:900px){.dash-kpis,.dash-bottom{grid-template-columns:1fr}.dash-topbar{flex-direction:column;align-items:stretch}.dash-search{max-width:none}}
+
+@media (max-width: 900px){
+  .chart-wrap{height:320px}
+}

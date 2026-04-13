@@ -15,16 +15,22 @@ export class AppComponent implements OnInit {
   isMobileView = window.innerWidth <= 991.98;
   isMobileSidebarOpen = false;
   private readonly silverMobileAllowedRoutes = new Set(['', 'login', 'register', 'plans']);
+  private readonly shellHiddenRoutes = new Set(['', 'login', 'register', 'plans']);
 
   constructor(private router: Router, public dataService: DataService, private dialog: MatDialog) {
     this.currentRouteEndPoint = router.url.split('/')[1];
+    this.syncShellVisibility();
   }
 
   ngOnInit(): void {
     this.recoverScrollLockIfStuck();
+    this.syncShellVisibility();
     this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
-      .subscribe(() => this.recoverScrollLockIfStuck());
+      .subscribe(() => {
+        this.syncShellVisibility();
+        this.recoverScrollLockIfStuck();
+      });
   }
 
   @HostListener('window:resize')
@@ -77,5 +83,34 @@ export class AppComponent implements OnInit {
     const path = url.split('?')[0].split('#')[0];
     const segment = path.replace(/^\/+/, '').split('/')[0].toLowerCase();
     return this.silverMobileAllowedRoutes.has(segment);
+  }
+
+  private syncShellVisibility(): void {
+    const shouldHide = this.shouldHideShellForRoute();
+    this.dataService.isLogin = shouldHide;
+    if (shouldHide) {
+      this.isMobileSidebarOpen = false;
+    }
+  }
+
+  private shouldHideShellForRoute(): boolean {
+    const url = this.router.url || '/';
+    const path = url.split('?')[0].split('#')[0];
+    const segment = path.replace(/^\/+/, '').split('/')[0].toLowerCase();
+
+    // Always hide shell on auth/pricing screens.
+    if (this.shellHiddenRoutes.has(segment)) return true;
+
+    // If no token, treat as logged out and hide shell until user logs in.
+    return !this.hasAuthToken();
+  }
+
+  private hasAuthToken(): boolean {
+    try {
+      const token = JSON.parse(localStorage.getItem('AuthToken') as string);
+      return !!token?.token;
+    } catch {
+      return false;
+    }
   }
 }
