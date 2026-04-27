@@ -308,9 +308,7 @@ export class AddPartyComponent implements OnInit {
   submit(isSaveAndNew: boolean) {
     this.ifFormSubmitted = true;
     if(this.addPartyForm.valid) {
-    if(this.cs.isUndefineOrNull(this.openingBalance)) {
-      this.checkTypeOfPay();
-    } 
+    this.checkTypeOfPay();
     this.AddPartyData(this.addPartyForm.value);
     if(isSaveAndNew){
       this.addPartyForm.reset();
@@ -394,15 +392,21 @@ export class AddPartyComponent implements OnInit {
   }
 
   checkTypeOfPay() {
-    console.log(this.isOpeningBalance)
     const rawValues = this.addPartyForm.getRawValue();
     const controlValue = rawValues.toPayOrReceiveControl;
-    if (controlValue === 'PAY') {
+    const openingBal = Number(rawValues.openingBalanceControl) || 0;
+    if (controlValue === 'PAY' && openingBal > 0) {
       this.typeOfPay = "PAYABLE OPENING BALANCE";
-      this.topayparty = rawValues.openingBalanceControl;
-    } else if (controlValue === 'RECEIVE') {
+      this.topayparty = openingBal;
+      this.toreceivefromparty = 0;
+    } else if (controlValue === 'RECEIVE' && openingBal > 0) {
       this.typeOfPay = "RECEIVABLE OPENING BALANCE";
-      this.toreceivefromparty = rawValues.openingBalanceControl;
+      this.toreceivefromparty = openingBal;
+      this.topayparty = 0;
+    } else {
+      this.typeOfPay = '';
+      this.topayparty = 0;
+      this.toreceivefromparty = 0;
     }
   }
   
