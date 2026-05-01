@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonService } from './common.service';
+import { environment } from '../../environments/environment';
 import { GetBankRq, GetBankRs, GetPartyTransactionDetailsRq, GetTypeOfPayTransactionsRq, ItemListRs, LinkedTransaction, LoginReponse, LoginRequest, Party, PartyListRs, PaymentInOut, SaveUpdateTransactionRq, TransactionDetails, TrnxInOut } from '../models';
 import { Observable } from 'rxjs';
 
@@ -252,7 +253,7 @@ export class ApiService {
     formData.append('file', file);
     formData.append('registeredPhoneNumber', registeredPhoneNumber.toString());
 
-    return this.http.post('https://automobill.in/api/Item/upload', formData);
+    return this.http.post(environment.backendUrl + '/api/Item/upload', formData);
   }
 
 }

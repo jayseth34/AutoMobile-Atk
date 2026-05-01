@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { GetPartyTransactionDetailsRq } from '../models';
 import Swal from 'sweetalert2';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommonService {
-  baseURL = "https://automobill.in/api/";
+  baseURL = environment.backendUrl + "/api/";
   authToken: any;
   httpOptions = {
     headers: new HttpHeaders({
