@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   isMobileView = window.innerWidth <= 991.98;
   isMobileSidebarOpen = false;
   private readonly silverMobileAllowedRoutes = new Set(['', 'login', 'register', 'plans']);
-  private readonly shellHiddenRoutes = new Set(['', 'login', 'register', 'plans']);
+  private readonly shellHiddenRoutes = new Set(['', 'login', 'register']);
 
   constructor(private router: Router, public dataService: DataService, private dialog: MatDialog) {
     this.currentRouteEndPoint = router.url.split('/')[1];
