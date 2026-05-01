@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-
+import { environment } from '../environments/environment';
 import { saleData } from './dummyData';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private backendUrl: string = "";
+  private backendUrl: string = environment.backendUrl;
   private saleData = saleData;
 
   constructor() { }

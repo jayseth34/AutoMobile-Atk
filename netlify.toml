@@ -1,0 +1,11 @@
+[build]
+  command = "npm install --force && npm run build"
+  publish = "dist/automobile"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
