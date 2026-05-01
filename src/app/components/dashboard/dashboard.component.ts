@@ -206,6 +206,32 @@ export class DashboardComponent implements OnInit, AfterViewInit{
         return { x, y };
       });
 
+      if (points.length === 1) {
+        const y = points[0].y;
+        ctx.save();
+        const grad1 = ctx.createLinearGradient(0, padT, 0, canvasHeight - padB);
+        grad1.addColorStop(0, 'rgba(37, 99, 235, 0.26)');
+        grad1.addColorStop(1, 'rgba(37, 99, 235, 0.02)');
+        ctx.fillStyle = grad1;
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(canvasWidth - padR, y);
+        ctx.lineTo(canvasWidth - padR, canvasHeight - padB);
+        ctx.lineTo(padL, canvasHeight - padB);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+        ctx.save();
+        ctx.strokeStyle = '#2563eb';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(canvasWidth - padR, y);
+        ctx.stroke();
+        ctx.restore();
+        return;
+      }
+
       // Area fill
       ctx.save();
       const grad = ctx.createLinearGradient(0, padT, 0, canvasHeight - padB);
