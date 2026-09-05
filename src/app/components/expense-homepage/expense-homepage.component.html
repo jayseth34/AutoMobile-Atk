@@ -1,0 +1,76 @@
+<div class="app-page">
+  <div class="app-topbar">
+    <div class="app-titleblock">
+      <p class="app-kicker">Purchase & Expense</p>
+      <h1 class="app-title">Expenses</h1>
+      <p class="app-subtitle">Track rent, salaries, utilities, and other business expenses.</p>
+    </div>
+  </div>
+
+  <div class="expense-content">
+    <div class="header-container">
+      <div class="circle-search" (click)="expenseSearch.focus()">
+        <mat-icon>search</mat-icon>
+        <input #expenseSearch [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search expenses" />
+      </div>
+      <div class="header-right">
+        <div class="total-tile">
+          <span class="total-label">Total Expenses</span>
+          <span class="total-value">&#8377; {{ totalExpense | number:'1.0-0' }}</span>
+        </div>
+        <button mat-raised-button color="warn" class="add-action-btn" (click)="openAddExpenseModal()">+ ADD EXPENSE</button>
+      </div>
+    </div>
+
+    <table mat-table [dataSource]="filteredExpenselist" class="mat-elevation-z8 expense_list">
+      <ng-container matColumnDef="expensedate">
+        <th mat-header-cell *matHeaderCellDef>DATE</th>
+        <td mat-cell *matCellDef="let e">{{ e.expensedate | date:'dd-MM-yyyy' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef>CATEGORY</th>
+        <td mat-cell *matCellDef="let e">{{ e.category }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="partyname">
+        <th mat-header-cell *matHeaderCellDef>PARTY</th>
+        <td mat-cell *matCellDef="let e">{{ e.partyname || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>DESCRIPTION</th>
+        <td mat-cell *matCellDef="let e">{{ e.description || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="paymenttype">
+        <th mat-header-cell *matHeaderCellDef>PAYMENT TYPE</th>
+        <td mat-cell *matCellDef="let e">{{ e.paymenttype }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef>AMOUNT</th>
+        <td mat-cell *matCellDef="let e" [ngStyle]="{ 'color': dataService.getColor(0, e.total) }">{{ e.total | number:'1.0-0' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="options">
+        <th mat-header-cell *matHeaderCellDef>OPTIONS</th>
+        <td mat-cell *matCellDef="let e">
+          <button mat-icon-button (click)="openAddExpenseModal(e)" title="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteExpense(e)" title="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <div class="empty-state" *ngIf="filteredExpenselist.length === 0">
+      No expenses recorded yet. Click "+ ADD EXPENSE" to record your first one.
+    </div>
+  </div>
+</div>

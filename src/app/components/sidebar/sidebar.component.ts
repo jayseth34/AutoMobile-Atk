@@ -45,22 +45,22 @@ export class SidebarComponent {
       isOpen: false
     },
     {
-      name: 'Purchase',
+      name: 'Purchase & Expense',
       icon: 'https://img.icons8.com/ios-filled/50/000000/purchase-order.png',
       subTabs: [
         { name: 'Purchase Bills', link: '/Purchase-Bills' },
         { name: 'Payment Out', link: '/Payment-Out' },
         { name: 'Advance Out', link: '/Advance-Out' },
         { name: 'Purchase Order', link: '/Purchase-Order' },
-        { name: 'Purchase Return/Dr. Note', link: '/Purchase-Return' }
+        { name: 'Purchase Return/Dr. Note', link: '/Purchase-Return' },
+        { name: 'Expenses', link: '/expense-homepage' }
       ],
       isOpen: false
     },
     { name: 'Grow Your Business', link: '/growyourbusiness', icon: 'https://img.icons8.com/ios-filled/50/000000/business.png' },
-    { name: 'Banks', link: '/banks-homepage', icon: 'https://img.icons8.com/ios-filled/50/000000/bank.png' },
+    { name: 'Cash & Bank', link: '/banks-homepage', icon: 'https://img.icons8.com/ios-filled/50/000000/bank.png' },
     { name: 'Reports', link: '/reports', icon: 'https://img.icons8.com/ios-filled/50/000000/report-card.png' },
     { name: 'Sync, Share & Backups', link: '/syncshare', icon: 'https://img.icons8.com/ios-filled/50/000000/synchronize.png' },
-    { name: 'Apply For Loan', link: '/applyloan', icon: 'https://img.icons8.com/ios-filled/50/000000/money.png' },
     { name: 'Other Products', link: '/otherproducts', icon: 'https://img.icons8.com/ios-filled/50/000000/product.png' },
     {
       name: 'Utilities',
@@ -68,6 +68,7 @@ export class SidebarComponent {
       subTabs: [{ name: 'Import Items', link: '/import-items' }],
       isOpen: false
     },
+    { name: 'Apply For Loan', link: '/applyloan', icon: 'https://img.icons8.com/ios-filled/50/000000/money.png' },
     { name: 'Plans', link: '/plans', icon: 'https://img.icons8.com/ios-filled/50/000000/calendar.png' },
     {
       name: 'Logout',

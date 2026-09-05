@@ -57,6 +57,8 @@ import { GrowbusinessComponent } from './components/growbusiness/growbusiness.co
 import { SyncshareComponent } from './components/syncshare/syncshare.component';
 import { ApplyloanComponent } from './components/applyloan/applyloan.component';
 import { ReportsComponent } from './components/reports/reports.component';
+import { ExpenseHomepageComponent } from './components/expense-homepage/expense-homepage.component';
+import { AddExpenseComponent } from './components/add-expense/add-expense.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +93,8 @@ import { ReportsComponent } from './components/reports/reports.component';
     SyncshareComponent,
     ApplyloanComponent,
     ReportsComponent,
+    ExpenseHomepageComponent,
+    AddExpenseComponent,
   ],
   imports: [
     BrowserModule,

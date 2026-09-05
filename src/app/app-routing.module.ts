@@ -24,6 +24,7 @@ import { GrowbusinessComponent } from "./components/growbusiness/growbusiness.co
 import { SyncshareComponent } from "./components/syncshare/syncshare.component";
 import { ApplyloanComponent } from "./components/applyloan/applyloan.component";
 import { ReportsComponent } from "./components/reports/reports.component";
+import { ExpenseHomepageComponent } from "./components/expense-homepage/expense-homepage.component";
 import { SilverMobileRestrictionGuard } from "./guards/silver-mobile-restriction.guard";
 
 const routes: Routes = [
@@ -46,6 +47,7 @@ const routes: Routes = [
   { path: 'import-items', component: ImportitemsComponent, canActivate: [SilverMobileRestrictionGuard] },
   { path: "party-homepage", component: PartyHomepageComponent, canActivate: [SilverMobileRestrictionGuard] },
   { path: "item-homepage", component: ItemHomepageComponent, canActivate: [SilverMobileRestrictionGuard] },
+  { path: "expense-homepage", component: ExpenseHomepageComponent, canActivate: [SilverMobileRestrictionGuard] },
   { path: "pin", component: PaymentInoutComponent, canActivate: [SilverMobileRestrictionGuard] },
   { path: "Payment-Link", component: LinkPaymentComponent, canActivate: [SilverMobileRestrictionGuard] },
   { path: "plans", component: PlansComponent },

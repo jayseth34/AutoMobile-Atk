@@ -1,4 +1,8 @@
 <div class="dash">
+  <div class="dash-welcome" *ngIf="businessName">
+    Welcome back, <strong>{{ businessName }}</strong>
+  </div>
+
   <div class="dash-topbar">
     <mat-form-field class="dash-search" appearance="outline">
       <mat-icon matPrefix>search</mat-icon>
@@ -6,6 +10,12 @@
     </mat-form-field>
 
     <div class="dash-actions">
+      <button type="button" class="icon-btn" title="Print dashboard" (click)="printDashboard()">
+        <mat-icon>print</mat-icon>
+      </button>
+      <button type="button" class="icon-btn" title="Quick add" (click)="goAddSale()">
+        <mat-icon>add</mat-icon>
+      </button>
       <button type="button" class="action-btn action-sale" (click)="goAddSale()">+ Add Sale</button>
       <button type="button" class="action-btn action-purchase" (click)="goAddPurchase()">+ Add Purchase</button>
     </div>
@@ -103,37 +113,70 @@
           </ul>
         </div>
       </section>
+
+      <section class="card dash-reports">
+        <div class="reports-head">
+          <div class="reports-title">Most Used Reports</div>
+          <a class="view-all" (click)="cs.launch()">View All &#8250;</a>
+        </div>
+        <div class="reports-grid">
+          <a class="report-tile" (click)="goSalesInvoices()">Sale Report <span>&#8250;</span></a>
+          <a class="report-tile" [routerLink]="['/party-homepage']">Party Statement <span>&#8250;</span></a>
+          <a class="report-tile" [routerLink]="['/reports']">All Transactions <span>&#8250;</span></a>
+          <a class="report-tile" [routerLink]="['/reports']">Daybook Report <span>&#8250;</span></a>
+        </div>
+      </section>
     </main>
 
     <aside class="dash-aside">
-      <section class="card aside-card">
-        <div class="aside-title">Cash & Bank</div>
-        <div class="aside-rows">
-          <div class="aside-row">
-            <span class="label">Cash In Hand</span>
-            <span class="val">&#8377; {{ cashinhand | number:'1.0-0' }}</span>
-          </div>
-          <div class="aside-row clickable" role="button" tabindex="0" (click)="goBanks()" (keydown.enter)="goBanks()">
-            <span class="label">Total Bank Balance</span>
-            <span class="val">&#8377; {{ bankamount | number:'1.0-0' }}</span>
-          </div>
-          <div class="aside-row clickable" role="button" tabindex="0" (click)="goItems()" (keydown.enter)="goItems()">
-            <span class="label">Stock Value</span>
-            <span class="val">&#8377; {{ stockvalue | number:'1.0-0' }}</span>
-          </div>
+      <div class="card aside-flat click-card" role="button" tabindex="0" (click)="goExpenses()">
+        <div class="flat-top">
+          <span class="flat-label">Expenses</span>
+          <span class="kpi-subtag">This Month</span>
         </div>
-      </section>
+        <div class="flat-val">&#8377; {{ totalexpense | number:'1.0-0' }}</div>
+      </div>
 
-      <section class="card aside-card click-card" role="button" tabindex="0" (click)="goItems()">
-        <div class="aside-title">Low Stocks Items</div>
+      <div class="card aside-flat">
+        <div class="flat-top">
+          <span class="flat-label">Cash In Hand</span>
+          <span class="kpi-subtag">As of Now</span>
+        </div>
+        <div class="flat-val">&#8377; {{ cashinhand | number:'1.0-0' }}</div>
+      </div>
+
+      <div class="card aside-flat click-card" role="button" tabindex="0" (click)="goBanks()" (keydown.enter)="goBanks()">
+        <div class="flat-top">
+          <span class="flat-label">Total Bank Balance</span>
+          <span class="kpi-subtag">As of Now</span>
+        </div>
+        <div class="flat-val">&#8377; {{ bankamount | number:'1.0-0' }}</div>
+      </div>
+
+      <div class="card aside-flat click-card" role="button" tabindex="0" (click)="goItems()" (keydown.enter)="goItems()">
+        <div class="flat-top">
+          <span class="flat-label">Stock Value</span>
+          <span class="kpi-subtag">As of Now</span>
+        </div>
+        <div class="flat-val">&#8377; {{ stockvalue | number:'1.0-0' }}</div>
+      </div>
+
+      <section class="card aside-card">
+        <div class="aside-top">
+          <div class="aside-title">Low Stocks Items</div>
+          <span class="kpi-subtag">As of Now</span>
+        </div>
         <ul class="mini-list tall">
-          <li *ngFor="let lowstock of lowstocks">
+          <li *ngFor="let lowstock of visibleLowstocks" class="click-card" (click)="goItems()">
             <span class="name">{{ lowstock.item }}</span>
             <span class="value" [ngStyle]="{ 'color': dataService.getColor(lowstock.qty, 0) }">
               {{ lowstock.qty | number:'1.0-0' }}
             </span>
           </li>
         </ul>
+        <a class="see-more" *ngIf="lowstocks && lowstocks.length > 3" (click)="toggleLowStocks()">
+          {{ showAllLowStocks ? 'See Less' : 'See More' }} &#8964;
+        </a>
       </section>
 
       <section class="card aside-card click-card" role="button" tabindex="0" (click)="goBanks()">
@@ -147,6 +190,19 @@
           </li>
         </ul>
       </section>
+
+      <div class="widget-row">
+        <a class="widget-tile" [routerLink]="['/otherproducts']">
+          <mat-icon>chat</mat-icon>
+          WhatsApp Connect
+        </a>
+        <a class="widget-tile" [routerLink]="['/otherproducts']">
+          <mat-icon>support_agent</mat-icon>
+          Grow with online support
+        </a>
+      </div>
+
+      <a class="widget-add" (click)="cs.launch()">+ Add Widget of Your Choice</a>
     </aside>
   </div>
 </div>

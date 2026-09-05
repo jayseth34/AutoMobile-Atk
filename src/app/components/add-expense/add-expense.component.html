@@ -1,0 +1,54 @@
+<div class="app-form-shell expense-shell">
+  <div class="app-form-header">
+    <h2 class="app-form-title">{{ isUpdateMode ? 'UPDATE' : 'ADD' }} EXPENSE</h2>
+  </div>
+  <div class="app-form-divider"></div>
+
+  <form [formGroup]="expenseForm" class="expense-form">
+    <div class="expense-grid">
+      <mat-form-field class="span-2">
+        <mat-label>As of Date</mat-label>
+        <input matInput [matDatepicker]="expenseDatePicker" formControlName="expensedate" />
+        <mat-datepicker-toggle matSuffix [for]="expenseDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #expenseDatePicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category">
+          <mat-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Amount</mat-label>
+        <input matInput type="number" formControlName="total" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Party / Vendor (optional)</mat-label>
+        <input matInput formControlName="partyname" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Payment Type</mat-label>
+        <mat-select formControlName="paymenttype">
+          <mat-option value="CASH">Cash</mat-option>
+          <mat-option *ngFor="let bank of bankAccounts" [value]="bank">{{ bank }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="span-2">
+        <mat-label>Description (optional)</mat-label>
+        <input matInput formControlName="description" />
+      </mat-form-field>
+    </div>
+
+    <div class="expense-actions">
+      <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+      <button mat-raised-button color="primary" class="save-button" type="button" (click)="submitForm()">
+        {{ isUpdateMode ? 'Update' : 'Save' }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -2,6 +2,7 @@ import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
+import { CommonService } from 'src/app/services/common.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
@@ -19,6 +20,7 @@ export class DashboardComponent implements OnInit, AfterViewInit{
   stockvalue: number;
   cashinhand: number;
   bankamount: number;
+  totalexpense: number = 0;
   lowstocks: any[];
   youllpayreceiveparty: any[];
   bankaccounts: any[];
@@ -33,7 +35,18 @@ export class DashboardComponent implements OnInit, AfterViewInit{
   salesDeltaLabel: string = '';
   receivablePartiesCount: number = 0;
   payablePartiesCount: number = 0;
-  constructor(public api: ApiService, public dataService: DataService, private router: Router){}
+  businessName: string = '';
+  showAllLowStocks: boolean = false;
+  constructor(public api: ApiService, public dataService: DataService, public cs: CommonService, private router: Router){}
+
+  get visibleLowstocks(): any[] {
+    if (!Array.isArray(this.lowstocks)) return [];
+    return this.showAllLowStocks ? this.lowstocks : this.lowstocks.slice(0, 3);
+  }
+
+  toggleLowStocks() {
+    this.showAllLowStocks = !this.showAllLowStocks;
+  }
 
     ngOnInit(){
       this.registeredPhoneNumber = parseInt(
@@ -46,9 +59,10 @@ export class DashboardComponent implements OnInit, AfterViewInit{
           this.youllpay = response.youllpay
           this.totalsale = response.totalsale
           this.totalpurchase = response.totalpurchase
-          this.stockvalue = response.stockvalue 
-          this.cashinhand = response.cashinhand   
-          this.bankamount = response.bankamount    
+          this.stockvalue = response.stockvalue
+          this.cashinhand = response.cashinhand
+          this.bankamount = response.bankamount
+          this.totalexpense = response.totalexpense
           this.lowstocks = response.lowstocks
           this.youllpayreceiveparty = response.youllpayreceiveparty
           this.bankaccounts = response.bankaccounts
@@ -61,6 +75,11 @@ export class DashboardComponent implements OnInit, AfterViewInit{
       this.selectedPeriod = 'This Month';
       this.fetchSalesData(this.selectedPeriod);
       this.fetchLastMonthSalesTotal();
+
+      this.api.getBusinessInfo(this.registeredPhoneNumber).subscribe({
+        next: (res: any) => this.businessName = res?.businessInfo?.businessName?.trim() || '',
+        error: () => this.businessName = ''
+      });
 
       this.currentDate = moment().format('YYYY-MM-DD');
       this.daysDiff = moment(JSON.parse(localStorage.getItem("expiryDate") as string)).diff(this.currentDate, 'days');
@@ -357,6 +376,14 @@ export class DashboardComponent implements OnInit, AfterViewInit{
 
     goBanks() {
       this.router.navigateByUrl('/banks-homepage');
+    }
+
+    goExpenses() {
+      this.router.navigateByUrl('/expense-homepage');
+    }
+
+    printDashboard() {
+      window.print();
     }
 
     @HostListener('window:resize')

@@ -244,6 +244,36 @@ export interface Account {
     name: string;
 }
 
+export interface ExpenseRq {
+    expense_id: number
+    registeredphonenumber: number
+    expensedate: string
+    category: string
+    partyname: string
+    description: string
+    total: number
+    paymenttype: string
+    isexpenseupdate: boolean
+    amountdetailslist: PaymentInfo[]
+}
+
+export interface ExpenseListItem {
+    expense_id: number
+    expensedate: string
+    category: string
+    partyname: string
+    description: string
+    total: number
+    paymenttype: string
+    amountdetailslist: PaymentInfo[]
+}
+
+export interface GetExpenseListRs {
+    status: string
+    statusmessage: string
+    expenselist: ExpenseListItem[]
+}
+
 export interface Bank {
     accountdisplayname: string;
     amount: number;
