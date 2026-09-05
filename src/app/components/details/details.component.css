@@ -56,18 +56,20 @@ section > h3 {
 }
 
 .quick-action-btn {
-  border-radius: 15px;
+  border-radius: 999px !important;
   white-space: nowrap;
+  font-weight: 800 !important;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
 }
 
 .sale-btn {
-  background-color: rgba(211, 18, 18, 0.1);
-  color: rgba(211, 18, 18, 1);
+  background-color: var(--color-sale-action) !important;
+  color: #fff !important;
 }
 
 .purchase-btn {
-  background-color: rgba(0, 0, 255, 0.1);
-  color: rgba(0, 0, 255, 1);
+  background-color: var(--color-primary) !important;
+  color: #fff !important;
 }
 
 .date-range-group .form-control {

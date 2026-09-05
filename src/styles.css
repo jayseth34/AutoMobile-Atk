@@ -13,6 +13,11 @@
   --color-success: #16a34a;
   --color-danger: #dc2626;
   --color-warning: #d97706;
+  /* Sale/Purchase are a distinct semantic pairing (red = money in via a sale action,
+     blue = money out via a purchase action) used on the dashboard's Add Sale/Add
+     Purchase buttons - kept as its own token (rather than reusing --color-danger)
+     since #ef4444 is deliberately brighter than the danger/error red. */
+  --color-sale-action: #ef4444;
   /* RGB triplets of the tokens above, for rgba(var(--x-rgb), alpha) so translucent
      tints (hover states, soft backgrounds, focus rings) reference the same palette
      as solid fills instead of duplicating raw numbers per component. */
