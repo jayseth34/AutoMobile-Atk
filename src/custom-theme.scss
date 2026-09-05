@@ -1,0 +1,61 @@
+@use '@angular/material' as mat;
+@use 'sass:color';
+
+@include mat.core();
+
+// Builds a Material-compatible tonal palette (50-900, A100-A700) from one brand
+// hex, so Angular Material's primary/accent/warn palettes render the app's own
+// colors (--color-primary/--color-accent/--color-danger in styles.css) instead
+// of the stock indigo-pink prebuilt theme. Keeps every mat-* component (buttons,
+// tabs, checkboxes, form fields, dialogs, ...) visually consistent with the
+// dashboard's custom-built blue/red/white styling.
+@function generate-palette($base) {
+  @return (
+    50: color.mix(white, $base, 88%),
+    100: color.mix(white, $base, 76%),
+    200: color.mix(white, $base, 60%),
+    300: color.mix(white, $base, 44%),
+    400: color.mix(white, $base, 26%),
+    500: $base,
+    600: color.mix(black, $base, 8%),
+    700: color.mix(black, $base, 16%),
+    800: color.mix(black, $base, 24%),
+    900: color.mix(black, $base, 34%),
+    A100: color.mix(white, $base, 60%),
+    A200: color.mix(white, $base, 40%),
+    A400: color.mix(black, $base, 10%),
+    A700: color.mix(black, $base, 20%),
+    contrast: (
+      50: rgba(black, 0.87),
+      100: rgba(black, 0.87),
+      200: rgba(black, 0.87),
+      300: rgba(black, 0.87),
+      400: white,
+      500: white,
+      600: white,
+      700: white,
+      800: white,
+      900: white,
+      A100: rgba(black, 0.87),
+      A200: white,
+      A400: white,
+      A700: white,
+    ),
+  );
+}
+
+$app-primary: mat.define-palette(generate-palette(#2563eb), 500, 300, 700);
+$app-accent: mat.define-palette(generate-palette(#0ea5a4), 500, 300, 700);
+$app-warn: mat.define-palette(generate-palette(#dc2626), 500, 300, 700);
+
+$app-theme: mat.define-light-theme((
+  color: (
+    primary: $app-primary,
+    accent: $app-accent,
+    warn: $app-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+@include mat.all-component-themes($app-theme);
