@@ -77,7 +77,7 @@ export class AddItemComponent {
     this.categorygroup()
     console.log("ITEM: ", this.categoryList)
 
-    if(this.data.status='SUCCESS'){
+    if(this.data.status === 'SUCCESS'){
       this.populateForm(this.data.itemDetails)
       if(this.data.itemDetails.wholesaleprice > 0 || this.data.itemDetails.minimumwholesalequantity > 0){
         this.isWholesalePriceEnabled = false

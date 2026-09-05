@@ -3,16 +3,16 @@
 .grid-container{display:grid;grid-template-columns:340px 1fr;grid-template-rows:auto 1fr;gap:14px;align-items:stretch;padding:16px;min-height:calc(100vh - 160px)}
 .sidebar{grid-row:1/span 2;display:flex;flex-direction:column;min-height:0;background:var(--color-surface);border:1px solid var(--color-border);border-radius:18px;padding:14px;box-shadow:var(--shadow-soft)}
 .sidebar .row{margin:0 0 10px;gap:10px;align-items:center}
-.bank_list{margin-top:10px;max-height:72vh;overflow:auto;border-radius:14px;border:1px solid rgba(216,225,239,.9);box-shadow:none!important;background:#fff}
-.selectedBank-row-td{background:rgba(37,99,235,.10)!important}
+.bank_list{margin-top:10px;max-height:72vh;overflow:auto;border-radius:14px;border:1px solid rgba(var(--color-border-rgb),.9);box-shadow:none!important;background:#fff}
+.selectedBank-row-td{background:rgba(var(--color-primary-rgb),.10)!important}
 .top-content,.bottom-content{background:var(--color-surface);border:1px solid var(--color-border);border-radius:18px;padding:14px;box-shadow:var(--shadow-soft);min-height:0}
 .top-content-row{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px}
 .bottom-content{overflow:auto}
 .header-container{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .header-container h2{margin:0;font-weight:900;letter-spacing:-.01em}
 .search-field{min-width:240px}
-.transaction-list{max-height:70vh;overflow:auto;border-radius:14px;border:1px solid rgba(216,225,239,.9);box-shadow:none!important;background:#fff}
-.mat-header-cell{font-weight:900;color:rgba(15,23,42,.86);background:rgba(238,243,250,.75)}
+.transaction-list{max-height:70vh;overflow:auto;border-radius:14px;border:1px solid rgba(var(--color-border-rgb),.9);box-shadow:none!important;background:#fff}
+.mat-header-cell{font-weight:900;color:rgba(15,23,42,.86);background:rgba(var(--color-surface-muted-rgb),.75)}
 .mat-cell{color:rgba(15,23,42,.86)}
-.mat-row:hover .mat-cell{background:rgba(37,99,235,.05)}
+.mat-row:hover .mat-cell{background:rgba(var(--color-primary-rgb),.05)}
 @media (max-width:991.98px){.grid-container{grid-template-columns:1fr;grid-template-rows:auto;min-height:auto;padding:12px;gap:12px}.sidebar{grid-row:auto}.bank_list{max-height:42vh}.top-content-row{justify-content:space-between}.search-field{min-width:0;width:100%}.transaction-list{max-height:none}}

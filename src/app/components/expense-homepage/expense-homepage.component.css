@@ -5,9 +5,9 @@
 .total-tile{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2}
 .total-label{font-size:12px;color:var(--color-text-muted)}
 .total-value{font-weight:900;font-size:18px}
-.expense_list{width:100%;border-radius:14px;border:1px solid rgba(216,225,239,.9);box-shadow:none!important;background:#fff}
-.mat-header-cell{font-weight:900;color:rgba(15,23,42,.86);background:rgba(238,243,250,.75)}
+.expense_list{width:100%;border-radius:14px;border:1px solid rgba(var(--color-border-rgb),.9);box-shadow:none!important;background:#fff}
+.mat-header-cell{font-weight:900;color:rgba(15,23,42,.86);background:rgba(var(--color-surface-muted-rgb),.75)}
 .mat-cell{color:rgba(15,23,42,.86)}
-.mat-row:hover .mat-cell{background:rgba(37,99,235,.05)}
+.mat-row:hover .mat-cell{background:rgba(var(--color-primary-rgb),.05)}
 .empty-state{padding:32px;text-align:center;color:var(--color-text-muted)}
 @media (max-width:767.98px){.header-container{flex-direction:column;align-items:stretch}.header-right{justify-content:space-between}}

@@ -154,7 +154,7 @@ section > h3 {
 .table-container table th {
   position: sticky;
   top: 0;
-  background-color: rgba(238, 243, 250, 0.95);
+  background-color: rgba(var(--color-surface-muted-rgb), 0.95);
   z-index: 1;
 }
 

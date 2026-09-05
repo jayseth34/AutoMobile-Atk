@@ -13,6 +13,17 @@
   --color-success: #16a34a;
   --color-danger: #dc2626;
   --color-warning: #d97706;
+  /* RGB triplets of the tokens above, for rgba(var(--x-rgb), alpha) so translucent
+     tints (hover states, soft backgrounds, focus rings) reference the same palette
+     as solid fills instead of duplicating raw numbers per component. */
+  --color-surface-rgb: 255, 255, 255;
+  --color-surface-muted-rgb: 238, 243, 250;
+  --color-border-rgb: 216, 225, 239;
+  --color-primary-rgb: 37, 99, 235;
+  --color-primary-hover-rgb: 29, 78, 216;
+  --color-accent-rgb: 14, 165, 164;
+  --color-success-rgb: 22, 163, 74;
+  --color-danger-rgb: 220, 38, 38;
   --shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.08);
   --radius-md: 10px;
   --scrollbar-track: rgba(216, 225, 239, 0.55);

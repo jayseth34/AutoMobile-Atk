@@ -10,7 +10,7 @@
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(circle at 80% 15%, rgba(37, 99, 235, 0.18), transparent 35%),
+    radial-gradient(circle at 80% 15%, rgba(var(--color-primary-rgb), 0.18), transparent 35%),
     radial-gradient(circle at 8% 85%, rgba(16, 185, 129, 0.14), transparent 45%),
     linear-gradient(150deg, #f3f9ff 0%, #edf8ff 50%, #f2faf5 100%);
   font-family: 'Manrope', sans-serif;
@@ -27,7 +27,7 @@
   height: 180px;
   left: -40px;
   top: 35px;
-  background: rgba(37, 99, 235, 0.16);
+  background: rgba(var(--color-primary-rgb), 0.16);
 }
 
 .orb-two {
@@ -60,7 +60,7 @@
 .brand-panel {
   padding: 2.2rem 2rem;
   background:
-    linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(16, 185, 129, 0.09)),
+    linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.1), rgba(16, 185, 129, 0.09)),
     #ffffff;
   display: flex;
   flex-direction: column;
@@ -69,7 +69,7 @@
 
 .brand-kicker {
   margin: 0 0 0.5rem;
-  color: #1d4ed8;
+  color: var(--color-primary-hover);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -135,8 +135,8 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.14);
 }
 
 .auth-btn {
@@ -145,7 +145,7 @@
   margin-top: 0.2rem;
   border: 0;
   border-radius: 11px;
-  background: linear-gradient(90deg, #2563eb, #0ea5a4);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
   color: #fff;
   font-size: 0.95rem;
   font-weight: 700;
@@ -159,7 +159,7 @@
 
 .error {
   margin-top: 0.3rem;
-  color: #dc2626;
+  color: var(--color-danger);
   font-size: 0.79rem;
   font-weight: 600;
 }
